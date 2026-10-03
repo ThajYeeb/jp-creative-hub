@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>About — J.P. Creative Hub</title>
+  <meta name="description" content="Juan Carlos and Pang, co-owners of J.P. Creative Hub. Language, voice, and the occasional visual." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #f7f6f3;
+      --ink: #3E5734;
+      --line: #d5ddd0;
+      --serif: "Cormorant Garamond", Georgia, serif;
+      --sans: "Outfit", system-ui, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--sans);
+      font-weight: 300;
+      letter-spacing: 0.01em;
+      line-height: 1.6;
+    }
+    a { color: inherit; text-decoration: none; }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 28px 7vw;
+      position: sticky;
+      top: 0;
+      background: rgba(247, 246, 243, 0.9);
+      backdrop-filter: blur(10px);
+      z-index: 2;
+    }
+    .mark {
+      font-family: var(--serif);
+      font-size: 1.35rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+    nav { display: flex; gap: 28px; font-size: 0.78rem; letter-spacing: 0.14em; text-transform: uppercase; }
+    .hero { padding: 12vh 7vw 6vh; max-width: 900px; }
+    .eyebrow {
+      font-size: 0.72rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      margin-bottom: 22px;
+    }
+    h1 {
+      font-family: var(--serif);
+      font-weight: 400;
+      font-size: clamp(3.2rem, 7vw, 5.6rem);
+      line-height: 0.92;
+      margin: 0;
+      letter-spacing: -0.02em;
+    }
+    h1 em { font-style: italic; font-weight: 400; }
+    .person {
+      padding: 8vh 7vw;
+      border-top: 1px solid var(--line);
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 40px;
+      max-width: 1100px;
+    }
+    .person h2 {
+      font-family: var(--serif);
+      font-weight: 400;
+      font-size: clamp(2rem, 4vw, 3rem);
+      margin: 0 0 8px;
+    }
+    .role { font-size: 0.78rem; letter-spacing: 0.14em; text-transform: uppercase; }
+    .person p { margin: 0 0 1.1em; max-width: 620px; }
+    .person p:last-child { margin-bottom: 0; }
+    footer {
+      padding: 28px 7vw 40px;
+      display: flex;
+      justify-content: space-between;
+      border-top: 1px solid var(--line);
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+    }
+    @media (max-width: 800px) {
+      nav { display: none; }
+      .person { grid-template-columns: 1fr; gap: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a class="mark" href="index.html">J.P. Creative Hub</a>
+    <nav>
+      <a href="about.html">About</a>
+      <a href="index.html#services">Services</a>
+      <a href="index.html#contact">Contact</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <p class="eyebrow">About</p>
+      <h1>Two people,<br /><em>one practice.</em></h1>
+    </section>
+
+    <article class="person">
+      <div>
+        <h2>Juan Carlos</h2>
+        <p class="role">Co-owner</p>
+      </div>
+      <div>
+        <p>I’m Juan. More than twenty years of digital media, multilingual work, and technical support sit behind the practice.</p>
+        <p>Translation, interpretation, voice, graphic design, audio engineering, and computer systems are the mix. Supporting translation teams across dozens of languages sharpened the unglamorous part: time, communication, and problems that need solving the same day. Design, banking, and IT came earlier, and left a habit of adapting to the client in front of me.</p>
+        <p>At J.P. Creative Hub I want the work to read clearly, look professional, and arrive intact, whether that is language, design, or a piece of multimedia.</p>
+      </div>
+    </article>
+
+    <article class="person">
+      <div>
+        <h2>Pang</h2>
+        <p class="role">Co-owner</p>
+      </div>
+      <div>
+        <p>I’m Pang, an English–Hmong interpreter and translator, with nearly a decade of professional work and a much earlier start. I was interpreting for my community while I was still young.</p>
+        <p>The settings have been medical, legal, educational, social, and multimedia. Accuracy and cultural care are the point. Voiceover, proofreading, and audio engineering sit alongside the language work.</p>
+        <p>At J.P. Creative Hub I want people to leave a conversation, or a document, clearer than they arrived.</p>
+      </div>
+    </article>
+  </main>
+
+  <footer>
+    <span>J.P. Creative Hub LLC</span>
+    <span>Juan Carlos · Pang</span>
+  </footer>
+</body>
+</html>
