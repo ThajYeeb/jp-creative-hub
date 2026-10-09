@@ -85,18 +85,6 @@
       margin: 10px 0 48px;
       color: var(--ink);
     }
-    .service {
-      display: grid;
-      grid-template-columns: 72px 220px 1fr;
-      gap: 24px;
-      padding: 28px 0;
-      border-top: 1px solid var(--line);
-      align-items: baseline;
-    }
-    .service:last-of-type { border-bottom: 1px solid var(--line); }
-    .num { color: var(--ink); font-size: 0.78rem; letter-spacing: 0.12em; }
-    .service h3 { margin: 0; font-weight: 400; font-size: 1rem; color: var(--ink); }
-    .service p { margin: 0; color: var(--ink); max-width: 560px; }
     .also {
       max-width: 640px;
       margin: 56px 0 0;
@@ -105,7 +93,6 @@
       font-size: 1.55rem;
       line-height: 1.35;
     }
-    .contact { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: end; }
     .phone, .mail {
       display: block;
       font-family: var(--serif);
@@ -115,31 +102,6 @@
       margin-bottom: 12px;
       color: var(--ink);
     }
-    form { display: grid; gap: 14px; }
-    input, textarea {
-      width: 100%;
-      background: transparent;
-      border: 0;
-      border-bottom: 1px solid var(--line);
-      padding: 12px 0;
-      font: inherit;
-      color: var(--ink);
-      outline: none;
-    }
-    input::placeholder, textarea::placeholder { color: var(--ink); opacity: 0.55; }
-    input:focus, textarea:focus { border-color: var(--ink); }
-    button {
-      justify-self: start;
-      margin-top: 8px;
-      background: var(--ink);
-      color: var(--bg);
-      border: 0;
-      padding: 14px 28px;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      font-size: 0.72rem;
-      cursor: pointer;
-    }
     footer {
       padding: 28px 7vw 40px;
       display: flex;
@@ -147,9 +109,6 @@
       color: var(--ink);
       font-size: 0.78rem;
       letter-spacing: 0.08em;
-    }
-    @media (max-width: 800px) {
-      .service, .contact { grid-template-columns: 1fr; }
     }
     .foot-mark{display:inline-flex;align-items:center;gap:10px}
     .foot-mark img{height:18px;width:auto;opacity:.75}
@@ -161,6 +120,7 @@
     .menu nav { display: flex; flex-direction: column; gap: 16px; position: absolute; right: 0; top: 40px; background: var(--bg); border: 1px solid var(--line); padding: 20px 24px; min-width: 160px; }
     .more { display: inline-block; margin-top: 40px; border-bottom: 1px solid var(--ink); padding-bottom: 4px; letter-spacing: 0.16em; text-transform: uppercase; font-size: 0.75rem; }
     @media (max-width: 800px) { header > nav { display: none; } .menu { display: block; } }
+    .teaser { list-style: none; padding: 26px 0; margin: 0; display: flex; flex-wrap: wrap; gap: 14px 44px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); font-family: var(--serif); font-size: clamp(1.4rem, 2.4vw, 1.9rem); }
   </style>
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="icon" href="assets/favicon-32.png" sizes="32x32" type="image/png">
@@ -189,51 +149,28 @@
       <p class="eyebrow">Juan Carlos and Pang</p>
       <h1>Meaning,<br /><em>kept intact.</em></h1>
       <p class="lede">English, Hmong, and Spanish. Interpreted, translated, and given a voice. Design when it is needed.</p>
-      <a class="cta" href="#contact">Start a conversation</a>
+      <a class="cta" href="contact.html">Start a conversation</a>
     </section>
 
     <section id="services">
       <p class="eyebrow">What we do</p>
       <h2>Language, carefully handled.</h2>
-      <article class="service">
-        <span class="num">01</span>
-        <h3>Interpreting</h3>
-        <p>Professional English and Hmong interpreting for events and meetings, with accuracy and cultural sensitivity. Spanish can be accommodated on request.</p>
-      </article>
-      <article class="service">
-        <span class="num">02</span>
-        <h3>Translation</h3>
-        <p>Precise, culturally relevant translations for documents, websites, and more, keeping the original intent and tone.</p>
-      </article>
-      <article class="service">
-        <span class="num">03</span>
-        <h3>Proofreading</h3>
-        <p>Grammar, punctuation, and style checked so written work reads clearly and professionally.</p>
-      </article>
-      <article class="service">
-        <span class="num">04</span>
-        <h3>Voice</h3>
-        <p>Engaging voiceovers for commercials, videos, and audiobooks, in a range of styles.</p>
-      </article>
+      <ul class="teaser">
+        <li>Interpreting</li>
+        <li>Translation</li>
+        <li>Proofreading</li>
+        <li>Voice</li>
+      </ul>
       <p class="also">When a project needs a visual side, we also take on graphic design and videography.</p>
       <a class="more" href="services.html">View all services</a>
     </section>
 
     <section id="contact">
-      <div class="contact">
-        <div>
-          <p class="eyebrow">Contact</p>
-          <h2>Tell us what you need.</h2>
-          <a class="phone" href="tel:9163185507">(916) 318-5507</a>
-          <a class="mail" href="mailto:info@jpcreatives.cc">info@jpcreatives.cc</a>
-        </div>
-        <form action="mailto:info@jpcreatives.cc" method="post" enctype="text/plain">
-          <input name="name" placeholder="Name" required />
-          <input name="email" type="email" placeholder="Email" required />
-          <textarea name="message" rows="4" placeholder="Project" required></textarea>
-          <button type="submit">Send</button>
-        </form>
-      </div>
+      <p class="eyebrow">Contact</p>
+      <h2>Tell us what you need.</h2>
+      <a class="phone" href="tel:9163185507">(916) 318-5507</a>
+      <a class="mail" href="mailto:info@jpcreatives.cc">info@jpcreatives.cc</a>
+      <a class="more" href="contact.html">Get in touch</a>
     </section>
   </main>
 
