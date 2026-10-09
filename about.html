@@ -88,11 +88,18 @@
       letter-spacing: 0.08em;
     }
     @media (max-width: 800px) {
-      nav { display: none; }
       .person { grid-template-columns: 1fr; gap: 16px; }
     }
     .foot-mark{display:inline-flex;align-items:center;gap:10px}
     .foot-mark img{height:18px;width:auto;opacity:.75}
+    nav a[aria-current="page"] { border-bottom: 1px solid var(--ink); padding-bottom: 3px; }
+    .menu { display: none; position: relative; font-size: 0.78rem; letter-spacing: 0.14em; text-transform: uppercase; }
+    .menu summary { list-style: none; cursor: pointer; padding: 6px 0; border-bottom: 1px solid var(--ink); }
+    .menu summary::-webkit-details-marker { display: none; }
+    .menu[open] summary { border-color: transparent; }
+    .menu nav { display: flex; flex-direction: column; gap: 16px; position: absolute; right: 0; top: 40px; background: var(--bg); border: 1px solid var(--line); padding: 20px 24px; min-width: 160px; }
+    .more { display: inline-block; margin-top: 40px; border-bottom: 1px solid var(--ink); padding-bottom: 4px; letter-spacing: 0.16em; text-transform: uppercase; font-size: 0.75rem; }
+    @media (max-width: 800px) { header > nav { display: none; } .menu { display: block; } }
   </style>
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="icon" href="assets/favicon-32.png" sizes="32x32" type="image/png">
@@ -101,11 +108,19 @@
 <body>
   <header>
     <a class="mark" href="index.html">J.P. Creative Hub</a>
-    <nav>
-      <a href="about.html">About</a>
-      <a href="index.html#services">Services</a>
-      <a href="index.html#contact">Contact</a>
+    <nav aria-label="Main">
+      <a href="about.html" aria-current="page">About</a>
+      <a href="services.html">Services</a>
+      <a href="contact.html">Contact</a>
     </nav>
+    <details class="menu">
+      <summary>Menu</summary>
+      <nav aria-label="Main">
+        <a href="about.html" aria-current="page">About</a>
+        <a href="services.html">Services</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+    </details>
   </header>
 
   <main>
