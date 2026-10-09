@@ -1,10 +1,11 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>About — J.P. Creative Hub</title>
-  <meta name="description" content="Juan Carlos and Pang, co-owners of J.P. Creative Hub. Language, voice, and the occasional visual." />
+  <title>Contact — J.P. Creative Hub</title>
+  <meta name="description" content="Contact J.P. Creative Hub: (916) 318-5507, info@jpcreatives.cc." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet" />
@@ -46,49 +47,109 @@
       text-transform: uppercase;
     }
     nav { display: flex; gap: 28px; font-size: 0.78rem; letter-spacing: 0.14em; text-transform: uppercase; }
-    .hero { padding: 12vh 7vw 6vh; max-width: 900px; }
+    nav a { color: var(--ink); }
+    .hero { padding: 12vh 7vw 10vh; max-width: 1100px; }
     .eyebrow {
       font-size: 0.72rem;
       letter-spacing: 0.22em;
       text-transform: uppercase;
+      color: var(--ink);
       margin-bottom: 22px;
     }
     h1 {
       font-family: var(--serif);
       font-weight: 400;
-      font-size: clamp(3.2rem, 7vw, 5.6rem);
+      font-size: clamp(3.2rem, 7vw, 6.4rem);
       line-height: 0.92;
-      margin: 0;
+      margin: 0 0 28px;
       letter-spacing: -0.02em;
+      color: var(--ink);
     }
     h1 em { font-style: italic; font-weight: 400; }
-    .person {
-      padding: 8vh 7vw;
-      border-top: 1px solid var(--line);
-      display: grid;
-      grid-template-columns: 220px 1fr;
-      gap: 40px;
-      max-width: 1100px;
+    .lede { max-width: 520px; font-size: 1.08rem; color: var(--ink); }
+    .cta {
+      display: inline-block;
+      margin-top: 36px;
+      border-bottom: 1px solid var(--ink);
+      padding-bottom: 4px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      color: var(--ink);
     }
-    .person h2 {
+    section { padding: 8vh 7vw; border-top: 1px solid var(--line); }
+    h2 {
       font-family: var(--serif);
       font-weight: 400;
-      font-size: clamp(2rem, 4vw, 3rem);
-      margin: 0 0 8px;
+      font-size: clamp(2.2rem, 4vw, 3.4rem);
+      margin: 10px 0 48px;
+      color: var(--ink);
     }
-    .role { font-size: 0.78rem; letter-spacing: 0.14em; text-transform: uppercase; }
-    .person p { margin: 0 0 1.1em; max-width: 620px; }
-    .person p:last-child { margin-bottom: 0; }
+    .service {
+      display: grid;
+      grid-template-columns: 72px 220px 1fr;
+      gap: 24px;
+      padding: 28px 0;
+      border-top: 1px solid var(--line);
+      align-items: baseline;
+    }
+    .service:last-of-type { border-bottom: 1px solid var(--line); }
+    .num { color: var(--ink); font-size: 0.78rem; letter-spacing: 0.12em; }
+    .service h3 { margin: 0; font-weight: 400; font-size: 1rem; color: var(--ink); }
+    .service p { margin: 0; color: var(--ink); max-width: 560px; }
+    .also {
+      max-width: 640px;
+      margin: 56px 0 0;
+      color: var(--ink);
+      font-family: var(--serif);
+      font-size: 1.55rem;
+      line-height: 1.35;
+    }
+    .contact { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: end; }
+    .phone, .mail {
+      display: block;
+      font-family: var(--serif);
+      font-size: clamp(1.8rem, 3.4vw, 2.8rem);
+      border-bottom: 1px solid var(--ink);
+      width: fit-content;
+      margin-bottom: 12px;
+      color: var(--ink);
+    }
+    form { display: grid; gap: 14px; }
+    input, textarea {
+      width: 100%;
+      background: transparent;
+      border: 0;
+      border-bottom: 1px solid var(--line);
+      padding: 12px 0;
+      font: inherit;
+      color: var(--ink);
+      outline: none;
+    }
+    input::placeholder, textarea::placeholder { color: var(--ink); opacity: 0.55; }
+    input:focus, textarea:focus { border-color: var(--ink); }
+    button {
+      justify-self: start;
+      margin-top: 8px;
+      background: var(--ink);
+      color: var(--bg);
+      border: 0;
+      padding: 14px 28px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      font-size: 0.72rem;
+      cursor: pointer;
+    }
     footer {
       padding: 28px 7vw 40px;
       display: flex;
       justify-content: space-between;
-      border-top: 1px solid var(--line);
+      color: var(--ink);
       font-size: 0.78rem;
       letter-spacing: 0.08em;
     }
     @media (max-width: 800px) {
-      .person { grid-template-columns: 1fr; gap: 16px; }
+      .service, .contact { grid-template-columns: 1fr; }
     }
     .foot-mark{display:inline-flex;align-items:center;gap:10px}
     .foot-mark img{height:18px;width:auto;opacity:.75}
@@ -109,49 +170,37 @@
   <header>
     <a class="mark" href="index.html">J.P. Creative Hub</a>
     <nav aria-label="Main">
-      <a href="about.html" aria-current="page">About</a>
+      <a href="about.html">About</a>
       <a href="services.html">Services</a>
-      <a href="contact.html">Contact</a>
+      <a href="contact.html" aria-current="page">Contact</a>
     </nav>
     <details class="menu">
       <summary>Menu</summary>
       <nav aria-label="Main">
-        <a href="about.html" aria-current="page">About</a>
+        <a href="about.html">About</a>
         <a href="services.html">Services</a>
-        <a href="contact.html">Contact</a>
+        <a href="contact.html" aria-current="page">Contact</a>
       </nav>
     </details>
   </header>
 
   <main>
-    <section class="hero">
-      <p class="eyebrow">About</p>
-      <h1>Two people,<br /><em>one practice.</em></h1>
+    <section id="contact" class="contact-page">
+      <div class="contact">
+        <div>
+          <p class="eyebrow">Contact</p>
+          <h2>Tell us what you need.</h2>
+          <a class="phone" href="tel:9163185507">(916) 318-5507</a>
+          <a class="mail" href="mailto:info@jpcreatives.cc">info@jpcreatives.cc</a>
+        </div>
+        <form action="mailto:info@jpcreatives.cc" method="post" enctype="text/plain">
+          <input name="name" placeholder="Name" required />
+          <input name="email" type="email" placeholder="Email" required />
+          <textarea name="message" rows="4" placeholder="Project" required></textarea>
+          <button type="submit">Send</button>
+        </form>
+      </div>
     </section>
-
-    <article class="person">
-      <div>
-        <h2>Juan Carlos</h2>
-        <p class="role">Co-owner</p>
-      </div>
-      <div>
-        <p>I’m Juan. More than twenty years of digital media, multilingual work, and technical support sit behind the practice.</p>
-        <p>Translation, interpretation, voice, graphic design, audio engineering, and computer systems are the mix. Supporting translation teams across dozens of languages sharpened the unglamorous part: time, communication, and problems that need solving the same day. Design, banking, and IT came earlier, and left a habit of adapting to the client in front of me.</p>
-        <p>At J.P. Creative Hub I want the work to read clearly, look professional, and arrive intact, whether that is language, design, or a piece of multimedia.</p>
-      </div>
-    </article>
-
-    <article class="person">
-      <div>
-        <h2>Pang</h2>
-        <p class="role">Co-owner · Lead interpreter and translator</p>
-      </div>
-      <div>
-        <p>I’m Pang, an English–Hmong interpreter and translator, with nearly a decade of professional work and a much earlier start. I was interpreting for my community while I was still young.</p>
-        <p>The settings have been medical, legal, educational, social, and multimedia. Accuracy and cultural care are the point. Voiceover, proofreading, and audio engineering sit alongside the language work.</p>
-        <p>At J.P. Creative Hub I want people to leave a conversation, or a document, clearer than they arrived.</p>
-      </div>
-    </article>
   </main>
 
   <footer>
