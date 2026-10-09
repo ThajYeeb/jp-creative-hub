@@ -91,11 +91,19 @@
       nav { display: none; }
       .person { grid-template-columns: 1fr; gap: 16px; }
     }
+    .mark{display:inline-flex;align-items:center;gap:12px}
+    .mark img{height:28px;width:auto}
+    .foot-mark{display:inline-flex;align-items:center;gap:10px}
+    .foot-mark img{height:18px;width:auto;opacity:.75}
+    @media (max-width: 800px){.mark img{height:24px}}
   </style>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="assets/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 </head>
 <body>
   <header>
-    <a class="mark" href="index.html">J.P. Creative Hub</a>
+    <a class="mark" href="index.html"><img src="assets/jpch-mark.svg" alt="" aria-hidden="true">J.P. Creative Hub</a>
     <nav>
       <a href="about.html">About</a>
       <a href="index.html#services">Services</a>
@@ -135,7 +143,7 @@
   </main>
 
   <footer>
-    <span>J.P. Creative Hub LLC</span>
+    <span class="foot-mark"><img src="assets/jpch-mark.svg" alt="" aria-hidden="true">J.P. Creative Hub LLC</span>
     <span>Juan Carlos · Pang</span>
   </footer>
 </body>
