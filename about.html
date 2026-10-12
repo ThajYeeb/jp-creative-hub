@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="color-scheme" content="light dark" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>About — J.P. Creative Hub</title>
   <meta name="description" content="Juan Carlos and Pang, co-owners of J.P. Creative Hub. Language, voice, and the occasional visual." />
@@ -100,6 +101,23 @@
     .menu nav { display: flex; flex-direction: column; gap: 16px; position: absolute; right: 0; top: 40px; background: var(--bg); border: 1px solid var(--line); padding: 20px 24px; min-width: 160px; }
     .more { display: inline-block; margin-top: 40px; border-bottom: 1px solid var(--ink); padding-bottom: 4px; letter-spacing: 0.16em; text-transform: uppercase; font-size: 0.75rem; }
     @media (max-width: 800px) { header > nav { display: none; } .menu { display: block; } }
+
+    @media (prefers-color-scheme: dark) {
+      :root { --bg: #1a1f1a; --ink: #ece9e1; --muted: #b9b6ad; --accent: #9db58f; --line: #2c352b; }
+      header { background: rgba(26, 31, 26, 0.9); }
+      .eyebrow, .num { color: var(--accent); }
+      h1 em { color: var(--accent); }
+      .lede, .service p { color: var(--muted); }
+      .cta { color: var(--accent); border-color: var(--accent); }
+      a:hover, a:focus-visible, nav a:hover { color: var(--accent); }
+      .phone:hover, .mail:hover, .phone:focus-visible, .mail:focus-visible { border-color: var(--accent); }
+      input:focus, textarea:focus { border-color: var(--accent); }
+      input::placeholder, textarea::placeholder { color: var(--muted); opacity: 0.7; }
+      button { background: var(--accent); color: #1a1f1a; }
+      button:hover, button:focus-visible { background: #b3c8a6; }
+      .menu summary { border-color: var(--accent); }
+      .foot-mark img { opacity: .9; }
+    }
   </style>
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="icon" href="assets/favicon-32.png" sizes="32x32" type="image/png">
@@ -155,7 +173,7 @@
   </main>
 
   <footer>
-    <span class="foot-mark"><img src="assets/jpch-mark.svg" alt="" aria-hidden="true">J.P. Creative Hub LLC</span>
+    <span class="foot-mark"><picture><source srcset="assets/jpch-mark-dark.svg" media="(prefers-color-scheme: dark)"><img src="assets/jpch-mark.svg" alt="" aria-hidden="true"></picture>J.P. Creative Hub LLC</span>
     <span>Juan Carlos · Pang</span>
   </footer>
 </body>
