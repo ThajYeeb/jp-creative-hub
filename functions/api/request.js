@@ -135,6 +135,8 @@ async function saveToAirtable(env, f) {
   }
 }
 
-export function onRequest() {
-  return json({ ok: false, error: 'method_not_allowed' }, 405);
+export function onRequest({ env }) {
+  // TEMP diagnostic (names + lengths only, never values). Remove after debugging.
+  const keys = Object.keys(env || {}).filter((k) => /resend|airtable/i.test(k)).map((k) => JSON.stringify(k) + ':' + String(env[k] || '').length);
+  return json({ ok: false, error: 'method_not_allowed', diag: keys }, 405);
 }
