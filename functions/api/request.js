@@ -1,4 +1,4 @@
-// Cloudflare Pages Function: POST /api/request
+// Cloudflare Pages Function: POST /api/request (rev 2026-10-16)
 // Logs website request-form submissions to Airtable (Requests table).
 // The Web3Forms email is sent separately from the browser; this never blocks it.
 const BASE_ID_DEFAULT = 'app6YIeS789McArMO';
