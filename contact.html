@@ -167,6 +167,26 @@
     .more { display: inline-block; margin-top: 40px; border-bottom: 1px solid var(--ink); padding-bottom: 4px; letter-spacing: 0.16em; text-transform: uppercase; font-size: 0.75rem; }
     @media (max-width: 800px) { header > nav { display: none; } .menu { display: block; } }
 
+    .request { max-width: 760px; padding-top: 72px; scroll-margin-top: 100px; }
+    .request h2 { margin-bottom: 8px; }
+    .request .intro { margin: 0 0 28px; max-width: 600px; }
+    .req-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 32px; }
+    .req-grid .full { grid-column: 1 / -1; }
+    .field { display: grid; gap: 2px; }
+    .field label { font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; }
+    .field .opt { text-transform: none; letter-spacing: 0.02em; opacity: 0.7; }
+    select {
+      width: 100%; background: transparent; border: 0; border-bottom: 1px solid var(--line);
+      padding: 12px 0; font: inherit; color: var(--ink); outline: none; border-radius: 0;
+    }
+    select:focus { border-color: var(--ink); }
+    select option { background: var(--bg); color: var(--ink); }
+    .warn, .note { font-size: 0.9rem; margin: 6px 0 0; }
+    .note { font-family: var(--serif); font-size: 1.2rem; line-height: 1.4; margin-top: 24px; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
+    input:focus-visible, textarea:focus-visible, select:focus-visible, button:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+    @media (max-width: 800px) { .req-grid { grid-template-columns: 1fr; } }
+
     @media (prefers-color-scheme: dark) {
       :root { --bg: #1a1f1a; --ink: #ece9e1; --muted: #b9b6ad; --accent: #9db58f; --line: #2c352b; }
       header { background: rgba(26, 31, 26, 0.9); }
@@ -176,7 +196,8 @@
       .cta { color: var(--accent); border-color: var(--accent); }
       a:hover, a:focus-visible, nav a:hover { color: var(--accent); }
       .phone:hover, .mail:hover, .phone:focus-visible, .mail:focus-visible { border-color: var(--accent); }
-      input:focus, textarea:focus { border-color: var(--accent); }
+      input:focus, textarea:focus, select:focus { border-color: var(--accent); }
+      input:focus-visible, textarea:focus-visible, select:focus-visible, button:focus-visible { outline-color: var(--accent); }
       input::placeholder, textarea::placeholder { color: var(--muted); opacity: 0.7; }
       button { background: var(--accent); color: #1a1f1a; }
       button:hover, button:focus-visible { background: #b3c8a6; }
@@ -214,18 +235,122 @@
         <div>
           <p class="eyebrow">Contact</p>
           <h2>Tell us what you need.</h2>
+          <p><a class="mail" href="#request">Request an interpreter →</a></p>
           <a class="phone" href="tel:9163185507">(916) 318-5507</a>
           <a class="mail" href="mailto:info@jpcreatives.cc">info@jpcreatives.cc</a>
         </div>
-        <form action="mailto:info@jpcreatives.cc" method="post" enctype="text/plain">
+        <form class="w3f" action="https://api.web3forms.com/submit" method="POST">
+          <input type="hidden" name="access_key" value="7e1590a1-bf2c-4fdb-8b91-c4bd7a38200b" />
+          <input type="hidden" name="subject" value="New message from jpcreativehub.com" />
+          <input type="hidden" name="from_name" value="J.P. Creative Hub website" />
+          <input type="hidden" name="redirect" value="https://jpcreativehub.com/contact.html#contact" />
+          <input type="checkbox" name="botcheck" class="sr-only" style="display:none" tabindex="-1" autocomplete="off" />
           <input name="name" placeholder="Name" required />
           <input name="email" type="email" placeholder="Email" required />
           <textarea name="message" rows="4" placeholder="Project" required></textarea>
           <button type="submit">Send</button>
+          <p class="form-status" role="status" aria-live="polite"></p>
         </form>
       </div>
     </section>
+    <section id="request" class="request" aria-labelledby="request-title">
+      <p class="eyebrow">Request</p>
+      <h2 id="request-title">Request an interpreter or translation.</h2>
+      <p class="intro">Fill in what you know and we will confirm by phone or email.</p>
+      <form id="request-form" class="w3f" action="https://api.web3forms.com/submit" method="POST">
+          <input type="hidden" name="access_key" value="7e1590a1-bf2c-4fdb-8b91-c4bd7a38200b" />
+          <input type="hidden" name="subject" value="New request from jpcreativehub.com" />
+          <input type="hidden" name="from_name" value="J.P. Creative Hub website" />
+          <input type="hidden" name="redirect" value="https://jpcreativehub.com/contact.html#request" />
+          <input type="checkbox" name="botcheck" class="sr-only" style="display:none" tabindex="-1" autocomplete="off" />
+        <div class="req-grid">
+          <div class="field">
+            <label for="r-name">Name</label>
+            <input id="r-name" name="name" autocomplete="name" required />
+          </div>
+          <div class="field">
+            <label for="r-email">Email</label>
+            <input id="r-email" name="email" type="email" autocomplete="email" required />
+          </div>
+          <div class="field">
+            <label for="r-phone">Phone <span class="opt">(optional)</span></label>
+            <input id="r-phone" name="phone" type="tel" autocomplete="tel" />
+          </div>
+          <div class="field">
+            <label for="r-org">Organization <span class="opt">(optional)</span></label>
+            <input id="r-org" name="organization" autocomplete="organization" />
+          </div>
+          <div class="field">
+            <label for="r-service">Service</label>
+            <select id="r-service" name="service" required>
+              <option value="">Choose one</option>
+              <option>Over-the-phone interpreting (OPI)</option>
+              <option>Video remote interpreting (VRI)</option>
+              <option>In-person interpreting (Central California only)</option>
+              <option>Translation</option>
+              <option>Proofreading</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="r-dialect">Hmong dialect</label>
+            <select id="r-dialect" name="dialect">
+              <option value="">—</option>
+              <option>Green / Mong Leng</option>
+              <option>White / Hmong Der</option>
+              <option>Mixed</option>
+              <option>Not sure</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="r-when">Date and time needed / Deadline</label>
+            <input id="r-when" name="when" aria-describedby="r-when-help" placeholder="e.g. Oct 20, 10:00 AM PT" />
+            <span id="r-when-help" class="sr-only">Date and time for interpreting, or deadline for translation.</span>
+          </div>
+          <div class="field">
+            <label for="r-setting">Setting</label>
+            <select id="r-setting" name="setting">
+              <option value="">—</option>
+              <option>Medical</option>
+              <option>School</option>
+              <option>Agency</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="field full">
+            <label for="r-details">Details / message</label>
+            <textarea id="r-details" name="details" rows="5" aria-describedby="r-warn"></textarea>
+            <p id="r-warn" class="warn">Please do not include sensitive medical details (diagnoses, records, patient identifiers). We will collect anything needed securely.</p>
+          </div>
+        </div>
+        <button type="submit">Send request</button>
+        <p class="form-status" role="status" aria-live="polite"></p>
+      </form>
+      <p class="note">Phone and video requests need at least 2 hours' notice. Everything you share stays confidential, and we strictly follow HIPAA.</p>
+    </section>
   </main>
+  <script>
+    // Submit via Web3Forms without leaving the page; plain POST still works without JS.
+    document.querySelectorAll('form.w3f').forEach(function (f) {
+      f.addEventListener('submit', function (e) {
+        if (!f.checkValidity()) return;
+        e.preventDefault();
+        var st = f.querySelector('.form-status'), btn = f.querySelector('button[type=submit]');
+        var data = new FormData(f); data.delete('redirect');
+        btn.disabled = true; st.textContent = 'Sending…';
+        fetch(f.action, { method: 'POST', headers: { 'Accept': 'application/json' }, body: data })
+          .then(function (r) { return r.json(); })
+          .then(function (j) {
+            if (!j.success) throw new Error(j.message);
+            f.reset(); st.textContent = 'Thank you! We received your request and will get back to you soon.';
+          })
+          .catch(function () {
+            st.textContent = 'Sorry, something went wrong. Please call (916) 318-5507 or email info@jpcreatives.cc.';
+          })
+          .finally(function () { btn.disabled = false; });
+      });
+    });
+  </script>
 
   <footer>
     <span class="foot-mark"><picture><source srcset="assets/jpch-mark-dark.svg" media="(prefers-color-scheme: dark)"><img src="assets/jpch-mark.svg" alt="" aria-hidden="true"></picture>J.P. Creative Hub LLC</span>
