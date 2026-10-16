@@ -34,3 +34,4 @@ Tell us what you need: the language pair, the setting, whether it is phone, vide
 - [Services](https://jpcreativehub.com/services.html): interpreting, translation, proofreading, and voice in detail
 - [FAQ](https://jpcreativehub.com/faq.html): booking, same-day requests, dialects, translation quotes, confidentiality, and in-person availability
 - [Contact](https://jpcreativehub.com/contact.html): phone, email, and a short contact form
+- [Privacy Policy](https://jpcreativehub.com/privacy.html): what we collect through the website, how we use and protect it, and your choices
