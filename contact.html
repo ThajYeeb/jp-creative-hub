@@ -167,11 +167,14 @@
     .more { display: inline-block; margin-top: 40px; border-bottom: 1px solid var(--ink); padding-bottom: 4px; letter-spacing: 0.16em; text-transform: uppercase; font-size: 0.75rem; }
     @media (max-width: 800px) { header > nav { display: none; } .menu { display: block; } }
 
-    .request { max-width: 760px; padding-top: 72px; scroll-margin-top: 100px; }
+    .request { max-width: 640px; margin: 0 auto; padding: 72px 24px 8vh; border-top: 0; scroll-margin-top: 100px; }
+    .reach { margin-top: 28px; padding-top: 20px; border-top: 1px solid var(--line); font-size: 0.95rem; }
+    .reach a { border-bottom: 1px solid var(--line); }
+    .reach a:hover, .reach a:focus-visible { border-color: currentColor; }
     .request h2 { margin-bottom: 8px; }
     .request .intro { margin: 0 0 28px; max-width: 600px; }
     .req-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 32px; }
-    .req-grid .full { grid-column: 1 / -1; }
+    .req-grid > .field:not(.pair) { grid-column: 1 / -1; }
     .field { display: grid; gap: 2px; }
     .field label { font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; }
     .field .opt { text-transform: none; letter-spacing: 0.02em; opacity: 0.7; }
@@ -185,7 +188,7 @@
     .note { font-family: var(--serif); font-size: 1.2rem; line-height: 1.4; margin-top: 24px; }
     .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
     input:focus-visible, textarea:focus-visible, select:focus-visible, button:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
-    @media (max-width: 800px) { .req-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 600px) { .req-grid { grid-template-columns: 1fr; } }
 
     @media (prefers-color-scheme: dark) {
       :root { --bg: #1a1f1a; --ink: #ece9e1; --muted: #b9b6ad; --accent: #9db58f; --line: #2c352b; }
@@ -230,33 +233,10 @@
   </header>
 
   <main>
-    <section id="contact" class="contact-page">
-      <div class="contact">
-        <div>
-          <p class="eyebrow">Contact</p>
-          <h2>Tell us what you need.</h2>
-          <p><a class="mail" href="#request">Request an interpreter →</a></p>
-          <a class="phone" href="tel:9163185507">(916) 318-5507</a>
-          <a class="mail" href="mailto:info@jpcreatives.cc">info@jpcreatives.cc</a>
-        </div>
-        <form class="w3f" action="https://api.web3forms.com/submit" method="POST">
-          <input type="hidden" name="access_key" value="7e1590a1-bf2c-4fdb-8b91-c4bd7a38200b" />
-          <input type="hidden" name="subject" value="New message from jpcreativehub.com" />
-          <input type="hidden" name="from_name" value="J.P. Creative Hub website" />
-          <input type="hidden" name="redirect" value="https://jpcreativehub.com/contact.html#contact" />
-          <input type="checkbox" name="botcheck" class="sr-only" style="display:none" tabindex="-1" autocomplete="off" />
-          <input name="name" placeholder="Name" required />
-          <input name="email" type="email" placeholder="Email" required />
-          <textarea name="message" rows="4" placeholder="Project" required></textarea>
-          <button type="submit">Send</button>
-          <p class="form-status" role="status" aria-live="polite"></p>
-        </form>
-      </div>
-    </section>
     <section id="request" class="request" aria-labelledby="request-title">
-      <p class="eyebrow">Request</p>
-      <h2 id="request-title">Request an interpreter or translation.</h2>
-      <p class="intro">Fill in what you know and we will confirm by phone or email.</p>
+      <p class="eyebrow">Contact</p>
+      <h2 id="request-title">Tell us what you need.</h2>
+      <p class="intro">Request an interpreter or translation, or just ask a question. Fill in what you know and we will confirm by phone or email.</p>
       <form id="request-form" class="w3f" action="https://api.web3forms.com/submit" method="POST">
           <input type="hidden" name="access_key" value="7e1590a1-bf2c-4fdb-8b91-c4bd7a38200b" />
           <input type="hidden" name="subject" value="New request from jpcreativehub.com" />
@@ -264,11 +244,11 @@
           <input type="hidden" name="redirect" value="https://jpcreativehub.com/contact.html#request" />
           <input type="checkbox" name="botcheck" class="sr-only" style="display:none" tabindex="-1" autocomplete="off" />
         <div class="req-grid">
-          <div class="field">
+          <div class="field pair">
             <label for="r-name">Name</label>
             <input id="r-name" name="name" autocomplete="name" required />
           </div>
-          <div class="field">
+          <div class="field pair">
             <label for="r-email">Email</label>
             <input id="r-email" name="email" type="email" autocomplete="email" required />
           </div>
@@ -284,6 +264,7 @@
             <label for="r-service">Service</label>
             <select id="r-service" name="service" required>
               <option value="">Choose one</option>
+              <option>General question</option>
               <option>Over-the-phone interpreting (OPI)</option>
               <option>Video remote interpreting (VRI)</option>
               <option>In-person interpreting (Central California only)</option>
@@ -293,7 +274,7 @@
             </select>
           </div>
           <div class="field">
-            <label for="r-dialect">Hmong dialect</label>
+            <label for="r-dialect">Hmong dialect <span class="opt">(optional)</span></label>
             <select id="r-dialect" name="dialect">
               <option value="">—</option>
               <option>Green / Mong Leng</option>
@@ -303,12 +284,12 @@
             </select>
           </div>
           <div class="field">
-            <label for="r-when">Date and time needed / Deadline</label>
+            <label for="r-when">Date and time needed / Deadline <span class="opt">(optional)</span></label>
             <input id="r-when" name="when" aria-describedby="r-when-help" placeholder="e.g. Oct 20, 10:00 AM PT" />
             <span id="r-when-help" class="sr-only">Date and time for interpreting, or deadline for translation.</span>
           </div>
           <div class="field">
-            <label for="r-setting">Setting</label>
+            <label for="r-setting">Setting <span class="opt">(optional)</span></label>
             <select id="r-setting" name="setting">
               <option value="">—</option>
               <option>Medical</option>
@@ -327,6 +308,7 @@
         <p class="form-status" role="status" aria-live="polite"></p>
       </form>
       <p class="note">Phone and video requests need at least 2 hours' notice. Everything you share stays confidential, and we strictly follow HIPAA.</p>
+      <p class="reach"><a href="tel:9163185507">(916) 318-5507</a> <span aria-hidden="true">·</span> <a href="mailto:info@jpcreatives.cc">info@jpcreatives.cc</a></p>
     </section>
   </main>
   <script>
