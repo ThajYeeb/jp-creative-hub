@@ -320,6 +320,13 @@
         var st = f.querySelector('.form-status'), btn = f.querySelector('button[type=submit]');
         var data = new FormData(f); data.delete('redirect');
         btn.disabled = true; st.textContent = 'Sending…';
+        // Also log the request to Airtable. Fire-and-forget: never blocks or affects the email/thank-you.
+        try {
+          var rec = {};
+          data.forEach(function (v, k) { if (k !== 'access_key' && typeof v === 'string') rec[k] = v; });
+          fetch('/api/request', { method: 'POST', keepalive: true, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(rec) })
+            .catch(function () {});
+        } catch (err) {}
         fetch(f.action, { method: 'POST', headers: { 'Accept': 'application/json' }, body: data })
           .then(function (r) { return r.json(); })
           .then(function (j) {
