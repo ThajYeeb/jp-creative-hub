@@ -31,4 +31,5 @@ Tell us what you need: the language pair, the setting, whether it is phone, vide
 - [Home](https://jpcreativehub.com/): overview of what we do
 - [About](https://jpcreativehub.com/about.html): Juan Carlos and Pang
 - [Services](https://jpcreativehub.com/services.html): interpreting, translation, proofreading, and voice in detail
+- [FAQ](https://jpcreativehub.com/faq.html): booking, same-day requests, dialects, translation quotes, confidentiality, and in-person availability
 - [Contact](https://jpcreativehub.com/contact.html): phone, email, and a short contact form
