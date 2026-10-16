@@ -24,7 +24,47 @@ function toDate(s) {
   return d.toISOString().slice(0, 10);
 }
 
-export async function onRequestPost({ request, env }) {
+const esc = (s) => s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+async function sendConfirmation(env, f) {
+  // Auto-reply via Resend. Skips quietly if RESEND_API_KEY is not configured.
+  if (!env.RESEND_API_KEY) return 'skipped';
+  const phrase = f.service ? 'your request for ' + f.service : 'your request';
+  const text =
+    `Hi ${f.name},\n\n` +
+    `Thank you for reaching out to J.P. Creative Hub! We received ${phrase} and will get back to you soon, usually within one business day.\n\n` +
+    `If your request is urgent, please call us at (916) 318-5507.\n\n` +
+    `Warmly,\nJC and Pang\nJ.P. Creative Hub\ninfo@jpcreativehub.com | jpcreativehub.com\n`;
+  const html =
+    `<p>Hi ${esc(f.name)},</p>` +
+    `<p>Thank you for reaching out to J.P. Creative Hub! We received ${esc(phrase)} and will get back to you soon, usually within one business day.</p>` +
+    `<p>If your request is urgent, please call us at <a href="tel:+19163185507">(916) 318-5507</a>.</p>` +
+    `<p>Warmly,<br>JC and Pang<br>J.P. Creative Hub<br>` +
+    `<a href="mailto:info@jpcreativehub.com">info@jpcreativehub.com</a> | <a href="https://jpcreativehub.com">jpcreativehub.com</a></p>`;
+  try {
+    const r = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        from: 'J.P. Creative Hub <info@jpcreativehub.com>',
+        to: [f.email],
+        reply_to: 'info@jpcreativehub.com',
+        subject: 'We received your request \u2013 J.P. Creative Hub',
+        text,
+        html,
+      }),
+    });
+    if (!r.ok) { console.error('Resend error', r.status, (await r.text()).slice(0, 300)); return 'failed'; }
+    return 'sent';
+  } catch (e) {
+    console.error('Resend fetch failed', String(e));
+    return 'failed';
+  }
+}
+
+
+export async function onRequestPost(context) {
+  const { request, env } = context;
   const len = Number(request.headers.get('Content-Length') || 0);
   if (len > MAX_BODY) return json({ ok: false, error: 'too_large' }, 413);
 
@@ -46,7 +86,15 @@ export async function onRequestPost({ request, env }) {
   for (const k in LIMITS) f[k] = clean(raw[k], LIMITS[k]);
   if (!f.name || !f.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(f.email)) return json({ ok: false, error: 'invalid' }, 400);
 
-  if (!env.AIRTABLE_TOKEN) return json({ ok: false, error: 'not_configured' }, 503);
+  // Airtable save and the confirmation email run independently; neither blocks the other.
+  const [airtable, email] = await Promise.all([saveToAirtable(env, f), sendConfirmation(env, f)]);
+  if (airtable === 'not_configured') return json({ ok: false, error: 'not_configured', email }, 503);
+  if (airtable !== 'saved') return json({ ok: false, error: 'upstream', email }, 502);
+  return json({ ok: true, email });
+}
+
+async function saveToAirtable(env, f) {
+  if (!env.AIRTABLE_TOKEN) return 'not_configured';
 
   const detailParts = [];
   if (f.when) detailParts.push('Date/time needed (as entered): ' + f.when);
@@ -78,12 +126,12 @@ export async function onRequestPost({ request, env }) {
     });
     if (!r.ok) {
       console.error('Airtable error', r.status, (await r.text()).slice(0, 500));
-      return json({ ok: false, error: 'upstream' }, 502);
+      return 'failed';
     }
-    return json({ ok: true });
+    return 'saved';
   } catch (e) {
     console.error('Airtable fetch failed', String(e));
-    return json({ ok: false, error: 'upstream' }, 502);
+    return 'failed';
   }
 }
 
