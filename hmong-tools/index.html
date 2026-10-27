@@ -8,28 +8,69 @@
 <style>
   :root { --bg: #f8f9fa; --card: #fff; --accent: #1F4E79; --accent2: #2E75B6; --text: #222; }
   * { box-sizing: border-box; }
-  body { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 24px 16px; line-height: 1.5; max-width: 720px; margin-left: auto; margin-right: auto; }
-  h1 { color: var(--accent); font-size: 1.7rem; margin-top: 0; }
+  body { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 24px 16px; line-height: 1.5; max-width: 760px; margin-left: auto; margin-right: auto; }
+  .top-header { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 12px; }
+  h1 { color: var(--accent); font-size: 1.65rem; margin: 0; }
   .card { background: var(--card); border-radius: 12px; padding: 20px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,.08); }
   .card h2 { color: var(--accent); font-size: 1.25rem; margin-top: 0; border-bottom: 2px solid var(--accent2); padding-bottom: 6px; }
   a.btn { display: inline-block; background: var(--accent); color: #fff; text-decoration: none; padding: 10px 18px; border-radius: 8px; font-weight: 600; margin-top: 8px; }
   a.btn:hover { background: var(--accent2); }
+  .lang-switch { display: inline-flex; background: #e2e8f0; border-radius: 999px; padding: 3px; gap: 2px; }
+  .lang-btn { background: transparent; color: #334155; border: none; padding: 6px 14px; border-radius: 999px; font-size: 0.9rem; font-weight: 700; cursor: pointer; }
+  .lang-btn.active { background: var(--accent); color: #fff; }
+  .hidden { display: none !important; }
 </style>
 </head>
 <body>
-  <h1>10-Day Hmong Language Course – Practice Suite</h1>
-  <p style="color:#555;margin-top:0;">Interactive take-home practice tools for White Hmong (RPA) students.</p>
-
-  <div class="card">
-    <h2>1. Hmong Sound Trainer (Focus on Tones)</h2>
-    <p>Learn the 7 main tones in White Hmong (RPA), practice minimal pairs, and record your own voice to compare pitch and voice quality.</p>
-    <a class="btn" href="./Hmong_Sound_Trainer.html">Open Sound Trainer →</a>
+  <div class="top-header">
+    <h1 id="hubTitle">10-Day Hmong Language Course – Practice Suite</h1>
+    <div class="lang-switch">
+      <button class="lang-btn active" id="btnEn" onclick="setLang('en')">English</button>
+      <button class="lang-btn" id="btnVi" onclick="setLang('vi')">Tiếng Việt</button>
+    </div>
   </div>
 
-  <div class="card">
-    <h2>2. Universal Language Generator Tool</h2>
-    <p>Build sentences with interactive word tiles, test your own typed sentences with real-time grammar &amp; tone diagnostics, and explore the 6-slot sentence generator.</p>
-    <a class="btn" href="./Universal_Language_Generator_Tool.html">Open Sentence Generator &amp; Checker →</a>
+  <div id="view-en">
+    <p style="color:#555;margin-top:0;">Interactive take-home practice tools for White Hmong (RPA) students. Choose your instruction language above (English or Tiếng Việt).</p>
+    <div class="card">
+      <h2>1. Hmong Sound Trainer (Focus on Tones)</h2>
+      <p>Learn the 7 main tones in White Hmong (RPA), practice minimal pairs, and record your own voice to compare pitch and voice quality.</p>
+      <a class="btn" href="./Hmong_Sound_Trainer.html?lang=en">Open Sound Trainer →</a>
+    </div>
+    <div class="card">
+      <h2>2. Universal Language Generator Tool</h2>
+      <p>Build sentences with interactive word tiles, test your own typed sentences with real-time grammar &amp; tone diagnostics, and explore the 6-slot sentence generator.</p>
+      <a class="btn" href="./Universal_Language_Generator_Tool.html?lang=en">Open Sentence Generator &amp; Checker →</a>
+    </div>
   </div>
+
+  <div id="view-vi" class="hidden">
+    <p style="color:#555;margin-top:0;">Bộ công cụ luyện tập thực hành tại nhà dành cho học viên khóa học tiếng H'Mông Trắng (RPA) 10 ngày.</p>
+    <div class="card">
+      <h2>1. Công Cụ Luyện Phát Âm &amp; Thanh Điệu Tiếng H'Mông</h2>
+      <p>Nắm vững 7 thanh điệu chính trong chữ H'Mông RPA, luyện nghe các cặp từ tối thiểu và ghi âm giọng của bạn để tự kiểm tra cao độ, chất giọng.</p>
+      <a class="btn" href="./Hmong_Sound_Trainer.html?lang=vi">Mở Công Cụ Luyện Thanh Điệu →</a>
+    </div>
+    <div class="card">
+      <h2>2. Công Cụ Tạo Câu &amp; Kiểm Tra Ngữ Pháp Đa Năng</h2>
+      <p>Ghép câu bằng thẻ từ tương tác, tự gõ câu tiếng H'Mông để kiểm tra lỗi trật tự từ và thanh điệu tức thì, hoặc tạo hàng trăm câu mẫu qua bảng 6 vị trí ngữ pháp.</p>
+      <a class="btn" href="./Universal_Language_Generator_Tool.html?lang=vi">Mở Công Cụ Tạo Câu &amp; Kiểm Tra Ngữ Pháp →</a>
+    </div>
+  </div>
+
+  <script>
+    function setLang(l) {
+      localStorage.setItem('hmong_ui_lang', l);
+      document.getElementById('btnEn').classList.toggle('active', l === 'en');
+      document.getElementById('btnVi').classList.toggle('active', l === 'vi');
+      document.getElementById('view-en').classList.toggle('hidden', l !== 'en');
+      document.getElementById('view-vi').classList.toggle('hidden', l !== 'vi');
+      document.getElementById('hubTitle').textContent = l === 'vi'
+        ? "Khóa Học Tiếng H'Mông 10 Ngày – Bộ Công Cụ Thực Hành"
+        : "10-Day Hmong Language Course – Practice Suite";
+    }
+    const saved = new URLSearchParams(window.location.search).get('lang') || localStorage.getItem('hmong_ui_lang') || 'en';
+    setLang(saved === 'vi' ? 'vi' : 'en');
+  </script>
 </body>
 </html>

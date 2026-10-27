@@ -312,9 +312,26 @@
     padding: 7px 8px;
   }
   table.ref-table th { color: var(--accent); background: #f0f4f8; }
+
+  .lang-switch { display: inline-flex; background: #e2e8f0; border-radius: 999px; padding: 3px; gap: 2px; }
+  .lang-btn { background: transparent; color: #334155; border: none; padding: 6px 14px; border-radius: 999px; font-size: 0.9rem; font-weight: 700; cursor: pointer; }
+  .lang-btn.active { background: var(--accent); color: #fff; }
+  .nav-bar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; }
+  .nav-link { font-size: 0.9rem; color: var(--accent); font-weight: 600; text-decoration: none; }
+  .nav-link:hover { text-decoration: underline; }
+
 </style>
 </head>
 <body>
+
+<div class="nav-bar">
+  <a class="nav-link" href="./index.html" id="backHubLink">← Back to Course Practice Hub</a>
+  <div class="lang-switch" role="group" aria-label="Instruction Language">
+    <button class="lang-btn active" id="uiBtnEn" onclick="setUILang('en')">English</button>
+    <button class="lang-btn" id="uiBtnVi" onclick="setUILang('vi')">Tiếng Việt</button>
+  </div>
+</div>
+
 
 <div class="card">
   <div class="top-bar">
@@ -1239,6 +1256,220 @@ document.querySelectorAll(".tab-btn").forEach(btn => {
 saveStats();
 loadChallenge();
 renderMatrix();
+
+// Bilingual UI & Vietnamese translations for Hmong course items
+const VI_LEX = {
+  "kuv": { vi: "tôi / mình", toneVi: "v (trung thăng)" },
+  "koj": { vi: "bạn", toneVi: "j (cao giáng)" },
+  "nws": { vi: "anh ấy / cô ấy / nó", toneVi: "s (thấp)" },
+  "peb": { vi: "chúng tôi / chúng ta", toneVi: "b (cao)" },
+  "nej": { vi: "các bạn", toneVi: "j (cao giáng)" },
+  "lawv": { vi: "họ", toneVi: "v (trung thăng)" },
+  "yuav": { vi: "sẽ (tương lai)", toneVi: "v (trung thăng)" },
+  "tau": { vi: "đã / được (quá khứ)", toneVi: "không chữ cuối (trung)" },
+  "tab tom": { vi: "đang", toneVi: "b + m" },
+  "puas": { vi: "có… không? (từ để hỏi)", toneVi: "s (thấp)" },
+  "tsis": { vi: "không (phủ định)", toneVi: "s (thấp)" },
+  "xav": { vi: "muốn", toneVi: "v (trung thăng)" },
+  "nyiam": { vi: "thích", toneVi: "m (thấp nghẹn)" },
+  "nyob": { vi: "sống / ở / khỏe", toneVi: "b (cao)" },
+  "mus": { vi: "đi", toneVi: "s (thấp)" },
+  "kawm": { vi: "học", toneVi: "m (thấp nghẹn)" },
+  "hais": { vi: "nói", toneVi: "s (thấp)" },
+  "paub": { vi: "biết", toneVi: "b (cao)" },
+  "pom": { vi: "nhìn thấy", toneVi: "m (thấp nghẹn)" },
+  "pab": { vi: "giúp đỡ", toneVi: "b (cao)" },
+  "nyeem": { vi: "đọc", toneVi: "m (thấp nghẹn)" },
+  "noj": { vi: "ăn", toneVi: "j (cao giáng)" },
+  "haus": { vi: "uống", toneVi: "s (thấp)" },
+  "ua": { vi: "làm", toneVi: "không chữ cuối (trung)" },
+  "hu": { vi: "gọi / tên là", toneVi: "không chữ cuối (trung)" },
+  "thov": { vi: "xin / vui lòng", toneVi: "v (trung thăng)" },
+  "zoo": { vi: "tốt / khỏe", toneVi: "không chữ cuối (trung)" },
+  "lus hmoob": { vi: "tiếng H\x27Mông", toneVi: "s + b" },
+  "lus": { vi: "tiếng / lời nói", toneVi: "s (thấp)" },
+  "hmoob": { vi: "H\x27Mông", toneVi: "b (cao)" },
+  "ntawv": { vi: "sách / chữ / giấy", toneVi: "v (trung thăng)" },
+  "phau ntawv": { vi: "quyển sách", toneVi: "trung + v" },
+  "tsev": { vi: "nhà", toneVi: "v (trung thăng)" },
+  "mov": { vi: "cơm", toneVi: "v (trung thăng)" },
+  "dej": { vi: "nước", toneVi: "j (cao giáng)" },
+  "dev": { vi: "con chó", toneVi: "v (trung thăng)" },
+  "phooj ywg": { vi: "bạn bè", toneVi: "j + g" },
+  "vajtswv": { vi: "Đức Chúa Trời", toneVi: "v (trung thăng)" },
+  "yehauvas": { vi: "Giê-hô-va", toneVi: "s (thấp)" },
+  "ib": { vi: "một (1)", toneVi: "b (cao)" },
+  "ob": { vi: "hai (2)", toneVi: "b (cao)" },
+  "tus": { vi: "loại từ (người / con vật)", toneVi: "s (thấp)" },
+  "tug": { vi: "loại từ (biến âm của tus sau ib/ob/peb)", toneVi: "g (hơi thở)" },
+  "lub": { vi: "loại từ (vật tròn / ngôi nhà)", toneVi: "b (cao)" },
+  "phau": { vi: "loại từ (quyển sách)", toneVi: "không chữ cuối (trung)" },
+  "dab tsi": { vi: "cái gì?", toneVi: "b + trung" },
+  "qhov twg": { vi: "ở đâu?", toneVi: "v + g" },
+  "leej twg": { vi: "ai?", toneVi: "j + g" },
+  "muaj": { vi: "có", toneVi: "j (cao giáng)" }
+};
+
+const VI_SENTENCES = [
+  { vi: "Bạn có khỏe không?", formulaVi: "Chủ ngữ (Koj) + Từ hỏi (puas) + Động từ (nyob) + Trạng từ (zoo)", hintVi: "Đặt 'puas' ngay trước động từ 'nyob' (giống cấu trúc: Bạn + có + khỏe + không)." },
+  { vi: "Tôi muốn học tiếng H'Mông.", formulaVi: "Chủ ngữ (Kuv) + Động từ khuyết thiếu (xav) + Động từ (kawm) + Tân ngữ (lus Hmoob)", hintVi: "Bắt đầu bằng 'Kuv xav kawm', sau đó là 'lus Hmoob' (chú ý 2 chữ o và chữ b báo thanh cao ở cuối)." },
+  { vi: "Tôi không biết.", formulaVi: "Chủ ngữ (Kuv) + Phủ định (tsis) + Động từ (paub)", hintVi: "'tsis' (không) đứng ngay trước động từ 'paub' (biết — đừng nhầm với 'pab' là giúp đỡ)." },
+  { vi: "Anh ấy / Cô ấy không về nhà.", formulaVi: "Chủ ngữ (Nws) + Phủ định (tsis) + Động từ (mus) + Nơi chốn (tsev)", hintVi: "Từ phủ định 'tsis' phải đứng trước động từ 'mus' (đi)." },
+  { vi: "Chúng tôi sẽ đọc quyển sách.", formulaVi: "Chủ ngữ (Peb) + Tương lai (yuav) + Động từ (nyeem) + Loại từ (phau) + Danh từ (ntawv)", hintVi: "Dùng 'yuav' (sẽ) trước động từ và 'phau' (quyển/cuốn) trước 'ntawv' (sách)." },
+  { vi: "Tôi đã ăn cơm.", formulaVi: "Chủ ngữ (Kuv) + Quá khứ (tau) + Động từ (noj) + Tân ngữ (mov)", hintVi: "Dùng 'tau' (đã) trước động từ 'noj' (ăn)." },
+  { vi: "Bạn có nói tiếng H'Mông không?", formulaVi: "Chủ ngữ (Koj) + Từ hỏi (puas) + Động từ (hais) + Tân ngữ (lus Hmoob)", hintVi: "Đặt 'puas' ngay trước động từ 'hais' (nói)." },
+  { vi: "Bạn sống ở đâu?", formulaVi: "Chủ ngữ (Koj) + Động từ (nyob) + Ở đâu (qhov twg)", hintVi: "Trong tiếng H'Mông (giống tiếng Việt), 'qhov twg' (ở đâu) đứng ở cuối câu và KHÔNG dùng 'puas'!" },
+  { vi: "Bạn đang làm gì?", formulaVi: "Chủ ngữ (Koj) + Động từ (ua) + Cái gì (dab tsi)", hintVi: "Đặt 'dab tsi' (cái gì) sau động từ 'ua' (làm) — rất giống trật tự tiếng Việt!" },
+  { vi: "Tôi nhìn thấy một người bạn.", formulaVi: "Chủ ngữ (Kuv) + Động từ (pom) + Số đếm (ib) + Loại từ (tug) + Danh từ (phooj ywg)", hintVi: "Sau số 'ib' (một), loại từ 'tus' biến âm thành 'tug'!" },
+  { vi: "Họ có hai quyển sách.", formulaVi: "Chủ ngữ (Lawv) + Động từ (muaj) + Số đếm (ob) + Loại từ (phau) + Danh từ (ntawv)", hintVi: "Số đếm (ob = 2) + Loại từ chỉ sách (phau = quyển) + Danh từ (ntawv = sách)." },
+  { vi: "Xin hãy giúp tôi.", formulaVi: "Lời thỉnh cầu (Thov) + Động từ (pab) + Tân ngữ (kuv)", hintVi: "'Thov' = xin vui lòng; 'pab' = giúp đỡ ('paub' = biết)." },
+  { vi: "Chúng tôi muốn giúp bạn.", formulaVi: "Chủ ngữ (Peb) + Muốn (xav) + Giúp (pab) + Bạn (koj)", hintVi: "Peb (chúng tôi) + xav (muốn) + pab (giúp) + koj (bạn)." }
+];
+
+const VI_SLOTS = [
+  { titleVi: "1. Chủ ngữ", itemsVi: ["Tôi", "Bạn", "Anh/Cô ấy", "Chúng tôi", "Họ"] },
+  { titleVi: "2. Thời/Thể", itemsVi: ["(hiện tại)", "sẽ", "đã", "đang"] },
+  { titleVi: "3. Nghi vấn", itemsVi: ["(câu kể)", "có… không?"] },
+  { titleVi: "4. Phủ định", itemsVi: ["(khẳng định)", "không"] },
+  { titleVi: "5. Động từ", itemsVi: ["học", "nói", "đọc", "giúp", "đi", "ở/sống"] },
+  { titleVi: "6. Tân ngữ", itemsVi: ["tiếng H'Mông", "quyển sách", "một người bạn", "nhà", "khỏe/tốt"] }
+];
+
+PACKS.hmong.lexicon.forEach(item => {
+  const m = VI_LEX[item.w.toLowerCase()];
+  item.enOrig = item.en;
+  item.toneOrig = item.tone;
+  item.vi = m ? m.vi : item.en;
+  item.toneVi = m ? m.toneVi : item.tone;
+});
+
+PACKS.hmong.sentences.forEach((s, idx) => {
+  const m = VI_SENTENCES[idx];
+  s.enOrig = s.en;
+  s.formulaOrig = s.formula;
+  s.hintOrig = s.hint;
+  if (m) {
+    s.vi = m.vi;
+    s.formulaVi = m.formulaVi;
+    s.hintVi = m.hintVi;
+  }
+});
+
+PACKS.hmong.slots.forEach((col, cIdx) => {
+  col.titleOrig = col.title;
+  col.titleVi = VI_SLOTS[cIdx] ? VI_SLOTS[cIdx].titleVi : col.title;
+  col.items.forEach((it, iIdx) => {
+    it.enOrig = it.en;
+    it.vi = (VI_SLOTS[cIdx] && VI_SLOTS[cIdx].itemsVi[iIdx]) ? VI_SLOTS[cIdx].itemsVi[iIdx] : it.en;
+  });
+});
+
+let uiLang = localStorage.getItem("hmong_ui_lang") || "en";
+
+function setUILang(lang) {
+  uiLang = lang;
+  localStorage.setItem("hmong_ui_lang", lang);
+  document.getElementById("uiBtnEn").classList.toggle("active", lang === "en");
+  document.getElementById("uiBtnVi").classList.toggle("active", lang === "vi");
+
+  const isVi = lang === "vi";
+  document.getElementById("backHubLink").textContent = isVi ? "← Quay lại Trang Chủ Bộ Công Cụ" : "← Back to Course Practice Hub";
+  document.querySelector("h1").textContent = isVi ? "Công Cụ Tạo Câu & Kiểm Tra Ngữ Pháp Đa Năng" : "Universal Language Generator Tool";
+  document.querySelector(".subtitle").textContent = isVi
+    ? "Ghép Câu & Kiểm Tra Ngữ Pháp Tiếng H'Mông Trắng (RPA) — Khóa Học 10 Ngày"
+    : "Sentence Builder & Diagnostic Grammar Checker — 10-Day Course Practice Suite";
+
+  // Swap lexicon active language strings
+  PACKS.hmong.lexicon.forEach(item => {
+    item.en = isVi ? item.vi : item.enOrig;
+    item.tone = isVi ? item.toneVi : item.toneOrig;
+  });
+  PACKS.hmong.sentences.forEach(s => {
+    s.en = isVi ? (s.vi || s.enOrig) : s.enOrig;
+    s.formula = isVi ? (s.formulaVi || s.formulaOrig) : s.formulaOrig;
+    s.hint = isVi ? (s.hintVi || s.hintOrig) : s.hintOrig;
+  });
+  PACKS.hmong.slots.forEach(col => {
+    col.title = isVi ? col.titleVi : col.titleOrig;
+    col.items.forEach(it => {
+      it.en = isVi ? it.vi : it.enOrig;
+    });
+  });
+
+  // Update tabs & buttons
+  const tabBtns = document.querySelectorAll(".tab-btn");
+  if (tabBtns.length === 3) {
+    tabBtns[0].textContent = isVi ? "1. Ghép Câu Bằng Thẻ Từ" : "1. Word-Tile Sentence Builder";
+    tabBtns[1].textContent = isVi ? "2. Tự Gõ Câu & Kiểm Tra Lỗi" : "2. Free-Typing Sentence Checker";
+    tabBtns[2].textContent = isVi ? "3. Bảng Ghép 6 Vị Trí Câu" : "3. Universal Slot Generator";
+  }
+
+  document.getElementById("checkTilesBtn").textContent = isVi ? "Kiểm Tra Câu" : "Check Sentence";
+  document.getElementById("clearTilesBtn").textContent = isVi ? "Xóa Làm Lại" : "Clear";
+  document.getElementById("hintTilesBtn").textContent = isVi ? "Gợi Ý" : "Show Hint";
+  document.getElementById("nextTilesBtn").textContent = isVi ? "Câu Tiếp Theo →" : "Next Prompt →";
+  document.getElementById("checkFreeBtn").textContent = isVi ? "Kiểm Tra Theo Câu Mẫu" : "Check My Sentence";
+  document.getElementById("checkFreeAnyBtn").textContent = isVi ? "Kiểm Tra Câu Tự Đặt" : "Test Custom Sentence";
+  document.getElementById("newTypePromptBtn").textContent = isVi ? "Đổi Câu Mẫu →" : "Next Target →";
+  document.getElementById("freeInput").placeholder = isVi
+    ? "Gõ câu tiếng H'Mông của bạn (ví dụ: Koj puas nyob zoo hoặc Kuv xav kawm lus Hmoob)…"
+    : "Type a Hmong sentence (e.g., Koj puas nyob zoo or Kuv xav kawm lus Hmoob)…";
+
+  loadChallenge();
+  renderMatrix();
+}
+
+
+const origDiagnose = diagnoseSentence;
+diagnoseSentence = function(inputStr, targetItem) {
+  const res = origDiagnose(inputStr, targetItem);
+  if (typeof uiLang !== "undefined" && uiLang === "vi") {
+    if (res.title === "Empty Sentence") {
+      res.title = "Chưa Nhập Câu";
+      res.msg = "Vui lòng chọn thẻ từ hoặc gõ một câu tiếng H\x27Mông trước khi kiểm tra.";
+    } else if (res.title.includes("Exact Match")) {
+      res.title = "Zoo heev! Chính Xác & Đúng Ngữ Pháp!";
+      if (targetItem) {
+        res.msg = "Câu của bạn <strong>\"" + targetItem.hm.join(" ") + "\"</strong> có nghĩa là: <em>\"" + targetItem.en + "\"</em>.";
+      }
+    } else if (res.title.includes("Right Words, Word-Order")) {
+      res.title = "Đúng Từ Vựng Nhưng Cần Đổi Trật Tự Từ";
+      res.msg = "Trong tiếng H\x27Mông, từ để hỏi <code>puas</code> và từ phủ định <code>tsis</code> phải đứng ngay <strong>trước</strong> động từ! Công thức: <code>" + (targetItem ? targetItem.formula : "") + "</code>.";
+    } else if (res.title.includes("Tone Sandhi") || res.title.includes("Classifier Tone Change")) {
+      res.title = "Quy Tắc Biến Âm Loại Từ: tus → tug";
+      res.msg = "Cấu trúc rất tốt! Chỉ lưu ý quy tắc biến âm: sau các số đếm <code>ib, ob, peb</code> (1, 2, 3), loại từ <code>tus</code> đổi chữ báo thanh cuối thành <strong><code>tug</code></strong> (ví dụ: <code>ib tug phooj ywg</code>).";
+    } else if (res.title.includes("Tone / Spelling Check")) {
+      res.title = res.title.replace("Tone / Spelling Check on", "Kiểm Tra Thanh Điệu / Chính Tả Từ");
+      res.msg = res.msg
+        .replace("Almost there! You wrote", "Sắp đúng rồi! Bạn đã viết")
+        .replace("instead of", "thay vì")
+        .replace("In White Hmong RPA, the final consonant marks the tone and changes the meaning.", "Trong chữ H\x27Mông RPA, chữ cái cuối dùng để báo thanh điệu và làm thay đổi nghĩa của từ.");
+    } else if (res.title.includes("Negation \x27tsis\x27 Goes Before")) {
+      res.title = "Lỗi Trật Tự Từ: \x27tsis\x27 (không) Phải Đứng Trước Động Từ";
+      res.msg = "Trong tiếng H\x27Mông (giống tiếng Việt), từ phủ định <code>tsis</code> phải đặt ngay <strong>trước</strong> động từ.";
+    } else if (res.title.includes("Question Particle \x27puas\x27 Goes Before")) {
+      res.title = "Lỗi Trật Tự Từ: \x27puas\x27 Phải Đứng Trước Động Từ";
+      res.msg = "Trong câu hỏi Có/Không tiếng H\x27Mông, từ để hỏi <code>puas</code> luôn đứng ngay <strong>trước</strong> động từ chính.";
+    } else if (res.title.includes("Possible Tone or Spelling Typo")) {
+      res.title = res.title.replace("Possible Tone or Spelling Typo:", "Có Thể Nhầm Thanh Điệu Hoặc Chính Tả:");
+      res.msg = res.msg
+        .replace("Did you mean", "Có phải ý bạn là")
+        .replace("Check the vowel or final tone letter.", "Hãy kiểm tra lại nguyên âm hoặc chữ cái báo thanh ở cuối từ.");
+    } else if (res.title === "Grammatically Valid Sentence!") {
+      res.title = "Câu Hợp Lệ & Đúng Ngữ Pháp!";
+      res.msg = "Câu của bạn tuân thủ đúng trật tự ngữ pháp tiếng H\x27Mông Trắng (RPA)!";
+    }
+  }
+  return res;
+};
+
+const urlLang = new URLSearchParams(window.location.search).get("lang");
+if (urlLang === "vi" || urlLang === "en") {
+  setUILang(urlLang);
+} else {
+  setUILang(uiLang);
+}
+
 </script>
 </body>
 </html>
