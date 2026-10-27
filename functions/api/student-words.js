@@ -6,18 +6,18 @@ const MAX_BODY = 100000;
 const MAX_WORDS = 300;
 
 const ROSTER = {
-  'HMONG-01': 'Stephen Trumble (Bền)',
-  'HMONG-02': 'Quỳnh Trumble',
-  'HMONG-03': 'Quân Nguyễn (Nguyễn Bá Anh Quân)',
-  'HMONG-04': 'Jade Trần (Trần Hoàng Kim Jade)',
-  'HMONG-05': 'Thái Lý (Lý Vĩnh Thái)',
-  'HMONG-06': 'Sa-ra Nguyễn (Nguyễn Mỹ Sa-ra)',
-  'HMONG-07': 'Minh Lê (Lê Thị Minh)',
-  'HMONG-08': 'Phương Nguyễn (Nguyễn Minh Phương)',
-  'HMONG-09': 'Hùng Nguyễn (Nguyễn Lý Hùng)',
-  'HMONG-10': 'Tuyết Nguyễn (Nguyễn Thị Ánh Tuyết)',
-  'HMONG-11': 'David Rorke',
-  'HMONG-12': 'Hoa Phạm (Phạm Thị Hoa)',
+  'HMOOB-01': 'Stephen Trumble (Bền)',
+  'HMOOB-02': 'Quỳnh Trumble',
+  'HMOOB-03': 'Quân Nguyễn (Nguyễn Bá Anh Quân)',
+  'HMOOB-04': 'Jade Trần (Trần Hoàng Kim Jade)',
+  'HMOOB-05': 'Thái Lý (Lý Vĩnh Thái)',
+  'HMOOB-06': 'Sa-ra Nguyễn (Nguyễn Mỹ Sa-ra)',
+  'HMOOB-07': 'Minh Lê (Lê Thị Minh)',
+  'HMOOB-08': 'Phương Nguyễn (Nguyễn Minh Phương)',
+  'HMOOB-09': 'Hùng Nguyễn (Nguyễn Lý Hùng)',
+  'HMOOB-10': 'Tuyết Nguyễn (Nguyễn Thị Ánh Tuyết)',
+  'HMOOB-11': 'David Rorke',
+  'HMOOB-12': 'Hoa Phạm (Phạm Thị Hoa)',
 };
 
 const json = (obj, status = 200) =>
@@ -34,8 +34,9 @@ const clean = (v, max) =>
 
 function normalizeCode(rawCode) {
   if (typeof rawCode !== 'string') return '';
-  const code = rawCode.trim().toUpperCase();
+  let code = rawCode.trim().toUpperCase();
   if (!/^[A-Z0-9-]{3,24}$/.test(code)) return '';
+  code = code.replace(/^HMONG-/, 'HMOOB-');
   return code;
 }
 
@@ -183,7 +184,7 @@ export async function onRequestPost(context) {
       const listData = await listRes.json();
       const existingCodes = new Set(
         (listData.records || [])
-          .map((r) => ((r.fields && r.fields['Student Code']) || '').toUpperCase().trim())
+          .map((r) => normalizeCode((r.fields && r.fields['Student Code']) || ''))
           .filter(Boolean)
       );
       const toCreate = [];
