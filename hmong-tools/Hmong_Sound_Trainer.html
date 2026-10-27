@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hmong Sound Trainer – Focus on Tones</title>
+<style>
+  :root { --bg: #f8f9fa; --card: #fff; --accent: #1F4E79; --accent2: #2E75B6; --text: #222; }
+  * { box-sizing: border-box; }
+  body { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 16px; line-height: 1.5; }
+  h1 { color: var(--accent); font-size: 1.6rem; margin-top: 0; }
+  h2 { color: var(--accent); font-size: 1.25rem; border-bottom: 2px solid var(--accent2); padding-bottom: 4px; }
+  .card { background: var(--card); border-radius: 12px; padding: 16px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,.08); }
+  button, .btn { background: var(--accent); color: white; border: none; padding: 10px 16px; border-radius: 8px; font-size: 1rem; cursor: pointer; margin: 4px; }
+  button:active, .btn:active { background: var(--accent2); }
+  .tone { margin: 12px 0; padding: 12px; background: #f0f4f8; border-left: 4px solid var(--accent2); border-radius: 6px; }
+  .tone strong { color: var(--accent); }
+  .pair { display: flex; gap: 8px; flex-wrap: wrap; margin: 8px 0; }
+  .pair span { background: #e8eef4; padding: 6px 12px; border-radius: 6px; font-weight: 600; }
+  #recorder { margin-top: 12px; }
+  audio { width: 100%; margin-top: 8px; }
+  .note { font-size: 0.9rem; color: #555; background: #fff8e1; padding: 10px; border-radius: 8px; }
+  .research { font-style: italic; color: #444; }
+</style>
+</head>
+<body>
+<h1>Hmong Sound Trainer</h1>
+<p class="research">Based on recent research (UCL/Tohoku 2026): Focus first on hearing the sounds themselves—treat unfamiliar tones as raw acoustic signals rather than forcing them into English categories. This improves pronunciation accuracy for tonal languages like Hmong.</p>
+
+<div class="card">
+  <h2>How to Use This Trainer</h2>
+  <ol>
+    <li>Read the tone description.</li>
+    <li>Listen to a native speaker (recommended: Study Hmong YouTube tone drills) or use the examples below.</li>
+    <li>Record yourself saying the syllable and play it back.</li>
+    <li>Practice distinguishing minimal pairs (same sound, different tone = different meaning).</li>
+    <li>Spend 5–10 minutes daily on pure sound discrimination before adding meaning.</li>
+  </ol>
+  <div class="note">Tip: Use headphones. Focus only on pitch and voice quality at first. Do not worry about the English meaning until the sound is clear.</div>
+</div>
+
+<div class="card">
+  <h2>The 7 Main Tones in White Hmong (RPA)</h2>
+  <p>In RPA, the tone is shown by a final letter (or none). All syllables end in a vowel.</p>
+
+  <div class="tone">
+    <strong>High (b)</strong> – high level / slightly rising<br>
+    Example: <em>pob</em> (ball / lump)<br>
+    Tip: Keep your voice high and steady, like singing a high note.
+  </div>
+  <div class="tone">
+    <strong>Mid (no letter)</strong> – mid level<br>
+    Example: <em>po</em> (spleen)<br>
+    Tip: Normal speaking pitch, flat.
+  </div>
+  <div class="tone">
+    <strong>Low (s)</strong> – low level<br>
+    Example: <em>pos</em> (thorn)<br>
+    Tip: Lower than normal, steady.
+  </div>
+  <div class="tone">
+    <strong>High-falling (j)</strong> – starts high and falls<br>
+    Example: <em>poj</em> (female)<br>
+    Tip: Start high then drop, like the end of a surprised “Oh!”
+  </div>
+  <div class="tone">
+    <strong>Mid-rising (v)</strong> – starts mid and rises<br>
+    Example: <em>pov</em> (to throw)<br>
+    Tip: Start lower and lift at the end, like a yes/no question.
+  </div>
+  <div class="tone">
+    <strong>Low falling / creaky (m)</strong> – low with a glottal catch<br>
+    Example: <em>pom</em> (to see)<br>
+    Tip: Drop low and end with a tight throat catch (like “uh-oh”).
+  </div>
+  <div class="tone">
+    <strong>Low falling breathy (g)</strong> – low falling with breathy voice<br>
+    Example: <em>pog</em> (grandmother)<br>
+    Tip: Drop while letting air escape more openly.
+  </div>
+</div>
+
+<div class="card">
+  <h2>Minimal Pair Practice</h2>
+  <p>Same consonants and vowels, only the tone changes the meaning. Train your ear to hear the difference.</p>
+  <div class="pair">
+    <span>po</span> <span>pob</span> <span>pos</span> <span>poj</span> <span>pov</span> <span>pom</span> <span>pog</span>
+  </div>
+  <p>More useful pairs (listen to native audio for these):</p>
+  <ul>
+    <li>nyob (live/well) vs other tones on the same base</li>
+    <li>zoo (good) vs other tones</li>
+    <li>tus (classifier) vs other tones</li>
+  </ul>
+  <p>Practice: Play one, identify the tone letter, then say it yourself.</p>
+</div>
+
+<div class="card">
+  <h2>Record Yourself</h2>
+  <p>Say a syllable clearly, then compare to native audio.</p>
+  <button id="startBtn">Start Recording</button>
+  <button id="stopBtn" disabled>Stop</button>
+  <div id="recorder">
+    <audio id="playback" controls></audio>
+  </div>
+  <p id="status">Ready</p>
+</div>
+
+<div class="card">
+  <h2>Recommended Native Practice</h2>
+  <ul>
+    <li>Study Hmong YouTube channel – dedicated tone drill videos (search “How To Read Hmong - Tone Drills”)</li>
+    <li>Hmonglus app – audio flashcards</li>
+    <li>Learn Hmong Language app – free tone lessons</li>
+    <li>Record a native Hmong speaker if available in your congregation and practice along</li>
+  </ul>
+  <p>Daily habit: 5–10 minutes of pure listening and repeating tones. This builds the auditory precision that research links to faster language learning.</p>
+</div>
+
+<script>
+const startBtn = document.getElementById('startBtn');
+const stopBtn = document.getElementById('stopBtn');
+const playback = document.getElementById('playback');
+const status = document.getElementById('status');
+let mediaRecorder, chunks = [];
+
+startBtn.onclick = async () => {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    mediaRecorder = new MediaRecorder(stream);
+    chunks = [];
+    mediaRecorder.ondataavailable = e => chunks.push(e.data);
+    mediaRecorder.onstop = () => {
+      const blob = new Blob(chunks, { type: 'audio/webm' });
+      playback.src = URL.createObjectURL(blob);
+      status.textContent = 'Recording saved. Play it back and compare.';
+    };
+    mediaRecorder.start();
+    startBtn.disabled = true;
+    stopBtn.disabled = false;
+    status.textContent = 'Recording… speak clearly.';
+  } catch (err) {
+    status.textContent = 'Microphone access needed. Please allow it.';
+  }
+};
+
+stopBtn.onclick = () => {
+  if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+    mediaRecorder.stop();
+    startBtn.disabled = false;
+    stopBtn.disabled = true;
+  }
+};
+</script>
+</body>
+</html>
