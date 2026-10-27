@@ -1,0 +1,1244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Universal Language Generator Tool – Sentence Builder & Grammar Checker</title>
+<style>
+  :root {
+    --bg: #f8f9fa;
+    --card: #fff;
+    --accent: #1F4E79;
+    --accent2: #2E75B6;
+    --accent-soft: #e8eef4;
+    --text: #222;
+    --muted: #555;
+    --ok-bg: #e8f5e9;
+    --ok-border: #2e7d32;
+    --warn-bg: #fff8e1;
+    --warn-border: #f57c00;
+    --err-bg: #ffebee;
+    --err-border: #c62828;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    margin: 0;
+    padding: 16px;
+    line-height: 1.5;
+    max-width: 960px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  h1 { color: var(--accent); font-size: 1.65rem; margin: 0 0 4px 0; }
+  h2 { color: var(--accent); font-size: 1.2rem; border-bottom: 2px solid var(--accent2); padding-bottom: 6px; margin-top: 0; }
+  .subtitle { color: var(--muted); font-size: 0.95rem; margin-top: 0; margin-bottom: 14px; }
+  .card {
+    background: var(--card);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.08);
+  }
+  .top-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .control-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+  }
+  select, input[type="text"], textarea {
+    font-family: inherit;
+    font-size: 1rem;
+    padding: 9px 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    background: #fff;
+    color: var(--text);
+  }
+  input[type="text"]:focus, select:focus, textarea:focus {
+    outline: 2px solid var(--accent2);
+    border-color: var(--accent2);
+  }
+  button, .btn {
+    background: var(--accent);
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 0.96rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  button:hover, .btn:hover { background: var(--accent2); }
+  button.secondary {
+    background: var(--accent-soft);
+    color: var(--accent);
+  }
+  button.secondary:hover { background: #d5e2ef; }
+  button.ghost {
+    background: transparent;
+    color: var(--accent);
+    border: 1px solid var(--accent2);
+  }
+  .tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+  .tab-btn {
+    flex: 1;
+    min-width: 180px;
+    text-align: center;
+    padding: 12px 14px;
+    border-radius: 10px;
+    background: #e2e8f0;
+    color: #334155;
+    font-weight: 700;
+  }
+  .tab-btn.active {
+    background: var(--accent);
+    color: #fff;
+    box-shadow: 0 2px 6px rgba(31,78,121,0.28);
+  }
+  .prompt-box {
+    background: #f0f4f8;
+    border-left: 4px solid var(--accent2);
+    padding: 12px 14px;
+    border-radius: 8px;
+    margin-bottom: 14px;
+  }
+  .prompt-label {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--accent);
+    font-weight: 700;
+  }
+  .prompt-en {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin: 4px 0;
+  }
+  .prompt-pattern {
+    font-size: 0.88rem;
+    color: var(--muted);
+  }
+  .sentence-well {
+    min-height: 62px;
+    border: 2px dashed #94a3b8;
+    border-radius: 10px;
+    padding: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    background: #fcfdff;
+    margin-bottom: 12px;
+  }
+  .well-placeholder {
+    color: #94a3b8;
+    font-style: italic;
+    font-size: 0.95rem;
+  }
+  .tile-bank {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 12px 0;
+  }
+  .tile {
+    background: var(--accent-soft);
+    color: var(--accent);
+    border: 1px solid #b8cce0;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 1.02rem;
+    cursor: pointer;
+    user-select: none;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1.2;
+  }
+  .tile small {
+    font-weight: 400;
+    font-size: 0.74rem;
+    color: #475569;
+    margin-top: 2px;
+  }
+  .tile:hover {
+    background: #d8e5f2;
+    transform: translateY(-1px);
+  }
+  .tile.used {
+    opacity: 0.35;
+    pointer-events: none;
+  }
+  .tile.in-well {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+  }
+  .tile.in-well small {
+    color: #dbeafe;
+  }
+  .feedback {
+    padding: 14px;
+    border-radius: 10px;
+    margin-top: 14px;
+    display: none;
+  }
+  .feedback.ok {
+    display: block;
+    background: var(--ok-bg);
+    border-left: 5px solid var(--ok-border);
+  }
+  .feedback.warn {
+    display: block;
+    background: var(--warn-bg);
+    border-left: 5px solid var(--warn-border);
+  }
+  .feedback.err {
+    display: block;
+    background: var(--err-bg);
+    border-left: 5px solid var(--err-border);
+  }
+  .feedback h3 {
+    margin: 0 0 6px 0;
+    font-size: 1.05rem;
+  }
+  .gloss-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+  }
+  .gloss-chip {
+    background: rgba(255,255,255,0.85);
+    border: 1px solid rgba(0,0,0,0.12);
+    border-radius: 8px;
+    padding: 6px 10px;
+    font-size: 0.85rem;
+  }
+  .gloss-chip strong { color: var(--accent); display: block; font-size: 0.96rem; }
+  .slot-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(135px, 1fr));
+    gap: 10px;
+    margin-top: 12px;
+  }
+  .slot-col {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 8px;
+  }
+  .slot-col h4 {
+    margin: 0 0 6px 0;
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    color: var(--accent);
+    border-bottom: 1px solid #cbd5e1;
+    padding-bottom: 4px;
+  }
+  .slot-opt {
+    display: block;
+    width: 100%;
+    text-align: left;
+    margin: 4px 0;
+    padding: 6px 8px;
+    font-size: 0.88rem;
+    border-radius: 6px;
+    background: #fff;
+    color: var(--text);
+    border: 1px solid #cbd5e1;
+    font-weight: 600;
+  }
+  .slot-opt.selected {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+  }
+  .stats-pill {
+    background: var(--accent-soft);
+    color: var(--accent);
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 0.86rem;
+    font-weight: 700;
+  }
+  .hidden { display: none !important; }
+  .input-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin: 10px 0;
+  }
+  .input-row input[type="text"] {
+    flex: 1;
+    min-width: 240px;
+    font-size: 1.08rem;
+  }
+  .note {
+    font-size: 0.9rem;
+    color: #444;
+    background: #fff8e1;
+    padding: 10px 12px;
+    border-radius: 8px;
+    margin-top: 10px;
+  }
+  table.ref-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+    margin-top: 8px;
+  }
+  table.ref-table th, table.ref-table td {
+    border-bottom: 1px solid #e2e8f0;
+    text-align: left;
+    padding: 7px 8px;
+  }
+  table.ref-table th { color: var(--accent); background: #f0f4f8; }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <div class="top-bar">
+    <div>
+      <h1>Universal Language Generator Tool</h1>
+      <p class="subtitle">Sentence Builder &amp; Diagnostic Grammar Checker — 10-Day Course Practice Suite</p>
+    </div>
+    <div class="control-group">
+      <span class="stats-pill" id="scoreDisplay">Solved: 0 | Streak: 0</span>
+      <button class="secondary" id="resetStatsBtn" title="Reset progress">Reset</button>
+    </div>
+  </div>
+
+  <div class="control-group" style="margin-top:8px;">
+    <label for="langSelect"><strong>Language Pack:</strong></label>
+    <select id="langSelect">
+      <option value="hmong">White Hmong (RPA) – 10-Day Course</option>
+      <option value="spanish">Spanish – Core SVO &amp; Questions (Demo Pack)</option>
+    </select>
+
+    <label for="categorySelect"><strong>Lesson Pattern:</strong></label>
+    <select id="categorySelect">
+      <option value="all">All Course Patterns</option>
+      <option value="svo">Core SVO (Subject + Verb + Object)</option>
+      <option value="negation">Negation (tsis / no before verb)</option>
+      <option value="tense">Tense &amp; Aspect (yuav / tau / tab tom)</option>
+      <option value="yn_question">Yes / No Questions (puas)</option>
+      <option value="wh_question">Content Questions (dab tsi / qhov twg / leej twg)</option>
+      <option value="classifier">Classifiers &amp; Numbers (ib tug / ob phau / peb lub)</option>
+      <option value="ministry">Everyday &amp; Ministry Expressions</option>
+    </select>
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="tab-btn active" data-tab="tiles">1. Word-Tile Sentence Builder</button>
+  <button class="tab-btn" data-tab="typing">2. Free-Typing Sentence Checker</button>
+  <button class="tab-btn" data-tab="matrix">3. Universal Slot Generator</button>
+</div>
+
+<!-- MODE 1: WORD-TILE SENTENCE BUILDER -->
+<div class="card" id="tab-tiles">
+  <h2>Word-Tile Sentence Builder</h2>
+  <p style="margin-top:0;color:var(--muted);">Tap the tiles in the right grammatical order to build the target sentence. Watch out for distractor tiles with wrong tones or particles!</p>
+
+  <div class="prompt-box">
+    <div class="prompt-label" id="tilePatternLabel">Pattern</div>
+    <div class="prompt-en" id="tilePromptEn">Loading...</div>
+    <div class="prompt-pattern" id="tileFormula">Formula: Subject + Verb + Object</div>
+  </div>
+
+  <div><strong>Your Sentence:</strong></div>
+  <div class="sentence-well" id="sentenceWell">
+    <span class="well-placeholder">Tap word tiles below to assemble your sentence…</span>
+  </div>
+
+  <div><strong>Word Bank (tap to add):</strong></div>
+  <div class="tile-bank" id="tileBank"></div>
+
+  <div class="control-group" style="margin-top:12px;">
+    <button id="checkTilesBtn">Check Sentence</button>
+    <button class="secondary" id="clearTilesBtn">Clear</button>
+    <button class="secondary" id="hintTilesBtn">Show Hint</button>
+    <button class="ghost" id="nextTilesBtn">Next Prompt →</button>
+  </div>
+
+  <div class="feedback" id="tileFeedback"></div>
+</div>
+
+<!-- MODE 2: FREE-TYPING SENTENCE CHECKER -->
+<div class="card hidden" id="tab-typing">
+  <h2>Free-Typing Sentence &amp; Grammar Checker</h2>
+  <p style="margin-top:0;color:var(--muted);">Type the translation for the prompt below, <strong>or type any sentence of your own</strong> using the course vocabulary to test whether its word order, tone letters, and classifiers are valid.</p>
+
+  <div class="prompt-box">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+      <div>
+        <div class="prompt-label" id="typePatternLabel">Target Challenge (Optional)</div>
+        <div class="prompt-en" id="typePromptEn">Are you doing well?</div>
+        <div class="prompt-pattern" id="typeFormula">Formula: Subject + puas + Verb + Modifier</div>
+      </div>
+      <div class="control-group">
+        <button class="secondary" id="newTypePromptBtn">Next Target →</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="input-row">
+    <input type="text" id="freeInput" placeholder="Type a Hmong sentence (e.g., Koj puas nyob zoo or Kuv xav kawm lus Hmoob)…" autocomplete="off" spellcheck="false">
+    <button id="checkFreeBtn">Check My Sentence</button>
+    <button class="secondary" id="checkFreeAnyBtn" title="Validate grammar of any custom sentence without comparing to the target prompt">Test Custom Sentence</button>
+  </div>
+
+  <div class="control-group" style="margin-top:6px;">
+    <span style="font-size:0.86rem;color:var(--muted);">Quick test examples (tap to fill):</span>
+    <button class="secondary" style="padding:5px 10px;font-size:0.82rem;" data-sample="Koj puas nyob zoo">Koj puas nyob zoo (Valid)</button>
+    <button class="secondary" style="padding:5px 10px;font-size:0.82rem;" data-sample="Kuv mus tsis tsev">Kuv mus tsis tsev (Order Error)</button>
+    <button class="secondary" style="padding:5px 10px;font-size:0.82rem;" data-sample="Kuv xav kawm lus Hmob">Kuv xav kawm lus Hmob (Tone Typo)</button>
+    <button class="secondary" style="padding:5px 10px;font-size:0.82rem;" data-sample="Kuv pom ib tus dev">Kuv pom ib tus dev (Sandhi Rule)</button>
+  </div>
+
+  <div class="feedback" id="freeFeedback"></div>
+
+  <div class="note">
+    <strong>What the Diagnostic Engine checks:</strong>
+    <ul style="margin:6px 0 0 0;padding-left:20px;">
+      <li><strong>Slot Order:</strong> <code>Subject + [Time/Aspect: yuav / tau / tab tom] + [Question: puas] + [Negation: tsis] + Verb + [Object / Classifier Phrase / Question Word]</code></li>
+      <li><strong>RPA Tone Precision:</strong> Detects near-miss tone letters (e.g. <em>nyob zo</em> vs <em>nyob zoo</em>, <em>kuv</em> vs <em>kub</em>, <em>hmoob</em> vs <em>hmob</em>).</li>
+      <li><strong>Classifier &amp; Tone Sandhi:</strong> Checks <code>Number + Classifier + Noun</code> order and reminds you when <em>tus</em> changes to <em>tug</em> after <em>ib, ob, peb</em> (e.g., <em>ib tug phooj ywg</em>).</li>
+    </ul>
+  </div>
+</div>
+
+<!-- MODE 3: UNIVERSAL SLOT GENERATOR -->
+<div class="card hidden" id="tab-matrix">
+  <h2>Universal Slot Matrix Generator</h2>
+  <p style="margin-top:0;color:var(--muted);">Click one item in each column to generate hundreds of grammatically valid sentences and see how Hmong sentence slots fit together.</p>
+
+  <div class="prompt-box">
+    <div class="prompt-label">Live Generated Sentence</div>
+    <div class="prompt-en" id="matrixOutputHm" style="color:var(--accent);font-size:1.35rem;">Kuv xav kawm lus Hmoob.</div>
+    <div id="matrixOutputEn" style="font-weight:600;color:#334155;">I want to learn Hmong.</div>
+    <div class="prompt-pattern" id="matrixOutputGloss" style="margin-top:4px;"></div>
+  </div>
+
+  <div class="slot-grid" id="slotGrid"></div>
+
+  <div class="control-group" style="margin-top:12px;">
+    <button id="sendMatrixToCheckerBtn">Send to Free-Typing Checker</button>
+    <button class="secondary" id="randomMatrixBtn">Randomize Slots</button>
+  </div>
+</div>
+
+<!-- VOCABULARY & CUSTOM PACK REFERENCE -->
+<div class="card">
+  <details>
+    <summary style="cursor:pointer;font-weight:700;color:var(--accent);font-size:1.05rem;">
+      Course Grammar Reference &amp; Custom Vocabulary Builder (Click to Expand)
+    </summary>
+    <div style="margin-top:12px;">
+      <p style="margin-top:0;">Add your own words from each day of the 10-day course so the Free-Typing Checker recognizes them automatically:</p>
+      <div class="input-row">
+        <input type="text" id="newWordHm" placeholder="Word (e.g., phooj ywg)" style="min-width:150px;">
+        <select id="newWordRole">
+          <option value="subj">Subject / Pronoun</option>
+          <option value="verb">Verb</option>
+          <option value="obj" selected>Object / Noun</option>
+          <option value="place">Place</option>
+          <option value="adj">Adjective / Adverb</option>
+        </select>
+        <input type="text" id="newWordEn" placeholder="English meaning (e.g., friend)" style="min-width:150px;">
+        <button id="addWordBtn">Add Word</button>
+      </div>
+      <div id="customWordStatus" style="font-size:0.88rem;color:var(--ok-border);margin-bottom:8px;"></div>
+
+      <table class="ref-table">
+        <thead>
+          <tr>
+            <th>Slot Order</th>
+            <th>Role</th>
+            <th>White Hmong (RPA) Examples</th>
+            <th>Grammar Rule</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1. Subject</td>
+            <td>Pronoun / Noun</td>
+            <td><code>kuv</code> (I), <code>koj</code> (you), <code>nws</code> (he/she), <code>peb</code> (we), <code>nej</code> (you pl.), <code>lawv</code> (they)</td>
+            <td>Starts the clause (SVO order).</td>
+          </tr>
+          <tr>
+            <td>2. Tense / Aspect</td>
+            <td>Time Marker</td>
+            <td><code>yuav</code> (will), <code>tau</code> (did/got), <code>tab tom</code> (currently -ing)</td>
+            <td>Placed after Subject, before <code>puas</code> / <code>tsis</code> / Verb.</td>
+          </tr>
+          <tr>
+            <td>3. Question</td>
+            <td>Yes/No Particle</td>
+            <td><code>puas</code> (do/does/is/are?)</td>
+            <td>Placed directly before the verb (or before <code>tsis</code> / modal).</td>
+          </tr>
+          <tr>
+            <td>4. Negation</td>
+            <td>Negative Particle</td>
+            <td><code>tsis</code> (not / do not)</td>
+            <td>Placed right before the verb: <code>Kuv tsis paub</code>.</td>
+          </tr>
+          <tr>
+            <td>5. Verb Chain</td>
+            <td>Modal + Main Verb</td>
+            <td><code>xav</code> (want), <code>nyiam</code> (like), <code>kawm</code> (learn), <code>hais</code> (speak), <code>mus</code> (go), <code>nyob</code> (live/be), <code>pab</code> (help), <code>nyeem</code> (read), <code>pom</code> (see)</td>
+            <td>Verbs never conjugate for tense or person.</td>
+          </tr>
+          <tr>
+            <td>6. Object / Tail</td>
+            <td>Noun / Classifier / Wh-word</td>
+            <td><code>lus Hmoob</code>, <code>ib tug phooj ywg</code>, <code>ob phau ntawv</code>, <code>dab tsi</code> (what), <code>qhov twg</code> (where)</td>
+            <td>Classifiers follow <code>Number + Classifier + Noun</code>.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </details>
+</div>
+
+<script>
+const PACKS = {
+  hmong: {
+    name: "White Hmong (RPA)",
+    lexicon: [
+      { w: "kuv", role: "subj", en: "I / me", tone: "v (mid-rising)" },
+      { w: "koj", role: "subj", en: "you (sg.)", tone: "j (high-falling)" },
+      { w: "nws", role: "subj", en: "he / she / it", tone: "s (low)" },
+      { w: "peb", role: "subj", en: "we / us", tone: "b (high)" },
+      { w: "nej", role: "subj", en: "you (plural)", tone: "j (high-falling)" },
+      { w: "lawv", role: "subj", en: "they / them", tone: "v (mid-rising)" },
+      { w: "yuav", role: "tense", en: "will (future)", tone: "v (mid-rising)" },
+      { w: "tau", role: "tense", en: "did / achieved (past)", tone: "unmarked (mid)" },
+      { w: "tab tom", role: "tense", en: "is currently (-ing)", tone: "b + m" },
+      { w: "puas", role: "qpart", en: "yes/no question marker", tone: "s (low)" },
+      { w: "tsis", role: "neg", en: "not", tone: "s (low)" },
+      { w: "xav", role: "modal", en: "want to", tone: "v (mid-rising)" },
+      { w: "nyiam", role: "modal", en: "like to", tone: "m (low creaky)" },
+      { w: "nyob", role: "verb", en: "live / stay / be at", tone: "b (high)" },
+      { w: "mus", role: "verb", en: "go", tone: "s (low)" },
+      { w: "kawm", role: "verb", en: "learn / study", tone: "m (low creaky)" },
+      { w: "hais", role: "verb", en: "speak / say", tone: "s (low)" },
+      { w: "paub", role: "verb", en: "know", tone: "b (high)" },
+      { w: "pom", role: "verb", en: "see", tone: "m (low creaky)" },
+      { w: "pab", role: "verb", en: "help", tone: "b (high)" },
+      { w: "nyeem", role: "verb", en: "read", tone: "m (low creaky)" },
+      { w: "noj", role: "verb", en: "eat", tone: "j (high-falling)" },
+      { w: "haus", role: "verb", en: "drink", tone: "s (low)" },
+      { w: "ua", role: "verb", en: "do / make", tone: "unmarked (mid)" },
+      { w: "hu", role: "verb", en: "call / be named", tone: "unmarked (mid)" },
+      { w: "thov", role: "polite", en: "please / request", tone: "v (mid-rising)" },
+      { w: "zoo", role: "adj", en: "good / well", tone: "unmarked (mid)" },
+      { w: "lus hmoob", role: "obj", en: "Hmong language", tone: "s + b" },
+      { w: "lus", role: "obj", en: "language / word", tone: "s (low)" },
+      { w: "hmoob", role: "obj", en: "Hmong", tone: "b (high)" },
+      { w: "ntawv", role: "obj", en: "book / paper / letter", tone: "v (mid-rising)" },
+      { w: "phau ntawv", role: "obj", en: "the book", tone: "mid + v" },
+      { w: "tsev", role: "place", en: "house / home", tone: "v (mid-rising)" },
+      { w: "mov", role: "obj", en: "rice / food", tone: "v (mid-rising)" },
+      { w: "dej", role: "obj", en: "water", tone: "j (high-falling)" },
+      { w: "dev", role: "obj", en: "dog", tone: "v (mid-rising)" },
+      { w: "phooj ywg", role: "obj", en: "friend", tone: "j + g" },
+      { w: "vajtswv", role: "subj", en: "God", tone: "v (mid-rising)" },
+      { w: "yehauvas", role: "obj", en: "Jehovah", tone: "s (low)" },
+      { w: "ib", role: "num", en: "one (1)", tone: "b (high)" },
+      { w: "ob", role: "num", en: "two (2)", tone: "b (high)" },
+      { w: "peb", role: "num", en: "three (3)", tone: "b (high)" },
+      { w: "tus", role: "clf", en: "classifier (animate / long things)", tone: "s (low)" },
+      { w: "tug", role: "clf", en: "classifier (sandhi form of tus after ib/ob/peb)", tone: "g (breathy)" },
+      { w: "lub", role: "clf", en: "classifier (round / bulky / house)", tone: "b (high)" },
+      { w: "phau", role: "clf", en: "classifier (books)", tone: "unmarked (mid)" },
+      { w: "dab tsi", role: "wh", en: "what?", tone: "b + unmarked" },
+      { w: "qhov twg", role: "wh", en: "where?", tone: "v + g" },
+      { w: "leej twg", role: "wh", en: "who?", tone: "j + g" }
+    ],
+    sentences: [
+      {
+        cat: "yn_question",
+        en: "Are you doing well?",
+        hm: ["Koj", "puas", "nyob", "zoo"],
+        distractors: ["tsis", "zo", "kuv"],
+        formula: "Subject (Koj) + Question (puas) + Verb (nyob) + Adverb (zoo)",
+        hint: "Put 'puas' directly before the verb 'nyob'."
+      },
+      {
+        cat: "svo",
+        en: "I want to learn the Hmong language.",
+        hm: ["Kuv", "xav", "kawm", "lus", "Hmoob"],
+        distractors: ["puas", "Hmob", "koj"],
+        formula: "Subject (Kuv) + Modal (xav) + Verb (kawm) + Object (lus Hmoob)",
+        hint: "Start with 'Kuv xav kawm', then 'lus Hmoob' (with double 'oo' and final 'b')."
+      },
+      {
+        cat: "negation",
+        en: "I do not know.",
+        hm: ["Kuv", "tsis", "paub"],
+        distractors: ["puas", "pab", "koj"],
+        formula: "Subject (Kuv) + Negation (tsis) + Verb (paub)",
+        hint: "'tsis' goes right before 'paub' (to know — don't confuse with 'pab' = help)."
+      },
+      {
+        cat: "negation",
+        en: "He/she is not going home.",
+        hm: ["Nws", "tsis", "mus", "tsev"],
+        distractors: ["puas", "nyob", "kuv"],
+        formula: "Subject (Nws) + Negation (tsis) + Verb (mus) + Place (tsev)",
+        hint: "Negation 'tsis' must come before the verb 'mus'."
+      },
+      {
+        cat: "tense",
+        en: "We will read the book.",
+        hm: ["Peb", "yuav", "nyeem", "phau", "ntawv"],
+        distractors: ["tau", "tsis", "lub"],
+        formula: "Subject (Peb) + Future (yuav) + Verb (nyeem) + Classifier (phau) + Noun (ntawv)",
+        hint: "Use 'yuav' for future tense and 'phau' as the classifier for books."
+      },
+      {
+        cat: "tense",
+        en: "I ate rice / food.",
+        hm: ["Kuv", "tau", "noj", "mov"],
+        distractors: ["yuav", "haus", "dej"],
+        formula: "Subject (Kuv) + Past (tau) + Verb (noj) + Object (mov)",
+        hint: "Use 'tau' before the verb 'noj' to show completed action."
+      },
+      {
+        cat: "yn_question",
+        en: "Do you speak Hmong?",
+        hm: ["Koj", "puas", "hais", "lus", "Hmoob"],
+        distractors: ["tsis", "kawm", "kuv"],
+        formula: "Subject (Koj) + Question (puas) + Verb (hais) + Object (lus Hmoob)",
+        hint: "Use 'puas' before 'hais' (to speak)."
+      },
+      {
+        cat: "wh_question",
+        en: "Where do you live?",
+        hm: ["Koj", "nyob", "qhov", "twg"],
+        distractors: ["puas", "dab", "tsi"],
+        formula: "Subject (Koj) + Verb (nyob) + Where (qhov twg)",
+        hint: "In Hmong, 'where' (qhov twg) stays at the end where the location answer would go—no 'puas' needed!"
+      },
+      {
+        cat: "wh_question",
+        en: "What are you doing?",
+        hm: ["Koj", "ua", "dab", "tsi"],
+        distractors: ["puas", "qhov", "twg"],
+        formula: "Subject (Koj) + Verb (ua) + What (dab tsi)",
+        hint: "Put 'dab tsi' (what) after the verb 'ua' (do/make)."
+      },
+      {
+        cat: "classifier",
+        en: "I see one friend.",
+        hm: ["Kuv", "pom", "ib", "tug", "phooj", "ywg"],
+        distractors: ["tus", "lub", "ob"],
+        formula: "Subject (Kuv) + Verb (pom) + Number (ib) + Classifier (tug) + Noun (phooj ywg)",
+        hint: "After 'ib' (one), the classifier 'tus' changes tone to 'tug'!"
+      },
+      {
+        cat: "classifier",
+        en: "They have two books.",
+        hm: ["Lawv", "muaj", "ob", "phau", "ntawv"],
+        distractors: ["lub", "tug", "ib"],
+        formula: "Subject (Lawv) + Verb (muaj) + Number (ob) + Classifier (phau) + Noun (ntawv)",
+        hint: "Use Number (ob) + Book Classifier (phau) + Noun (ntawv)."
+      },
+      {
+        cat: "ministry",
+        en: "Please help me.",
+        hm: ["Thov", "pab", "kuv"],
+        distractors: ["paub", "koj", "tsis"],
+        formula: "Polite Request (Thov) + Verb (pab) + Object Pronoun (kuv)",
+        hint: "'Thov' means please; 'pab' is help ('paub' is know)."
+      },
+      {
+        cat: "ministry",
+        en: "We want to help you.",
+        hm: ["Peb", "xav", "pab", "koj"],
+        distractors: ["paub", "tsis", "puas"],
+        formula: "Subject (Peb) + Modal (xav) + Verb (pab) + Object (koj)",
+        hint: "Peb (we) + xav (want) + pab (help) + koj (you)."
+      }
+    ],
+    slots: [
+      {
+        title: "1. Subject",
+        items: [
+          { hm: "Kuv", en: "I" },
+          { hm: "Koj", en: "You" },
+          { hm: "Nws", en: "He/She" },
+          { hm: "Peb", en: "We" },
+          { hm: "Lawv", en: "They" }
+        ]
+      },
+      {
+        title: "2. Tense",
+        items: [
+          { hm: "", en: "(present)" },
+          { hm: "yuav", en: "will" },
+          { hm: "tau", en: "did" },
+          { hm: "tab tom", en: "currently" }
+        ]
+      },
+      {
+        title: "3. Question",
+        items: [
+          { hm: "", en: "(statement)" },
+          { hm: "puas", en: "[question?]" }
+        ]
+      },
+      {
+        title: "4. Negation",
+        items: [
+          { hm: "", en: "(affirmative)" },
+          { hm: "tsis", en: "not" }
+        ]
+      },
+      {
+        title: "5. Verb",
+        items: [
+          { hm: "kawm", en: "learn" },
+          { hm: "hais", en: "speak" },
+          { hm: "nyeem", en: "read" },
+          { hm: "pab", en: "help" },
+          { hm: "mus", en: "go to" },
+          { hm: "nyob", en: "stay at" }
+        ]
+      },
+      {
+        title: "6. Object / Tail",
+        items: [
+          { hm: "lus Hmoob", en: "Hmong" },
+          { hm: "phau ntawv", en: "the book" },
+          { hm: "ib tug phooj ywg", en: "a friend" },
+          { hm: "tsev", en: "home" },
+          { hm: "zoo", en: "well" }
+        ]
+      }
+    ]
+  },
+  spanish: {
+    name: "Spanish (Demo Pack)",
+    lexicon: [
+      { w: "yo", role: "subj", en: "I", tone: "N/A" },
+      { w: "tú", role: "subj", en: "you", tone: "N/A" },
+      { w: "nosotros", role: "subj", en: "we", tone: "N/A" },
+      { w: "no", role: "neg", en: "not", tone: "N/A" },
+      { w: "quiero", role: "modal", en: "want to", tone: "N/A" },
+      { w: "hablar", role: "verb", en: "speak", tone: "N/A" },
+      { w: "aprender", role: "verb", en: "learn", tone: "N/A" },
+      { w: "español", role: "obj", en: "Spanish", tone: "N/A" }
+    ],
+    sentences: [
+      {
+        cat: "svo",
+        en: "I want to learn Spanish.",
+        hm: ["Yo", "quiero", "aprender", "español"],
+        distractors: ["no", "tú"],
+        formula: "Subject + Modal + Infinitive + Object",
+        hint: "Yo quiero aprender español."
+      },
+      {
+        cat: "negation",
+        en: "I do not want to speak Spanish.",
+        hm: ["Yo", "no", "quiero", "hablar", "español"],
+        distractors: ["tú", "aprender"],
+        formula: "Subject + no + Verb + Object",
+        hint: "Place 'no' before the conjugated verb 'quiero'."
+      }
+    ],
+    slots: [
+      { title: "1. Subject", items: [{ hm: "Yo", en: "I" }, { hm: "Nosotros", en: "We" }] },
+      { title: "2. Negation", items: [{ hm: "", en: "(affirmative)" }, { hm: "no", en: "do not" }] },
+      { title: "3. Modal", items: [{ hm: "quiero", en: "want to" }] },
+      { title: "4. Verb", items: [{ hm: "aprender", en: "learn" }, { hm: "hablar", en: "speak" }] },
+      { title: "5. Object", items: [{ hm: "español", en: "Spanish" }] }
+    ]
+  }
+};
+
+// Also add "muaj" to Hmong lexicon
+PACKS.hmong.lexicon.push({ w: "muaj", role: "verb", en: "have / there is", tone: "j (high-falling)" });
+
+let currentLang = "hmong";
+let currentCat = "all";
+let currentIdx = 0;
+let selectedTiles = [];
+let availableTileObjs = [];
+let stats = JSON.parse(localStorage.getItem("ulgt_stats") || '{"solved":0,"streak":0}');
+
+function saveStats() {
+  localStorage.setItem("ulgt_stats", JSON.stringify(stats));
+  document.getElementById("scoreDisplay").textContent = `Solved: ${stats.solved} | Streak: ${stats.streak}`;
+}
+
+function getFilteredSentences() {
+  const pack = PACKS[currentLang];
+  if (currentCat === "all") return pack.sentences;
+  const filtered = pack.sentences.filter(s => s.cat === currentCat);
+  return filtered.length ? filtered : pack.sentences;
+}
+
+function findLex(word) {
+  const clean = word.toLowerCase().replace(/[?.!,]/g, "").trim();
+  return PACKS[currentLang].lexicon.find(x => x.w.toLowerCase() === clean);
+}
+
+// Levenshtein distance for tone/spelling near-miss detection
+function editDistance(a, b) {
+  const dp = Array.from({ length: a.length + 1 }, () => Array(b.length + 1).fill(0));
+  for (let i = 0; i <= a.length; i++) dp[i][0] = i;
+  for (let j = 0; j <= b.length; j++) dp[0][j] = j;
+  for (let i = 1; i <= a.length; i++) {
+    for (let j = 1; j <= b.length; j++) {
+      dp[i][j] = a[i - 1] === b[j - 1]
+        ? dp[i - 1][j - 1]
+        : 1 + Math.min(dp[i - 1][j - 1], dp[i][j - 1], dp[i - 1][j]);
+    }
+  }
+  return dp[a.length][b.length];
+}
+
+function loadChallenge() {
+  const list = getFilteredSentences();
+  if (currentIdx >= list.length) currentIdx = 0;
+  const item = list[currentIdx];
+
+  document.getElementById("tilePatternLabel").textContent = `Pattern: ${item.cat.toUpperCase()}`;
+  document.getElementById("tilePromptEn").textContent = item.en;
+  document.getElementById("tileFormula").textContent = `Formula: ${item.formula}`;
+
+  document.getElementById("typePatternLabel").textContent = `Target Challenge (${item.cat.toUpperCase()})`;
+  document.getElementById("typePromptEn").textContent = item.en;
+  document.getElementById("typeFormula").textContent = `Formula: ${item.formula}`;
+
+  selectedTiles = [];
+  const combined = [...item.hm, ...(item.distractors || [])];
+  availableTileObjs = combined.map((w, i) => ({ id: i, word: w, used: false }));
+  // Shuffle
+  for (let i = availableTileObjs.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [availableTileObjs[i], availableTileObjs[j]] = [availableTileObjs[j], availableTileObjs[i]];
+  }
+  renderTiles();
+  document.getElementById("tileFeedback").className = "feedback";
+  document.getElementById("tileFeedback").innerHTML = "";
+}
+
+function renderTiles() {
+  const well = document.getElementById("sentenceWell");
+  const bank = document.getElementById("tileBank");
+  well.innerHTML = "";
+  bank.innerHTML = "";
+
+  if (selectedTiles.length === 0) {
+    well.innerHTML = `<span class="well-placeholder">Tap word tiles below to assemble your sentence…</span>`;
+  } else {
+    selectedTiles.forEach((tileObj, idx) => {
+      const el = document.createElement("div");
+      el.className = "tile in-well";
+      const lex = findLex(tileObj.word);
+      el.innerHTML = `<span>${tileObj.word}</span><small>${lex ? lex.en.split("/")[0] : ""}</small>`;
+      el.onclick = () => {
+        tileObj.used = false;
+        selectedTiles.splice(idx, 1);
+        renderTiles();
+      };
+      well.appendChild(el);
+    });
+  }
+
+  availableTileObjs.forEach(tileObj => {
+    const el = document.createElement("div");
+    el.className = "tile" + (tileObj.used ? " used" : "");
+    const lex = findLex(tileObj.word);
+    el.innerHTML = `<span>${tileObj.word}</span><small>${lex ? lex.en.split("/")[0] : "tile"}</small>`;
+    el.onclick = () => {
+      if (!tileObj.used) {
+        tileObj.used = true;
+        selectedTiles.push(tileObj);
+        renderTiles();
+      }
+    };
+    bank.appendChild(el);
+  });
+}
+
+function buildGlossHTML(words) {
+  let html = `<div class="gloss-row">`;
+  words.forEach(w => {
+    const lex = findLex(w);
+    html += `<div class="gloss-chip">
+      <strong>${w}</strong>
+      <div>${lex ? lex.en : "course word"}</div>
+      <div style="color:#64748b;font-size:0.75rem;">${lex ? lex.role.toUpperCase() + " • Tone: " + lex.tone : ""}</div>
+    </div>`;
+  });
+  html += `</div>`;
+  return html;
+}
+
+// Diagnostic analyzer for any Hmong/universal sentence
+function diagnoseSentence(inputStr, targetItem) {
+  const cleaned = inputStr.replace(/[?.!,]/g, " ").trim().replace(/\s+/g, " ");
+  if (!cleaned) {
+    return { status: "err", title: "Empty Sentence", msg: "Please type or build a sentence first." };
+  }
+  const tokens = cleaned.split(" ");
+  const lowerTokens = tokens.map(t => t.toLowerCase());
+
+  // 1. Check if it matches targetItem (when targetItem is provided)
+  if (targetItem) {
+    const targetLower = targetItem.hm.map(t => t.toLowerCase());
+    if (lowerTokens.join(" ") === targetLower.join(" ")) {
+      return {
+        status: "ok",
+        title: "zoo heev! Exact Match & Grammatically Correct!",
+        msg: `Your sentence <strong>"${targetItem.hm.join(" ")}"</strong> means <em>"${targetItem.en}"</em>.`,
+        gloss: buildGlossHTML(targetItem.hm)
+      };
+    }
+
+    // Check if same words in wrong order
+    const sortedInput = [...lowerTokens].sort().join(" ");
+    const sortedTarget = [...targetLower].sort().join(" ");
+    if (sortedInput === sortedTarget) {
+      let orderTip = `Compare your word order with the pattern: <code>${targetItem.formula}</code>.`;
+      if (lowerTokens.includes("tsis") || lowerTokens.includes("puas")) {
+        orderTip = `In Hmong, <code>puas</code> (question) and <code>tsis</code> (not) must go directly <strong>before</strong> the verb! Pattern: <code>${targetItem.formula}</code>.`;
+      }
+      return {
+        status: "warn",
+        title: "Right Words, Word-Order Adjustment Needed",
+        msg: orderTip
+      };
+    }
+
+    // Check for tone / spelling near-misses against target words
+    if (lowerTokens.length === targetLower.length) {
+      let diffs = [];
+      for (let i = 0; i < targetLower.length; i++) {
+        if (lowerTokens[i] !== targetLower[i]) {
+          const dist = editDistance(lowerTokens[i], targetLower[i]);
+          diffs.push({ typed: tokens[i], expected: targetItem.hm[i], dist });
+        }
+      }
+      if (diffs.length === 1 && diffs[0].dist <= 2) {
+        const d = diffs[0];
+        const lex = findLex(d.expected);
+        if (d.typed.toLowerCase() === "tus" && d.expected.toLowerCase() === "tug") {
+          return {
+            status: "warn",
+            title: "Tone Sandhi Rule: tus → tug",
+            msg: `Great structure! Just one tone-change detail: after numbers like <code>ib, ob, peb</code>, the classifier <code>tus</code> changes its final tone letter to <strong><code>tug</code></strong> (<code>ib tug phooj ywg</code>).`
+          };
+        }
+        return {
+          status: "warn",
+          title: `Tone / Spelling Check on "${d.typed}"`,
+          msg: `Almost there! You wrote <strong>"${d.typed}"</strong> instead of <strong>"${d.expected}"</strong>${lex ? ` (${lex.en}, tone: ${lex.tone})` : ""}. In White Hmong RPA, the final consonant marks the tone and changes the meaning.`
+        };
+      }
+    }
+  }
+
+  // 2. Universal Grammar Rules Validator (for any custom sentence!)
+  // Check tone sandhi: ib/ob/peb + tus
+  for (let i = 0; i < lowerTokens.length - 1; i++) {
+    if (["ib", "ob", "peb"].includes(lowerTokens[i]) && lowerTokens[i + 1] === "tus") {
+      return {
+        status: "warn",
+        title: "Classifier Tone Change (Sandhi): tus → tug",
+        msg: `You wrote <code>${tokens[i]} tus</code>. After <code>ib, ob, peb</code>, the classifier <code>tus</code> changes to <strong><code>tug</code></strong> (e.g., <code>${tokens[i]} tug ${tokens[i + 2] || "dev"}</code>).`
+      };
+    }
+  }
+
+  // Check if tsis or puas appears AFTER a verb
+  const verbIndices = [];
+  lowerTokens.forEach((t, idx) => {
+    const l = findLex(t);
+    if (l && (l.role === "verb" || l.role === "modal")) verbIndices.push(idx);
+  });
+  const negIdx = lowerTokens.indexOf("tsis");
+  const qIdx = lowerTokens.indexOf("puas");
+
+  if (negIdx !== -1 && verbIndices.length > 0 && negIdx > verbIndices[0]) {
+    return {
+      status: "err",
+      title: "Word Order: Negation 'tsis' Goes Before the Verb",
+      msg: `You placed <code>tsis</code> after the verb <code>${tokens[verbIndices[0]]}</code>. In Hmong, place <code>tsis</code> directly <strong>before</strong> the verb (e.g., <code>tsis ${tokens[verbIndices[0]]}</code>).`
+    };
+  }
+  if (qIdx !== -1 && verbIndices.length > 0 && qIdx > verbIndices[0]) {
+    return {
+      status: "err",
+      title: "Word Order: Question Particle 'puas' Goes Before the Verb",
+      msg: `You placed <code>puas</code> after <code>${tokens[verbIndices[0]]}</code>. In Hmong, Yes/No questions place <code>puas</code> right <strong>before</strong> the verb.`
+    };
+  }
+
+  // Check if puas + wh-word are mixed unnecessarily
+  if (qIdx !== -1 && (lowerTokens.join(" ").includes("dab tsi") || lowerTokens.join(" ").includes("qhov twg") || lowerTokens.join(" ").includes("leej twg"))) {
+    return {
+      status: "warn",
+      title: "Question Rule: Don't Combine 'puas' with Content Question Words",
+      msg: `Use <code>puas</code> only for Yes/No questions. When asking <em>what</em> (<code>dab tsi</code>), <em>where</em> (<code>qhov twg</code>), or <em>who</em> (<code>leej twg</code>), drop <code>puas</code>!`
+    };
+  }
+
+  // Check unknown words / tone typos against lexicon
+  const unknown = [];
+  for (let i = 0; i < lowerTokens.length; i++) {
+    const t = lowerTokens[i];
+    const twoWord = i < lowerTokens.length - 1 ? `${t} ${lowerTokens[i + 1]}` : "";
+    if (twoWord && findLex(twoWord)) {
+      i++;
+      continue;
+    }
+    if (!findLex(t)) {
+      // Find closest lexicon match
+      let best = null, bestDist = 99;
+      PACKS[currentLang].lexicon.forEach(item => {
+        const d = editDistance(t, item.w.toLowerCase());
+        if (d < bestDist) { bestDist = d; best = item; }
+      });
+      unknown.push({ typed: tokens[i], best, bestDist });
+    }
+  }
+
+  if (unknown.length > 0) {
+    const u = unknown[0];
+    if (u.best && u.bestDist <= 2) {
+      return {
+        status: "warn",
+        title: `Possible Tone or Spelling Typo: "${u.typed}"`,
+        msg: `Did you mean <strong><code>${u.best.w}</code></strong> (${u.best.en}, tone: ${u.best.tone})? Check the vowel or final tone letter.`
+      };
+    }
+    return {
+      status: "warn",
+      title: `Unrecognized Word: "${u.typed}"`,
+      msg: `<code>${u.typed}</code> isn't in the active course vocabulary yet. You can add it in the <strong>Custom Vocabulary Builder</strong> below if it's a new course word!`
+    };
+  }
+
+  // Must have at least a verb or polite/predicate
+  if (verbIndices.length === 0 && !lowerTokens.includes("zoo")) {
+    return {
+      status: "warn",
+      title: "Incomplete Sentence (Missing Verb)",
+      msg: `Every complete Hmong sentence needs an action or state verb (like <code>nyob, mus, kawm, hais, paub, pab</code>).`
+    };
+  }
+
+  return {
+    status: "ok",
+    title: "Grammatically Valid Sentence!",
+    msg: `Your sentence <strong>"${tokens.join(" ")}"</strong> follows valid ${PACKS[currentLang].name} slot order!`,
+    gloss: buildGlossHTML(tokens)
+  };
+}
+
+function showFeedback(elId, result) {
+  const el = document.getElementById(elId);
+  el.className = `feedback ${result.status}`;
+  el.innerHTML = `<h3>${result.title}</h3><div>${result.msg}</div>${result.gloss || ""}`;
+  if (result.status === "ok") {
+    stats.solved++;
+    stats.streak++;
+    saveStats();
+  } else if (result.status === "err") {
+    stats.streak = 0;
+    saveStats();
+  }
+}
+
+// Event Listeners for Mode 1 (Tiles)
+document.getElementById("checkTilesBtn").onclick = () => {
+  const list = getFilteredSentences();
+  const target = list[currentIdx];
+  const built = selectedTiles.map(t => t.word).join(" ");
+  const res = diagnoseSentence(built, target);
+  showFeedback("tileFeedback", res);
+};
+
+document.getElementById("clearTilesBtn").onclick = () => {
+  selectedTiles = [];
+  availableTileObjs.forEach(t => t.used = false);
+  renderTiles();
+  document.getElementById("tileFeedback").className = "feedback";
+};
+
+document.getElementById("hintTilesBtn").onclick = () => {
+  const list = getFilteredSentences();
+  const target = list[currentIdx];
+  showFeedback("tileFeedback", {
+    status: "warn",
+    title: "Grammar Hint",
+    msg: `${target.hint}<br><small>First word: <strong>${target.hm[0]}</strong></small>`
+  });
+};
+
+document.getElementById("nextTilesBtn").onclick = () => {
+  currentIdx = (currentIdx + 1) % getFilteredSentences().length;
+  loadChallenge();
+};
+
+// Event Listeners for Mode 2 (Free Typing)
+document.getElementById("checkFreeBtn").onclick = () => {
+  const list = getFilteredSentences();
+  const target = list[currentIdx];
+  const val = document.getElementById("freeInput").value;
+  const res = diagnoseSentence(val, target);
+  showFeedback("freeFeedback", res);
+};
+
+document.getElementById("checkFreeAnyBtn").onclick = () => {
+  const val = document.getElementById("freeInput").value;
+  const res = diagnoseSentence(val, null);
+  showFeedback("freeFeedback", res);
+};
+
+document.getElementById("newTypePromptBtn").onclick = () => {
+  currentIdx = (currentIdx + 1) % getFilteredSentences().length;
+  loadChallenge();
+  document.getElementById("freeFeedback").className = "feedback";
+};
+
+document.querySelectorAll("[data-sample]").forEach(btn => {
+  btn.onclick = () => {
+    document.getElementById("freeInput").value = btn.getAttribute("data-sample");
+    const res = diagnoseSentence(btn.getAttribute("data-sample"), null);
+    showFeedback("freeFeedback", res);
+  };
+});
+
+// Mode 3: Universal Slot Matrix
+let matrixSelections = [0, 0, 0, 0, 0, 0];
+
+function renderMatrix() {
+  const slots = PACKS[currentLang].slots;
+  if (matrixSelections.length !== slots.length) {
+    matrixSelections = slots.map(() => 0);
+  }
+  const grid = document.getElementById("slotGrid");
+  grid.innerHTML = "";
+
+  slots.forEach((col, cIdx) => {
+    const colEl = document.createElement("div");
+    colEl.className = "slot-col";
+    colEl.innerHTML = `<h4>${col.title}</h4>`;
+    col.items.forEach((item, iIdx) => {
+      const btn = document.createElement("button");
+      btn.className = "slot-opt" + (matrixSelections[cIdx] === iIdx ? " selected" : "");
+      btn.innerHTML = `<div>${item.hm || "—"}</div><div style="font-size:0.74rem;font-weight:400;opacity:0.85;">${item.en}</div>`;
+      btn.onclick = () => {
+        matrixSelections[cIdx] = iIdx;
+        renderMatrix();
+      };
+      colEl.appendChild(btn);
+    });
+    grid.appendChild(colEl);
+  });
+
+  const hmParts = [];
+  const enParts = [];
+  slots.forEach((col, cIdx) => {
+    const pick = col.items[matrixSelections[cIdx]] || col.items[0];
+    if (pick.hm) hmParts.push(pick.hm);
+    if (pick.hm) enParts.push(pick.en);
+  });
+
+  const isQuestion = hmParts.includes("puas");
+  const hmSentence = hmParts.join(" ") + (isQuestion ? "?" : ".");
+  document.getElementById("matrixOutputHm").textContent = hmSentence;
+  document.getElementById("matrixOutputEn").textContent = "Literal slot flow: " + enParts.join(" + ") + (isQuestion ? "?" : "");
+  document.getElementById("matrixOutputGloss").innerHTML = buildGlossHTML(hmParts);
+}
+
+document.getElementById("randomMatrixBtn").onclick = () => {
+  const slots = PACKS[currentLang].slots;
+  matrixSelections = slots.map(col => Math.floor(Math.random() * col.items.length));
+  renderMatrix();
+};
+
+document.getElementById("sendMatrixToCheckerBtn").onclick = () => {
+  const text = document.getElementById("matrixOutputHm").textContent.replace(/[?.]/g, "");
+  document.querySelector('[data-tab="typing"]').click();
+  document.getElementById("freeInput").value = text;
+  const res = diagnoseSentence(text, null);
+  showFeedback("freeFeedback", res);
+};
+
+// Custom word addition
+document.getElementById("addWordBtn").onclick = () => {
+  const w = document.getElementById("newWordHm").value.trim();
+  const role = document.getElementById("newWordRole").value;
+  const en = document.getElementById("newWordEn").value.trim();
+  if (!w || !en) return;
+  PACKS[currentLang].lexicon.push({ w, role, en, tone: "custom" });
+  document.getElementById("customWordStatus").textContent = `Added "${w}" (${en}) to active lexicon!`;
+  document.getElementById("newWordHm").value = "";
+  document.getElementById("newWordEn").value = "";
+};
+
+// Top controls & Tabs
+document.getElementById("langSelect").onchange = e => {
+  currentLang = e.target.value;
+  currentIdx = 0;
+  loadChallenge();
+  renderMatrix();
+};
+
+document.getElementById("categorySelect").onchange = e => {
+  currentCat = e.target.value;
+  currentIdx = 0;
+  loadChallenge();
+};
+
+document.getElementById("resetStatsBtn").onclick = () => {
+  stats = { solved: 0, streak: 0 };
+  saveStats();
+};
+
+document.querySelectorAll(".tab-btn").forEach(btn => {
+  btn.onclick = () => {
+    document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    const target = btn.getAttribute("data-tab");
+    ["tiles", "typing", "matrix"].forEach(id => {
+      document.getElementById(`tab-${id}`).classList.toggle("hidden", id !== target);
+    });
+  };
+});
+
+saveStats();
+loadChallenge();
+renderMatrix();
+</script>
+</body>
+</html>
