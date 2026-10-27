@@ -24,14 +24,15 @@
 <body>
   <div class="top-header">
     <h1 id="hubTitle">10-Day Hmong Language Course – Practice Suite</h1>
-    <div class="lang-switch">
+    <div class="lang-switch" role="group" aria-label="Instruction Language">
       <button class="lang-btn active" id="btnEn" onclick="setLang('en')">English</button>
       <button class="lang-btn" id="btnVi" onclick="setLang('vi')">Tiếng Việt</button>
+      <button class="lang-btn" id="btnKo" onclick="setLang('ko')">한국어</button>
     </div>
   </div>
 
   <div id="view-en">
-    <p style="color:#555;margin-top:0;">Interactive take-home practice tools for White Hmong (RPA) students. Choose your instruction language above (English or Tiếng Việt).</p>
+    <p style="color:#555;margin-top:0;">Interactive take-home practice tools for White Hmong (RPA) students. Choose your instruction language above (English, Tiếng Việt, or 한국어).</p>
     <div class="card">
       <h2>1. Hmong Sound Trainer (Focus on Tones)</h2>
       <p>Learn the 7 main tones in White Hmong (RPA), practice minimal pairs, and record your own voice to compare pitch and voice quality.</p>
@@ -39,7 +40,7 @@
     </div>
     <div class="card">
       <h2>2. Universal Language Generator Tool</h2>
-      <p>Build sentences with interactive word tiles, test your own typed sentences with real-time grammar &amp; tone diagnostics, and explore the 6-slot sentence generator.</p>
+      <p>Build sentences with interactive word tiles, test your own typed sentences with real-time grammar &amp; tone diagnostics, explore the 6-slot sentence generator, and sync your personal vocabulary with your Student Code (<code>HMOOB-01</code> to <code>HMOOB-14</code>).</p>
       <a class="btn" href="./Universal_Language_Generator_Tool.html?lang=en">Open Sentence Generator &amp; Checker →</a>
     </div>
   </div>
@@ -53,24 +54,44 @@
     </div>
     <div class="card">
       <h2>2. Công Cụ Tạo Câu &amp; Kiểm Tra Ngữ Pháp Đa Năng</h2>
-      <p>Ghép câu bằng thẻ từ tương tác, tự gõ câu tiếng H'Mông để kiểm tra lỗi trật tự từ và thanh điệu tức thì, hoặc tạo hàng trăm câu mẫu qua bảng 6 vị trí ngữ pháp.</p>
+      <p>Ghép câu bằng thẻ từ tương tác, tự gõ câu tiếng H'Mông để kiểm tra lỗi trật tự từ và thanh điệu tức thì, tạo hàng trăm câu mẫu qua bảng 6 vị trí ngữ pháp và đồng bộ từ vựng theo Mã Học Viên (<code>HMOOB-01</code> đến <code>HMOOB-14</code>).</p>
       <a class="btn" href="./Universal_Language_Generator_Tool.html?lang=vi">Mở Công Cụ Tạo Câu &amp; Kiểm Tra Ngữ Pháp →</a>
     </div>
   </div>
 
+  <div id="view-ko" class="hidden">
+    <p style="color:#555;margin-top:0;">백색 몽족어(White Hmong, RPA 표기법) 10일 과정 수강생을 위한 양방향 자습 도구 모음입니다. 상단에서 안내 언어를 선택하세요 (English, Tiếng Việt, 한국어).</p>
+    <div class="card">
+      <h2>1. 몽족어 발음 및 성조 트레이너 (Hmong Sound Trainer)</h2>
+      <p>백색 몽족어(RPA)의 7가지 핵심 성조를 익히고, 최소대립쌍(Minimal Pairs)을 비교하며, 내 목소리를 직접 녹음하여 음높이와 발성을 점검해 보세요.</p>
+      <a class="btn" href="./Hmong_Sound_Trainer.html?lang=ko">성조 트레이너 열기 →</a>
+    </div>
+    <div class="card">
+      <h2>2. 다목적 문장 생성 및 문법 진단 도구 (Universal Language Generator)</h2>
+      <p>단어 타일로 문장을 조립하고, 직접 입력한 몽족어 문장의 어순·성조·분류사를 실시간으로 진단받으세요. 6칸 문장 슬롯 생성기와 학생 코드(<code>HMOOB-01</code> ~ <code>HMOOB-14</code>) 클라우드 단어장 동기화를 지원합니다.</p>
+      <a class="btn" href="./Universal_Language_Generator_Tool.html?lang=ko">문장 생성 및 문법 검사기 열기 →</a>
+    </div>
+  </div>
+
   <script>
+    const HUB_TITLES = {
+      en: "10-Day Hmong Language Course – Practice Suite",
+      vi: "Khóa Học Tiếng H'Mông 10 Ngày – Bộ Công Cụ Thực Hành",
+      ko: "10일 몽족어(White Hmong) 과정 – 실습 도구 모음"
+    };
     function setLang(l) {
-      localStorage.setItem('hmong_ui_lang', l);
-      document.getElementById('btnEn').classList.toggle('active', l === 'en');
-      document.getElementById('btnVi').classList.toggle('active', l === 'vi');
-      document.getElementById('view-en').classList.toggle('hidden', l !== 'en');
-      document.getElementById('view-vi').classList.toggle('hidden', l !== 'vi');
-      document.getElementById('hubTitle').textContent = l === 'vi'
-        ? "Khóa Học Tiếng H'Mông 10 Ngày – Bộ Công Cụ Thực Hành"
-        : "10-Day Hmong Language Course – Practice Suite";
+      const lang = (l === 'vi' || l === 'ko') ? l : 'en';
+      localStorage.setItem('hmong_ui_lang', lang);
+      document.getElementById('btnEn').classList.toggle('active', lang === 'en');
+      document.getElementById('btnVi').classList.toggle('active', lang === 'vi');
+      document.getElementById('btnKo').classList.toggle('active', lang === 'ko');
+      document.getElementById('view-en').classList.toggle('hidden', lang !== 'en');
+      document.getElementById('view-vi').classList.toggle('hidden', lang !== 'vi');
+      document.getElementById('view-ko').classList.toggle('hidden', lang !== 'ko');
+      document.getElementById('hubTitle').textContent = HUB_TITLES[lang];
     }
     const saved = new URLSearchParams(window.location.search).get('lang') || localStorage.getItem('hmong_ui_lang') || 'en';
-    setLang(saved === 'vi' ? 'vi' : 'en');
+    setLang(saved);
   </script>
 </body>
 </html>

@@ -437,6 +437,7 @@
   <div class="lang-switch" role="group" aria-label="Instruction Language">
     <button class="lang-btn active" id="uiBtnEn" onclick="setUILang('en')">English</button>
     <button class="lang-btn" id="uiBtnVi" onclick="setUILang('vi')">Tiếng Việt</button>
+    <button class="lang-btn" id="uiBtnKo" onclick="setUILang('ko')">한국어</button>
   </div>
 </div>
 
@@ -473,13 +474,13 @@
   </div>
 
   <div class="control-group" style="margin-top:8px;">
-    <label for="langSelect"><strong>Language Pack:</strong></label>
+    <label for="langSelect"><strong id="langPackLabel">Language Pack:</strong></label>
     <select id="langSelect">
       <option value="hmong">White Hmong (RPA) – 10-Day Course</option>
       <option value="spanish">Spanish – Core SVO &amp; Questions (Demo Pack)</option>
     </select>
 
-    <label for="categorySelect"><strong>Lesson Pattern:</strong></label>
+    <label for="categorySelect"><strong id="lessonPatternLabel">Lesson Pattern:</strong></label>
     <select id="categorySelect">
       <option value="all">All Course Patterns</option>
       <option value="svo">Core SVO (Subject + Verb + Object)</option>
@@ -501,8 +502,8 @@
 
 <!-- MODE 1: WORD-TILE SENTENCE BUILDER -->
 <div class="card" id="tab-tiles">
-  <h2>Word-Tile Sentence Builder</h2>
-  <p style="margin-top:0;color:var(--muted);">Tap the tiles in the right grammatical order to build the target sentence. Watch out for distractor tiles with wrong tones or particles!</p>
+  <h2 id="mode1Title">Word-Tile Sentence Builder</h2>
+  <p id="mode1Desc" style="margin-top:0;color:var(--muted);">Tap the tiles in the right grammatical order to build the target sentence. Watch out for distractor tiles with wrong tones or particles!</p>
 
   <div class="prompt-box">
     <div class="prompt-label" id="tilePatternLabel">Pattern</div>
@@ -510,12 +511,12 @@
     <div class="prompt-pattern" id="tileFormula">Formula: Subject + Verb + Object</div>
   </div>
 
-  <div><strong>Your Sentence:</strong></div>
+  <div><strong id="yourSentenceLabel">Your Sentence:</strong></div>
   <div class="sentence-well" id="sentenceWell">
     <span class="well-placeholder">Tap word tiles below to assemble your sentence…</span>
   </div>
 
-  <div><strong>Word Bank (tap to add):</strong></div>
+  <div><strong id="wordBankLabel">Word Bank (tap to add):</strong></div>
   <div class="tile-bank" id="tileBank"></div>
 
   <div class="control-group" style="margin-top:12px;">
@@ -530,8 +531,8 @@
 
 <!-- MODE 2: FREE-TYPING SENTENCE CHECKER -->
 <div class="card hidden" id="tab-typing">
-  <h2>Free-Typing Sentence &amp; Grammar Checker</h2>
-  <p style="margin-top:0;color:var(--muted);">Type the translation for the prompt below, <strong>or type any sentence of your own</strong> using the course vocabulary to test whether its word order, tone letters, and classifiers are valid.</p>
+  <h2 id="mode2Title">Free-Typing Sentence &amp; Grammar Checker</h2>
+  <p id="mode2Desc" style="margin-top:0;color:var(--muted);">Type the translation for the prompt below, <strong>or type any sentence of your own</strong> using the course vocabulary to test whether its word order, tone letters, and classifiers are valid.</p>
 
   <div class="prompt-box">
     <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
@@ -553,7 +554,7 @@
   </div>
 
   <div class="control-group" style="margin-top:6px;">
-    <span style="font-size:0.86rem;color:var(--muted);">Quick test examples (tap to fill):</span>
+    <span id="quickExamplesLabel" style="font-size:0.86rem;color:var(--muted);">Quick test examples (tap to fill):</span>
     <button class="secondary" style="padding:5px 10px;font-size:0.82rem;" data-sample="Koj puas nyob zoo">Koj puas nyob zoo (Valid)</button>
     <button class="secondary" style="padding:5px 10px;font-size:0.82rem;" data-sample="Kuv mus tsis tsev">Kuv mus tsis tsev (Order Error)</button>
     <button class="secondary" style="padding:5px 10px;font-size:0.82rem;" data-sample="Kuv xav kawm lus Hmob">Kuv xav kawm lus Hmob (Tone Typo)</button>
@@ -562,7 +563,7 @@
 
   <div class="feedback" id="freeFeedback"></div>
 
-  <div class="note">
+  <div class="note" id="diagNoteBox">
     <strong>What the Diagnostic Engine checks:</strong>
     <ul style="margin:6px 0 0 0;padding-left:20px;">
       <li><strong>Slot Order:</strong> <code>Subject + [Time/Aspect: yuav / tau / tab tom] + [Question: puas] + [Negation: tsis] + Verb + [Object / Classifier Phrase / Question Word]</code></li>
@@ -574,11 +575,11 @@
 
 <!-- MODE 3: UNIVERSAL SLOT GENERATOR -->
 <div class="card hidden" id="tab-matrix">
-  <h2>Universal Slot Matrix Generator</h2>
-  <p style="margin-top:0;color:var(--muted);">Click one item in each column to generate hundreds of grammatically valid sentences and see how Hmong sentence slots fit together.</p>
+  <h2 id="mode3Title">Universal Slot Matrix Generator</h2>
+  <p id="mode3Desc" style="margin-top:0;color:var(--muted);">Click one item in each column to generate hundreds of grammatically valid sentences and see how Hmong sentence slots fit together.</p>
 
   <div class="prompt-box">
-    <div class="prompt-label">Live Generated Sentence</div>
+    <div class="prompt-label" id="liveMatrixLabel">Live Generated Sentence</div>
     <div class="prompt-en" id="matrixOutputHm" style="color:var(--accent);font-size:1.35rem;">Kuv xav kawm lus Hmoob.</div>
     <div id="matrixOutputEn" style="font-weight:600;color:#334155;">I want to learn Hmong.</div>
     <div class="prompt-pattern" id="matrixOutputGloss" style="margin-top:4px;"></div>
@@ -629,7 +630,7 @@
         </div>
       </div>
 
-      <table class="ref-table">
+      <table class="ref-table" id="refTable">
         <thead>
           <tr>
             <th>Slot Order</th>
@@ -1366,7 +1367,9 @@ const STUDENT_ROSTER = {
   "HMOOB-09": { name: "Hùng Nguyễn (Nguyễn Lý Hùng)", short: "Hùng" },
   "HMOOB-10": { name: "Tuyết Nguyễn (Nguyễn Thị Ánh Tuyết)", short: "Tuyết" },
   "HMOOB-11": { name: "David Rorke", short: "David" },
-  "HMOOB-12": { name: "Hoa Phạm (Phạm Thị Hoa)", short: "Hoa" }
+  "HMOOB-12": { name: "Hoa Phạm (Phạm Thị Hoa)", short: "Hoa" },
+  "HMOOB-13": { name: "Student 13", short: "Student 13" },
+  "HMOOB-14": { name: "Student 14", short: "Student 14" }
 };
 
 function normalizeStudentCode(raw) {
@@ -1384,11 +1387,12 @@ function getCustomWordsStorageKey(code) {
 function normalizeCustomWordObj(item) {
   if (!item || typeof item !== "object") return null;
   const hmong = String(item.hmong || item.w || "").trim();
-  const en = String(item.en || item.vi || "").trim();
-  const vi = String(item.vi || item.en || "").trim();
+  const en = String(item.en || item.vi || item.ko || "").trim();
+  const vi = String(item.vi || item.en || item.ko || "").trim();
+  const ko = String(item.ko || item.en || item.vi || "").trim();
   const pos = String(item.pos || item.role || "obj").trim() || "obj";
   if (!hmong || !en) return null;
-  return { hmong, en, vi, pos };
+  return { hmong, en, vi, ko, pos };
 }
 
 function mergeWordLists(listA, listB) {
@@ -1405,19 +1409,23 @@ function mergeWordLists(listA, listB) {
 function syncCustomWordsIntoLexicon() {
   // Remove previously injected custom words first so deletions take effect cleanly
   PACKS.hmong.lexicon = PACKS.hmong.lexicon.filter(item => !item.isCustom);
-  const isVi = typeof uiLang !== "undefined" && uiLang === "vi";
+  const lang = typeof uiLang !== "undefined" ? uiLang : "en";
   customWords.forEach(cw => {
     const existsBase = PACKS.hmong.lexicon.find(x => x.w.toLowerCase() === cw.hmong.toLowerCase());
     if (!existsBase) {
+      const activeMeaning = lang === "vi" ? (cw.vi || cw.en) : (lang === "ko" ? (cw.ko || cw.en) : cw.en);
+      const activeTone = lang === "vi" ? "từ tự thêm" : (lang === "ko" ? "사용자 단어" : "custom");
       PACKS.hmong.lexicon.push({
         w: cw.hmong,
         role: cw.pos || "obj",
-        en: isVi ? (cw.vi || cw.en) : cw.en,
+        en: activeMeaning,
         enOrig: cw.en,
         vi: cw.vi || cw.en,
-        tone: isVi ? "từ tự thêm" : "custom",
+        ko: cw.ko || cw.en,
+        tone: activeTone,
         toneOrig: "custom",
         toneVi: "từ tự thêm",
+        toneKo: "사용자 단어",
         isCustom: true
       });
     }
@@ -1457,18 +1465,20 @@ function loadCustomWordsLocal(code) {
 }
 
 function renderCustomWordsUI() {
-  const isVi = typeof uiLang !== "undefined" && uiLang === "vi";
+  const lang = typeof uiLang !== "undefined" ? uiLang : "en";
   const count = customWords.length;
 
   const drawerBtn = document.getElementById("openVocabDrawerBtn");
   if (drawerBtn) {
-    drawerBtn.textContent = isVi ? `Từ Đã Lưu (${count})` : `My Saved Words (${count})`;
+    drawerBtn.textContent = lang === "vi"
+      ? `Từ Đã Lưu (${count})`
+      : (lang === "ko" ? `저장된 단어 (${count})` : `My Saved Words (${count})`);
   }
   const heading = document.getElementById("savedWordsHeading");
   if (heading) {
-    heading.textContent = isVi
+    heading.textContent = lang === "vi"
       ? `Từ Vựng Cá Nhân Đã Lưu (${count})`
-      : `My Personal Course Words (${count})`;
+      : (lang === "ko" ? `나의 개인 학습 단어장 (${count})` : `My Personal Course Words (${count})`);
   }
 
   const badge = document.getElementById("connectedStudentBadge");
@@ -1478,23 +1488,31 @@ function renderCustomWordsUI() {
     const displayName = info ? info.short : (activeStudentName || activeStudentCode);
     badge.classList.remove("hidden");
     badge.classList.toggle("offline", lastSyncState === "local");
-    badge.textContent = isVi
+    badge.textContent = lang === "vi"
       ? `Đã kết nối: ${activeStudentCode} (${displayName})`
-      : `Connected: ${activeStudentCode} (${displayName})`;
+      : (lang === "ko" ? `연결됨: ${activeStudentCode} (${displayName})` : `Connected: ${activeStudentCode} (${displayName})`);
 
     if (lastSyncState === "cloud_ok") {
-      stateText.textContent = isVi ? "Đã lưu lên đám mây ✓" : "Saved to cloud ✓";
+      stateText.textContent = lang === "vi"
+        ? "Đã lưu lên đám mây ✓"
+        : (lang === "ko" ? "클라우드에 저장됨 ✓" : "Saved to cloud ✓");
       stateText.style.color = "var(--ok-border)";
     } else if (lastSyncState === "syncing") {
-      stateText.textContent = isVi ? "Đang đồng bộ đám mây…" : "Syncing to cloud…";
+      stateText.textContent = lang === "vi"
+        ? "Đang đồng bộ đám mây…"
+        : (lang === "ko" ? "클라우드 동기화 중…" : "Syncing to cloud…");
       stateText.style.color = "var(--accent)";
     } else {
-      stateText.textContent = isVi ? "Đã lưu trên trình duyệt ✓" : "Saved on this browser ✓";
+      stateText.textContent = lang === "vi"
+        ? "Đã lưu trên trình duyệt ✓"
+        : (lang === "ko" ? "이 브라우저에 저장됨 ✓" : "Saved on this browser ✓");
       stateText.style.color = "var(--muted)";
     }
   } else {
     badge.classList.add("hidden");
-    stateText.textContent = isVi ? "Chưa kết nối mã (Đang lưu cục bộ)" : "No code connected (Saved locally)";
+    stateText.textContent = lang === "vi"
+      ? "Chưa kết nối mã (Đang lưu cục bộ)"
+      : (lang === "ko" ? "코드 미연결 (브라우저 로컬 저장 중)" : "No code connected (Saved locally)");
     stateText.style.color = "var(--muted)";
   }
 
@@ -1506,9 +1524,11 @@ function renderCustomWordsUI() {
     emptySpan.id = "noCustomWordsMsg";
     emptySpan.style.fontSize = "0.86rem";
     emptySpan.style.color = "var(--muted)";
-    emptySpan.textContent = isVi
+    emptySpan.textContent = lang === "vi"
       ? "Chưa có từ tự thêm nào. Hãy thêm từ ở trên hoặc kết nối Mã Học Viên của bạn!"
-      : "No custom words added yet. Add words above or connect your Student Code!";
+      : (lang === "ko"
+          ? "아직 추가된 개인 단어가 없습니다. 위에서 단어를 추가하거나 학생 코드를 연결하세요!"
+          : "No custom words added yet. Add words above or connect your Student Code!");
     container.appendChild(emptySpan);
     return;
   }
@@ -1516,11 +1536,11 @@ function renderCustomWordsUI() {
   customWords.forEach((cw, idx) => {
     const chip = document.createElement("div");
     chip.className = "custom-chip";
-    const meaning = isVi ? (cw.vi || cw.en) : cw.en;
+    const meaning = lang === "vi" ? (cw.vi || cw.en) : (lang === "ko" ? (cw.ko || cw.en) : cw.en);
     chip.innerHTML = `<strong>${cw.hmong}</strong> <span>(${meaning})</span> <small style="color:#64748b;">[${cw.pos}]</small>`;
     const delBtn = document.createElement("button");
     delBtn.className = "del-word";
-    delBtn.title = isVi ? "Xóa từ này" : "Remove word";
+    delBtn.title = lang === "vi" ? "Xóa từ này" : (lang === "ko" ? "이 단어 삭제" : "Remove word");
     delBtn.textContent = "×";
     delBtn.onclick = () => {
       customWords.splice(idx, 1);
@@ -1564,14 +1584,14 @@ async function pushWordsToCloud() {
 }
 
 async function connectStudentCode(rawCode, silent = false) {
-  const isVi = typeof uiLang !== "undefined" && uiLang === "vi";
+  const lang = typeof uiLang !== "undefined" ? uiLang : "en";
   const code = normalizeStudentCode(rawCode);
   if (!/^[A-Z0-9-]{3,24}$/.test(code)) {
     if (!silent) {
       document.getElementById("customWordStatus").style.color = "var(--err-border)";
-      document.getElementById("customWordStatus").textContent = isVi
+      document.getElementById("customWordStatus").textContent = lang === "vi"
         ? "Vui lòng nhập Mã Học Viên hợp lệ (ví dụ: HMOOB-01)."
-        : "Please enter a valid Student Code (e.g., HMOOB-01).";
+        : (lang === "ko" ? "올바른 학생 코드를 입력해 주세요 (예: HMOOB-01)." : "Please enter a valid Student Code (e.g., HMOOB-01).");
     }
     return;
   }
@@ -1617,7 +1637,6 @@ async function connectStudentCode(rawCode, silent = false) {
           lastSyncState = "local";
         } else {
           lastSyncState = "cloud_ok";
-          // If local had newer words not yet in cloud, push merged list back to cloud
           if (customWords.length > cloudWords.length || beforeCount > cloudWords.length) {
             await pushWordsToCloud();
           }
@@ -1625,9 +1644,11 @@ async function connectStudentCode(rawCode, silent = false) {
         renderCustomWordsUI();
         if (!silent) {
           document.getElementById("customWordStatus").style.color = "var(--ok-border)";
-          document.getElementById("customWordStatus").textContent = isVi
+          document.getElementById("customWordStatus").textContent = lang === "vi"
             ? `Đã kết nối mã ${activeStudentCode} (${activeStudentName}) — Đã tải ${customWords.length} từ vựng cá nhân!`
-            : `Connected ${activeStudentCode} (${activeStudentName}) — ${customWords.length} personal words ready!`;
+            : (lang === "ko"
+                ? `${activeStudentCode} (${activeStudentName}) 연결 완료 — 개인 단어 ${customWords.length}개가 준비되었습니다!`
+                : `Connected ${activeStudentCode} (${activeStudentName}) — ${customWords.length} personal words ready!`);
         }
         return;
       }
@@ -1640,9 +1661,11 @@ async function connectStudentCode(rawCode, silent = false) {
   renderCustomWordsUI();
   if (!silent) {
     document.getElementById("customWordStatus").style.color = "var(--ok-border)";
-    document.getElementById("customWordStatus").textContent = isVi
+    document.getElementById("customWordStatus").textContent = lang === "vi"
       ? `Đã kết nối ${activeStudentCode} (${activeStudentName}) — Đang lưu trên trình duyệt này.`
-      : `Connected ${activeStudentCode} (${activeStudentName}) — Saved on this browser.`;
+      : (lang === "ko"
+          ? `${activeStudentCode} (${activeStudentName}) 연결됨 — 이 브라우저에 안전하게 저장됩니다.`
+          : `Connected ${activeStudentCode} (${activeStudentName}) — Saved on this browser.`);
   }
 }
 
@@ -1667,13 +1690,15 @@ document.getElementById("openVocabDrawerBtn").onclick = () => {
 };
 
 document.getElementById("syncNowBtn").onclick = async () => {
-  const isVi = typeof uiLang !== "undefined" && uiLang === "vi";
+  const lang = typeof uiLang !== "undefined" ? uiLang : "en";
   if (!activeStudentCode) {
     document.getElementById("studentCodeInput").focus();
     document.getElementById("customWordStatus").style.color = "var(--warn-border)";
-    document.getElementById("customWordStatus").textContent = isVi
-      ? "Hãy chọn hoặc nhập Mã Học Viên (ví dụ: HMOOB-01) ở thanh phía trên để đồng bộ đám mây!"
-      : "Select or enter your Student Code (e.g., HMOOB-01) in the top bar to sync to the cloud!";
+    document.getElementById("customWordStatus").textContent = lang === "vi"
+      ? "Hãy nhập Mã Học Viên (ví dụ: HMOOB-01) ở thanh phía trên để đồng bộ đám mây!"
+      : (lang === "ko"
+          ? "클라우드 동기화를 위해 상단 바에 학생 코드(예: HMOOB-01)를 입력해 주세요!"
+          : "Enter your Student Code (e.g., HMOOB-01) in the top bar to sync to the cloud!");
     return;
   }
   await connectStudentCode(activeStudentCode, false);
@@ -1709,7 +1734,7 @@ document.getElementById("importWordsFile").onchange = e => {
   if (!file) return;
   const reader = new FileReader();
   reader.onload = async ev => {
-    const isVi = typeof uiLang !== "undefined" && uiLang === "vi";
+    const lang = typeof uiLang !== "undefined" ? uiLang : "en";
     try {
       const parsed = JSON.parse(String(ev.target.result || "{}"));
       const importedList = Array.isArray(parsed) ? parsed : (Array.isArray(parsed.words) ? parsed.words : []);
@@ -1721,14 +1746,18 @@ document.getElementById("importWordsFile").onchange = e => {
       saveCustomWordsLocal();
       if (activeStudentCode) await pushWordsToCloud();
       document.getElementById("customWordStatus").style.color = "var(--ok-border)";
-      document.getElementById("customWordStatus").textContent = isVi
+      document.getElementById("customWordStatus").textContent = lang === "vi"
         ? `Đã nhập thành công! Hiện có ${customWords.length} từ vựng cá nhân.`
-        : `Backup imported! You now have ${customWords.length} personal words saved.`;
+        : (lang === "ko"
+            ? `백업 불러오기 완료! 현재 ${customWords.length}개의 개인 단어가 저장되어 있습니다.`
+            : `Backup imported! You now have ${customWords.length} personal words saved.`);
     } catch {
       document.getElementById("customWordStatus").style.color = "var(--err-border)";
-      document.getElementById("customWordStatus").textContent = isVi
+      document.getElementById("customWordStatus").textContent = lang === "vi"
         ? "Tệp JSON không hợp lệ. Vui lòng chọn tệp sao lưu (.json) đã xuất trước đó."
-        : "Invalid JSON backup file. Please choose a valid exported .json file.";
+        : (lang === "ko"
+            ? "유효하지 않은 JSON 파일입니다. 이전에 내보낸 .json 백업 파일을 선택해 주세요."
+            : "Invalid JSON backup file. Please choose a valid exported .json file.");
     }
     e.target.value = "";
   };
@@ -1737,17 +1766,19 @@ document.getElementById("importWordsFile").onchange = e => {
 
 // Custom word addition
 document.getElementById("addWordBtn").onclick = async () => {
-  const isVi = typeof uiLang !== "undefined" && uiLang === "vi";
+  const lang = typeof uiLang !== "undefined" ? uiLang : "en";
   const w = document.getElementById("newWordHm").value.trim();
   const role = document.getElementById("newWordRole").value;
-  const en = document.getElementById("newWordEn").value.trim();
-  if (!w || !en) return;
-  customWords = mergeWordLists(customWords, [{ hmong: w, en, vi: en, pos: role }]);
+  const meaning = document.getElementById("newWordEn").value.trim();
+  if (!w || !meaning) return;
+  customWords = mergeWordLists(customWords, [{ hmong: w, en: meaning, vi: meaning, ko: meaning, pos: role }]);
   saveCustomWordsLocal();
   document.getElementById("customWordStatus").style.color = "var(--ok-border)";
-  document.getElementById("customWordStatus").textContent = isVi
-    ? `Đã thêm "${w}" (${en}) vào bộ từ vựng cá nhân!`
-    : `Added "${w}" (${en}) to your personal lexicon!`;
+  document.getElementById("customWordStatus").textContent = lang === "vi"
+    ? `Đã thêm "${w}" (${meaning}) vào bộ từ vựng cá nhân!`
+    : (lang === "ko"
+        ? `"${w}" (${meaning}) 단어가 내 단어장에 추가되었습니다!`
+        : `Added "${w}" (${meaning}) to your personal lexicon!`);
   document.getElementById("newWordHm").value = "";
   document.getElementById("newWordEn").value = "";
   if (activeStudentCode) {
@@ -1785,11 +1816,7 @@ document.querySelectorAll(".tab-btn").forEach(btn => {
   };
 });
 
-saveStats();
-loadChallenge();
-renderMatrix();
-
-// Bilingual UI & Vietnamese translations for Hmong course items
+// Trilingual UI & Vietnamese + Korean translations for Hmong course items
 const VI_LEX = {
   "kuv": { vi: "tôi / mình", toneVi: "v (trung thăng)" },
   "koj": { vi: "bạn", toneVi: "j (cao giáng)" },
@@ -1818,9 +1845,9 @@ const VI_LEX = {
   "hu": { vi: "gọi / tên là", toneVi: "không chữ cuối (trung)" },
   "thov": { vi: "xin / vui lòng", toneVi: "v (trung thăng)" },
   "zoo": { vi: "tốt / khỏe", toneVi: "không chữ cuối (trung)" },
-  "lus hmoob": { vi: "tiếng H\x27Mông", toneVi: "s + b" },
+  "lus hmoob": { vi: "tiếng H'Mông", toneVi: "s + b" },
   "lus": { vi: "tiếng / lời nói", toneVi: "s (thấp)" },
-  "hmoob": { vi: "H\x27Mông", toneVi: "b (cao)" },
+  "hmoob": { vi: "H'Mông", toneVi: "b (cao)" },
   "ntawv": { vi: "sách / chữ / giấy", toneVi: "v (trung thăng)" },
   "phau ntawv": { vi: "quyển sách", toneVi: "trung + v" },
   "tsev": { vi: "nhà", toneVi: "v (trung thăng)" },
@@ -1842,6 +1869,58 @@ const VI_LEX = {
   "muaj": { vi: "có", toneVi: "j (cao giáng)" }
 };
 
+const KO_LEX = {
+  "kuv": { ko: "나 / 저", toneKo: "v (중상승조)" },
+  "koj": { ko: "당신 / 너", toneKo: "j (고하강조)" },
+  "nws": { ko: "그 / 그녀", toneKo: "s (저평조)" },
+  "peb": { ko: "우리", toneKo: "b (고평조)" },
+  "nej": { ko: "여러분 / 너희", toneKo: "j (고하강조)" },
+  "lawv": { ko: "그들", toneKo: "v (중상승조)" },
+  "yuav": { ko: "~할 것이다 (미래)", toneKo: "v (중상승조)" },
+  "tau": { ko: "~했다 (과거/완료)", toneKo: "무표기 (중평조)" },
+  "tab tom": { ko: "지금 ~하는 중이다", toneKo: "b + m" },
+  "puas": { ko: "~입니까? (의문사)", toneKo: "s (저평조)" },
+  "tsis": { ko: "안 / ~하지 않다 (부정)", toneKo: "s (저평조)" },
+  "xav": { ko: "~하고 싶다 (원하다)", toneKo: "v (중상승조)" },
+  "nyiam": { ko: "좋아하다", toneKo: "m (저하강 성문폐쇄조)" },
+  "nyob": { ko: "살다 / 지내다 / 있다", toneKo: "b (고평조)" },
+  "mus": { ko: "가다", toneKo: "s (저평조)" },
+  "kawm": { ko: "배우다 / 공부하다", toneKo: "m (저하강 성문폐쇄조)" },
+  "hais": { ko: "말하다", toneKo: "s (저평조)" },
+  "paub": { ko: "알다", toneKo: "b (고평조)" },
+  "pom": { ko: "보다", toneKo: "m (저하강 성문폐쇄조)" },
+  "pab": { ko: "돕다", toneKo: "b (고평조)" },
+  "nyeem": { ko: "읽다", toneKo: "m (저하강 성문폐쇄조)" },
+  "noj": { ko: "먹다", toneKo: "j (고하강조)" },
+  "haus": { ko: "마시다", toneKo: "s (저평조)" },
+  "ua": { ko: "하다 / 만들다", toneKo: "무표기 (중평조)" },
+  "hu": { ko: "부르다 / 이름하다", toneKo: "무표기 (중평조)" },
+  "thov": { ko: "부탁합니다 / 제발", toneKo: "v (중상승조)" },
+  "zoo": { ko: "좋다 / 잘", toneKo: "무표기 (중평조)" },
+  "lus hmoob": { ko: "몽족어", toneKo: "s + b" },
+  "lus": { ko: "언어 / 말", toneKo: "s (저평조)" },
+  "hmoob": { ko: "몽족(Hmong)", toneKo: "b (고평조)" },
+  "ntawv": { ko: "책 / 글자 / 종이", toneKo: "v (중상승조)" },
+  "phau ntawv": { ko: "책 (한 권)", toneKo: "중평조 + v" },
+  "tsev": { ko: "집", toneKo: "v (중상승조)" },
+  "mov": { ko: "밥 / 음식", toneKo: "v (중상승조)" },
+  "dej": { ko: "물", toneKo: "j (고하강조)" },
+  "dev": { ko: "개 (강아지)", toneKo: "v (중상승조)" },
+  "phooj ywg": { ko: "친구", toneKo: "j + g" },
+  "vajtswv": { ko: "하느님", toneKo: "v (중상승조)" },
+  "yehauvas": { ko: "여호와", toneKo: "s (저평조)" },
+  "ib": { ko: "하나 (1)", toneKo: "b (고평조)" },
+  "ob": { ko: "둘 (2)", toneKo: "b (고평조)" },
+  "tus": { ko: "분류사 (사람/동물/긴 것)", toneKo: "s (저평조)" },
+  "tug": { ko: "분류사 (ib/ob/peb 뒤 tus의 연음형)", toneKo: "g (기식조)" },
+  "lub": { ko: "분류사 (둥근 것/사물/집)", toneKo: "b (고평조)" },
+  "phau": { ko: "분류사 (책 ‘권’)", toneKo: "무표기 (중평조)" },
+  "dab tsi": { ko: "무엇?", toneKo: "b + 무표기" },
+  "qhov twg": { ko: "어디?", toneKo: "v + g" },
+  "leej twg": { ko: "누구?", toneKo: "j + g" },
+  "muaj": { ko: "가지고 있다 / 있다", toneKo: "j (고하강조)" }
+};
+
 const VI_SENTENCES = [
   { vi: "Bạn có khỏe không?", formulaVi: "Chủ ngữ (Koj) + Từ hỏi (puas) + Động từ (nyob) + Trạng từ (zoo)", hintVi: "Đặt 'puas' ngay trước động từ 'nyob' (giống cấu trúc: Bạn + có + khỏe + không)." },
   { vi: "Tôi muốn học tiếng H'Mông.", formulaVi: "Chủ ngữ (Kuv) + Động từ khuyết thiếu (xav) + Động từ (kawm) + Tân ngữ (lus Hmoob)", hintVi: "Bắt đầu bằng 'Kuv xav kawm', sau đó là 'lus Hmoob' (chú ý 2 chữ o và chữ b báo thanh cao ở cuối)." },
@@ -1858,6 +1937,22 @@ const VI_SENTENCES = [
   { vi: "Chúng tôi muốn giúp bạn.", formulaVi: "Chủ ngữ (Peb) + Muốn (xav) + Giúp (pab) + Bạn (koj)", hintVi: "Peb (chúng tôi) + xav (muốn) + pab (giúp) + koj (bạn)." }
 ];
 
+const KO_SENTENCES = [
+  { ko: "잘 지내시나요? (안녕하신가요?)", formulaKo: "주어 (Koj) + 의문입자 (puas) + 동사 (nyob) + 부사 (zoo)", hintKo: "의문 입자 'puas'를 동사 'nyob' 바로 앞에 놓으세요." },
+  { ko: "저는 몽족어를 배우고 싶습니다.", formulaKo: "주어 (Kuv) + 조동사 (xav) + 동사 (kawm) + 목적어 (lus Hmoob)", hintKo: "'Kuv xav kawm'(나는 배우고 싶다) 뒤에 'lus Hmoob'(몽족어, 이중모음 oo와 끝 성조 b 유의)을 배열하세요." },
+  { ko: "저는 모릅니다.", formulaKo: "주어 (Kuv) + 부정 (tsis) + 동사 (paub)", hintKo: "부정어 'tsis'를 동사 'paub'(알다 — 돕다인 'pab'과 구별!) 바로 앞에 놓으세요." },
+  { ko: "그/그녀는 집에 가지 않습니다.", formulaKo: "주어 (Nws) + 부정 (tsis) + 동사 (mus) + 장소 (tsev)", hintKo: "부정어 'tsis'는 반드시 동사 'mus'(가다) 앞에 와야 합니다." },
+  { ko: "우리는 그 책을 읽을 것입니다.", formulaKo: "주어 (Peb) + 미래 (yuav) + 동사 (nyeem) + 분류사 (phau) + 명사 (ntawv)", hintKo: "미래 시제 'yuav'를 동사 앞에 쓰고, 책 분류사 'phau'를 'ntawv' 앞에 놓으세요." },
+  { ko: "저는 밥을 먹었습니다.", formulaKo: "주어 (Kuv) + 과거 (tau) + 동사 (noj) + 목적어 (mov)", hintKo: "완료/과거를 나타내는 'tau'를 동사 'noj'(먹다) 앞에 놓으세요." },
+  { ko: "당신은 몽족어를 할 줄 아시나요?", formulaKo: "주어 (Koj) + 의문입자 (puas) + 동사 (hais) + 목적어 (lus Hmoob)", hintKo: "'puas'를 동사 'hais'(말하다) 바로 앞에 놓으세요." },
+  { ko: "어디에 사시나요?", formulaKo: "주어 (Koj) + 동사 (nyob) + 어디 (qhov twg)", hintKo: "몽족어에서 '어디'(qhov twg)는 문장 맨 끝에 위치하며, 의문사 질문에는 'puas'를 쓰지 않습니다!" },
+  { ko: "무엇을 하고 계시나요?", formulaKo: "주어 (Koj) + 동사 (ua) + 무엇 (dab tsi)", hintKo: "'무엇'(dab tsi)을 동사 'ua'(하다) 뒤에 놓으세요." },
+  { ko: "나는 친구 한 명을 봅니다.", formulaKo: "주어 (Kuv) + 동사 (pom) + 숫자 (ib) + 분류사 (tug) + 명사 (phooj ywg)", hintKo: "숫자 'ib'(1) 뒤에서는 분류사 'tus'가 성조 연음 규칙에 따라 'tug'로 바뀝니다!" },
+  { ko: "그들은 책 두 권을 가지고 있습니다.", formulaKo: "주어 (Lawv) + 동사 (muaj) + 숫자 (ob) + 분류사 (phau) + 명사 (ntawv)", hintKo: "숫자 (ob = 2) + 책 분류사 (phau = 권) + 명사 (ntawv = 책) 순서로 배열하세요." },
+  { ko: "저를 도와주세요.", formulaKo: "정중한 요청 (Thov) + 동사 (pab) + 목적어 (kuv)", hintKo: "'Thov'는 부탁합니다(제발), 'pab'은 돕다입니다 ('paub'은 알다)." },
+  { ko: "우리는 당신을 돕고 싶습니다.", formulaKo: "주어 (Peb) + 조동사 (xav) + 동사 (pab) + 목적어 (koj)", hintKo: "Peb (우리) + xav (~하고 싶다) + pab (돕다) + koj (당신) 순서입니다." }
+];
+
 const VI_SLOTS = [
   { titleVi: "1. Chủ ngữ", itemsVi: ["Tôi", "Bạn", "Anh/Cô ấy", "Chúng tôi", "Họ"] },
   { titleVi: "2. Thời/Thể", itemsVi: ["(hiện tại)", "sẽ", "đã", "đang"] },
@@ -1867,159 +1962,284 @@ const VI_SLOTS = [
   { titleVi: "6. Tân ngữ", itemsVi: ["tiếng H'Mông", "quyển sách", "một người bạn", "nhà", "khỏe/tốt"] }
 ];
 
+const KO_SLOTS = [
+  { titleKo: "1. 주어 (Subject)", itemsKo: ["나 (저)", "당신", "그/그녀", "우리", "그들"] },
+  { titleKo: "2. 시제/상 (Tense)", itemsKo: ["(현재)", "미래 (~할 것)", "과거 (~했다)", "진행 (~하는 중)"] },
+  { titleKo: "3. 의문 (Question)", itemsKo: ["(평서문)", "[의문문?]"] },
+  { titleKo: "4. 부정 (Negation)", itemsKo: ["(긍정문)", "안 (~하지 않다)"] },
+  { titleKo: "5. 동사 (Verb)", itemsKo: ["배우다", "말하다", "읽다", "돕다", "가다", "머물다/지내다"] },
+  { titleKo: "6. 목적어/보어 (Object)", itemsKo: ["몽족어", "책", "친구 한 명", "집", "잘 (건강히)"] }
+];
+
 PACKS.hmong.lexicon.forEach(item => {
-  const m = VI_LEX[item.w.toLowerCase()];
+  const key = item.w.toLowerCase();
+  const mVi = VI_LEX[key];
+  const mKo = KO_LEX[key];
   item.enOrig = item.en;
   item.toneOrig = item.tone;
-  item.vi = m ? m.vi : item.en;
-  item.toneVi = m ? m.toneVi : item.tone;
+  item.vi = mVi ? mVi.vi : item.en;
+  item.toneVi = mVi ? mVi.toneVi : item.tone;
+  item.ko = mKo ? mKo.ko : item.en;
+  item.toneKo = mKo ? mKo.toneKo : item.tone;
 });
 
 PACKS.hmong.sentences.forEach((s, idx) => {
-  const m = VI_SENTENCES[idx];
+  const mVi = VI_SENTENCES[idx];
+  const mKo = KO_SENTENCES[idx];
   s.enOrig = s.en;
   s.formulaOrig = s.formula;
   s.hintOrig = s.hint;
-  if (m) {
-    s.vi = m.vi;
-    s.formulaVi = m.formulaVi;
-    s.hintVi = m.hintVi;
+  if (mVi) {
+    s.vi = mVi.vi;
+    s.formulaVi = mVi.formulaVi;
+    s.hintVi = mVi.hintVi;
+  }
+  if (mKo) {
+    s.ko = mKo.ko;
+    s.formulaKo = mKo.formulaKo;
+    s.hintKo = mKo.hintKo;
   }
 });
 
 PACKS.hmong.slots.forEach((col, cIdx) => {
   col.titleOrig = col.title;
   col.titleVi = VI_SLOTS[cIdx] ? VI_SLOTS[cIdx].titleVi : col.title;
+  col.titleKo = KO_SLOTS[cIdx] ? KO_SLOTS[cIdx].titleKo : col.title;
   col.items.forEach((it, iIdx) => {
     it.enOrig = it.en;
     it.vi = (VI_SLOTS[cIdx] && VI_SLOTS[cIdx].itemsVi[iIdx]) ? VI_SLOTS[cIdx].itemsVi[iIdx] : it.en;
+    it.ko = (KO_SLOTS[cIdx] && KO_SLOTS[cIdx].itemsKo[iIdx]) ? KO_SLOTS[cIdx].itemsKo[iIdx] : it.en;
   });
 });
 
 let uiLang = localStorage.getItem("hmong_ui_lang") || "en";
 
-function setUILang(lang) {
+// Override saveStats & renderMatrix so they use active uiLang
+saveStats = function() {
+  localStorage.setItem("ulgt_stats", JSON.stringify(stats));
+  const lang = typeof uiLang !== "undefined" ? uiLang : "en";
+  if (lang === "vi") {
+    document.getElementById("scoreDisplay").textContent = `Đã giải: ${stats.solved} | Chuỗi đúng: ${stats.streak}`;
+  } else if (lang === "ko") {
+    document.getElementById("scoreDisplay").textContent = `해결: ${stats.solved} | 연속 정답: ${stats.streak}`;
+  } else {
+    document.getElementById("scoreDisplay").textContent = `Solved: ${stats.solved} | Streak: ${stats.streak}`;
+  }
+};
+
+const origRenderMatrix = renderMatrix;
+renderMatrix = function() {
+  origRenderMatrix();
+  const lang = typeof uiLang !== "undefined" ? uiLang : "en";
+  if (currentLang === "hmong" && (lang === "vi" || lang === "ko")) {
+    const slots = PACKS.hmong.slots;
+    const hmParts = [];
+    const glossParts = [];
+    slots.forEach((col, cIdx) => {
+      const pick = col.items[matrixSelections[cIdx]] || col.items[0];
+      if (pick.hm) {
+        hmParts.push(pick.hm);
+        glossParts.push(pick.en);
+      }
+    });
+    const isQuestion = hmParts.includes("puas");
+    const prefix = lang === "vi" ? "Trật tự từng từ: " : "어순 구조 (직역): ";
+    document.getElementById("matrixOutputEn").textContent = prefix + glossParts.join(" + ") + (isQuestion ? "?" : "");
+  }
+};
+
+function setUILang(rawLang) {
+  const lang = (rawLang === "vi" || rawLang === "ko") ? rawLang : "en";
   uiLang = lang;
   localStorage.setItem("hmong_ui_lang", lang);
   document.getElementById("uiBtnEn").classList.toggle("active", lang === "en");
   document.getElementById("uiBtnVi").classList.toggle("active", lang === "vi");
+  const btnKo = document.getElementById("uiBtnKo");
+  if (btnKo) btnKo.classList.toggle("active", lang === "ko");
 
   const isVi = lang === "vi";
-  document.getElementById("backHubLink").textContent = isVi ? "← Quay lại Trang Chủ Bộ Công Cụ" : "← Back to Course Practice Hub";
-  document.querySelector("h1").textContent = isVi ? "Công Cụ Tạo Câu & Kiểm Tra Ngữ Pháp Đa Năng" : "Universal Language Generator Tool";
+  const isKo = lang === "ko";
+
+  document.getElementById("backHubLink").textContent = isVi
+    ? "← Quay lại Trang Chủ Bộ Công Cụ"
+    : (isKo ? "← 실습 도구 홈으로 돌아가기" : "← Back to Course Practice Hub");
+  document.querySelector("h1").textContent = isVi
+    ? "Công Cụ Tạo Câu & Kiểm Tra Ngữ Pháp Đa Năng"
+    : (isKo ? "다목적 문장 생성 및 문법 진단 도구" : "Universal Language Generator Tool");
   document.querySelector(".subtitle").textContent = isVi
     ? "Ghép Câu & Kiểm Tra Ngữ Pháp Tiếng H'Mông Trắng (RPA) — Khóa Học 10 Ngày"
-    : "Sentence Builder & Diagnostic Grammar Checker — 10-Day Course Practice Suite";
+    : (isKo ? "백색 몽족어(RPA) 문장 조립 및 실시간 문법·성조 검사기 — 10일 과정 실습 도구" : "Sentence Builder & Diagnostic Grammar Checker — 10-Day Course Practice Suite");
+
+  const resetBtn = document.getElementById("resetStatsBtn");
+  if (resetBtn) resetBtn.textContent = isVi ? "Đặt lại" : (isKo ? "초기화" : "Reset");
+
+  const langPackLabel = document.getElementById("langPackLabel");
+  if (langPackLabel) langPackLabel.textContent = isVi ? "Gói Ngôn Ngữ:" : (isKo ? "언어 팩:" : "Language Pack:");
+  const lessonPatternLabel = document.getElementById("lessonPatternLabel");
+  if (lessonPatternLabel) lessonPatternLabel.textContent = isVi ? "Mẫu Câu Bài Học:" : (isKo ? "학습 문형:" : "Lesson Pattern:");
 
   // Swap lexicon active language strings
   PACKS.hmong.lexicon.forEach(item => {
-    item.en = isVi ? item.vi : item.enOrig;
-    item.tone = isVi ? item.toneVi : item.toneOrig;
+    item.en = isVi ? item.vi : (isKo ? item.ko : item.enOrig);
+    item.tone = isVi ? item.toneVi : (isKo ? item.toneKo : item.toneOrig);
   });
   PACKS.hmong.sentences.forEach(s => {
-    s.en = isVi ? (s.vi || s.enOrig) : s.enOrig;
-    s.formula = isVi ? (s.formulaVi || s.formulaOrig) : s.formulaOrig;
-    s.hint = isVi ? (s.hintVi || s.hintOrig) : s.hintOrig;
+    s.en = isVi ? (s.vi || s.enOrig) : (isKo ? (s.ko || s.enOrig) : s.enOrig);
+    s.formula = isVi ? (s.formulaVi || s.formulaOrig) : (isKo ? (s.formulaKo || s.formulaOrig) : s.formulaOrig);
+    s.hint = isVi ? (s.hintVi || s.hintOrig) : (isKo ? (s.hintKo || s.hintOrig) : s.hintOrig);
   });
   PACKS.hmong.slots.forEach(col => {
-    col.title = isVi ? col.titleVi : col.titleOrig;
+    col.title = isVi ? col.titleVi : (isKo ? col.titleKo : col.titleOrig);
     col.items.forEach(it => {
-      it.en = isVi ? it.vi : it.enOrig;
+      it.en = isVi ? it.vi : (isKo ? it.ko : it.enOrig);
     });
   });
 
-  // Update tabs & buttons
+  // Update tabs & mode headings
   const tabBtns = document.querySelectorAll(".tab-btn");
   if (tabBtns.length === 3) {
-    tabBtns[0].textContent = isVi ? "1. Ghép Câu Bằng Thẻ Từ" : "1. Word-Tile Sentence Builder";
-    tabBtns[1].textContent = isVi ? "2. Tự Gõ Câu & Kiểm Tra Lỗi" : "2. Free-Typing Sentence Checker";
-    tabBtns[2].textContent = isVi ? "3. Bảng Ghép 6 Vị Trí Câu" : "3. Universal Slot Generator";
+    tabBtns[0].textContent = isVi ? "1. Ghép Câu Bằng Thẻ Từ" : (isKo ? "1. 단어 타일 문장 조립" : "1. Word-Tile Sentence Builder");
+    tabBtns[1].textContent = isVi ? "2. Tự Gõ Câu & Kiểm Tra Lỗi" : (isKo ? "2. 직접 문장 입력 및 문법 검사" : "2. Free-Typing Sentence Checker");
+    tabBtns[2].textContent = isVi ? "3. Bảng Ghép 6 Vị Trí Câu" : (isKo ? "3. 6칸 문장 슬롯 생성기" : "3. Universal Slot Generator");
   }
 
-  document.getElementById("checkTilesBtn").textContent = isVi ? "Kiểm Tra Câu" : "Check Sentence";
-  document.getElementById("clearTilesBtn").textContent = isVi ? "Xóa Làm Lại" : "Clear";
-  document.getElementById("hintTilesBtn").textContent = isVi ? "Gợi Ý" : "Show Hint";
-  document.getElementById("nextTilesBtn").textContent = isVi ? "Câu Tiếp Theo →" : "Next Prompt →";
-  document.getElementById("checkFreeBtn").textContent = isVi ? "Kiểm Tra Theo Câu Mẫu" : "Check My Sentence";
-  document.getElementById("checkFreeAnyBtn").textContent = isVi ? "Kiểm Tra Câu Tự Đặt" : "Test Custom Sentence";
-  document.getElementById("newTypePromptBtn").textContent = isVi ? "Đổi Câu Mẫu →" : "Next Target →";
+  const mode1Title = document.getElementById("mode1Title");
+  if (mode1Title) mode1Title.textContent = isVi ? "Ghép Câu Bằng Thẻ Từ" : (isKo ? "단어 타일 문장 조립기" : "Word-Tile Sentence Builder");
+  const mode1Desc = document.getElementById("mode1Desc");
+  if (mode1Desc) mode1Desc.textContent = isVi
+    ? "Nhấn vào các thẻ từ theo đúng trật tự ngữ pháp để ghép thành câu mục tiêu. Chú ý các thẻ gây nhiễu có sai thanh điệu hoặc hư từ!"
+    : (isKo ? "단어 타일을 올바른 몽족어 어순(SVO)으로 눌러 목표 문장을 완성하세요. 성조나 불변화사가 다른 함정 타일에 주의하세요!" : "Tap the tiles in the right grammatical order to build the target sentence. Watch out for distractor tiles with wrong tones or particles!");
+
+  const yourSentenceLabel = document.getElementById("yourSentenceLabel");
+  if (yourSentenceLabel) yourSentenceLabel.textContent = isVi ? "Câu Của Bạn:" : (isKo ? "내가 조립한 문장:" : "Your Sentence:");
+  const wordBankLabel = document.getElementById("wordBankLabel");
+  if (wordBankLabel) wordBankLabel.textContent = isVi ? "Ngân Hàng Từ (nhấn để chọn):" : (isKo ? "단어 모음 (눌러서 추가):" : "Word Bank (tap to add):");
+
+  const mode2Title = document.getElementById("mode2Title");
+  if (mode2Title) mode2Title.textContent = isVi ? "Tự Gõ Câu & Kiểm Tra Ngữ Pháp" : (isKo ? "직접 문장 입력 및 문법·성조 진단기" : "Free-Typing Sentence & Grammar Checker");
+  const mode2Desc = document.getElementById("mode2Desc");
+  if (mode2Desc) mode2Desc.innerHTML = isVi
+    ? "Gõ câu tiếng H'Mông cho đề bài bên dưới, <strong>hoặc tự gõ bất kỳ câu nào của riêng bạn</strong> để kiểm tra trật tự từ, chữ báo thanh và loại từ."
+    : (isKo ? "아래 제시된 문장을 몽족어로 번역해 입력하거나, <strong>자신이 직접 만든 아무 문장이나 입력</strong>하여 어순·성조 철자·분류사가 정확한지 확인해 보세요." : "Type the translation for the prompt below, <strong>or type any sentence of your own</strong> using the course vocabulary to test whether its word order, tone letters, and classifiers are valid.");
+
+  const quickExamplesLabel = document.getElementById("quickExamplesLabel");
+  if (quickExamplesLabel) quickExamplesLabel.textContent = isVi ? "Ví dụ kiểm tra nhanh (nhấn để điền):" : (isKo ? "빠른 테스트 예시 (누르면 자동 입력):" : "Quick test examples (tap to fill):");
+
+  const mode3Title = document.getElementById("mode3Title");
+  if (mode3Title) mode3Title.textContent = isVi ? "Bảng Ghép 6 Vị Trí Câu Đa Năng" : (isKo ? "6칸 문장 슬롯 조합 생성기" : "Universal Slot Matrix Generator");
+  const mode3Desc = document.getElementById("mode3Desc");
+  if (mode3Desc) mode3Desc.textContent = isVi
+    ? "Chọn một mục ở mỗi cột để tạo hàng trăm câu đúng ngữ pháp và quan sát cách các thành phần câu tiếng H'Mông ghép với nhau."
+    : (isKo ? "각 열에서 원하는 단어를 하나씩 선택하여 수백 가지의 올바른 몽족어 문장을 만들고 어순 구조를 한눈에 익혀 보세요." : "Click one item in each column to generate hundreds of grammatically valid sentences and see how Hmong sentence slots fit together.");
+  const liveMatrixLabel = document.getElementById("liveMatrixLabel");
+  if (liveMatrixLabel) liveMatrixLabel.textContent = isVi ? "Câu Tạo Trực Tiếp" : (isKo ? "실시간 생성된 문장" : "Live Generated Sentence");
+
+  document.getElementById("sendMatrixToCheckerBtn").textContent = isVi
+    ? "Gửi Sang Công Cụ Kiểm Tra Câu"
+    : (isKo ? "문법 검사기로 보내기" : "Send to Free-Typing Checker");
+  document.getElementById("randomMatrixBtn").textContent = isVi
+    ? "Chọn Ngẫu Nhiên"
+    : (isKo ? "무작위 슬롯 선택" : "Randomize Slots");
+
+  document.getElementById("checkTilesBtn").textContent = isVi ? "Kiểm Tra Câu" : (isKo ? "문장 확인" : "Check Sentence");
+  document.getElementById("clearTilesBtn").textContent = isVi ? "Xóa Làm Lại" : (isKo ? "지우기" : "Clear");
+  document.getElementById("hintTilesBtn").textContent = isVi ? "Gợi Ý" : (isKo ? "힌트 보기" : "Show Hint");
+  document.getElementById("nextTilesBtn").textContent = isVi ? "Câu Tiếp Theo →" : (isKo ? "다음 문제 →" : "Next Prompt →");
+  document.getElementById("checkFreeBtn").textContent = isVi ? "Kiểm Tra Theo Câu Mẫu" : (isKo ? "제시문 번역 검사" : "Check My Sentence");
+  document.getElementById("checkFreeAnyBtn").textContent = isVi ? "Kiểm Tra Câu Tự Đặt" : (isKo ? "자유 문장 문법 검사" : "Test Custom Sentence");
+  document.getElementById("newTypePromptBtn").textContent = isVi ? "Đổi Câu Mẫu →" : (isKo ? "다음 제시문 →" : "Next Target →");
   document.getElementById("freeInput").placeholder = isVi
     ? "Gõ câu tiếng H'Mông của bạn (ví dụ: Koj puas nyob zoo hoặc Kuv xav kawm lus Hmoob)…"
-    : "Type a Hmong sentence (e.g., Koj puas nyob zoo or Kuv xav kawm lus Hmoob)…";
+    : (isKo ? "몽족어 문장을 입력하세요 (예: Koj puas nyob zoo 또는 Kuv xav kawm lus Hmoob)…" : "Type a Hmong sentence (e.g., Koj puas nyob zoo or Kuv xav kawm lus Hmoob)…");
 
   // Translate Student Code Sync Bar & Custom Vocab section
   const syncTitle = document.getElementById("syncBarTitle");
   if (syncTitle) {
     syncTitle.innerHTML = isVi
       ? "<span>☁️ Đồng Bộ Mã Học Viên &amp; Từ Vựng Cá Nhân</span>"
-      : "<span>☁️ Student Code &amp; Personal Vocabulary Sync</span>";
+      : (isKo ? "<span>☁️ 학생 코드 및 개인 단어장 클라우드 동기화</span>" : "<span>☁️ Student Code &amp; Personal Vocabulary Sync</span>");
   }
 
   const codeInput = document.getElementById("studentCodeInput");
   if (codeInput) {
-    codeInput.placeholder = isVi ? "Nhập mã (VD: HMOOB-01)" : "Enter your code (e.g. HMOOB-01)";
+    codeInput.placeholder = isVi ? "Nhập mã (VD: HMOOB-01)" : (isKo ? "학생 코드 입력 (예: HMOOB-01)" : "Enter your code (e.g. HMOOB-01)");
   }
   const connectBtn = document.getElementById("connectCodeBtn");
   if (connectBtn) {
-    connectBtn.textContent = isVi ? "Kết Nối Mã Học Viên" : "Load / Connect Code";
+    connectBtn.textContent = isVi ? "Kết Nối Mã Học Viên" : (isKo ? "학생 코드 연결 / 불러오기" : "Load / Connect Code");
   }
   const syncSubnote = document.getElementById("syncBarSubnote");
   if (syncSubnote) {
     syncSubnote.textContent = isVi
       ? "Nhập Mã Học Viên cá nhân của bạn (ví dụ: HMOOB-01) để lưu từ vựng cá nhân an toàn ngay cả khi đổi trình duyệt hoặc thiết bị."
-      : "Enter your personal Student Code (e.g. HMOOB-01) so your custom vocabulary stays saved across browsers and devices.";
+      : (isKo
+          ? "본인의 개인 학생 코드(예: HMOOB-01)를 입력하면 브라우저를 초기화하거나 기기를 바꿔도 나만의 단어장이 안전하게 유지됩니다."
+          : "Enter your personal Student Code (e.g. HMOOB-01) so your custom vocabulary stays saved across browsers and devices.");
   }
   const vocabSummary = document.getElementById("vocabBuilderSummary");
   if (vocabSummary) {
     vocabSummary.textContent = isVi
       ? "Bảng Ngữ Pháp Tham Khảo & Bộ Từ Vựng Cá Nhân (Nhấn để Mở/Đóng)"
-      : "Course Grammar Reference & Custom Vocabulary Builder (Click to Expand)";
+      : (isKo ? "어순 문법 요약표 & 나만의 단어장 추가 (클릭하여 열기/닫기)" : "Course Grammar Reference & Custom Vocabulary Builder (Click to Expand)");
   }
   const vocabIntro = document.getElementById("vocabBuilderIntro");
   if (vocabIntro) {
     vocabIntro.textContent = isVi
       ? "Thêm từ mới mỗi ngày trong khóa học 10 ngày để Công Cụ Kiểm Tra Câu tự động nhận diện và lưu theo Mã Học Viên của bạn:"
-      : "Add your own words from each day of the 10-day course so the Free-Typing Checker recognizes them automatically and saves them to your Student Code:";
+      : (isKo
+          ? "10일 과정 동안 매일 배운 새 단어를 추가하세요. 자유 문장 검사기가 자동으로 인식하며 내 학생 코드에 저장됩니다:"
+          : "Add your own words from each day of the 10-day course so the Free-Typing Checker recognizes them automatically and saves them to your Student Code:");
   }
   const newWordHm = document.getElementById("newWordHm");
   if (newWordHm) {
-    newWordHm.placeholder = isVi ? "Từ tiếng H'Mông (VD: phooj ywg)" : "Hmong word (e.g., phooj ywg)";
+    newWordHm.placeholder = isVi ? "Từ tiếng H'Mông (VD: phooj ywg)" : (isKo ? "몽족어 단어 (예: phooj ywg)" : "Hmong word (e.g., phooj ywg)");
   }
   const newWordEn = document.getElementById("newWordEn");
   if (newWordEn) {
-    newWordEn.placeholder = isVi ? "Nghĩa tiếng Việt / Anh (VD: bạn bè)" : "English / Tiếng Việt meaning (e.g., friend / bạn)";
+    newWordEn.placeholder = isVi
+      ? "Nghĩa tiếng Việt / Anh (VD: bạn bè)"
+      : (isKo ? "한국어 / 영어 뜻 (예: 친구 / friend)" : "Meaning (English / Tiếng Việt / 한국어)");
+  }
+  const roleSelect = document.getElementById("newWordRole");
+  if (roleSelect && roleSelect.options.length === 5) {
+    roleSelect.options[0].textContent = isVi ? "Chủ ngữ / Đại từ" : (isKo ? "주어 / 대명사" : "Subject / Pronoun");
+    roleSelect.options[1].textContent = isVi ? "Động từ" : (isKo ? "동사" : "Verb");
+    roleSelect.options[2].textContent = isVi ? "Tân ngữ / Danh từ" : (isKo ? "목적어 / 명사" : "Object / Noun");
+    roleSelect.options[3].textContent = isVi ? "Nơi chốn" : (isKo ? "장소" : "Place");
+    roleSelect.options[4].textContent = isVi ? "Tính từ / Trạng từ" : (isKo ? "형용사 / 부사" : "Adjective / Adverb");
   }
   const addWordBtn = document.getElementById("addWordBtn");
   if (addWordBtn) {
-    addWordBtn.textContent = isVi ? "Thêm Từ" : "Add Word";
+    addWordBtn.textContent = isVi ? "Thêm Từ" : (isKo ? "단어 추가" : "Add Word");
   }
   const syncNowBtn = document.getElementById("syncNowBtn");
   if (syncNowBtn) {
-    syncNowBtn.textContent = isVi ? "☁️ Đồng Bộ Ngay" : "☁️ Sync Now";
+    syncNowBtn.textContent = isVi ? "☁️ Đồng Bộ Ngay" : (isKo ? "☁️ 지금 동기화" : "☁️ Sync Now");
   }
   const exportBtn = document.getElementById("exportWordsBtn");
   if (exportBtn) {
-    exportBtn.textContent = isVi ? "⬇ Xuất Tệp Sao Lưu (.json)" : "⬇ Export Backup (.json)";
+    exportBtn.textContent = isVi ? "⬇ Xuất Tệp Sao Lưu (.json)" : (isKo ? "⬇ 백업 파일 내보내기 (.json)" : "⬇ Export Backup (.json)");
   }
   const importBtn = document.getElementById("importWordsBtn");
   if (importBtn) {
-    importBtn.textContent = isVi ? "⬆ Nhập Tệp Sao Lưu (.json)" : "⬆ Import Backup (.json)";
+    importBtn.textContent = isVi ? "⬆ Nhập Tệp Sao Lưu (.json)" : (isKo ? "⬆ 백업 파일 불러오기 (.json)" : "⬆ Import Backup (.json)");
   }
 
+  saveStats();
   syncCustomWordsIntoLexicon();
   renderCustomWordsUI();
   loadChallenge();
   renderMatrix();
 }
 
-
 const origDiagnose = diagnoseSentence;
 diagnoseSentence = function(inputStr, targetItem) {
   const res = origDiagnose(inputStr, targetItem);
-  if (typeof uiLang !== "undefined" && uiLang === "vi") {
+  const lang = typeof uiLang !== "undefined" ? uiLang : "en";
+  if (lang === "vi") {
     if (res.title === "Empty Sentence") {
       res.title = "Chưa Nhập Câu";
-      res.msg = "Vui lòng chọn thẻ từ hoặc gõ một câu tiếng H\x27Mông trước khi kiểm tra.";
+      res.msg = "Vui lòng chọn thẻ từ hoặc gõ một câu tiếng H'Mông trước khi kiểm tra.";
     } else if (res.title.includes("Exact Match")) {
       res.title = "Zoo heev! Chính Xác & Đúng Ngữ Pháp!";
       if (targetItem) {
@@ -2027,7 +2247,7 @@ diagnoseSentence = function(inputStr, targetItem) {
       }
     } else if (res.title.includes("Right Words, Word-Order")) {
       res.title = "Đúng Từ Vựng Nhưng Cần Đổi Trật Tự Từ";
-      res.msg = "Trong tiếng H\x27Mông, từ để hỏi <code>puas</code> và từ phủ định <code>tsis</code> phải đứng ngay <strong>trước</strong> động từ! Công thức: <code>" + (targetItem ? targetItem.formula : "") + "</code>.";
+      res.msg = "Trong tiếng H'Mông, từ để hỏi <code>puas</code> và từ phủ định <code>tsis</code> phải đứng ngay <strong>trước</strong> động từ! Công thức: <code>" + (targetItem ? targetItem.formula : "") + "</code>.";
     } else if (res.title.includes("Tone Sandhi") || res.title.includes("Classifier Tone Change")) {
       res.title = "Quy Tắc Biến Âm Loại Từ: tus → tug";
       res.msg = "Cấu trúc rất tốt! Chỉ lưu ý quy tắc biến âm: sau các số đếm <code>ib, ob, peb</code> (1, 2, 3), loại từ <code>tus</code> đổi chữ báo thanh cuối thành <strong><code>tug</code></strong> (ví dụ: <code>ib tug phooj ywg</code>).";
@@ -2036,24 +2256,219 @@ diagnoseSentence = function(inputStr, targetItem) {
       res.msg = res.msg
         .replace("Almost there! You wrote", "Sắp đúng rồi! Bạn đã viết")
         .replace("instead of", "thay vì")
-        .replace("In White Hmong RPA, the final consonant marks the tone and changes the meaning.", "Trong chữ H\x27Mông RPA, chữ cái cuối dùng để báo thanh điệu và làm thay đổi nghĩa của từ.");
-    } else if (res.title.includes("Negation \x27tsis\x27 Goes Before")) {
-      res.title = "Lỗi Trật Tự Từ: \x27tsis\x27 (không) Phải Đứng Trước Động Từ";
-      res.msg = "Trong tiếng H\x27Mông (giống tiếng Việt), từ phủ định <code>tsis</code> phải đặt ngay <strong>trước</strong> động từ.";
-    } else if (res.title.includes("Question Particle \x27puas\x27 Goes Before")) {
-      res.title = "Lỗi Trật Tự Từ: \x27puas\x27 Phải Đứng Trước Động Từ";
-      res.msg = "Trong câu hỏi Có/Không tiếng H\x27Mông, từ để hỏi <code>puas</code> luôn đứng ngay <strong>trước</strong> động từ chính.";
+        .replace("In White Hmong RPA, the final consonant marks the tone and changes the meaning.", "Trong chữ H'Mông RPA, chữ cái cuối dùng để báo thanh điệu và làm thay đổi nghĩa của từ.");
+    } else if (res.title.includes("Negation 'tsis' Goes Before")) {
+      res.title = "Lỗi Trật Tự Từ: 'tsis' (không) Phải Đứng Trước Động Từ";
+      res.msg = "Trong tiếng H'Mông (giống tiếng Việt), từ phủ định <code>tsis</code> phải đặt ngay <strong>trước</strong> động từ.";
+    } else if (res.title.includes("Question Particle 'puas' Goes Before")) {
+      res.title = "Lỗi Trật Tự Từ: 'puas' Phải Đứng Trước Động Từ";
+      res.msg = "Trong câu hỏi Có/Không tiếng H'Mông, từ để hỏi <code>puas</code> luôn đứng ngay <strong>trước</strong> động từ chính.";
     } else if (res.title.includes("Possible Tone or Spelling Typo")) {
       res.title = res.title.replace("Possible Tone or Spelling Typo:", "Có Thể Nhầm Thanh Điệu Hoặc Chính Tả:");
       res.msg = res.msg
         .replace("Did you mean", "Có phải ý bạn là")
         .replace("Check the vowel or final tone letter.", "Hãy kiểm tra lại nguyên âm hoặc chữ cái báo thanh ở cuối từ.");
+    } else if (res.title.includes("Unrecognized Word:")) {
+      res.title = res.title.replace("Unrecognized Word:", "Từ Chưa Có Trong Bộ Từ Vựng:");
+      res.msg = "Từ này chưa có trong bộ từ vựng mặc định. Nếu đây là từ mới trong khóa học, bạn có thể thêm vào <strong>Bộ Từ Vựng Cá Nhân</strong> bên dưới!";
     } else if (res.title === "Grammatically Valid Sentence!") {
       res.title = "Câu Hợp Lệ & Đúng Ngữ Pháp!";
-      res.msg = "Câu của bạn tuân thủ đúng trật tự ngữ pháp tiếng H\x27Mông Trắng (RPA)!";
+      res.msg = "Câu của bạn tuân thủ đúng trật tự ngữ pháp tiếng H'Mông Trắng (RPA)!";
+    }
+  } else if (lang === "ko") {
+    if (res.title === "Empty Sentence") {
+      res.title = "문장이 비어 있습니다";
+      res.msg = "확인하기 전에 단어 타일을 선택하거나 몽족어 문장을 입력해 주세요.";
+    } else if (res.title.includes("Exact Match")) {
+      res.title = "Zoo heev! 정확히 일치하며 문법적으로 완벽합니다!";
+      if (targetItem) {
+        res.msg = "작성하신 문장 <strong>\"" + targetItem.hm.join(" ") + "\"</strong>의 뜻은 <em>\"" + targetItem.en + "\"</em>입니다.";
+      }
+    } else if (res.title.includes("Right Words, Word-Order")) {
+      res.title = "단어는 맞지만 어순 조정이 필요합니다";
+      res.msg = "몽족어에서는 의문 입자 <code>puas</code>와 부정어 <code>tsis</code>가 반드시 동사 <strong>바로 앞</strong>에 와야 합니다! 공식: <code>" + (targetItem ? targetItem.formula : "") + "</code>.";
+    } else if (res.title.includes("Tone Sandhi") || res.title.includes("Classifier Tone Change")) {
+      res.title = "분류사 성조 연음 규칙 (Sandhi): tus → tug";
+      res.msg = "문장 구조가 훌륭합니다! 한 가지 성조 변화 규칙만 기억하세요: 숫자 <code>ib, ob, peb</code> (1, 2, 3) 뒤에서는 분류사 <code>tus</code>의 끝 성조 글자가 <strong><code>tug</code></strong>로 바뀝니다 (예: <code>ib tug phooj ywg</code>).";
+    } else if (res.title.includes("Tone / Spelling Check")) {
+      res.title = res.title.replace("Tone / Spelling Check on", "성조 / 철자 확인:");
+      res.msg = res.msg
+        .replace("Almost there! You wrote", "거의 다 왔습니다! 입력하신 단어:")
+        .replace("instead of", "→ 올바른 단어:")
+        .replace("In White Hmong RPA, the final consonant marks the tone and changes the meaning.", "백색 몽족어(RPA)에서 단어 끝 자음은 성조를 나타내며 단어의 뜻을 바꿉니다.");
+    } else if (res.title.includes("Negation 'tsis' Goes Before")) {
+      res.title = "어순 오류: 부정어 'tsis'는 동사 앞에 위치합니다";
+      res.msg = "몽족어에서 부정어 <code>tsis</code>(안/못)는 반드시 동사 <strong>바로 앞</strong>에 놓아야 합니다.";
+    } else if (res.title.includes("Question Particle 'puas' Goes Before")) {
+      res.title = "어순 오류: 의문 입자 'puas'는 동사 앞에 위치합니다";
+      res.msg = "몽족어 예/아니오 의문문에서 <code>puas</code>는 항상 본동사 <strong>바로 앞</strong>에 위치합니다.";
+    } else if (res.title.includes("Don't Combine 'puas' with Content Question Words")) {
+      res.title = "의문문 규칙: 의문사 질문에는 'puas'를 함께 쓰지 않습니다";
+      res.msg = "<code>puas</code>는 예/아니오 질문에만 사용합니다. <em>무엇</em>(<code>dab tsi</code>), <em>어디</em>(<code>qhov twg</code>), <em>누구</em>(<code>leej twg</code>)를 물을 때는 <code>puas</code>를 빼세요!";
+    } else if (res.title.includes("Possible Tone or Spelling Typo")) {
+      res.title = res.title.replace("Possible Tone or Spelling Typo:", "성조 또는 철자 오타 가능성:");
+      res.msg = res.msg
+        .replace("Did you mean", "혹시 다음 단어를 의도하셨나요:")
+        .replace("Check the vowel or final tone letter.", "모음 철자나 단어 끝의 성조 표시 알파벳을 확인해 보세요.");
+    } else if (res.title.includes("Unrecognized Word:")) {
+      res.title = res.title.replace("Unrecognized Word:", "미등록 단어:");
+      res.msg = "기본 단어장에 없는 단어입니다. 수업에서 배운 새 단어라면 아래 <strong>나만의 단어장 추가</strong>에서 추가해 보세요!";
+    } else if (res.title.includes("Incomplete Sentence")) {
+      res.title = "불완전한 문장 (동사 누락)";
+      res.msg = "완전한 몽족어 문장에는 동작이나 상태를 나타내는 동사(예: <code>nyob, mus, kawm, hais, paub, pab</code>)가 필요합니다.";
+    } else if (res.title === "Grammatically Valid Sentence!") {
+      res.title = "문법적으로 올바른 문장입니다!";
+      res.msg = "작성하신 문장이 백색 몽족어(RPA) 어순과 문법 규칙에 정확히 부합합니다!";
     }
   }
   return res;
+};
+
+
+const origLoadChallenge = loadChallenge;
+loadChallenge = function() {
+  origLoadChallenge();
+  const lang = typeof uiLang !== "undefined" ? uiLang : "en";
+  const list = getFilteredSentences();
+  const item = list[currentIdx] || list[0];
+  if (!item) return;
+  if (lang === "vi") {
+    document.getElementById("tilePatternLabel").textContent = `Mẫu câu: ${item.cat.toUpperCase()}`;
+    document.getElementById("tileFormula").textContent = `Công thức: ${item.formula}`;
+    document.getElementById("typePatternLabel").textContent = `Câu mẫu thử thách (${item.cat.toUpperCase()})`;
+    document.getElementById("typeFormula").textContent = `Công thức: ${item.formula}`;
+  } else if (lang === "ko") {
+    document.getElementById("tilePatternLabel").textContent = `문형: ${item.cat.toUpperCase()}`;
+    document.getElementById("tileFormula").textContent = `공식: ${item.formula}`;
+    document.getElementById("typePatternLabel").textContent = `번역 도전 과제 (${item.cat.toUpperCase()})`;
+    document.getElementById("typeFormula").textContent = `공식: ${item.formula}`;
+  }
+};
+
+const origRenderTiles = renderTiles;
+renderTiles = function() {
+  origRenderTiles();
+  const lang = typeof uiLang !== "undefined" ? uiLang : "en";
+  if (selectedTiles.length === 0) {
+    const well = document.getElementById("sentenceWell");
+    if (well) {
+      const msg = lang === "vi"
+        ? "Nhấn vào các thẻ từ bên dưới để ghép thành câu của bạn…"
+        : (lang === "ko" ? "아래 단어 타일을 순서대로 눌러 문장을 조립하세요…" : "Tap word tiles below to assemble your sentence…");
+      well.innerHTML = `<span class="well-placeholder">${msg}</span>`;
+    }
+  }
+};
+
+document.getElementById("hintTilesBtn").onclick = () => {
+  const lang = typeof uiLang !== "undefined" ? uiLang : "en";
+  const list = getFilteredSentences();
+  const target = list[currentIdx];
+  const title = lang === "vi" ? "Gợi Ý Ngữ Pháp" : (lang === "ko" ? "문법 힌트" : "Grammar Hint");
+  const firstWordLbl = lang === "vi" ? "Từ đầu tiên" : (lang === "ko" ? "첫 번째 단어" : "First word");
+  showFeedback("tileFeedback", {
+    status: "warn",
+    title,
+    msg: `${target.hint}<br><small>${firstWordLbl}: <strong>${target.hm[0]}</strong></small>`
+  });
+};
+
+const REF_TABLE_HTML = {
+  en: `<thead><tr><th>Slot Order</th><th>Role</th><th>White Hmong (RPA) Examples</th><th>Grammar Rule</th></tr></thead>
+       <tbody>
+         <tr><td>1. Subject</td><td>Pronoun / Noun</td><td><code>kuv</code> (I), <code>koj</code> (you), <code>nws</code> (he/she), <code>peb</code> (we), <code>nej</code> (you pl.), <code>lawv</code> (they)</td><td>Starts the clause (SVO order).</td></tr>
+         <tr><td>2. Tense / Aspect</td><td>Time Marker</td><td><code>yuav</code> (will), <code>tau</code> (did/got), <code>tab tom</code> (currently -ing)</td><td>Placed after Subject, before <code>puas</code> / <code>tsis</code> / Verb.</td></tr>
+         <tr><td>3. Question</td><td>Yes/No Particle</td><td><code>puas</code> (do/does/is/are?)</td><td>Placed directly before the verb (or before <code>tsis</code> / modal).</td></tr>
+         <tr><td>4. Negation</td><td>Negative Particle</td><td><code>tsis</code> (not / do not)</td><td>Placed right before the verb: <code>Kuv tsis paub</code>.</td></tr>
+         <tr><td>5. Verb Chain</td><td>Modal + Main Verb</td><td><code>xav</code> (want), <code>nyiam</code> (like), <code>kawm</code> (learn), <code>hais</code> (speak), <code>mus</code> (go), <code>nyob</code> (live/be), <code>pab</code> (help), <code>nyeem</code> (read), <code>pom</code> (see)</td><td>Verbs never conjugate for tense or person.</td></tr>
+         <tr><td>6. Object / Tail</td><td>Noun / Classifier / Wh-word</td><td><code>lus Hmoob</code>, <code>ib tug phooj ywg</code>, <code>ob phau ntawv</code>, <code>dab tsi</code> (what), <code>qhov twg</code> (where)</td><td>Classifiers follow <code>Number + Classifier + Noun</code>.</td></tr>
+       </tbody>`,
+  vi: `<thead><tr><th>Thứ Tự Vị Trí</th><th>Vai Trò Ngữ Pháp</th><th>Ví Dụ Tiếng H'Mông Trắng (RPA)</th><th>Quy Tắc Ngữ Pháp</th></tr></thead>
+       <tbody>
+         <tr><td>1. Chủ ngữ</td><td>Đại từ / Danh từ</td><td><code>kuv</code> (tôi), <code>koj</code> (bạn), <code>nws</code> (anh/cô ấy), <code>peb</code> (chúng tôi), <code>nej</code> (các bạn), <code>lawv</code> (họ)</td><td>Đứng đầu câu (trật tự Chủ–Động–Tân SVO giống tiếng Việt).</td></tr>
+         <tr><td>2. Thời / Thể</td><td>Từ chỉ thời gian</td><td><code>yuav</code> (sẽ), <code>tau</code> (đã/được), <code>tab tom</code> (đang)</td><td>Đứng sau Chủ ngữ, trước <code>puas</code> / <code>tsis</code> / Động từ.</td></tr>
+         <tr><td>3. Nghi vấn</td><td>Từ hỏi Có/Không</td><td><code>puas</code> (có… không?)</td><td>Đứng ngay trước động từ chính (hoặc trước <code>tsis</code> / động từ khuyết thiếu).</td></tr>
+         <tr><td>4. Phủ định</td><td>Từ phủ định</td><td><code>tsis</code> (không)</td><td>Đặt ngay trước động từ: <code>Kuv tsis paub</code> (Tôi không biết).</td></tr>
+         <tr><td>5. Chuỗi động từ</td><td>Động từ phụ + chính</td><td><code>xav</code> (muốn), <code>nyiam</code> (thích), <code>kawm</code> (học), <code>hais</code> (nói), <code>mus</code> (đi), <code>nyob</code> (ở/khỏe), <code>pab</code> (giúp), <code>nyeem</code> (đọc), <code>pom</code> (thấy)</td><td>Động từ không bao giờ chia theo ngôi hay thì.</td></tr>
+         <tr><td>6. Tân ngữ / Đuôi</td><td>Danh từ / Loại từ / Từ để hỏi</td><td><code>lus Hmoob</code>, <code>ib tug phooj ywg</code>, <code>ob phau ntawv</code>, <code>dab tsi</code> (cái gì), <code>qhov twg</code> (ở đâu)</td><td>Cụm danh từ có số đếm: <code>Số đếm + Loại từ + Danh từ</code>.</td></tr>
+       </tbody>`,
+  ko: `<thead><tr><th>어순 위치</th><th>문법 역할</th><th>백색 몽족어(RPA) 예시</th><th>핵심 문법 규칙</th></tr></thead>
+       <tbody>
+         <tr><td>1. 주어 (Subject)</td><td>대명사 / 명사</td><td><code>kuv</code> (나), <code>koj</code> (당신), <code>nws</code> (그/그녀), <code>peb</code> (우리), <code>nej</code> (여러분), <code>lawv</code> (그들)</td><td>문장 맨 앞에 위치합니다 (영어·중국어와 같은 SVO 어순).</td></tr>
+         <tr><td>2. 시제 / 상 (Tense)</td><td>시간 표지</td><td><code>yuav</code> (미래: ~할 것), <code>tau</code> (과거: ~했다), <code>tab tom</code> (진행: ~하는 중)</td><td>주어 뒤, <code>puas</code> / <code>tsis</code> / 동사 앞에 위치합니다.</td></tr>
+         <tr><td>3. 의문 (Question)</td><td>예/아니오 의문 입자</td><td><code>puas</code> (~입니까? / ~하나요?)</td><td>동사 바로 앞(또는 조동사 앞)에 놓아 의문문을 만듭니다.</td></tr>
+         <tr><td>4. 부정 (Negation)</td><td>부정 입자</td><td><code>tsis</code> (안 / ~하지 않다)</td><td>동사 바로 앞에 위치합니다: <code>Kuv tsis paub</code> (나는 모른다).</td></tr>
+         <tr><td>5. 동사 연쇄 (Verb)</td><td>조동사 + 본동사</td><td><code>xav</code> (~하고 싶다), <code>nyiam</code> (좋아하다), <code>kawm</code> (배우다), <code>hais</code> (말하다), <code>mus</code> (가다), <code>nyob</code> (살다/지내다), <code>pab</code> (돕다), <code>nyeem</code> (읽다), <code>pom</code> (보다)</td><td>인칭이나 시제에 따라 동사 형태가 절대 변하지 않습니다.</td></tr>
+         <tr><td>6. 목적어 / 의문사</td><td>명사 / 분류사구 / 의문사</td><td><code>lus Hmoob</code> (몽족어), <code>ib tug phooj ywg</code> (친구 한 명), <code>ob phau ntawv</code> (책 두 권), <code>dab tsi</code> (무엇), <code>qhov twg</code> (어디)</td><td>수량 표현은 반드시 <code>숫자 + 분류사 + 명사</code> 순서를 따릅니다.</td></tr>
+       </tbody>`
+};
+
+const DIAG_NOTE_HTML = {
+  en: `<strong>What the Diagnostic Engine checks:</strong>
+    <ul style="margin:6px 0 0 0;padding-left:20px;">
+      <li><strong>Slot Order:</strong> <code>Subject + [Time/Aspect: yuav / tau / tab tom] + [Question: puas] + [Negation: tsis] + Verb + [Object / Classifier Phrase / Question Word]</code></li>
+      <li><strong>RPA Tone Precision:</strong> Detects near-miss tone letters (e.g. <em>nyob zo</em> vs <em>nyob zoo</em>, <em>kuv</em> vs <em>kub</em>, <em>hmoob</em> vs <em>hmob</em>).</li>
+      <li><strong>Classifier &amp; Tone Sandhi:</strong> Checks <code>Number + Classifier + Noun</code> order and reminds you when <em>tus</em> changes to <em>tug</em> after <em>ib, ob, peb</em> (e.g., <em>ib tug phooj ywg</em>).</li>
+    </ul>`,
+  vi: `<strong>Công Cụ Kiểm Tra Ngữ Pháp tự động phân tích:</strong>
+    <ul style="margin:6px 0 0 0;padding-left:20px;">
+      <li><strong>Trật Tự Vị Trí Câu:</strong> <code>Chủ ngữ + [Thời/Thể: yuav / tau / tab tom] + [Nghi vấn: puas] + [Phủ định: tsis] + Động từ + [Tân ngữ / Cụm loại từ / Từ để hỏi]</code></li>
+      <li><strong>Độ Chính Xác Thanh Điệu RPA:</strong> Phát hiện lỗi gõ nhầm nguyên âm hoặc chữ báo thanh ở cuối từ (ví dụ: <em>nyob zo</em> vs <em>nyob zoo</em>, <em>kuv</em> vs <em>kub</em>, <em>hmoob</em> vs <em>hmob</em>).</li>
+      <li><strong>Loại Từ &amp; Quy Tắc Biến Âm:</strong> Kiểm tra trật tự <code>Số đếm + Loại từ + Danh từ</code> và nhắc khi <em>tus</em> biến âm thành <em>tug</em> sau <em>ib, ob, peb</em> (ví dụ: <em>ib tug phooj ywg</em>).</li>
+    </ul>`,
+  ko: `<strong>문법 진단 엔진이 자동으로 검사하는 항목:</strong>
+    <ul style="margin:6px 0 0 0;padding-left:20px;">
+      <li><strong>문장 슬롯 어순:</strong> <code>주어 + [시제/상: yuav / tau / tab tom] + [의문: puas] + [부정: tsis] + 동사 + [목적어 / 분류사구 / 의문사]</code></li>
+      <li><strong>RPA 성조 철자 정확도:</strong> 성조 알파벳이나 모음 오타를 감지합니다 (예: <em>nyob zo</em> vs <em>nyob zoo</em>, <em>kuv</em> vs <em>kub</em>, <em>hmoob</em> vs <em>hmob</em>).</li>
+      <li><strong>분류사 및 성조 연음(Sandhi):</strong> <code>숫자 + 분류사 + 명사</code> 순서를 확인하고, 숫자 <em>ib, ob, peb</em> 뒤에서 <em>tus</em>가 <em>tug</em>로 바뀌는 연음 규칙을 안내합니다 (예: <em>ib tug phooj ywg</em>).</li>
+    </ul>`
+};
+
+const CAT_OPTIONS = {
+  en: [
+    "All Course Patterns",
+    "Core SVO (Subject + Verb + Object)",
+    "Negation (tsis / no before verb)",
+    "Tense & Aspect (yuav / tau / tab tom)",
+    "Yes / No Questions (puas)",
+    "Content Questions (dab tsi / qhov twg / leej twg)",
+    "Classifiers & Numbers (ib tug / ob phau / peb lub)",
+    "Everyday & Ministry Expressions"
+  ],
+  vi: [
+    "Tất Cả Mẫu Câu Trong Khóa Học",
+    "Cấu Trúc SVO Cơ Bản (Chủ ngữ + Động từ + Tân ngữ)",
+    "Câu Phủ Định (tsis đứng trước động từ)",
+    "Thời & Thể (yuav / tau / tab tom)",
+    "Câu Hỏi Có / Không (puas)",
+    "Câu Hỏi Có Từ Để Hỏi (dab tsi / qhov twg / leej twg)",
+    "Loại Từ & Số Đếm (ib tug / ob phau / peb lub)",
+    "Mẫu Câu Giao Tiếp & Thánh Chức Hàng Ngày"
+  ],
+  ko: [
+    "전체 과정 문형 보기",
+    "핵심 SVO 어순 (주어 + 동사 + 목적어)",
+    "부정문 (동사 앞 tsis)",
+    "시제 및 상 (yuav / tau / tab tom)",
+    "예 / 아니오 의문문 (puas)",
+    "의문사 의문문 (dab tsi / qhov twg / leej twg)",
+    "분류사 및 수량 표현 (ib tug / ob phau / peb lub)",
+    "일상 회화 및 봉사 표현"
+  ]
+};
+
+const origSetUILang = setUILang;
+setUILang = function(rawLang) {
+  const lang = (rawLang === "vi" || rawLang === "ko") ? rawLang : "en";
+  const refTbl = document.getElementById("refTable");
+  if (refTbl && REF_TABLE_HTML[lang]) refTbl.innerHTML = REF_TABLE_HTML[lang];
+  const diagBox = document.getElementById("diagNoteBox");
+  if (diagBox && DIAG_NOTE_HTML[lang]) diagBox.innerHTML = DIAG_NOTE_HTML[lang];
+  const catSel = document.getElementById("categorySelect");
+  if (catSel && CAT_OPTIONS[lang] && catSel.options.length === CAT_OPTIONS[lang].length) {
+    CAT_OPTIONS[lang].forEach((txt, idx) => { catSel.options[idx].textContent = txt; });
+  }
+  origSetUILang(lang);
 };
 
 const urlParams = new URLSearchParams(window.location.search);
@@ -2062,7 +2477,7 @@ const urlCode = urlParams.get("code");
 
 loadCustomWordsLocal(urlCode ? normalizeStudentCode(urlCode) : activeStudentCode);
 
-if (urlLang === "vi" || urlLang === "en") {
+if (urlLang === "vi" || urlLang === "ko" || urlLang === "en") {
   setUILang(urlLang);
 } else {
   setUILang(uiLang);

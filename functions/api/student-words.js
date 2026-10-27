@@ -18,6 +18,8 @@ const ROSTER = {
   'HMOOB-10': 'Tuyết Nguyễn (Nguyễn Thị Ánh Tuyết)',
   'HMOOB-11': 'David Rorke',
   'HMOOB-12': 'Hoa Phạm (Phạm Thị Hoa)',
+  'HMOOB-13': 'Student 13',
+  'HMOOB-14': 'Student 14',
 };
 
 const json = (obj, status = 200) =>
@@ -49,12 +51,20 @@ function sanitizeWords(rawWords) {
     const hmong = clean(item.hmong || item.w || '', 80);
     const en = clean(item.en || '', 120);
     const vi = clean(item.vi || '', 120);
+    const ko = clean(item.ko || '', 120);
     const pos = clean(item.pos || item.role || 'obj', 32) || 'obj';
-    if (!hmong || (!en && !vi)) continue;
+    const fallback = en || vi || ko;
+    if (!hmong || !fallback) continue;
     const key = hmong.toLowerCase();
     if (seen.has(key)) continue;
     seen.add(key);
-    out.push({ hmong, en: en || vi, vi: vi || en, pos });
+    out.push({
+      hmong,
+      en: en || fallback,
+      vi: vi || fallback,
+      ko: ko || fallback,
+      pos,
+    });
     if (out.length >= MAX_WORDS) break;
   }
   return out;
@@ -173,7 +183,7 @@ export async function onRequestPost(context) {
   }
   if (!raw || typeof raw !== 'object') return json({ ok: false, error: 'bad_request' }, 400);
 
-  // Optional seed action to initialize all 12 student rows if missing
+  // Optional seed action to initialize all 14 student rows if missing
   if (raw.action === 'seed_roster') {
     const cfg = getConfig(env);
     if (!cfg.token) return json({ ok: false, error: 'not_configured' }, 503);
