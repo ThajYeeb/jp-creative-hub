@@ -320,6 +320,114 @@
   .nav-link { font-size: 0.9rem; color: var(--accent); font-weight: 600; text-decoration: none; }
   .nav-link:hover { text-decoration: underline; }
 
+
+  .sync-bar {
+    background: linear-gradient(135deg, #f0f6fc 0%, #e6f0fa 100%);
+    border: 1.5px solid #b8cce0;
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 6px rgba(31,78,121,0.06);
+  }
+  .sync-bar-header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+  .sync-title {
+    font-weight: 700;
+    color: var(--accent);
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .sync-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--ok-bg);
+    color: var(--ok-border);
+    border: 1px solid #a5d6a7;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 0.84rem;
+    font-weight: 700;
+  }
+  .sync-badge.offline {
+    background: #fff8e1;
+    color: #e65100;
+    border-color: #ffe082;
+  }
+  .sync-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+  }
+  .sync-controls input[type="text"] {
+    width: 155px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 7px 10px;
+    font-size: 0.95rem;
+  }
+  .sync-controls select {
+    padding: 7px 10px;
+    font-size: 0.92rem;
+    max-width: 260px;
+  }
+  .sync-controls button {
+    padding: 8px 14px;
+    font-size: 0.9rem;
+  }
+  .custom-words-box {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 12px;
+    margin: 10px 0 14px 0;
+  }
+  .custom-words-header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  .custom-word-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .custom-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #fff;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    padding: 5px 10px;
+    font-size: 0.88rem;
+  }
+  .custom-chip strong { color: var(--accent); }
+  .custom-chip button.del-word {
+    background: transparent;
+    color: #c62828;
+    border: none;
+    padding: 0 4px;
+    font-size: 1rem;
+    line-height: 1;
+    cursor: pointer;
+    font-weight: 700;
+  }
+  .custom-chip button.del-word:hover { color: #b71c1c; background: #ffebee; border-radius: 4px; }
+
 </style>
 </head>
 <body>
@@ -332,6 +440,40 @@
   </div>
 </div>
 
+<div class="sync-bar" id="studentSyncBar">
+  <div class="sync-bar-header">
+    <div class="sync-title" id="syncBarTitle">
+      <span>☁️ Student Code &amp; Personal Vocabulary Sync</span>
+    </div>
+    <div>
+      <span class="sync-badge hidden" id="connectedStudentBadge"></span>
+      <span style="font-size:0.82rem;color:var(--muted);margin-left:6px;" id="cloudSyncStateText"></span>
+    </div>
+  </div>
+  <div class="sync-controls">
+    <select id="studentRosterSelect" aria-label="Select Student Code">
+      <option value="" id="rosterPlaceholderOpt">— Select Student (HMONG-01 to 12) —</option>
+      <option value="HMONG-01">HMONG-01 — Stephen Trumble (Bền)</option>
+      <option value="HMONG-02">HMONG-02 — Quỳnh Trumble</option>
+      <option value="HMONG-03">HMONG-03 — Quân Nguyễn (Nguyễn Bá Anh Quân)</option>
+      <option value="HMONG-04">HMONG-04 — Jade Trần (Trần Hoàng Kim Jade)</option>
+      <option value="HMONG-05">HMONG-05 — Thái Lý (Lý Vĩnh Thái)</option>
+      <option value="HMONG-06">HMONG-06 — Sa-ra Nguyễn (Nguyễn Mỹ Sa-ra)</option>
+      <option value="HMONG-07">HMONG-07 — Minh Lê (Lê Thị Minh)</option>
+      <option value="HMONG-08">HMONG-08 — Phương Nguyễn (Nguyễn Minh Phương)</option>
+      <option value="HMONG-09">HMONG-09 — Hùng Nguyễn (Nguyễn Lý Hùng)</option>
+      <option value="HMONG-10">HMONG-10 — Tuyết Nguyễn (Nguyễn Thị Ánh Tuyết)</option>
+      <option value="HMONG-11">HMONG-11 — David Rorke</option>
+      <option value="HMONG-12">HMONG-12 — Hoa Phạm (Phạm Thị Hoa)</option>
+    </select>
+    <input type="text" id="studentCodeInput" placeholder="e.g. HMONG-01" maxlength="24" aria-label="Student Code">
+    <button id="connectCodeBtn">Load / Connect Code</button>
+    <button class="secondary" id="openVocabDrawerBtn" type="button">My Saved Words (0)</button>
+  </div>
+  <div id="syncBarSubnote" style="font-size:0.82rem;color:var(--muted);margin-top:6px;">
+    Enter or pick your Student Code so your custom vocabulary stays saved across browsers and devices.
+  </div>
+</div>
 
 <div class="card">
   <div class="top-bar">
@@ -467,14 +609,14 @@
 
 <!-- VOCABULARY & CUSTOM PACK REFERENCE -->
 <div class="card">
-  <details>
-    <summary style="cursor:pointer;font-weight:700;color:var(--accent);font-size:1.05rem;">
+  <details id="vocabBuilderDetails" open>
+    <summary id="vocabBuilderSummary" style="cursor:pointer;font-weight:700;color:var(--accent);font-size:1.05rem;">
       Course Grammar Reference &amp; Custom Vocabulary Builder (Click to Expand)
     </summary>
     <div style="margin-top:12px;">
-      <p style="margin-top:0;">Add your own words from each day of the 10-day course so the Free-Typing Checker recognizes them automatically:</p>
+      <p id="vocabBuilderIntro" style="margin-top:0;">Add your own words from each day of the 10-day course so the Free-Typing Checker recognizes them automatically and saves them to your Student Code:</p>
       <div class="input-row">
-        <input type="text" id="newWordHm" placeholder="Word (e.g., phooj ywg)" style="min-width:150px;">
+        <input type="text" id="newWordHm" placeholder="Hmong word (e.g., phooj ywg)" style="min-width:140px;">
         <select id="newWordRole">
           <option value="subj">Subject / Pronoun</option>
           <option value="verb">Verb</option>
@@ -482,10 +624,25 @@
           <option value="place">Place</option>
           <option value="adj">Adjective / Adverb</option>
         </select>
-        <input type="text" id="newWordEn" placeholder="English meaning (e.g., friend)" style="min-width:150px;">
+        <input type="text" id="newWordEn" placeholder="English / Tiếng Việt meaning (e.g., friend / bạn)" style="min-width:180px;">
         <button id="addWordBtn">Add Word</button>
       </div>
       <div id="customWordStatus" style="font-size:0.88rem;color:var(--ok-border);margin-bottom:8px;"></div>
+
+      <div class="custom-words-box">
+        <div class="custom-words-header">
+          <strong id="savedWordsHeading" style="color:var(--accent);font-size:0.94rem;">My Personal Course Words (0)</strong>
+          <div class="control-group">
+            <button class="secondary" id="syncNowBtn" type="button" style="padding:6px 11px;font-size:0.82rem;">☁️ Sync Now</button>
+            <button class="secondary" id="exportWordsBtn" type="button" style="padding:6px 11px;font-size:0.82rem;">⬇ Export Backup (.json)</button>
+            <button class="secondary" id="importWordsBtn" type="button" style="padding:6px 11px;font-size:0.82rem;">⬆ Import Backup (.json)</button>
+            <input type="file" id="importWordsFile" accept=".json,application/json" class="hidden">
+          </div>
+        </div>
+        <div id="customWordsList" class="custom-word-chips">
+          <span style="font-size:0.86rem;color:var(--muted);" id="noCustomWordsMsg">No custom words added yet. Add words above or connect your Student Code!</span>
+        </div>
+      </div>
 
       <table class="ref-table">
         <thead>
@@ -1211,16 +1368,412 @@ document.getElementById("sendMatrixToCheckerBtn").onclick = () => {
   showFeedback("freeFeedback", res);
 };
 
+// Student Roster & Personal Vocabulary Cloud Sync + LocalStorage + JSON Backup
+const STUDENT_ROSTER = {
+  "HMONG-01": { name: "Stephen Trumble (Bền)", short: "Stephen / Bền" },
+  "HMONG-02": { name: "Quỳnh Trumble", short: "Quỳnh" },
+  "HMONG-03": { name: "Quân Nguyễn (Nguyễn Bá Anh Quân)", short: "Quân" },
+  "HMONG-04": { name: "Jade Trần (Trần Hoàng Kim Jade)", short: "Jade" },
+  "HMONG-05": { name: "Thái Lý (Lý Vĩnh Thái)", short: "Thái" },
+  "HMONG-06": { name: "Sa-ra Nguyễn (Nguyễn Mỹ Sa-ra)", short: "Sa-ra" },
+  "HMONG-07": { name: "Minh Lê (Lê Thị Minh)", short: "Minh" },
+  "HMONG-08": { name: "Phương Nguyễn (Nguyễn Minh Phương)", short: "Phương" },
+  "HMONG-09": { name: "Hùng Nguyễn (Nguyễn Lý Hùng)", short: "Hùng" },
+  "HMONG-10": { name: "Tuyết Nguyễn (Nguyễn Thị Ánh Tuyết)", short: "Tuyết" },
+  "HMONG-11": { name: "David Rorke", short: "David" },
+  "HMONG-12": { name: "Hoa Phạm (Phạm Thị Hoa)", short: "Hoa" }
+};
+
+let activeStudentCode = (localStorage.getItem("hmong_student_code") || "").trim().toUpperCase();
+let activeStudentName = localStorage.getItem("hmong_student_name") || "";
+let customWords = [];
+let lastSyncState = "local"; // "cloud_ok" | "syncing" | "local"
+
+function getCustomWordsStorageKey(code) {
+  return code ? `hmong_custom_words_${code}` : "ulgt_custom_words";
+}
+
+function normalizeCustomWordObj(item) {
+  if (!item || typeof item !== "object") return null;
+  const hmong = String(item.hmong || item.w || "").trim();
+  const en = String(item.en || item.vi || "").trim();
+  const vi = String(item.vi || item.en || "").trim();
+  const pos = String(item.pos || item.role || "obj").trim() || "obj";
+  if (!hmong || !en) return null;
+  return { hmong, en, vi, pos };
+}
+
+function mergeWordLists(listA, listB) {
+  const map = new Map();
+  [...(listA || []), ...(listB || [])].forEach(raw => {
+    const norm = normalizeCustomWordObj(raw);
+    if (norm) {
+      map.set(norm.hmong.toLowerCase(), norm);
+    }
+  });
+  return Array.from(map.values());
+}
+
+function syncCustomWordsIntoLexicon() {
+  // Remove previously injected custom words first so deletions take effect cleanly
+  PACKS.hmong.lexicon = PACKS.hmong.lexicon.filter(item => !item.isCustom);
+  const isVi = typeof uiLang !== "undefined" && uiLang === "vi";
+  customWords.forEach(cw => {
+    const existsBase = PACKS.hmong.lexicon.find(x => x.w.toLowerCase() === cw.hmong.toLowerCase());
+    if (!existsBase) {
+      PACKS.hmong.lexicon.push({
+        w: cw.hmong,
+        role: cw.pos || "obj",
+        en: isVi ? (cw.vi || cw.en) : cw.en,
+        enOrig: cw.en,
+        vi: cw.vi || cw.en,
+        tone: isVi ? "từ tự thêm" : "custom",
+        toneOrig: "custom",
+        toneVi: "từ tự thêm",
+        isCustom: true
+      });
+    }
+  });
+}
+
+function saveCustomWordsLocal() {
+  try {
+    localStorage.setItem("ulgt_custom_words", JSON.stringify(customWords));
+    if (activeStudentCode) {
+      localStorage.setItem(getCustomWordsStorageKey(activeStudentCode), JSON.stringify(customWords));
+    }
+  } catch (e) {
+    console.warn("localStorage save failed", e);
+  }
+  syncCustomWordsIntoLexicon();
+  renderCustomWordsUI();
+}
+
+function loadCustomWordsLocal(code) {
+  let baseList = [];
+  let codeList = [];
+  try {
+    baseList = JSON.parse(localStorage.getItem("ulgt_custom_words") || "[]");
+  } catch { baseList = []; }
+  if (code) {
+    try {
+      codeList = JSON.parse(localStorage.getItem(getCustomWordsStorageKey(code)) || "[]");
+    } catch { codeList = []; }
+  }
+  customWords = mergeWordLists(baseList, codeList);
+  syncCustomWordsIntoLexicon();
+  renderCustomWordsUI();
+}
+
+function renderCustomWordsUI() {
+  const isVi = typeof uiLang !== "undefined" && uiLang === "vi";
+  const count = customWords.length;
+
+  const drawerBtn = document.getElementById("openVocabDrawerBtn");
+  if (drawerBtn) {
+    drawerBtn.textContent = isVi ? `Từ Đã Lưu (${count})` : `My Saved Words (${count})`;
+  }
+  const heading = document.getElementById("savedWordsHeading");
+  if (heading) {
+    heading.textContent = isVi
+      ? `Từ Vựng Cá Nhân Đã Lưu (${count})`
+      : `My Personal Course Words (${count})`;
+  }
+
+  const badge = document.getElementById("connectedStudentBadge");
+  const stateText = document.getElementById("cloudSyncStateText");
+  if (activeStudentCode) {
+    const info = STUDENT_ROSTER[activeStudentCode];
+    const displayName = info ? info.short : (activeStudentName || activeStudentCode);
+    badge.classList.remove("hidden");
+    badge.classList.toggle("offline", lastSyncState === "local");
+    badge.textContent = isVi
+      ? `Đã kết nối: ${activeStudentCode} (${displayName})`
+      : `Connected: ${activeStudentCode} (${displayName})`;
+
+    if (lastSyncState === "cloud_ok") {
+      stateText.textContent = isVi ? "Đã lưu lên đám mây ✓" : "Saved to cloud ✓";
+      stateText.style.color = "var(--ok-border)";
+    } else if (lastSyncState === "syncing") {
+      stateText.textContent = isVi ? "Đang đồng bộ đám mây…" : "Syncing to cloud…";
+      stateText.style.color = "var(--accent)";
+    } else {
+      stateText.textContent = isVi ? "Đã lưu trên trình duyệt ✓" : "Saved on this browser ✓";
+      stateText.style.color = "var(--muted)";
+    }
+  } else {
+    badge.classList.add("hidden");
+    stateText.textContent = isVi ? "Chưa kết nối mã (Đang lưu cục bộ)" : "No code connected (Saved locally)";
+    stateText.style.color = "var(--muted)";
+  }
+
+  const container = document.getElementById("customWordsList");
+  if (!container) return;
+  container.innerHTML = "";
+  if (count === 0) {
+    const emptySpan = document.createElement("span");
+    emptySpan.id = "noCustomWordsMsg";
+    emptySpan.style.fontSize = "0.86rem";
+    emptySpan.style.color = "var(--muted)";
+    emptySpan.textContent = isVi
+      ? "Chưa có từ tự thêm nào. Hãy thêm từ ở trên hoặc kết nối Mã Học Viên của bạn!"
+      : "No custom words added yet. Add words above or connect your Student Code!";
+    container.appendChild(emptySpan);
+    return;
+  }
+
+  customWords.forEach((cw, idx) => {
+    const chip = document.createElement("div");
+    chip.className = "custom-chip";
+    const meaning = isVi ? (cw.vi || cw.en) : cw.en;
+    chip.innerHTML = `<strong>${cw.hmong}</strong> <span>(${meaning})</span> <small style="color:#64748b;">[${cw.pos}]</small>`;
+    const delBtn = document.createElement("button");
+    delBtn.className = "del-word";
+    delBtn.title = isVi ? "Xóa từ này" : "Remove word";
+    delBtn.textContent = "×";
+    delBtn.onclick = () => {
+      customWords.splice(idx, 1);
+      saveCustomWordsLocal();
+      if (activeStudentCode) pushWordsToCloud();
+    };
+    chip.appendChild(delBtn);
+    container.appendChild(chip);
+  });
+}
+
+async function pushWordsToCloud() {
+  if (!activeStudentCode) return;
+  lastSyncState = "syncing";
+  renderCustomWordsUI();
+  try {
+    const r = await fetch("/api/student-words", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        code: activeStudentCode,
+        studentName: activeStudentName || (STUDENT_ROSTER[activeStudentCode] && STUDENT_ROSTER[activeStudentCode].name) || "",
+        words: customWords
+      })
+    });
+    if (r.ok) {
+      const data = await r.json();
+      if (data && data.ok) {
+        lastSyncState = "cloud_ok";
+        renderCustomWordsUI();
+        return true;
+      }
+    }
+    lastSyncState = "local";
+    renderCustomWordsUI();
+  } catch {
+    lastSyncState = "local";
+    renderCustomWordsUI();
+  }
+  return false;
+}
+
+async function connectStudentCode(rawCode, silent = false) {
+  const isVi = typeof uiLang !== "undefined" && uiLang === "vi";
+  const code = String(rawCode || "").trim().toUpperCase();
+  if (!/^[A-Z0-9-]{3,24}$/.test(code)) {
+    if (!silent) {
+      document.getElementById("customWordStatus").style.color = "var(--err-border)";
+      document.getElementById("customWordStatus").textContent = isVi
+        ? "Vui lòng nhập Mã Học Viên hợp lệ (ví dụ: HMONG-01)."
+        : "Please enter a valid Student Code (e.g., HMONG-01).";
+    }
+    return;
+  }
+
+  activeStudentCode = code;
+  const rosterEntry = STUDENT_ROSTER[code];
+  activeStudentName = rosterEntry ? rosterEntry.name : code;
+  localStorage.setItem("hmong_student_code", activeStudentCode);
+  localStorage.setItem("hmong_student_name", activeStudentName);
+
+  const codeInput = document.getElementById("studentCodeInput");
+  if (codeInput) codeInput.value = activeStudentCode;
+  const rosterSelect = document.getElementById("studentRosterSelect");
+  if (rosterSelect) {
+    rosterSelect.value = STUDENT_ROSTER[activeStudentCode] ? activeStudentCode : "";
+  }
+
+  // Load any words stored locally for this student code first
+  let localCodeWords = [];
+  try {
+    localCodeWords = JSON.parse(localStorage.getItem(getCustomWordsStorageKey(activeStudentCode)) || "[]");
+  } catch { localCodeWords = []; }
+  customWords = mergeWordLists(customWords, localCodeWords);
+  saveCustomWordsLocal();
+
+  lastSyncState = "syncing";
+  renderCustomWordsUI();
+
+  try {
+    const r = await fetch(`/api/student-words?code=${encodeURIComponent(activeStudentCode)}`, {
+      method: "GET",
+      headers: { "Accept": "application/json" }
+    });
+    if (r.ok) {
+      const data = await r.json();
+      if (data && data.ok) {
+        if (data.studentName) {
+          activeStudentName = data.studentName;
+          localStorage.setItem("hmong_student_name", activeStudentName);
+        }
+        const cloudWords = Array.isArray(data.words) ? data.words : [];
+        const beforeCount = customWords.length;
+        customWords = mergeWordLists(cloudWords, customWords);
+        saveCustomWordsLocal();
+
+        if (data.mode === "roster_fallback") {
+          lastSyncState = "local";
+        } else {
+          lastSyncState = "cloud_ok";
+          // If local had newer words not yet in cloud, push merged list back to cloud
+          if (customWords.length > cloudWords.length || beforeCount > cloudWords.length) {
+            await pushWordsToCloud();
+          }
+        }
+        renderCustomWordsUI();
+        if (!silent) {
+          document.getElementById("customWordStatus").style.color = "var(--ok-border)";
+          document.getElementById("customWordStatus").textContent = isVi
+            ? `Đã kết nối mã ${activeStudentCode} (${activeStudentName}) — Đã tải ${customWords.length} từ vựng cá nhân!`
+            : `Connected ${activeStudentCode} (${activeStudentName}) — ${customWords.length} personal words ready!`;
+        }
+        return;
+      }
+    }
+  } catch (e) {
+    console.warn("Cloud sync fetch unreachable, using browser storage", e);
+  }
+
+  lastSyncState = "local";
+  renderCustomWordsUI();
+  if (!silent) {
+    document.getElementById("customWordStatus").style.color = "var(--ok-border)";
+    document.getElementById("customWordStatus").textContent = isVi
+      ? `Đã kết nối ${activeStudentCode} (${activeStudentName}) — Đang lưu trên trình duyệt này.`
+      : `Connected ${activeStudentCode} (${activeStudentName}) — Saved on this browser.`;
+  }
+}
+
+document.getElementById("studentRosterSelect").onchange = e => {
+  const val = e.target.value;
+  if (val) {
+    document.getElementById("studentCodeInput").value = val;
+    connectStudentCode(val, false);
+  }
+};
+
+document.getElementById("connectCodeBtn").onclick = () => {
+  const val = document.getElementById("studentCodeInput").value.trim() || document.getElementById("studentRosterSelect").value;
+  connectStudentCode(val, false);
+};
+
+document.getElementById("studentCodeInput").addEventListener("keydown", e => {
+  if (e.key === "Enter") {
+    e.preventDefault();
+    document.getElementById("connectCodeBtn").click();
+  }
+});
+
+document.getElementById("openVocabDrawerBtn").onclick = () => {
+  const details = document.getElementById("vocabBuilderDetails");
+  if (details) {
+    details.open = true;
+    details.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+};
+
+document.getElementById("syncNowBtn").onclick = async () => {
+  const isVi = typeof uiLang !== "undefined" && uiLang === "vi";
+  if (!activeStudentCode) {
+    document.getElementById("studentCodeInput").focus();
+    document.getElementById("customWordStatus").style.color = "var(--warn-border)";
+    document.getElementById("customWordStatus").textContent = isVi
+      ? "Hãy chọn hoặc nhập Mã Học Viên (ví dụ: HMONG-01) ở thanh phía trên để đồng bộ đám mây!"
+      : "Select or enter your Student Code (e.g., HMONG-01) in the top bar to sync to the cloud!";
+    return;
+  }
+  await connectStudentCode(activeStudentCode, false);
+  await pushWordsToCloud();
+};
+
+// Export Backup (.json)
+document.getElementById("exportWordsBtn").onclick = () => {
+  const payload = {
+    studentCode: activeStudentCode || "CUSTOM",
+    studentName: activeStudentName || "",
+    exportedAt: new Date().toISOString(),
+    words: customWords
+  };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  const codeSlug = (activeStudentCode || "my-words").toLowerCase();
+  a.download = `hmong-words-${codeSlug}.json`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(a.href);
+};
+
+// Import Backup (.json)
+document.getElementById("importWordsBtn").onclick = () => {
+  document.getElementById("importWordsFile").click();
+};
+
+document.getElementById("importWordsFile").onchange = e => {
+  const file = e.target.files && e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = async ev => {
+    const isVi = typeof uiLang !== "undefined" && uiLang === "vi";
+    try {
+      const parsed = JSON.parse(String(ev.target.result || "{}"));
+      const importedList = Array.isArray(parsed) ? parsed : (Array.isArray(parsed.words) ? parsed.words : []);
+      customWords = mergeWordLists(customWords, importedList);
+      if (parsed.studentCode && !activeStudentCode && /^[A-Z0-9-]{3,24}$/i.test(parsed.studentCode)) {
+        activeStudentCode = parsed.studentCode.toUpperCase();
+        localStorage.setItem("hmong_student_code", activeStudentCode);
+      }
+      saveCustomWordsLocal();
+      if (activeStudentCode) await pushWordsToCloud();
+      document.getElementById("customWordStatus").style.color = "var(--ok-border)";
+      document.getElementById("customWordStatus").textContent = isVi
+        ? `Đã nhập thành công! Hiện có ${customWords.length} từ vựng cá nhân.`
+        : `Backup imported! You now have ${customWords.length} personal words saved.`;
+    } catch {
+      document.getElementById("customWordStatus").style.color = "var(--err-border)";
+      document.getElementById("customWordStatus").textContent = isVi
+        ? "Tệp JSON không hợp lệ. Vui lòng chọn tệp sao lưu (.json) đã xuất trước đó."
+        : "Invalid JSON backup file. Please choose a valid exported .json file.";
+    }
+    e.target.value = "";
+  };
+  reader.readAsText(file);
+};
+
 // Custom word addition
-document.getElementById("addWordBtn").onclick = () => {
+document.getElementById("addWordBtn").onclick = async () => {
+  const isVi = typeof uiLang !== "undefined" && uiLang === "vi";
   const w = document.getElementById("newWordHm").value.trim();
   const role = document.getElementById("newWordRole").value;
   const en = document.getElementById("newWordEn").value.trim();
   if (!w || !en) return;
-  PACKS[currentLang].lexicon.push({ w, role, en, tone: "custom" });
-  document.getElementById("customWordStatus").textContent = `Added "${w}" (${en}) to active lexicon!`;
+  customWords = mergeWordLists(customWords, [{ hmong: w, en, vi: en, pos: role }]);
+  saveCustomWordsLocal();
+  document.getElementById("customWordStatus").style.color = "var(--ok-border)";
+  document.getElementById("customWordStatus").textContent = isVi
+    ? `Đã thêm "${w}" (${en}) vào bộ từ vựng cá nhân!`
+    : `Added "${w}" (${en}) to your personal lexicon!`;
   document.getElementById("newWordHm").value = "";
   document.getElementById("newWordEn").value = "";
+  if (activeStudentCode) {
+    await pushWordsToCloud();
+  }
 };
 
 // Top controls & Tabs
@@ -1415,6 +1968,72 @@ function setUILang(lang) {
     ? "Gõ câu tiếng H'Mông của bạn (ví dụ: Koj puas nyob zoo hoặc Kuv xav kawm lus Hmoob)…"
     : "Type a Hmong sentence (e.g., Koj puas nyob zoo or Kuv xav kawm lus Hmoob)…";
 
+  // Translate Student Code Sync Bar & Custom Vocab section
+  const syncTitle = document.getElementById("syncBarTitle");
+  if (syncTitle) {
+    syncTitle.innerHTML = isVi
+      ? "<span>☁️ Đồng Bộ Mã Học Viên &amp; Từ Vựng Cá Nhân</span>"
+      : "<span>☁️ Student Code &amp; Personal Vocabulary Sync</span>";
+  }
+  const rosterPlaceholder = document.getElementById("rosterPlaceholderOpt");
+  if (rosterPlaceholder) {
+    rosterPlaceholder.textContent = isVi
+      ? "— Chọn Học Viên (HMONG-01 đến 12) —"
+      : "— Select Student (HMONG-01 to 12) —";
+  }
+  const codeInput = document.getElementById("studentCodeInput");
+  if (codeInput) {
+    codeInput.placeholder = isVi ? "Mã (VD: HMONG-01)" : "e.g. HMONG-01";
+  }
+  const connectBtn = document.getElementById("connectCodeBtn");
+  if (connectBtn) {
+    connectBtn.textContent = isVi ? "Kết Nối Mã Học Viên" : "Load / Connect Code";
+  }
+  const syncSubnote = document.getElementById("syncBarSubnote");
+  if (syncSubnote) {
+    syncSubnote.textContent = isVi
+      ? "Chọn hoặc nhập Mã Học Viên của bạn để lưu từ vựng cá nhân an toàn ngay cả khi đổi trình duyệt hoặc thiết bị."
+      : "Enter or pick your Student Code so your custom vocabulary stays saved across browsers and devices.";
+  }
+  const vocabSummary = document.getElementById("vocabBuilderSummary");
+  if (vocabSummary) {
+    vocabSummary.textContent = isVi
+      ? "Bảng Ngữ Pháp Tham Khảo & Bộ Từ Vựng Cá Nhân (Nhấn để Mở/Đóng)"
+      : "Course Grammar Reference & Custom Vocabulary Builder (Click to Expand)";
+  }
+  const vocabIntro = document.getElementById("vocabBuilderIntro");
+  if (vocabIntro) {
+    vocabIntro.textContent = isVi
+      ? "Thêm từ mới mỗi ngày trong khóa học 10 ngày để Công Cụ Kiểm Tra Câu tự động nhận diện và lưu theo Mã Học Viên của bạn:"
+      : "Add your own words from each day of the 10-day course so the Free-Typing Checker recognizes them automatically and saves them to your Student Code:";
+  }
+  const newWordHm = document.getElementById("newWordHm");
+  if (newWordHm) {
+    newWordHm.placeholder = isVi ? "Từ tiếng H'Mông (VD: phooj ywg)" : "Hmong word (e.g., phooj ywg)";
+  }
+  const newWordEn = document.getElementById("newWordEn");
+  if (newWordEn) {
+    newWordEn.placeholder = isVi ? "Nghĩa tiếng Việt / Anh (VD: bạn bè)" : "English / Tiếng Việt meaning (e.g., friend / bạn)";
+  }
+  const addWordBtn = document.getElementById("addWordBtn");
+  if (addWordBtn) {
+    addWordBtn.textContent = isVi ? "Thêm Từ" : "Add Word";
+  }
+  const syncNowBtn = document.getElementById("syncNowBtn");
+  if (syncNowBtn) {
+    syncNowBtn.textContent = isVi ? "☁️ Đồng Bộ Ngay" : "☁️ Sync Now";
+  }
+  const exportBtn = document.getElementById("exportWordsBtn");
+  if (exportBtn) {
+    exportBtn.textContent = isVi ? "⬇ Xuất Tệp Sao Lưu (.json)" : "⬇ Export Backup (.json)";
+  }
+  const importBtn = document.getElementById("importWordsBtn");
+  if (importBtn) {
+    importBtn.textContent = isVi ? "⬆ Nhập Tệp Sao Lưu (.json)" : "⬆ Import Backup (.json)";
+  }
+
+  syncCustomWordsIntoLexicon();
+  renderCustomWordsUI();
   loadChallenge();
   renderMatrix();
 }
@@ -1463,11 +2082,22 @@ diagnoseSentence = function(inputStr, targetItem) {
   return res;
 };
 
-const urlLang = new URLSearchParams(window.location.search).get("lang");
+const urlParams = new URLSearchParams(window.location.search);
+const urlLang = urlParams.get("lang");
+const urlCode = urlParams.get("code");
+
+loadCustomWordsLocal(urlCode ? urlCode.trim().toUpperCase() : activeStudentCode);
+
 if (urlLang === "vi" || urlLang === "en") {
   setUILang(urlLang);
 } else {
   setUILang(uiLang);
+}
+
+if (urlCode && /^[A-Za-z0-9-]{3,24}$/.test(urlCode.trim())) {
+  connectStudentCode(urlCode.trim().toUpperCase(), false);
+} else if (activeStudentCode) {
+  connectStudentCode(activeStudentCode, true);
 }
 
 </script>
