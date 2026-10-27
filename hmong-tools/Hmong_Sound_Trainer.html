@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="robots" content="noindex, nofollow">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hmong Sound Trainer – Focus on Tones / Luyện phát âm tiếng H'Mông / 몽족어 성조 트레이너</title>
+<title>Hmong Sound Trainer – Focus on Tones / Luyện phát âm tiếng H'Mông / 몽족어 성조 트레이너 / モン語発音＆声調トレーナー</title>
 <style>
   :root { --bg: #f8f9fa; --card: #fff; --accent: #1F4E79; --accent2: #2E75B6; --text: #222; }
   * { box-sizing: border-box; }
@@ -15,7 +15,7 @@
   .card { background: var(--card); border-radius: 12px; padding: 16px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,.08); }
   button, .btn { background: var(--accent); color: white; border: none; padding: 10px 16px; border-radius: 8px; font-size: 1rem; cursor: pointer; margin: 4px; font-weight: 600; text-decoration: none; display: inline-block; }
   button:active, .btn:active, button:hover, .btn:hover { background: var(--accent2); }
-  .lang-switch { display: inline-flex; background: #e2e8f0; border-radius: 999px; padding: 3px; gap: 2px; }
+  .lang-switch { display: inline-flex; flex-wrap: wrap; background: #e2e8f0; border-radius: 999px; padding: 3px; gap: 2px; }
   .lang-btn { background: transparent; color: #334155; padding: 6px 14px; border-radius: 999px; font-size: 0.9rem; font-weight: 700; margin: 0; }
   .lang-btn.active { background: var(--accent); color: #fff; }
   .tone { margin: 12px 0; padding: 12px; background: #f0f4f8; border-left: 4px solid var(--accent2); border-radius: 6px; }
@@ -39,6 +39,7 @@
     <button class="lang-btn active" id="btnEn" onclick="setUILang('en')">English</button>
     <button class="lang-btn" id="btnVi" onclick="setUILang('vi')">Tiếng Việt</button>
     <button class="lang-btn" id="btnKo" onclick="setUILang('ko')">한국어</button>
+    <button class="lang-btn" id="btnJa" onclick="setUILang('ja')">日本語</button>
   </div>
 </div>
 
@@ -262,6 +263,79 @@
   </div>
 </div>
 
+<!-- JAPANESE VIEW -->
+<div id="view-ja" class="hidden">
+  <h1>白モン語（White Hmong）発音＆声調トレーナー</h1>
+  <p class="research">最新の音声学研究（UCL／東北大学 2026年）に基づくアプローチ：未知の声調を日本語のイントネーションに無理に当てはめるのではなく、まずは純粋な音の高さ（ピッチ）や声質（声門閉鎖・息漏れ声）そのものを聴き取ることで、声調言語の発音習得が劇的に速まります。</p>
+
+  <div class="card">
+    <h2>このトレーナーの使い方</h2>
+    <ol>
+      <li>下記の7つの声調の解説と、語末の声調記号アルファベット（RPA表記）を確認します。</li>
+      <li>ネイティブの発音（おすすめ：YouTube「Study Hmong」チャンネルの声調ドリル動画）を聴きます。</li>
+      <li>下の録音ボタンで自分の発音を録音し、再生してネイティブの音と比較します。</li>
+      <li>ミニマルペア（子音・母音は同じで、語末の声調記号だけが異なる単語）を聴き分け・発音練習します。</li>
+      <li>単語の意味を暗記する前に、毎日5〜10分間「純粋な音の聴き分け」に集中しましょう。</li>
+    </ol>
+    <div class="note">ヒント：イヤホンやヘッドホンの使用をおすすめします。最初は意味を気にせず、音の高さ（ピッチ）と声の質感（喉を締める音、息を漏らす音）だけに集中してください。</div>
+  </div>
+
+  <div class="card">
+    <h2>白モン語（RPA表記）の7つの主要声調</h2>
+    <p>モン語のローマ字表記（RPA）では、単語の最後のアルファベットは<strong>語末子音として発音せず、声調（トーン）を表す記号</strong>として使われます。すべての音節は母音で終わります。</p>
+
+    <div class="tone">
+      <strong>高平調 – High（語末記号: b）</strong> – 高く平らに保つ音<br>
+      例：<em>pob</em>（ボール／こぶ）<br>
+      発音のコツ：高い音符を歌うように、最後まで下げずに高いピッチをまっすぐ保ちます（「ポー」）。
+    </div>
+    <div class="tone">
+      <strong>中平調 – Mid（語末記号なし）</strong> – 中くらいの高さで平らな音<br>
+      例：<em>po</em>（脾臓）<br>
+      発音のコツ：普段リラックスして話すときの自然な高さで、抑揚をつけずに平らに発音します。
+    </div>
+    <div class="tone">
+      <strong>低平調 – Low（語末記号: s）</strong> – 低く平らに保つ音<br>
+      例：<em>pos</em>（とげ）<br>
+      発音のコツ：普段の声より一段階低いピッチに落とし、そのまま低く一定に保ちます。
+    </div>
+    <div class="tone">
+      <strong>高降調 – High-falling（語末記号: j）</strong> – 高く始まって一気に下がる音<br>
+      例：<em>poj</em>（女性／雌）<br>
+      発音のコツ：高い音から始まり、驚いて「あっ！」と言うときのように上から下へ素早く落とします。
+    </div>
+    <div class="tone">
+      <strong>中昇調 – Mid-rising（語末記号: v）</strong> – 中くらいから始まり上へ上がる音<br>
+      例：<em>pov</em>（投げる）<br>
+      発音のコツ：日本語で疑問文の語尾を上げるとき（「本当？」）のように、中音から語尾をなめらかに引き上げます。
+    </div>
+    <div class="tone">
+      <strong>低降声門閉鎖調 / 軋み声 – Low creaky（語末記号: m）</strong> – 低く下がり、語尾で喉（声門）をキュッと閉じる音<br>
+      例：<em>pom</em>（見る）<br>
+      発音のコツ：語末の「m」で唇を閉じないでください！低く下げながら、最後に喉の奥（声帯）を「あっ」と止めるように一瞬締めて音を切ります。
+    </div>
+    <div class="tone">
+      <strong>低降気息調 / 息漏れ声 – Low breathy（語末記号: g）</strong> – 低く下がりながら温かい息を漏らす音<br>
+      例：<em>pog</em>（おばあさん／祖母）<br>
+      発音のコツ：低いピッチへ下げながら、ため息をつくように喉を開いて空気をふわっと一緒に吐き出します。
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>ミニマルペア（最小対立語）練習</h2>
+    <p>頭子音 <code>p</code> と母音 <code>o</code> はすべて同じですが、語末の声調記号だけで意味が 완전히変わります：</p>
+    <div class="pair">
+      <span>po (脾臓)</span> <span>pob (ボール)</span> <span>pos (とげ)</span> <span>poj (女性)</span> <span>pov (投げる)</span> <span>pom (見る)</span> <span>pog (祖母)</span>
+    </div>
+    <p>日常会話で特に重要な声調ペア：</p>
+    <ul>
+      <li><strong>nyob</strong>（住む／いる／元気である – 高平調 <code>b</code>）</li>
+      <li><strong>zoo</strong>（良い／元気 – 語末記号なしの中平調。二重表記 <code>oo</code> は鼻母音 [ɔ̃]）</li>
+      <li><strong>tus / tug</strong>（人・動物の類別詞 – 数字の <em>ib, ob, peb</em>（1, 2, 3）の後ろでは連音変化により <code>tus</code> が <code>tug</code> に変わります）</li>
+    </ul>
+  </div>
+</div>
+
 <!-- SHARED RECORDER CARD -->
 <div class="card">
   <h2 id="recTitle">Record Yourself</h2>
@@ -308,6 +382,17 @@
   <p>매일 습관: 긴 문장을 말하기 전에 하루 5~10분씩 성조를 듣고 똑같이 따라 하는 훈련이 발음 정확도를 크게 높여 줍니다.</p>
 </div>
 
+<div class="card hidden" id="res-ja">
+  <h2>おすすめのネイティブ音声教材</h2>
+  <ul>
+    <li>YouTubeチャンネル <strong>Study Hmong</strong> – 声調ドリル動画（「How To Read Hmong - Tone Drills」で検索）</li>
+    <li><strong>Hmonglus</strong> アプリ – 音声付き単語フラッシュカード</li>
+    <li><strong>Learn Hmong Language</strong> アプリ – 無料の基礎声調レッスン</li>
+    <li>会衆内にモン語ネイティブの兄弟姉妹がいれば発音を録音させてもらい、毎日シャドーイング練習をしましょう</li>
+  </ul>
+  <p>毎日の習慣：長い文を作る前に、1日5〜10分間、純粋に声調を聴いて真似る練習を続けることで聴覚の精度が高まります。</p>
+</div>
+
 <script>
 const startBtn = document.getElementById('startBtn');
 const stopBtn = document.getElementById('stopBtn');
@@ -349,22 +434,36 @@ const UI_STRINGS = {
     recording: "녹음 중… 또렷하게 발음해 주세요.",
     saved: "녹음이 저장되었습니다. 재생 버튼을 눌러 비교해 보세요.",
     micErr: "마이크 권한이 필요합니다. 브라우저에서 마이크 사용을 허용해 주세요."
+  },
+  ja: {
+    back: "← 練習ツール集ホームに戻る",
+    recTitle: "自分の発音を録音して確認",
+    recDesc: "1音節ずつはっきりと発音して録音し、再生してネイティブ音声と聴き比べてみましょう。",
+    start: "録音開始",
+    stop: "停止",
+    ready: "準備完了",
+    recording: "録音中… はっきりと発音してください。",
+    saved: "録音が保存されました。再生ボタンを押して確認してください。",
+    micErr: "マイクへのアクセス許可が必要です。ブラウザの設定で許可してください。"
   }
 };
 
 function setUILang(rawLang) {
-  const lang = (rawLang === 'vi' || rawLang === 'ko') ? rawLang : 'en';
+  const lang = (rawLang === 'vi' || rawLang === 'ko' || rawLang === 'ja') ? rawLang : 'en';
   currentUILang = lang;
   localStorage.setItem('hmong_ui_lang', lang);
   document.getElementById('btnEn').classList.toggle('active', lang === 'en');
   document.getElementById('btnVi').classList.toggle('active', lang === 'vi');
   document.getElementById('btnKo').classList.toggle('active', lang === 'ko');
+  document.getElementById('btnJa').classList.toggle('active', lang === 'ja');
   document.getElementById('view-en').classList.toggle('hidden', lang !== 'en');
   document.getElementById('view-vi').classList.toggle('hidden', lang !== 'vi');
   document.getElementById('view-ko').classList.toggle('hidden', lang !== 'ko');
+  document.getElementById('view-ja').classList.toggle('hidden', lang !== 'ja');
   document.getElementById('res-en').classList.toggle('hidden', lang !== 'en');
   document.getElementById('res-vi').classList.toggle('hidden', lang !== 'vi');
   document.getElementById('res-ko').classList.toggle('hidden', lang !== 'ko');
+  document.getElementById('res-ja').classList.toggle('hidden', lang !== 'ja');
 
   const s = UI_STRINGS[lang];
   document.getElementById('backLink').textContent = s.back;
@@ -404,10 +503,10 @@ stopBtn.onclick = () => {
   }
 };
 
-// Check URL param ?lang=vi|ko|en or localStorage
+// Check URL param ?lang=vi|ko|ja|en or localStorage
 const urlParams = new URLSearchParams(window.location.search);
 const qLang = urlParams.get('lang');
-if (qLang === 'vi' || qLang === 'ko' || qLang === 'en') {
+if (qLang === 'vi' || qLang === 'ko' || qLang === 'ja' || qLang === 'en') {
   setUILang(qLang);
 } else {
   setUILang(currentUILang);

@@ -438,6 +438,7 @@
     <button class="lang-btn active" id="uiBtnEn" onclick="setUILang('en')">English</button>
     <button class="lang-btn" id="uiBtnVi" onclick="setUILang('vi')">Tiếng Việt</button>
     <button class="lang-btn" id="uiBtnKo" onclick="setUILang('ko')">한국어</button>
+    <button class="lang-btn" id="uiBtnJa" onclick="setUILang('ja')">日本語</button>
   </div>
 </div>
 
@@ -678,6 +679,40 @@
           </tr>
         </tbody>
       </table>
+    </div>
+  </details>
+</div>
+
+<!-- EXPANDED THEOCRATIC VOCABULARY REFERENCE (51 TERMS - wol.jw.org/hmn) -->
+<div class="card">
+  <details id="theocraticRefDetails">
+    <summary id="theocraticRefSummary" style="cursor:pointer;font-weight:700;color:var(--accent);font-size:1.05rem;">
+      📖 Expanded Theocratic Vocabulary Reference (51 Terms — wol.jw.org/hmn)
+    </summary>
+    <div style="margin-top:12px;">
+      <p id="theocraticRefIntro" style="margin-top:0;color:var(--muted);font-size:0.92rem;">
+        Compiled from recent Daily Bible Reading &amp; Watchtower study articles on <code>wol.jw.org/hmn</code> with standard Vietnamese, Korean, and Japanese theocratic equivalents. Filter below or click <strong>+ Add to My Words</strong> to save any term to your Student Code:
+      </p>
+      <div class="input-row" style="align-items:center;">
+        <input type="text" id="theoSearchInput" placeholder="Search 51 theocratic terms (e.g., Nceeg Vaj, Phòng Nước Trời, Pioneer, 王国会館)…" style="flex:1;min-width:220px;">
+        <button class="secondary" id="addAllTheoBtn" type="button" style="white-space:nowrap;">+ Add All 51 Terms to My Words</button>
+      </div>
+      <div style="overflow-x:auto;max-height:460px;overflow-y:auto;border:1px solid #e2e8f0;border-radius:8px;margin-top:8px;">
+        <table class="ref-table" id="theoTable" style="margin-top:0;">
+          <thead id="theoTableHead" style="position:sticky;top:0;z-index:1;">
+            <tr>
+              <th>#</th>
+              <th>Hmong (RPA)</th>
+              <th>English</th>
+              <th>Tiếng Việt (JW)</th>
+              <th>한국어 / 日本語</th>
+              <th>Role / Notes</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="theoTableBody"></tbody>
+        </table>
+      </div>
     </div>
   </details>
 </div>
@@ -1387,12 +1422,13 @@ function getCustomWordsStorageKey(code) {
 function normalizeCustomWordObj(item) {
   if (!item || typeof item !== "object") return null;
   const hmong = String(item.hmong || item.w || "").trim();
-  const en = String(item.en || item.vi || item.ko || "").trim();
-  const vi = String(item.vi || item.en || item.ko || "").trim();
-  const ko = String(item.ko || item.en || item.vi || "").trim();
+  const en = String(item.en || item.vi || item.ko || item.ja || "").trim();
+  const vi = String(item.vi || item.en || item.ko || item.ja || "").trim();
+  const ko = String(item.ko || item.en || item.vi || item.ja || "").trim();
+  const ja = String(item.ja || item.en || item.vi || item.ko || "").trim();
   const pos = String(item.pos || item.role || "obj").trim() || "obj";
   if (!hmong || !en) return null;
-  return { hmong, en, vi, ko, pos };
+  return { hmong, en, vi, ko, ja, pos };
 }
 
 function mergeWordLists(listA, listB) {
@@ -1413,8 +1449,8 @@ function syncCustomWordsIntoLexicon() {
   customWords.forEach(cw => {
     const existsBase = PACKS.hmong.lexicon.find(x => x.w.toLowerCase() === cw.hmong.toLowerCase());
     if (!existsBase) {
-      const activeMeaning = lang === "vi" ? (cw.vi || cw.en) : (lang === "ko" ? (cw.ko || cw.en) : cw.en);
-      const activeTone = lang === "vi" ? "từ tự thêm" : (lang === "ko" ? "사용자 단어" : "custom");
+      const activeMeaning = lang === "vi" ? (cw.vi || cw.en) : (lang === "ko" ? (cw.ko || cw.en) : (lang === "ja" ? (cw.ja || cw.en) : cw.en));
+      const activeTone = lang === "vi" ? "từ tự thêm" : (lang === "ko" ? "사용자 단어" : (lang === "ja" ? "カスタム単語" : "custom"));
       PACKS.hmong.lexicon.push({
         w: cw.hmong,
         role: cw.pos || "obj",
@@ -1422,10 +1458,12 @@ function syncCustomWordsIntoLexicon() {
         enOrig: cw.en,
         vi: cw.vi || cw.en,
         ko: cw.ko || cw.en,
+        ja: cw.ja || cw.en,
         tone: activeTone,
         toneOrig: "custom",
         toneVi: "từ tự thêm",
         toneKo: "사용자 단어",
+        toneJa: "カスタム単語",
         isCustom: true
       });
     }
@@ -1472,13 +1510,13 @@ function renderCustomWordsUI() {
   if (drawerBtn) {
     drawerBtn.textContent = lang === "vi"
       ? `Từ Đã Lưu (${count})`
-      : (lang === "ko" ? `저장된 단어 (${count})` : `My Saved Words (${count})`);
+      : (lang === "ko" ? `저장된 단어 (${count})` : (lang === "ja" ? `保存した単語 (${count})` : `My Saved Words (${count})`));
   }
   const heading = document.getElementById("savedWordsHeading");
   if (heading) {
     heading.textContent = lang === "vi"
       ? `Từ Vựng Cá Nhân Đã Lưu (${count})`
-      : (lang === "ko" ? `나의 개인 학습 단어장 (${count})` : `My Personal Course Words (${count})`);
+      : (lang === "ko" ? `나의 개인 학습 단어장 (${count})` : (lang === "ja" ? `マイ単語帳 (${count})` : `My Personal Course Words (${count})`));
   }
 
   const badge = document.getElementById("connectedStudentBadge");
@@ -1490,29 +1528,29 @@ function renderCustomWordsUI() {
     badge.classList.toggle("offline", lastSyncState === "local");
     badge.textContent = lang === "vi"
       ? `Đã kết nối: ${activeStudentCode} (${displayName})`
-      : (lang === "ko" ? `연결됨: ${activeStudentCode} (${displayName})` : `Connected: ${activeStudentCode} (${displayName})`);
+      : (lang === "ko" ? `연결됨: ${activeStudentCode} (${displayName})` : (lang === "ja" ? `接続中: ${activeStudentCode} (${displayName})` : `Connected: ${activeStudentCode} (${displayName})`));
 
     if (lastSyncState === "cloud_ok") {
       stateText.textContent = lang === "vi"
         ? "Đã lưu lên đám mây ✓"
-        : (lang === "ko" ? "클라우드에 저장됨 ✓" : "Saved to cloud ✓");
+        : (lang === "ko" ? "클라우드에 저장됨 ✓" : (lang === "ja" ? "クラウドに保存済み ✓" : "Saved to cloud ✓"));
       stateText.style.color = "var(--ok-border)";
     } else if (lastSyncState === "syncing") {
       stateText.textContent = lang === "vi"
         ? "Đang đồng bộ đám mây…"
-        : (lang === "ko" ? "클라우드 동기화 중…" : "Syncing to cloud…");
+        : (lang === "ko" ? "클라우드 동기화 중…" : (lang === "ja" ? "クラウド同期中…" : "Syncing to cloud…"));
       stateText.style.color = "var(--accent)";
     } else {
       stateText.textContent = lang === "vi"
         ? "Đã lưu trên trình duyệt ✓"
-        : (lang === "ko" ? "이 브라우저에 저장됨 ✓" : "Saved on this browser ✓");
+        : (lang === "ko" ? "이 브라우저에 저장됨 ✓" : (lang === "ja" ? "このブラウザに保存済み ✓" : "Saved on this browser ✓"));
       stateText.style.color = "var(--muted)";
     }
   } else {
     badge.classList.add("hidden");
     stateText.textContent = lang === "vi"
       ? "Chưa kết nối mã (Đang lưu cục bộ)"
-      : (lang === "ko" ? "코드 미연결 (브라우저 로컬 저장 중)" : "No code connected (Saved locally)");
+      : (lang === "ko" ? "코드 미연결 (브라우저 로컬 저장 중)" : (lang === "ja" ? "コード未接続（ブラウザにローカル保存中）" : "No code connected (Saved locally)"));
     stateText.style.color = "var(--muted)";
   }
 
@@ -1528,19 +1566,22 @@ function renderCustomWordsUI() {
       ? "Chưa có từ tự thêm nào. Hãy thêm từ ở trên hoặc kết nối Mã Học Viên của bạn!"
       : (lang === "ko"
           ? "아직 추가된 개인 단어가 없습니다. 위에서 단어를 추가하거나 학생 코드를 연결하세요!"
-          : "No custom words added yet. Add words above or connect your Student Code!");
+          : (lang === "ja"
+              ? "カスタム単語はまだありません。上で単語を追加するか、受講生コードを接続してください！"
+              : "No custom words added yet. Add words above or connect your Student Code!"));
     container.appendChild(emptySpan);
+    if (typeof renderTheocraticTable === "function") renderTheocraticTable();
     return;
   }
 
   customWords.forEach((cw, idx) => {
     const chip = document.createElement("div");
     chip.className = "custom-chip";
-    const meaning = lang === "vi" ? (cw.vi || cw.en) : (lang === "ko" ? (cw.ko || cw.en) : cw.en);
+    const meaning = lang === "vi" ? (cw.vi || cw.en) : (lang === "ko" ? (cw.ko || cw.en) : (lang === "ja" ? (cw.ja || cw.en) : cw.en));
     chip.innerHTML = `<strong>${cw.hmong}</strong> <span>(${meaning})</span> <small style="color:#64748b;">[${cw.pos}]</small>`;
     const delBtn = document.createElement("button");
     delBtn.className = "del-word";
-    delBtn.title = lang === "vi" ? "Xóa từ này" : (lang === "ko" ? "이 단어 삭제" : "Remove word");
+    delBtn.title = lang === "vi" ? "Xóa từ này" : (lang === "ko" ? "이 단어 삭제" : (lang === "ja" ? "この単語を削除" : "Remove word"));
     delBtn.textContent = "×";
     delBtn.onclick = () => {
       customWords.splice(idx, 1);
@@ -1550,6 +1591,7 @@ function renderCustomWordsUI() {
     chip.appendChild(delBtn);
     container.appendChild(chip);
   });
+  if (typeof renderTheocraticTable === "function") renderTheocraticTable();
 }
 
 async function pushWordsToCloud() {
@@ -1591,7 +1633,7 @@ async function connectStudentCode(rawCode, silent = false) {
       document.getElementById("customWordStatus").style.color = "var(--err-border)";
       document.getElementById("customWordStatus").textContent = lang === "vi"
         ? "Vui lòng nhập Mã Học Viên hợp lệ (ví dụ: HMOOB-01)."
-        : (lang === "ko" ? "올바른 학생 코드를 입력해 주세요 (예: HMOOB-01)." : "Please enter a valid Student Code (e.g., HMOOB-01).");
+        : (lang === "ko" ? "올바른 학생 코드를 입력해 주세요 (예: HMOOB-01)." : (lang === "ja" ? "有効な受講生コードを入力してください（例: HMOOB-01）。" : "Please enter a valid Student Code (e.g., HMOOB-01)."));
     }
     return;
   }
@@ -1648,7 +1690,9 @@ async function connectStudentCode(rawCode, silent = false) {
             ? `Đã kết nối mã ${activeStudentCode} (${activeStudentName}) — Đã tải ${customWords.length} từ vựng cá nhân!`
             : (lang === "ko"
                 ? `${activeStudentCode} (${activeStudentName}) 연결 완료 — 개인 단어 ${customWords.length}개가 준비되었습니다!`
-                : `Connected ${activeStudentCode} (${activeStudentName}) — ${customWords.length} personal words ready!`);
+                : (lang === "ja"
+                    ? `${activeStudentCode} (${activeStudentName}) 接続完了 — ${customWords.length} 個のマイ単語を読み込みました！`
+                    : `Connected ${activeStudentCode} (${activeStudentName}) — ${customWords.length} personal words ready!`));
         }
         return;
       }
@@ -1665,7 +1709,9 @@ async function connectStudentCode(rawCode, silent = false) {
       ? `Đã kết nối ${activeStudentCode} (${activeStudentName}) — Đang lưu trên trình duyệt này.`
       : (lang === "ko"
           ? `${activeStudentCode} (${activeStudentName}) 연결됨 — 이 브라우저에 안전하게 저장됩니다.`
-          : `Connected ${activeStudentCode} (${activeStudentName}) — Saved on this browser.`);
+          : (lang === "ja"
+              ? `${activeStudentCode} (${activeStudentName}) 接続済み — このブラウザに保存されています。`
+              : `Connected ${activeStudentCode} (${activeStudentName}) — Saved on this browser.`));
   }
 }
 
@@ -1698,7 +1744,9 @@ document.getElementById("syncNowBtn").onclick = async () => {
       ? "Hãy nhập Mã Học Viên (ví dụ: HMOOB-01) ở thanh phía trên để đồng bộ đám mây!"
       : (lang === "ko"
           ? "클라우드 동기화를 위해 상단 바에 학생 코드(예: HMOOB-01)를 입력해 주세요!"
-          : "Enter your Student Code (e.g., HMOOB-01) in the top bar to sync to the cloud!");
+          : (lang === "ja"
+              ? "クラウド同期するには、上部バーに受講生コード（例: HMOOB-01）を入力してください！"
+              : "Enter your Student Code (e.g., HMOOB-01) in the top bar to sync to the cloud!"));
     return;
   }
   await connectStudentCode(activeStudentCode, false);
@@ -1750,14 +1798,18 @@ document.getElementById("importWordsFile").onchange = e => {
         ? `Đã nhập thành công! Hiện có ${customWords.length} từ vựng cá nhân.`
         : (lang === "ko"
             ? `백업 불러오기 완료! 현재 ${customWords.length}개의 개인 단어가 저장되어 있습니다.`
-            : `Backup imported! You now have ${customWords.length} personal words saved.`);
+            : (lang === "ja"
+                ? `バックアップを読み込みました！現在 ${customWords.length} 個のマイ単語が保存されています。`
+                : `Backup imported! You now have ${customWords.length} personal words saved.`));
     } catch {
       document.getElementById("customWordStatus").style.color = "var(--err-border)";
       document.getElementById("customWordStatus").textContent = lang === "vi"
         ? "Tệp JSON không hợp lệ. Vui lòng chọn tệp sao lưu (.json) đã xuất trước đó."
         : (lang === "ko"
             ? "유효하지 않은 JSON 파일입니다. 이전에 내보낸 .json 백업 파일을 선택해 주세요."
-            : "Invalid JSON backup file. Please choose a valid exported .json file.");
+            : (lang === "ja"
+                ? "無効なJSONファイルです。エクスポートされた有効な .json ファイルを選択してください。"
+                : "Invalid JSON backup file. Please choose a valid exported .json file."));
     }
     e.target.value = "";
   };
@@ -1771,14 +1823,16 @@ document.getElementById("addWordBtn").onclick = async () => {
   const role = document.getElementById("newWordRole").value;
   const meaning = document.getElementById("newWordEn").value.trim();
   if (!w || !meaning) return;
-  customWords = mergeWordLists(customWords, [{ hmong: w, en: meaning, vi: meaning, ko: meaning, pos: role }]);
+  customWords = mergeWordLists(customWords, [{ hmong: w, en: meaning, vi: meaning, ko: meaning, ja: meaning, pos: role }]);
   saveCustomWordsLocal();
   document.getElementById("customWordStatus").style.color = "var(--ok-border)";
   document.getElementById("customWordStatus").textContent = lang === "vi"
     ? `Đã thêm "${w}" (${meaning}) vào bộ từ vựng cá nhân!`
     : (lang === "ko"
         ? `"${w}" (${meaning}) 단어가 내 단어장에 추가되었습니다!`
-        : `Added "${w}" (${meaning}) to your personal lexicon!`);
+        : (lang === "ja"
+            ? `「${w}」(${meaning}) をマイ単語帳に追加しました！`
+            : `Added "${w}" (${meaning}) to your personal lexicon!`));
   document.getElementById("newWordHm").value = "";
   document.getElementById("newWordEn").value = "";
   if (activeStudentCode) {
@@ -2471,13 +2525,571 @@ setUILang = function(rawLang) {
   origSetUILang(lang);
 };
 
+const JA_LEX = {
+  "kuv": { ja: "私（わたし）", toneJa: "v（中昇調）" },
+  "koj": { ja: "あなた", toneJa: "j（高降調）" },
+  "nws": { ja: "彼 / 彼女", toneJa: "s（低平調）" },
+  "peb": { ja: "私たち", toneJa: "b（高平調）" },
+  "nej": { ja: "あなたたち（複数）", toneJa: "j（高降調）" },
+  "lawv": { ja: "彼ら", toneJa: "v（中昇調）" },
+  "yuav": { ja: "〜でしょう / 〜するつもり（未来）", toneJa: "v（中昇調）" },
+  "tau": { ja: "〜した / できた（過去・完了）", toneJa: "無表記（中平調）" },
+  "tab tom": { ja: "今〜している（進行）", toneJa: "b + m" },
+  "puas": { ja: "〜ですか？（疑問助詞）", toneJa: "s（低平調）" },
+  "tsis": { ja: "〜ない（否定）", toneJa: "s（低平調）" },
+  "xav": { ja: "〜したい / 思う", toneJa: "v（中昇調）" },
+  "nyiam": { ja: "好きである", toneJa: "m（低降声門閉鎖調）" },
+  "nyob": { ja: "住む / いる / 元気である", toneJa: "b（高平調）" },
+  "mus": { ja: "行く", toneJa: "s（低平調）" },
+  "kawm": { ja: "学ぶ / 勉強する", toneJa: "m（低降声門閉鎖調）" },
+  "hais": { ja: "話す / 言う", toneJa: "s（低平調）" },
+  "paub": { ja: "知る / 分かる", toneJa: "b（高平調）" },
+  "pom": { ja: "見る / 見かける", toneJa: "m（低降声門閉鎖調）" },
+  "pab": { ja: "助ける / 手伝う", toneJa: "b（高平調）" },
+  "nyeem": { ja: "読む", toneJa: "m（低降声門閉鎖調）" },
+  "noj": { ja: "食べる", toneJa: "j（高降調）" },
+  "haus": { ja: "飲む", toneJa: "s（低平調）" },
+  "ua": { ja: "する / 行う", toneJa: "無表記（中平調）" },
+  "hu": { ja: "呼ぶ / 歌う", toneJa: "無表記（中平調）" },
+  "thov": { ja: "どうか〜してください / 祈る", toneJa: "v（中昇調）" },
+  "zoo": { ja: "良い / 元気な", toneJa: "無表記（中平調）" },
+  "lus hmoob": { ja: "モン語（白モン語）", toneJa: "s + b" },
+  "lus": { ja: "言葉 / 言語", toneJa: "s（低平調）" },
+  "hmoob": { ja: "モン族（Hmong）", toneJa: "b（高平調）" },
+  "ntawv": { ja: "本 / 文字 / 紙", toneJa: "v（中昇調）" },
+  "phau ntawv": { ja: "本（一冊）", toneJa: "中平調 + v" },
+  "tsev": { ja: "家", toneJa: "v（中昇調）" },
+  "mov": { ja: "ご飯 / 食事", toneJa: "v（中昇調）" },
+  "dej": { ja: "水", toneJa: "j（高降調）" },
+  "dev": { ja: "犬", toneJa: "v（中昇調）" },
+  "phooj ywg": { ja: "友達", toneJa: "j + g" },
+  "vajtswv": { ja: "神（神様）", toneJa: "v（中昇調）" },
+  "yehauvas": { ja: "エホバ", toneJa: "s（低平調）" },
+  "ib": { ja: "1（一）", toneJa: "b（高平調）" },
+  "ob": { ja: "2（二）", toneJa: "b（高平調）" },
+  "tus": { ja: "類別詞（人・動物・細長い物）", toneJa: "s（低平調）" },
+  "tug": { ja: "類別詞（ib/ob/peb の後の tus の連濁形）", toneJa: "g（息漏れ調）" },
+  "lub": { ja: "類別詞（丸い物・建物・一般的な物）", toneJa: "b（高平調）" },
+  "phau": { ja: "類別詞（本「冊」）", toneJa: "無表記（中平調）" },
+  "dab tsi": { ja: "何（なに）？", toneJa: "b + 無表記" },
+  "qhov twg": { ja: "どこ？", toneJa: "v + g" },
+  "leej twg": { ja: "誰（だれ）？", toneJa: "j + g" },
+  "muaj": { ja: "持っている / ある", toneJa: "j（高降調）" }
+};
+
+const JA_SENTENCES = [
+  { ja: "お元気ですか？", formulaJa: "主語 (Koj) + 疑問助詞 (puas) + 動詞 (nyob) + 修飾語 (zoo)", hintJa: "疑問助詞 'puas' を動詞 'nyob' の直前に置きます。" },
+  { ja: "私はモン語を学びたいです。", formulaJa: "主語 (Kuv) + 助動詞 (xav) + 動詞 (kawm) + 目的語 (lus Hmoob)", hintJa: "'Kuv xav kawm'（私は学びたい）の後に 'lus Hmoob'（モン語、二重母音 oo と語末声調 b に注意）を続けます。" },
+  { ja: "私は分かりません（知りません）。", formulaJa: "主語 (Kuv) + 否定 (tsis) + 動詞 (paub)", hintJa: "否定語 'tsis' を動詞 'paub'（知る — 助けるの 'pab' と区別！）の直前に置きます。" },
+  { ja: "彼（彼女）は家に帰りません。", formulaJa: "主語 (Nws) + 否定 (tsis) + 動詞 (mus) + 場所 (tsev)", hintJa: "否定語 'tsis' は必ず動詞 'mus'（行く）の前に置きます。" },
+  { ja: "私たちはその本を読むつもりです。", formulaJa: "主語 (Peb) + 未来 (yuav) + 動詞 (nyeem) + 類別詞 (phau) + 名詞 (ntawv)", hintJa: "未来を表す 'yuav' を動詞の前に、本の類別詞 'phau' を 'ntawv' の前に置きます。" },
+  { ja: "私はご飯を食べました。", formulaJa: "主語 (Kuv) + 過去 (tau) + 動詞 (noj) + 目的語 (mov)", hintJa: "過去・完了を表す 'tau' を動詞 'noj'（食べる）の前に置きます。" },
+  { ja: "あなたはモン語を話しますか？", formulaJa: "主語 (Koj) + 疑問助詞 (puas) + 動詞 (hais) + 目的語 (lus Hmoob)", hintJa: "'puas' を動詞 'hais'（話す）の直前に置きます。" },
+  { ja: "どこに住んでいますか？", formulaJa: "主語 (Koj) + 動詞 (nyob) + どこ (qhov twg)", hintJa: "モン語では「どこ」(qhov twg) は文末に置き、疑問詞の質問には 'puas' を使いません！" },
+  { ja: "何をしていますか？", formulaJa: "主語 (Koj) + 動詞 (ua) + 何 (dab tsi)", hintJa: "「何」(dab tsi) を動詞 'ua'（する）の後ろに置きます。" },
+  { ja: "私は一人の友達を見かけます。", formulaJa: "主語 (Kuv) + 動詞 (pom) + 数字 (ib) + 類別詞 (tug) + 名詞 (phooj ywg)", hintJa: "数字 'ib' (1) の後ろでは、類別詞 'tus' が声調連濁により 'tug' に変わります！" },
+  { ja: "彼らは本を二冊持っています。", formulaJa: "主語 (Lawv) + 動詞 (muaj) + 数字 (ob) + 類別詞 (phau) + 名詞 (ntawv)", hintJa: "数字 (ob = 2) + 本の類別詞 (phau = 冊) + 名詞 (ntawv = 本) の語順にします。" },
+  { ja: "どうか私を助けてください。", formulaJa: "丁寧な依頼 (Thov) + 動詞 (pab) + 目的語 (kuv)", hintJa: "'Thov' = どうか〜してください、'pab' = 助ける（'paub' = 知る）。" },
+  { ja: "私たちはあなたを助けたいです。", formulaJa: "主語 (Peb) + 助動詞 (xav) + 動詞 (pab) + 目的語 (koj)", hintJa: "Peb（私たち）+ xav（〜したい）+ pab（助ける）+ koj（あなた）の順です。" }
+];
+
+const JA_SLOTS = [
+  { titleJa: "1. 主語 (Subject)", itemsJa: ["私", "あなた", "彼/彼女", "私たち", "彼ら"] },
+  { titleJa: "2. 時制/相 (Tense)", itemsJa: ["（現在）", "未来（〜するつもり）", "過去（〜した）", "進行（〜している）"] },
+  { titleJa: "3. 疑問 (Question)", itemsJa: ["（平叙文）", "［疑問文？］"] },
+  { titleJa: "4. 否定 (Negation)", itemsJa: ["（肯定文）", "〜ない（否定）"] },
+  { titleJa: "5. 動詞 (Verb)", itemsJa: ["学ぶ", "話す", "読む", "助ける", "行く", "住む/いる"] },
+  { titleJa: "6. 目的語/補語 (Object)", itemsJa: ["モン語", "本", "一人の友達", "家", "元気/良く"] }
+];
+
+PACKS.hmong.lexicon.forEach(item => {
+  const key = item.w.toLowerCase();
+  const mJa = JA_LEX[key];
+  item.ja = mJa ? mJa.ja : item.enOrig;
+  item.toneJa = mJa ? mJa.toneJa : item.toneOrig;
+});
+
+PACKS.hmong.sentences.forEach((s, idx) => {
+  const mJa = JA_SENTENCES[idx];
+  if (mJa) {
+    s.ja = mJa.ja;
+    s.formulaJa = mJa.formulaJa;
+    s.hintJa = mJa.hintJa;
+  }
+});
+
+PACKS.hmong.slots.forEach((col, cIdx) => {
+  col.titleJa = JA_SLOTS[cIdx] ? JA_SLOTS[cIdx].titleJa : col.titleOrig;
+  col.items.forEach((it, iIdx) => {
+    it.ja = (JA_SLOTS[cIdx] && JA_SLOTS[cIdx].itemsJa[iIdx]) ? JA_SLOTS[cIdx].itemsJa[iIdx] : it.enOrig;
+  });
+});
+
+REF_TABLE_HTML.ja = `<thead><tr><th>語順スロット</th><th>文法的役割</th><th>白モン語 (RPA) の例</th><th>文法ルール</th></tr></thead>
+  <tbody>
+    <tr><td>1. 主語 (Subject)</td><td>代名詞 / 名詞</td><td><code>kuv</code> (私), <code>koj</code> (あなた), <code>nws</code> (彼/彼女), <code>peb</code> (私たち), <code>nej</code> (あなたたち), <code>lawv</code> (彼ら)</td><td>文頭に置きます（英語や中国語と同じ SVO 語順）。</td></tr>
+    <tr><td>2. 時制 / 相 (Tense)</td><td>時間マーカー</td><td><code>yuav</code> (未来: 〜するつもり), <code>tau</code> (過去: 〜した), <code>tab tom</code> (進行: 今〜している)</td><td>主語の後ろ、<code>puas</code> / <code>tsis</code> / 動詞の前に置きます。</td></tr>
+    <tr><td>3. 疑問 (Question)</td><td>はい/いいえ疑問助詞</td><td><code>puas</code> (〜ですか？)</td><td>本動詞（または助動詞）の直前に置いて疑問文を作ります。</td></tr>
+    <tr><td>4. 否定 (Negation)</td><td>否定助詞</td><td><code>tsis</code> (〜ない)</td><td>動詞の直前に置きます: <code>Kuv tsis paub</code>（私は分かりません）。</td></tr>
+    <tr><td>5. 動詞連鎖 (Verb)</td><td>助動詞 + 本動詞</td><td><code>xav</code> (〜したい), <code>nyiam</code> (好き), <code>kawm</code> (学ぶ), <code>hais</code> (話す), <code>mus</code> (行く), <code>nyob</code> (住む/いる), <code>pab</code> (助ける), <code>nyeem</code> (読む), <code>pom</code> (見る)</td><td>人称や時制による動詞の活用（語形変化）は一切ありません。</td></tr>
+    <tr><td>6. 目的語 / 疑問詞</td><td>名詞 / 類別詞句 / 疑問詞</td><td><code>lus Hmoob</code> (モン語), <code>ib tug phooj ywg</code> (一人の友達), <code>ob phau ntawv</code> (二冊の本), <code>dab tsi</code> (何), <code>qhov twg</code> (どこ)</td><td>数量表現は必ず <code>数字 + 類別詞 + 名詞</code> の順になります。</td></tr>
+  </tbody>`;
+
+DIAG_NOTE_HTML.ja = `<strong>文法診断エンジンが自動チェックする項目:</strong>
+  <ul style="margin:6px 0 0 0;padding-left:20px;">
+    <li><strong>スロット語順:</strong> <code>主語 + [時制/相: yuav / tau / tab tom] + [疑問: puas] + [否定: tsis] + 動詞 + [目的語 / 類別詞句 / 疑問詞]</code></li>
+    <li><strong>RPA 声調スペル精度:</strong> 母音や語末の声調文字の入力ミスを検出します（例: <em>nyob zo</em> vs <em>nyob zoo</em>, <em>kuv</em> vs <em>kub</em>, <em>hmoob</em> vs <em>hmob</em>）。</li>
+    <li><strong>類別詞と声調連濁 (Sandhi):</strong> <code>数字 + 類別詞 + 名詞</code> の語順を確認し、数字 <em>ib, ob, peb</em> の後ろで <em>tus</em> が <em>tug</em> に変わる連濁ルールを案内します（例: <em>ib tug phooj ywg</em>）。</li>
+  </ul>`;
+
+CAT_OPTIONS.ja = [
+  "すべてのコース文型",
+  "基本 SVO 語順（主語 + 動詞 + 目的語）",
+  "否定文（動詞の前の tsis）",
+  "時制・相（yuav / tau / tab tom）",
+  "はい / いいえ疑問文（puas）",
+  "疑問詞の疑問文（dab tsi / qhov twg / leej twg）",
+  "類別詞と数量表現（ib tug / ob phau / peb lub）",
+  "日常会話と奉仕の表現"
+];
+
+// 51-Item Expanded Theocratic Terms Dataset (wol.jw.org/hmn)
+const THEOCRATIC_TERMS_51 = [
+  { hm: "Yehauvas", en: "Jehovah", vi: "Giê-hô-va", ko: "여호와", ja: "エホバ", pos: "subj", note: "God’s name" },
+  { hm: "Vajtswv", en: "God", vi: "Đức Chúa Trời / Đức Giê-hô-va", ko: "하느님", ja: "神", pos: "subj", note: "General term" },
+  { hm: "Phau Vajlugkub", en: "Bible", vi: "Kinh Thánh", ko: "성경", ja: "聖書", pos: "obj", note: "Also: Vajlugkub" },
+  { hm: "Txoj xov zoo", en: "Good news", vi: "Tin mừng", ko: "좋은 소식", ja: "良い知らせ", pos: "obj", note: "Preaching (Xov zoo)" },
+  { hm: "Lub Nceeg Vaj", en: "Kingdom", vi: "Nước Trời / Nước Đức Chúa Trời", ko: "왕국 (하느님의 왕국)", ja: "王国（神の王国）", pos: "obj", note: "Also: Nceeg Vaj" },
+  { hm: "Khixatias", en: "Christians", vi: "Người theo đạo Đấng Christ / Cơ Đốc nhân", ko: "그리스도인", ja: "クリスチャン", pos: "subj", note: "" },
+  { hm: "Txwj laus", en: "Elders", vi: "Trưởng lão", ko: "장로", ja: "長老", pos: "subj", note: "Congregation leadership" },
+  { hm: "Tub leg num", en: "Ministerial servant", vi: "Phụ tá hội thánh", ko: "봉사의 종", ja: "奉仕の僕", pos: "subj", note: "" },
+  { hm: "Koom txoos", en: "Congregation", vi: "Hội thánh", ko: "회중", ja: "会衆", pos: "obj", note: "" },
+  { hm: "Teev tiam", en: "Worship / Serve", vi: "Thờ phượng / Phụng sự", ko: "숭배하다 / 섬기다", ja: "崇拝する / 奉仕する", pos: "verb", note: "" },
+  { hm: "Kev ntseeg", en: "Faith", vi: "Đức tin", ko: "믿음", ja: "信仰", pos: "obj", note: "" },
+  { hm: "Cov kwv tij nkauj muam", en: "Brothers and sisters", vi: "Anh chị em", ko: "형제 자매들", ja: "兄弟姉妹", pos: "subj", note: "" },
+  { hm: "Tus Tswv Pluas Hmo", en: "Memorial", vi: "Lễ Tưởng Niệm", ko: "기념식 (주의 만찬)", ja: "記念式（主の晩餐）", pos: "obj", note: "Lord’s Evening Meal" },
+  { hm: "Npe-ee", en: "Branch office", vi: "Chi nhánh", ko: "지부 사무실 (베델)", ja: "支部事務所（ベテル）", pos: "place", note: "Organization structure" },
+  { hm: "Pab Uas Ntaus Thawj", en: "Governing Body", vi: "Hội đồng Lãnh đạo Trung ương", ko: "통치체", ja: "統治体", pos: "subj", note: "" },
+  { hm: "Tho kev", en: "Pioneer", vi: "Người tiên phong", ko: "파이오니아", ja: "開拓者（パイオニア）", pos: "subj", note: "" },
+  { hm: "Tshaj tawm", en: "Preach / Preach the good news", vi: "Rao giảng / Rao truyền tin mừng", ko: "전파하다 / 봉사하다", ja: "伝道する / 宣べ伝える", pos: "verb", note: "" },
+  { hm: "Sib txoos", en: "Meet / Congregation meeting", vi: "Nhóm họp / Buổi họp", ko: "집회 / 모이다", ja: "集会 / 集まり合う", pos: "verb", note: "" },
+  { hm: "Lub koom haum", en: "Organization", vi: "Tổ chức", ko: "조직", ja: "組織", pos: "obj", note: "" },
+  { hm: "Yehauvas Cov Tim Khawv", en: "Jehovah’s Witnesses", vi: "Nhân Chứng Giê-hô-va", ko: "여호와의 증인", ja: "エホバの証人", pos: "subj", note: "" },
+  { hm: "Yexus", en: "Jesus", vi: "Giê-su / Chúa Giê-su", ko: "예수", ja: "イエス", pos: "subj", note: "" },
+  { hm: "Xatas", en: "Satan", vi: "Sa-tan", ko: "사탄", ja: "サタン", pos: "subj", note: "" },
+  { hm: "Tub txib", en: "Apostles", vi: "Các sứ đồ", ko: "사도들", ja: "使徒たち", pos: "subj", note: "" },
+  { hm: "Kawm Vajlugkub", en: "Study the Bible", vi: "Học hỏi Kinh Thánh", ko: "성경을 연구하다", ja: "聖書を学ぶ", pos: "verb", note: "" },
+  { hm: "Teev tiam Yehauvas", en: "Worship Jehovah", vi: "Thờ phượng Đức Giê-hô-va", ko: "여호와를 숭배하다", ja: "エホバを崇拝する", pos: "verb", note: "" },
+  { hm: "Lub Tsev Nceeg Vaj", en: "Kingdom Hall", vi: "Phòng Nước Trời", ko: "왕국회관", ja: "王国会館", pos: "place", note: "Also: Tsev Nceeg Vaj" },
+  { hm: "Kev Pab Cuam", en: "Ministry / Sacred service", vi: "Thánh chức / Sự phụng sự", ko: "봉사의 직무 / 신성한 봉사", ja: "宣教 / 神聖な奉仕", pos: "obj", note: "" },
+  { hm: " Ntsuj Plig Dawb Huv", en: "Holy spirit", vi: "Thần khí thánh", ko: "성령", ja: "聖霊", pos: "obj", note: "" },
+  { hm: "Kev Sawv Rov Los", en: "Resurrection", vi: "Sự sống lại", ko: "부활", ja: "復活", pos: "obj", note: "" },
+  { hm: "Lub Ntiaj Teb Tshiab", en: "New world", vi: "Thế giới mới", ko: "신세계", ja: "新しい世", pos: "place", note: "" },
+  { hm: "Rooj Sib Txoos", en: "Convention / Assembly", vi: "Đại hội", ko: "대회", ja: "大会", pos: "obj", note: "" },
+  { hm: "Hu Nkauj", en: "Sing songs / Kingdom songs", vi: "Hát thánh ca", ko: "노래 부르다 (왕국 노래)", ja: "賛美の歌を歌う", pos: "verb", note: "" },
+  { hm: "Qhia Vajlugkub", en: "Teach the Bible / Conduct Bible study", vi: "Dạy Kinh Thánh / Học Kinh Thánh", ko: "성경을 가르치다 / 성서 연구 사회", ja: "聖書を教える / 聖書レッスン", pos: "verb", note: "" },
+  { hm: "Cov Xaiv Tseg", en: "Anointed ones", vi: "Những người được xức dầu", ko: "기름부음받은 자들", ja: "油そそがれた者たち", pos: "subj", note: "" },
+  { hm: "Amankedoos", en: "Armageddon", vi: "Ha-ma-ghê-đôn", ko: "아마겟돈", ja: "ハルマゲドン", pos: "obj", note: "" },
+  { hm: "Lub Vaj Kaj Siab", en: "Paradise", vi: "Địa đàng / Vườn Ê-đen", ko: "낙원 (파라다이스)", ja: "楽園（パラダイス）", pos: "place", note: "" },
+  { hm: "Kev Sib Haum Xeeb", en: "Peace / Unity", vi: "Sự hòa hợp", ko: "평화 / 연합", ja: "平和 / 一致", pos: "obj", note: "" },
+  { hm: "Zam Txim", en: "Forgive", vi: "Tha thứ", ko: "용서하다", ja: "許す（赦す）", pos: "verb", note: "" },
+  { hm: "Nqe Txhiv", en: "Ransom", vi: "Giá chuộc", ko: "대속물", ja: "贖い（あがない）", pos: "obj", note: "" },
+  { hm: "Thwj Tim", en: "Disciple", vi: "Môn đồ", ko: "제자", ja: "弟子", pos: "subj", note: "" },
+  { hm: "Cov Tshaj Tawm", en: "Publishers", vi: "Người công bố", ko: "전도인", ja: "伝道者", pos: "subj", note: "" },
+  { hm: "Mus Tsev Rau Tsev", en: "House to house", vi: "Từ nhà này sang nhà khác", ko: "집집으로 (호별 봉사)", ja: "家から家へ", pos: "verb", note: "" },
+  { hm: "Rov Mus Xyuas", en: "Return visit", vi: "Thăm lại", ko: "재방문", ja: "再訪問", pos: "verb", note: "" },
+  { hm: "Phau Tsom Faj", en: "Watchtower", vi: "Tháp Canh", ko: "파수대", ja: "ものみの塔", pos: "obj", note: "" },
+  { hm: "Niaj Hnub Tshawb Nrhiav", en: "Daily Bible Reading", vi: "Đọc Kinh Thánh hằng ngày", ko: "성경을 매일 검토함", ja: "聖書を毎日調べる", pos: "obj", note: "" },
+  { hm: "Lub Koom Txoos", en: "Congregation", vi: "Hội thánh", ko: "회중", ja: "会衆", pos: "obj", note: "" },
+  { hm: "Kev Txiav Txim", en: "Judgment", vi: "Sự phán xét", ko: "심판", ja: "裁き", pos: "obj", note: "" },
+  { hm: "Lub Neej Nyob Mus Ib Txhis", en: "Everlasting life", vi: "Sự sống đời đời", ko: "영원한 생명", ja: "永遠の命", pos: "obj", note: "" },
+  { hm: "Tej Lus Samhwm", en: "Commandments", vi: "Các điều răn", ko: "계명", ja: "おきて（戒め）", pos: "obj", note: "" },
+  { hm: "Thov", en: "Pray", vi: "Cầu nguyện", ko: "기도하다", ja: "祈る", pos: "verb", note: "" },
+  { hm: "Cov Laus", en: "Older ones", vi: "Người cao tuổi", ko: "연로한 분들", ja: "高齢の方々", pos: "subj", note: "" },
+  { hm: "Cov Poj Ntsuam", en: "Widows", vi: "Những người góa phụ", ko: "과부들", ja: "やもめ（寡婦）", pos: "subj", note: "" }
+];
+
+// Register single-word theocratic items intoPACKS.hmong.lexicon so Free-Typing Checker recognizes them natively
+THEOCRATIC_TERMS_51.forEach(t => {
+  const cleanHm = t.hm.trim();
+  const key = cleanHm.toLowerCase();
+  if (!PACKS.hmong.lexicon.some(x => x.w.toLowerCase() === key)) {
+    PACKS.hmong.lexicon.push({
+      w: cleanHm,
+      role: t.pos || "obj",
+      en: t.en,
+      enOrig: t.en,
+      vi: t.vi,
+      ko: t.ko,
+      ja: t.ja,
+      tone: "theocratic term",
+      toneOrig: "theocratic term",
+      toneVi: "thuật ngữ thần quyền",
+      toneKo: "신권 용어",
+      toneJa: "神権用語"
+    });
+  }
+});
+
+function renderTheocraticTable() {
+  const tbody = document.getElementById("theoTableBody");
+  if (!tbody) return;
+  const q = (document.getElementById("theoSearchInput")?.value || "").trim().toLowerCase();
+  const lang = typeof uiLang !== "undefined" ? uiLang : "en";
+  const addLbl = lang === "vi" ? "+ Thêm vào Từ Của Tôi" : (lang === "ko" ? "+ 내 단어장에 추가" : (lang === "ja" ? "+ マイ単語に追加" : "+ Add to My Words"));
+  const addedLbl = lang === "vi" ? "✓ Đã lưu" : (lang === "ko" ? "✓ 저장됨" : (lang === "ja" ? "✓ 追加済み" : "✓ Saved"));
+  const savedSet = new Set(customWords.map(w => (w.hmong || "").trim().toLowerCase()));
+
+  const rows = THEOCRATIC_TERMS_51.filter(item => {
+    if (!q) return true;
+    return (
+      item.hm.toLowerCase().includes(q) ||
+      item.en.toLowerCase().includes(q) ||
+      item.vi.toLowerCase().includes(q) ||
+      item.ko.toLowerCase().includes(q) ||
+      item.ja.toLowerCase().includes(q) ||
+      (item.note && item.note.toLowerCase().includes(q))
+    );
+  });
+
+  tbody.innerHTML = rows.map((item, idx) => {
+    const cleanHm = item.hm.trim();
+    const isSaved = savedSet.has(cleanHm.toLowerCase());
+    return `<tr>
+      <td>${idx + 1}</td>
+      <td><strong><code>${cleanHm}</code></strong></td>
+      <td>${item.en}</td>
+      <td>${item.vi}</td>
+      <td>${item.ko}<br><span style="color:var(--muted);font-size:0.84rem;">${item.ja}</span></td>
+      <td style="font-size:0.84rem;color:var(--muted);">${item.note || item.pos}</td>
+      <td>
+        <button type="button" class="${isSaved ? 'secondary' : ''}" style="padding:4px 9px;font-size:0.78rem;" data-theo-idx="${THEOCRATIC_TERMS_51.indexOf(item)}">
+          ${isSaved ? addedLbl : addLbl}
+        </button>
+      </td>
+    </tr>`;
+  }).join("");
+
+  tbody.querySelectorAll("button[data-theo-idx]").forEach(btn => {
+    btn.onclick = async () => {
+      const item = THEOCRATIC_TERMS_51[Number(btn.getAttribute("data-theo-idx"))];
+      if (!item) return;
+      customWords = mergeWordLists(customWords, [{
+        hmong: item.hm.trim(),
+        en: item.en,
+        vi: item.vi,
+        ko: item.ko,
+        ja: item.ja,
+        pos: item.pos || "obj"
+      }]);
+      saveCustomWordsLocal();
+      renderCustomWordsUI();
+      renderTheocraticTable();
+      if (activeStudentCode) await pushWordsToCloud();
+    };
+  });
+}
+
+const theoSearchEl = document.getElementById("theoSearchInput");
+if (theoSearchEl) {
+  theoSearchEl.oninput = () => renderTheocraticTable();
+}
+
+const addAllTheoBtn = document.getElementById("addAllTheoBtn");
+if (addAllTheoBtn) {
+  addAllTheoBtn.onclick = async () => {
+    const allItems = THEOCRATIC_TERMS_51.map(item => ({
+      hmong: item.hm.trim(),
+      en: item.en,
+      vi: item.vi,
+      ko: item.ko,
+      ja: item.ja,
+      pos: item.pos || "obj"
+    }));
+    customWords = mergeWordLists(customWords, allItems);
+    saveCustomWordsLocal();
+    renderCustomWordsUI();
+    renderTheocraticTable();
+    if (activeStudentCode) await pushWordsToCloud();
+  };
+}
+
+// Wrap saveStats, renderMatrix, diagnoseSentence, loadChallenge, renderTiles, and setUILang for 'ja'
+const prevSaveStats = saveStats;
+saveStats = function() {
+  prevSaveStats();
+  if (typeof uiLang !== "undefined" && uiLang === "ja") {
+    document.getElementById("scoreDisplay").textContent = `正解数: ${stats.solved} | 連続正解: ${stats.streak}`;
+  }
+};
+
+const prevRenderMatrix = renderMatrix;
+renderMatrix = function() {
+  prevRenderMatrix();
+  if (currentLang === "hmong" && typeof uiLang !== "undefined" && uiLang === "ja") {
+    const slots = PACKS.hmong.slots;
+    const hmParts = [];
+    const glossParts = [];
+    slots.forEach((col, cIdx) => {
+      const pick = col.items[matrixSelections[cIdx]] || col.items[0];
+      if (pick.hm) {
+        hmParts.push(pick.hm);
+        glossParts.push(pick.ja || pick.en);
+      }
+    });
+    const isQuestion = hmParts.includes("puas");
+    document.getElementById("matrixOutputEn").textContent = "語順構造（直訳）: " + glossParts.join(" + ") + (isQuestion ? "？" : "");
+  }
+};
+
+const prevDiagnose = diagnoseSentence;
+diagnoseSentence = function(inputStr, targetItem) {
+  const res = prevDiagnose(inputStr, targetItem);
+  if (typeof uiLang !== "undefined" && uiLang === "ja") {
+    if (res.title === "Empty Sentence") {
+      res.title = "文が入力されていません";
+      res.msg = "チェックする前に、単語タイルを選択するかモン語の文を入力してください。";
+    } else if (res.title.includes("Exact Match")) {
+      res.title = "Zoo heev! 完全一致・文法も完璧です！";
+      if (targetItem) {
+        res.msg = `作成した文 <strong>"${targetItem.hm.join(" ")}"</strong> の意味は <em>"${targetItem.ja || targetItem.en}"</em> です。`;
+      }
+    } else if (res.title.includes("Right Words, Word-Order")) {
+      res.title = "単語は正しいですが、語順の調整が必要です";
+      res.msg = "モン語では疑問助詞 <code>puas</code> と否定語 <code>tsis</code> は必ず動詞の<strong>直前</strong>に置きます！公式: <code>" + (targetItem ? targetItem.formula : "") + "</code>";
+    } else if (res.title.includes("Tone Sandhi") || res.title.includes("Classifier Tone Change")) {
+      res.title = "類別詞の声調連濁ルール (Sandhi): tus → tug";
+      res.msg = "文の構造は素晴らしいです！数字 <code>ib, ob, peb</code> (1, 2, 3) の後ろでは類別詞 <code>tus</code> が <strong><code>tug</code></strong> に変わります（例: <code>ib tug phooj ywg</code>）。";
+    } else if (res.title.includes("Tone / Spelling Check")) {
+      res.title = res.title.replace("Tone / Spelling Check on", "声調・スペルの確認:");
+      res.msg = res.msg
+        .replace("Almost there! You wrote", "もう少しです！入力された語:")
+        .replace("instead of", "→ 正しい語:")
+        .replace("In White Hmong RPA, the final consonant marks the tone and changes the meaning.", "白モン語 (RPA) では語末の子音が声調を表し、単語の意味を変えます。");
+    } else if (res.title.includes("Negation 'tsis' Goes Before")) {
+      res.title = "語順エラー: 否定語 'tsis' は動詞の前に置きます";
+      res.msg = "モン語では否定語 <code>tsis</code>（〜ない）は必ず動詞の<strong>直前</strong>に置きます。";
+    } else if (res.title.includes("Question Particle 'puas' Goes Before")) {
+      res.title = "語順エラー: 疑問助詞 'puas' は動詞の前に置きます";
+      res.msg = "はい/いいえ疑問文では、<code>puas</code> は常に本動詞の<strong>直前</strong>に置きます。";
+    } else if (res.title.includes("Don't Combine 'puas' with Content Question Words")) {
+      res.title = "疑問文ルール: 疑問詞の質問には 'puas' を併用しません";
+      res.msg = "<code>puas</code> は「はい/いいえ」の質問専用です。<em>何</em> (<code>dab tsi</code>)、<em>どこ</em> (<code>qhov twg</code>)、<em>誰</em> (<code>leej twg</code>) を尋ねる時は <code>puas</code> を外してください！";
+    } else if (res.title.includes("Possible Tone or Spelling Typo")) {
+      res.title = res.title.replace("Possible Tone or Spelling Typo:", "声調またはスペルの入力ミスの可能性:");
+      res.msg = res.msg
+        .replace("Did you mean", "もしかして次の単語ですか:")
+        .replace("Check the vowel or final tone letter.", "母音の綴りまたは語末の声調文字を確認してください。");
+    } else if (res.title.includes("Unrecognized Word:")) {
+      res.title = res.title.replace("Unrecognized Word:", "未登録の単語:");
+      res.msg = "基本単語帳にない単語です。コースで学んだ新しい単語や神権用語なら、下の<strong>マイ単語帳</strong>または<strong>神権用語51語リスト</strong>から追加できます！";
+    } else if (res.title.includes("Incomplete Sentence")) {
+      res.title = "不完全な文（動詞がありません）";
+      res.msg = "完全なモン語の文には動作や状態を表す動詞（例: <code>nyob, mus, kawm, hais, paub, pab</code>）が必要です。";
+    } else if (res.title === "Grammatically Valid Sentence!") {
+      res.title = "文法的に正しいモン語の文です！";
+      res.msg = "入力された文は白モン語 (RPA) のSVO語順と文法ルールに正しく合致しています！";
+    }
+  }
+  return res;
+};
+
+const prevLoadChallenge = loadChallenge;
+loadChallenge = function() {
+  prevLoadChallenge();
+  if (typeof uiLang !== "undefined" && uiLang === "ja") {
+    const list = getFilteredSentences();
+    const item = list[currentIdx] || list[0];
+    if (!item) return;
+    document.getElementById("tilePatternLabel").textContent = `文型: ${item.cat.toUpperCase()}`;
+    document.getElementById("tileFormula").textContent = `公式: ${item.formula}`;
+    document.getElementById("typePatternLabel").textContent = `翻訳チャレンジ (${item.cat.toUpperCase()})`;
+    document.getElementById("typeFormula").textContent = `公式: ${item.formula}`;
+  }
+};
+
+const prevRenderTiles = renderTiles;
+renderTiles = function() {
+  prevRenderTiles();
+  if (typeof uiLang !== "undefined" && uiLang === "ja" && selectedTiles.length === 0) {
+    const well = document.getElementById("sentenceWell");
+    if (well) {
+      well.innerHTML = `<span class="well-placeholder">下の単語タイルを順番にタップして文を組み立ててください…</span>`;
+    }
+  }
+};
+
+const prevSetUILang = setUILang;
+setUILang = function(rawLang) {
+  const lang = (rawLang === "vi" || rawLang === "ko" || rawLang === "ja") ? rawLang : "en";
+  prevSetUILang(lang === "ja" ? "en" : lang);
+  uiLang = lang;
+  localStorage.setItem("hmong_ui_lang", lang);
+
+  document.getElementById("uiBtnEn").classList.toggle("active", lang === "en");
+  document.getElementById("uiBtnVi").classList.toggle("active", lang === "vi");
+  const btnKo = document.getElementById("uiBtnKo");
+  if (btnKo) btnKo.classList.toggle("active", lang === "ko");
+  const btnJa = document.getElementById("uiBtnJa");
+  if (btnJa) btnJa.classList.toggle("active", lang === "ja");
+
+  const theoSummary = document.getElementById("theocraticRefSummary");
+  if (theoSummary) {
+    theoSummary.textContent = lang === "vi"
+      ? "📖 Bảng Từ Vựng Thần Quyền Mở Rộng (51 Thuật Ngữ — wol.jw.org/hmn)"
+      : (lang === "ko"
+          ? "📖 확장 신권 용어 참조표 (51개 핵심 용어 — wol.jw.org/hmn)"
+          : (lang === "ja"
+              ? "📖 拡張版・神権用語リファレンス（全51語 — wol.jw.org/hmn）"
+              : "📖 Expanded Theocratic Vocabulary Reference (51 Terms — wol.jw.org/hmn)"));
+  }
+  const theoIntro = document.getElementById("theocraticRefIntro");
+  if (theoIntro) {
+    theoIntro.innerHTML = lang === "vi"
+      ? "Tổng hợp từ chương trình Đọc Kinh Thánh hằng ngày &amp; bài học Tháp Canh trên <code>wol.jw.org/hmn</code> cùng thuật ngữ chuẩn tiếng Việt, Hàn, Nhật. Tìm kiếm bên dưới hoặc nhấn <strong>+ Thêm vào Từ Của Tôi</strong> để lưu vào Mã Học Viên:"
+      : (lang === "ko"
+          ? "<code>wol.jw.org/hmn</code>의 성경을 매일 검토함 및 파수대 연구 기사에서 발췌한 51개 핵심 신권 용어(베트남어·한국어·일본어 대조표)입니다. 아래에서 검색하거나 <strong>+ 내 단어장에 추가</strong>를 눌러 학생 코드에 저장하세요:"
+          : (lang === "ja"
+              ? "<code>wol.jw.org/hmn</code> の「聖書を毎日調べる」や「ものみの塔」研究記事からまとめた神権用語51語（英語・ベトナム語・韓国語・日本語対照表）です。検索または<strong>+ マイ単語に追加</strong>をクリックして受講生コードに保存できます:"
+              : "Compiled from recent Daily Bible Reading &amp; Watchtower study articles on <code>wol.jw.org/hmn</code> with standard Vietnamese, Korean, and Japanese theocratic equivalents. Filter below or click <strong>+ Add to My Words</strong> to save any term to your Student Code:"));
+  }
+  const addAllBtn = document.getElementById("addAllTheoBtn");
+  if (addAllBtn) {
+    addAllBtn.textContent = lang === "vi"
+      ? "+ Thêm Tất Cả 51 Thuật Ngữ"
+      : (lang === "ko"
+          ? "+ 51개 신권 용어 전체 추가"
+          : (lang === "ja"
+              ? "+ 51語すべてをマイ単語に追加"
+              : "+ Add All 51 Terms to My Words"));
+  }
+
+  if (lang === "ja") {
+    document.getElementById("backHubLink").textContent = "← 練習ツール・ハブに戻る";
+    document.querySelector("h1").textContent = "多機能・モン語文生成＆文法診断ツール";
+    document.querySelector(".subtitle").textContent = "白モン語 (RPA) 文組み立て＆リアルタイム文法・声調チェッカー — 10日間コース練習スイート";
+    const resetBtn = document.getElementById("resetStatsBtn");
+    if (resetBtn) resetBtn.textContent = "リセット";
+    const langPackLabel = document.getElementById("langPackLabel");
+    if (langPackLabel) langPackLabel.textContent = "言語パック:";
+    const lessonPatternLabel = document.getElementById("lessonPatternLabel");
+    if (lessonPatternLabel) lessonPatternLabel.textContent = "学習文型:";
+
+    PACKS.hmong.lexicon.forEach(item => {
+      item.en = item.ja || item.enOrig;
+      item.tone = item.toneJa || item.toneOrig;
+    });
+    PACKS.hmong.sentences.forEach(s => {
+      s.en = s.ja || s.enOrig;
+      s.formula = s.formulaJa || s.formulaOrig;
+      s.hint = s.hintJa || s.hintOrig;
+    });
+    PACKS.hmong.slots.forEach(col => {
+      col.title = col.titleJa || col.titleOrig;
+      col.items.forEach(it => {
+        it.en = it.ja || it.enOrig;
+      });
+    });
+
+    const tabBtns = document.querySelectorAll(".tab-btn");
+    if (tabBtns.length === 3) {
+      tabBtns[0].textContent = "1. 単語タイル文組み立て";
+      tabBtns[1].textContent = "2. 自由入力＆文法チェッカー";
+      tabBtns[2].textContent = "3. 6スロット文生成マトリックス";
+    }
+
+    const mode1Title = document.getElementById("mode1Title");
+    if (mode1Title) mode1Title.textContent = "単語タイル文組み立てビルダー";
+    const mode1Desc = document.getElementById("mode1Desc");
+    if (mode1Desc) mode1Desc.textContent = "単語タイルを正しいモン語語順（SVO）でタップして目標の文を完成させましょう。声調や助詞が異なるダミータイルに注意してください！";
+    const yourSentenceLabel = document.getElementById("yourSentenceLabel");
+    if (yourSentenceLabel) yourSentenceLabel.textContent = "組み立てた文:";
+    const wordBankLabel = document.getElementById("wordBankLabel");
+    if (wordBankLabel) wordBankLabel.textContent = "単語バンク（タップして追加）:";
+
+    const mode2Title = document.getElementById("mode2Title");
+    if (mode2Title) mode2Title.textContent = "自由入力・文法＆声調チェッカー";
+    const mode2Desc = document.getElementById("mode2Desc");
+    if (mode2Desc) mode2Desc.innerHTML = "下の課題文のモン語訳を入力するか、<strong>自分で作った任意のモン語の文を入力</strong>して、語順・声調文字・類別詞が正しいか診断できます。";
+    const quickExamplesLabel = document.getElementById("quickExamplesLabel");
+    if (quickExamplesLabel) quickExamplesLabel.textContent = "クイックテスト例（タップで自動入力）:";
+
+    const mode3Title = document.getElementById("mode3Title");
+    if (mode3Title) mode3Title.textContent = "6スロット文生成マトリックス";
+    const mode3Desc = document.getElementById("mode3Desc");
+    if (mode3Desc) mode3Desc.textContent = "各列から1つずつ項目を選んで何百通りもの正しいモン語の文を生成し、文スロットのつながりを確認しましょう。";
+    const liveMatrixLabel = document.getElementById("liveMatrixLabel");
+    if (liveMatrixLabel) liveMatrixLabel.textContent = "リアルタイム生成文";
+
+    document.getElementById("sendMatrixToCheckerBtn").textContent = "自由入力チェッカーへ送る";
+    document.getElementById("randomMatrixBtn").textContent = "ランダム選択";
+    document.getElementById("checkTilesBtn").textContent = "文をチェック";
+    document.getElementById("clearTilesBtn").textContent = "クリア";
+    document.getElementById("hintTilesBtn").textContent = "ヒントを表示";
+    document.getElementById("nextTilesBtn").textContent = "次の課題 →";
+    document.getElementById("checkFreeBtn").textContent = "課題文の翻訳をチェック";
+    document.getElementById("checkFreeAnyBtn").textContent = "自由文の文法を診断";
+    document.getElementById("newTypePromptBtn").textContent = "次の課題 →";
+    document.getElementById("freeInput").placeholder = "モン語の文を入力してください（例: Koj puas nyob zoo または Kuv xav kawm lus Hmoob）…";
+
+    const syncTitle = document.getElementById("syncBarTitle");
+    if (syncTitle) syncTitle.innerHTML = "<span>☁️ 受講生コード＆マイ単語帳クラウド同期</span>";
+    const codeInput = document.getElementById("studentCodeInput");
+    if (codeInput) codeInput.placeholder = "コードを入力 (例: HMOOB-01)";
+    const connectBtn = document.getElementById("connectCodeBtn");
+    if (connectBtn) connectBtn.textContent = "受講生コードを接続 / 読込";
+    const syncSubnote = document.getElementById("syncBarSubnote");
+    if (syncSubnote) syncSubnote.textContent = "個人の受講生コード（例: HMOOB-01）を入力すると、ブラウザをリセットしたり端末を変えてもマイ単語帳が安全に保持されます。";
+    const vocabSummary = document.getElementById("vocabBuilderSummary");
+    if (vocabSummary) vocabSummary.textContent = "コース文法早見表 ＆ マイ単語帳ビルダー（クリックで開閉）";
+    const vocabIntro = document.getElementById("vocabBuilderIntro");
+    if (vocabIntro) vocabIntro.textContent = "10日間コースで毎日学んだ新しい単語を追加すると、自由入力チェッカーが自動認識し、受講生コードに保存されます:";
+    const newWordHm = document.getElementById("newWordHm");
+    if (newWordHm) newWordHm.placeholder = "モン語の単語 (例: phooj ywg)";
+    const newWordEn = document.getElementById("newWordEn");
+    if (newWordEn) newWordEn.placeholder = "日本語 / 英語の意味 (例: 友達 / friend)";
+    const roleSelect = document.getElementById("newWordRole");
+    if (roleSelect && roleSelect.options.length === 5) {
+      roleSelect.options[0].textContent = "主語 / 代名詞";
+      roleSelect.options[1].textContent = "動詞";
+      roleSelect.options[2].textContent = "目的語 / 名詞";
+      roleSelect.options[3].textContent = "場所";
+      roleSelect.options[4].textContent = "形容詞 / 副詞";
+    }
+    const addWordBtn = document.getElementById("addWordBtn");
+    if (addWordBtn) addWordBtn.textContent = "単語を追加";
+    const syncNowBtn = document.getElementById("syncNowBtn");
+    if (syncNowBtn) syncNowBtn.textContent = "☁️ 今すぐ同期";
+    const exportBtn = document.getElementById("exportWordsBtn");
+    if (exportBtn) exportBtn.textContent = "⬇ バックアップ出力 (.json)";
+    const importBtn = document.getElementById("importWordsBtn");
+    if (importBtn) importBtn.textContent = "⬆ バックアップ読込 (.json)";
+
+    const refTbl = document.getElementById("refTable");
+    if (refTbl && REF_TABLE_HTML.ja) refTbl.innerHTML = REF_TABLE_HTML.ja;
+    const diagBox = document.getElementById("diagNoteBox");
+    if (diagBox && DIAG_NOTE_HTML.ja) diagBox.innerHTML = DIAG_NOTE_HTML.ja;
+    const catSel = document.getElementById("categorySelect");
+    if (catSel && CAT_OPTIONS.ja && catSel.options.length === CAT_OPTIONS.ja.length) {
+      CAT_OPTIONS.ja.forEach((txt, idx) => { catSel.options[idx].textContent = txt; });
+    }
+
+    saveStats();
+    syncCustomWordsIntoLexicon();
+    renderCustomWordsUI();
+    loadChallenge();
+    renderMatrix();
+  }
+  renderTheocraticTable();
+};
+
 const urlParams = new URLSearchParams(window.location.search);
 const urlLang = urlParams.get("lang");
 const urlCode = urlParams.get("code");
 
 loadCustomWordsLocal(urlCode ? normalizeStudentCode(urlCode) : activeStudentCode);
 
-if (urlLang === "vi" || urlLang === "ko" || urlLang === "en") {
+if (urlLang === "vi" || urlLang === "ko" || urlLang === "ja" || urlLang === "en") {
   setUILang(urlLang);
 } else {
   setUILang(uiLang);

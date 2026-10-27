@@ -52,8 +52,9 @@ function sanitizeWords(rawWords) {
     const en = clean(item.en || '', 120);
     const vi = clean(item.vi || '', 120);
     const ko = clean(item.ko || '', 120);
+    const ja = clean(item.ja || '', 120);
     const pos = clean(item.pos || item.role || 'obj', 32) || 'obj';
-    const fallback = en || vi || ko;
+    const fallback = en || vi || ko || ja;
     if (!hmong || !fallback) continue;
     const key = hmong.toLowerCase();
     if (seen.has(key)) continue;
@@ -63,6 +64,7 @@ function sanitizeWords(rawWords) {
       en: en || fallback,
       vi: vi || fallback,
       ko: ko || fallback,
+      ja: ja || fallback,
       pos,
     });
     if (out.length >= MAX_WORDS) break;
