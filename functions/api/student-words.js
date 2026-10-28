@@ -22,6 +22,8 @@ const ROSTER = {
   'HMOOB-14': 'Student 14',
   'HMOOB-15': 'Tsim Meej',
   'HMOOB-16': 'Paj Nyiag',
+  'HMOOB-17': 'Txawj Thaiv',
+  'HMOOB-18': 'Nkauj Huab',
 };
 
 const json = (obj, status = 200) =>
