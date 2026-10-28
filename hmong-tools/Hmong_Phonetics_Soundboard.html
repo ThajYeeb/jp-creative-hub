@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Hmong Vowels &amp; Consonants Soundboard – Male &amp; Female Audio</title>
+<style>
+  :root {
+    --bg: #f8f9fa; --card: #ffffff; --accent: #1F4E79; --accent2: #2E75B6;
+    --text: #1e293b; --muted: #64748b; --border: #cbd5e1;
+    --male-bg: #eff6ff; --male-border: #3b82f6; --male-text: #1d4ed8;
+    --fem-bg: #fdf2f8; --fem-border: #ec4899; --fem-text: #be185d;
+    --ok: #15803d; --warn: #b45309; --err: #b91c1c;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    background: var(--bg); color: var(--text); margin: 0; padding: 18px 14px 48px;
+    line-height: 1.5; max-width: 1080px; margin-left: auto; margin-right: auto;
+  }
+  .nav-bar {
+    display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center;
+    gap: 10px; margin-bottom: 12px;
+  }
+  .nav-links { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+  .nav-link { color: var(--accent); font-weight: 700; text-decoration: none; font-size: 0.92rem; }
+  .nav-link:hover { text-decoration: underline; }
+  .lang-switch {
+    display: inline-flex; flex-wrap: wrap; background: #e2e8f0; border-radius: 999px; padding: 3px; gap: 2px;
+  }
+  .lang-btn {
+    background: transparent; color: #334155; border: none; padding: 6px 13px;
+    border-radius: 999px; font-size: 0.88rem; font-weight: 700; cursor: pointer;
+  }
+  .lang-btn.active { background: var(--accent); color: #fff; }
+  .card {
+    background: var(--card); border-radius: 12px; padding: 18px; margin-bottom: 14px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07); border: 1px solid #e2e8f0;
+  }
+  .header-row {
+    display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: 12px;
+  }
+  h1 { color: var(--accent); font-size: 1.55rem; margin: 0 0 4px 0; }
+  .subtitle { color: var(--muted); font-size: 0.95rem; margin: 0; }
+  button {
+    background: var(--accent); color: #fff; border: none; padding: 8px 14px;
+    border-radius: 8px; font-size: 0.9rem; font-weight: 600; cursor: pointer;
+    transition: background 0.15s, transform 0.08s;
+  }
+  button:hover { background: var(--accent2); }
+  button.secondary { background: #e2e8f0; color: #1e293b; }
+  button.secondary:hover { background: #cbd5e1; }
+  button.studio-toggle {
+    background: #0f766e; color: #fff; display: inline-flex; align-items: center; gap: 6px;
+  }
+  button.studio-toggle.active { background: #b91c1c; }
+  .formula-banner {
+    background: linear-gradient(135deg, #eff6ff 0%, #f0fdf4 100%);
+    border: 1px solid #bfdbfe; border-left: 5px solid var(--accent);
+    border-radius: 10px; padding: 12px 14px; margin-top: 12px; font-size: 0.9rem;
+  }
+  .formula-parts {
+    display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; align-items: center;
+  }
+  .f-chip {
+    background: #fff; border: 1px solid #93c5fd; border-radius: 6px;
+    padding: 4px 10px; font-weight: 700; color: var(--accent); font-size: 0.85rem;
+  }
+  .tabs-bar {
+    display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; align-items: center;
+  }
+  .tab-btn {
+    background: #fff; color: #334155; border: 1px solid var(--border);
+    padding: 8px 14px; border-radius: 999px; font-size: 0.88rem; font-weight: 700;
+  }
+  .tab-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .filter-row {
+    display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between;
+    margin-bottom: 12px;
+  }
+  .search-input {
+    padding: 8px 12px; border: 1px solid var(--border); border-radius: 8px;
+    font-size: 0.92rem; min-width: 240px; flex: 1;
+  }
+  .studio-panel {
+    background: #fffbeb; border: 2px solid #f59e0b; border-radius: 12px;
+    padding: 16px; margin-bottom: 14px;
+  }
+  .studio-top {
+    display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px;
+  }
+  .voice-selector { display: inline-flex; gap: 8px; flex-wrap: wrap; }
+  .voice-pick {
+    padding: 8px 14px; border-radius: 999px; font-weight: 700; border: 2px solid transparent;
+  }
+  .voice-pick.male-pick { background: var(--male-bg); color: var(--male-text); border-color: #93c5fd; }
+  .voice-pick.male-pick.active { background: #1d4ed8; color: #fff; border-color: #1e3a8a; }
+  .voice-pick.fem-pick { background: var(--fem-bg); color: var(--fem-text); border-color: #f9a8d4; }
+  .voice-pick.fem-pick.active { background: #be185d; color: #fff; border-color: #831843; }
+  .speed-box {
+    background: #fff; border: 1px solid #fcd34d; border-radius: 10px;
+    padding: 12px; margin-top: 12px; display: flex; flex-wrap: wrap;
+    justify-content: space-between; align-items: center; gap: 12px;
+  }
+  .sound-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(295px, 1fr)); gap: 12px;
+  }
+  .sound-card {
+    background: #fff; border: 1px solid #e2e8f0; border-radius: 12px;
+    padding: 14px; display: flex; flex-direction: column; justify-content: space-between;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05); transition: border-color 0.15s;
+  }
+  .sound-card:hover { border-color: #93c5fd; }
+  .sc-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+  .sc-glyph {
+    font-size: 1.75rem; font-weight: 800; color: var(--accent);
+    background: #f1f5f9; padding: 4px 14px; border-radius: 10px; letter-spacing: 0.5px;
+  }
+  .sc-badges { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+  .sc-ipa {
+    font-family: monospace; font-size: 0.84rem; background: #e2e8f0; color: #334155;
+    padding: 2px 8px; border-radius: 6px; font-weight: 700;
+  }
+  .sc-group {
+    font-size: 0.74rem; color: var(--muted); font-weight: 700; text-transform: uppercase;
+  }
+  .sc-example {
+    margin: 10px 0 6px; padding: 8px 10px; background: #f8fafc;
+    border-left: 3px solid var(--accent2); border-radius: 6px; font-size: 0.92rem;
+  }
+  .sc-example code { font-size: 1rem; font-weight: 800; color: var(--accent); }
+  .sc-tip { font-size: 0.84rem; color: #475569; margin-bottom: 10px; }
+  .voice-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: auto; }
+  .play-btn {
+    flex: 1; min-width: 112px; padding: 7px 10px; font-size: 0.83rem;
+    border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; gap: 5px;
+  }
+  .play-btn.male-btn {
+    background: var(--male-bg); color: var(--male-text); border: 1px solid #93c5fd;
+  }
+  .play-btn.male-btn.has-clip { background: #1d4ed8; color: #fff; border-color: #1d4ed8; }
+  .play-btn.fem-btn {
+    background: var(--fem-bg); color: var(--fem-text); border: 1px solid #f9a8d4;
+  }
+  .play-btn.fem-btn.has-clip { background: #be185d; color: #fff; border-color: #be185d; }
+  .play-btn.both-btn {
+    background: #f0fdf4; color: #166534; border: 1px solid #86efac; flex-basis: 100%;
+  }
+  .student-rec-row {
+    display: flex; gap: 6px; margin-top: 6px; padding-top: 6px; border-top: 1px dashed #e2e8f0;
+  }
+  .student-rec-row button {
+    font-size: 0.78rem; padding: 5px 9px; flex: 1;
+  }
+  .studio-card-controls {
+    margin-top: 8px; padding: 8px; background: #fffbeb; border: 1px solid #fde68a;
+    border-radius: 8px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center;
+  }
+  .studio-card-controls button { font-size: 0.78rem; padding: 5px 9px; }
+  .rec-active { background: #dc2626 !important; color: #fff !important; animation: pulse 1s infinite; }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.65; } }
+  .hidden { display: none !important; }
+  .status-pill {
+    display: inline-block; font-size: 0.82rem; padding: 4px 10px; border-radius: 999px;
+    background: #e0f2fe; color: #0369a1; font-weight: 700;
+  }
+</style>
+</head>
+<body>
+
+<div class="nav-bar">
+  <div class="nav-links">
+    <a class="nav-link" href="./index.html" id="backHubLink">← Back to Course Practice Hub</a>
+    <a class="nav-link" href="./Hmong_Sound_Trainer.html" id="toneTrainerLink">🎵 7 Tones Trainer</a>
+    <a class="nav-link" href="./Universal_Language_Generator_Tool.html" id="ulgLink">🧩 Sentence Builder</a>
+    <a class="nav-link" href="./Hmong_Flashcards.html" id="flashcardsLink">🃏 Visual Flashcards</a>
+  </div>
+  <div class="lang-switch" role="group" aria-label="Instruction Language">
+    <button class="lang-btn active" id="uiBtnEn" onclick="setUILang('en')">English</button>
+    <button class="lang-btn" id="uiBtnVi" onclick="setUILang('vi')">Tiếng Việt</button>
+    <button class="lang-btn" id="uiBtnKo" onclick="setUILang('ko')">한국어</button>
+    <button class="lang-btn" id="uiBtnJa" onclick="setUILang('ja')">日本語</button>
+  </div>
+</div>
+
+<div class="card">
+  <div class="header-row">
+    <div>
+      <h1 id="pageTitle">Hmong Vowels &amp; Consonants Soundboard</h1>
+      <p class="subtitle" id="pageSubtitle">Listen to Male &amp; Female instructor pronunciations for all 70 White Hmong (RPA) vowels and single, double, triple &amp; quadruple consonants.</p>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;">
+      <span class="status-pill" id="clipCountBadge">Clips: 0M / 0F</span>
+      <button class="studio-toggle" id="toggleStudioBtn" type="button">🎙️ Instructor Studio</button>
+    </div>
+  </div>
+
+  <div class="formula-banner" id="clusterFormulaBanner">
+    <strong id="formulaTitle">💡 How Multi-Letter Hmong Consonants Work (Up to 4 Letters):</strong>
+    <div id="formulaDesc" style="margin-top:4px;color:#334155;">
+      White Hmong builds complex consonants in predictable layers from left to right—you never pronounce the letters separately:
+    </div>
+    <div class="formula-parts">
+      <span class="f-chip" id="fPart1">1. Pre-nasal (n-) = hum through nose first</span>
+      <span>+</span>
+      <span class="f-chip" id="fPart2">2. Core Stop / Affricate (p, t, c, k, q, ts, tx)</span>
+      <span>+</span>
+      <span class="f-chip" id="fPart3">3. Lateral release (-l-) = tongue flick</span>
+      <span>+</span>
+      <span class="f-chip" id="fPart4">4. Aspiration (-h) = strong puff of air</span>
+      <span>=</span>
+      <span class="f-chip" style="background:#1F4E79;color:#fff;" id="fPartEx">Example: n + p + l + h = nplh (nplhaib "ring")</span>
+    </div>
+  </div>
+</div>
+
+<!-- INSTRUCTOR RECORDING STUDIO PANEL -->
+<div class="studio-panel hidden" id="studioPanel">
+  <div class="studio-top">
+    <div>
+      <strong style="font-size:1.05rem;color:#92400e;" id="studioHeading">🎙️ Instructor Recording Studio (Male &amp; Female Voices)</strong>
+      <div style="font-size:0.84rem;color:#78350f;margin-top:2px;" id="studioSub">
+        Choose Male (JC) or Female (Pang) below, then click <strong>● Record</strong> or <strong>⬆ Upload</strong> on any sound card—or use the Speed-Record Queue. Every clip syncs automatically to the cloud!
+      </div>
+    </div>
+    <div class="voice-selector">
+      <button type="button" class="voice-pick male-pick active" id="studioVoiceMaleBtn" onclick="setStudioVoice('male')">👨 Record Male Voice (JC)</button>
+      <button type="button" class="voice-pick fem-pick" id="studioVoiceFemBtn" onclick="setStudioVoice('female')">👩 Record Female Voice (Pang)</button>
+    </div>
+  </div>
+
+  <div class="speed-box">
+    <div>
+      <strong style="font-size:0.92rem;color:var(--accent);" id="speedTitle">⚡ Speed-Record Queue:</strong>
+      <span id="speedCurrentLabel" style="font-size:0.92rem;margin-left:6px;font-weight:700;">Ready</span>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;">
+      <button type="button" id="speedPrevBtn" class="secondary">← Prev</button>
+      <button type="button" id="speedRecBtn" style="background:#dc2626;">● Record Current</button>
+      <button type="button" id="speedNextBtn" class="secondary">Skip / Next →</button>
+      <label style="font-size:0.83rem;display:inline-flex;align-items:center;gap:4px;margin-left:6px;cursor:pointer;">
+        <input type="checkbox" id="filterUnrecordedChk"> <span id="filterUnrecordedLbl">Show unrecorded only</span>
+      </label>
+    </div>
+  </div>
+
+  <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px;margin-top:10px;font-size:0.83rem;">
+    <span id="cloudSyncStatus" style="color:#0369a1;font-weight:600;">☁️ Cloud audio sync ready</span>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;">
+      <button type="button" class="secondary" id="syncFromCloudBtn" style="padding:5px 10px;font-size:0.8rem;">🔄 Refresh Cloud Audio</button>
+      <button type="button" class="secondary" id="exportAudioJsonBtn" style="padding:5px 10px;font-size:0.8rem;">⬇ Export Audio Backup (.json)</button>
+      <button type="button" class="secondary" id="importAudioJsonBtn" style="padding:5px 10px;font-size:0.8rem;">⬆ Import Backup (.json)</button>
+      <input type="file" id="importAudioFileInput" accept=".json,application/json" class="hidden">
+      <input type="file" id="singleClipUploadInput" accept="audio/*,.mp3,.m4a,.wav,.webm,.ogg" class="hidden">
+    </div>
+  </div>
+</div>
+
+<div class="tabs-bar" id="categoryTabs">
+  <button class="tab-btn active" data-cat="all" id="tabAll">All Sounds (70)</button>
+  <button class="tab-btn" data-cat="vowels" id="tabVowels">1. Vowels (13)</button>
+  <button class="tab-btn" data-cat="c1" id="tabC1">2. Single Consonants (17)</button>
+  <button class="tab-btn" data-cat="c2" id="tabC2">3. Double Consonants (22)</button>
+  <button class="tab-btn" data-cat="c3" id="tabC3">4. Triple Consonants (15)</button>
+  <button class="tab-btn" data-cat="c4" id="tabC4">5. Quadruple Consonants (3)</button>
+</div>
+
+<div class="filter-row">
+  <input type="text" class="search-input" id="searchInput" placeholder="Search letter, example word, or meaning (e.g., nplh, Hmoob, bird, ring)…">
+</div>
+
+<div class="sound-grid" id="soundGrid"></div>
+<script>
+// 70 White Hmong (RPA) Vowels & Single, Double, Triple, Quadruple Consonants
+// Tuple format: [id, cat, subcat, glyph, ipa, exWord, exEn, exVi, exKo, exJa, tipEn, tipVi, tipKo, tipJa]
+const RAW_PHONETICS = [
+  // 1. VOWELS — 6 Single Vowels (Monophthongs)
+  ["v_a","vowels","Single Vowel","a","/a/","pab","help","giúp đỡ","돕다","助ける","Open 'ah' as in 'father'.","Mở miệng rộng như âm 'a' tiếng Việt.","입을 크게 벌리는 '아' 소리.","口を大きく開ける「ア」の音。"],
+  ["v_e","vowels","Single Vowel","e","/e/","peb","we / three","chúng tôi / số 3","우리 / 셋(3)","私たち / 3","Clear mid-front 'eh' like 'bet' or 'café' (no glide).","Như âm 'ê' tiếng Việt.","중설 모음 '에' (이중모음 없이 깔끔하게).","二重母音にならないすっきりした「エ」。"],
+  ["v_i","vowels","Single Vowel","i","/i/","ib","one (1)","một (1)","하나 (1)","1（一）","High front 'ee' as in 'see'.","Như âm 'i' tiếng Việt.","영어 'see'처럼 높은 '이' 모음.","「イー」に近い高い前舌母音。"],
+  ["v_o","vowels","Single Vowel","o","/ɔ/","ob","two (2)","hai (2)","둘 (2)","2（二）","Open 'aw' as in British 'law' or 'thought'.","Như âm 'o' mở trong tiếng Việt.","입을 약간 벌린 '어/오' 중간 소리 (/ɔ/).","口をやや広めに開けた「オー」(/ɔ/)。"],
+  ["v_u","vowels","Single Vowel","u","/u/","kuv","I / me","tôi / mình","나 / 저","私","Rounded 'oo' as in 'boot'.","Như âm 'u' tròn môi tiếng Việt.","입술을 둥글게 모으는 '우' 소리.","唇を丸める「ウ」の音。"],
+  ["v_w","vowels","Single Vowel","w","/ɨ/","nws","he / she","anh ấy / cô ấy","그 / 그녀","彼 / 彼女","Unrounded high central vowel: smile slightly while saying 'uh/oo' (like Vietnamese 'ư').","Giống hệt âm 'ư' trong tiếng Việt!","입술을 평평하게 펴고 발음하는 '으' 소리!","唇を横に引いて発音する中舌の「ウ」（韓国語の「으」やベトナム語の「ư」）。"],
+
+  // 1. VOWELS — 7 Double / Diphthong & Nasalized Vowels
+  ["v_ai","vowels","Diphthong","ai","/ai/","hais","speak / say","nói","말하다","話す","Glides from 'ah' to 'ee', like English 'eye'.","Như vần 'ai' tiếng Việt.","영어 'eye'처럼 '아이'로 이어지는 이중모음.","英語の「eye」のような「アイ」の二重母音。"],
+  ["v_au","vowels","Diphthong","au","/au/","tau","get / past marker","được / đã","얻다 / 과거 표지","得る / 〜した","Glides from 'ah' to 'oo', like English 'now'.","Như vần 'au/ao' tiếng Việt.","영어 'now'처럼 '아우'로 이어지는 이중모음.","英語の「now」のような「アウ」の二重母音。"],
+  ["v_aw","vowels","Diphthong","aw","/aɨ/","kawm","learn / study","học","배우다","学ぶ","Starts at 'a' and glides up into unrounded 'w' (/ɨ/).","Bắt đầu bằng 'a' rồi lướt nhanh lên âm 'ư' (a-ư).","'아'에서 시작해 입술을 펴며 '으'로 이어지는 소리(아으).","「ア」から始まり、唇を丸めない「w (/ɨ/)」へ滑らかに移る音。"],
+  ["v_ee","vowels","Nasal Vowel","ee","/ẽŋ/","nyeem","read","đọc","읽다","読む","Double letter = nasalized! Say 'eng' (as in 'sing/pen') resonated through the nose.","Hai chữ 'ee' = nguyên âm mũi! Phát âm như 'ênh/eng' qua mũi.","모음 두 글자(ee)는 비음! 코로 울리는 '엥' 소리.","2文字重ねは鼻母音！鼻に響かせる「エン (/ẽŋ/)」。"],
+  ["v_ia","vowels","Diphthong","ia","/iə/","nyiam","like / love","thích","좋아하다","好き","Glides from 'ee' to 'uh' (like 'ee-uh' in 'idea').","Giống vần 'ia/iê' trong tiếng Việt (như 'mía').","'이'에서 '어'로 자연스럽게 이어지는 '이어' 소리.","「イ」から「ア/अ」へ滑る「イア」の二重母音。"],
+  ["v_oo","vowels","Nasal Vowel","oo","/ɔ̃ŋ/","Hmoob","Hmong","người H'Mông","몽족 (Hmong)","モン族","Double letter = nasalized! Say 'awng/ong' resonated through the nose.","Hai chữ 'oo' = nguyên âm mũi! Phát âm như 'ong/ông' ngân qua mũi.","모음 두 글자(oo)는 비음! 코로 깊게 울리는 '옹/엉' 소리.","2文字重ねは鼻母音！鼻に響かせる「オン (/ɔ̃ŋ/)」。"],
+  ["v_ua","vowels","Diphthong","ua","/uə/","ua","do / make","làm","하다 / 만들다","する","Glides from 'oo' to 'uh' (like 'oo-uh' in 'tour').","Giống vần 'ua/uô' trong tiếng Việt (như 'mua').","'우'에서 '어'로 이어지는 '우어' 이중모음.","「ウ」から「ア」へ滑る「ウア」の二重母音。"],
+
+  // 2. SINGLE CONSONANTS (17)
+  ["c1_c","c1","Single Consonant","c","/c/","cas","how / matter (ua li cas)","sao / thế nào","어떻게 (ua li cas)","どのように","Unaspirated palatal stop (tongue blade flat against hard palate, like Vietnamese 'ch' with NO puff of air).","Giống âm 'ch' tiếng Việt (không bật hơi).","거센소리가 없는 경구개 파찰음 (된소리 'ㅉ/ㅊ' 중간, 바람 빼지 않음).","息を強く出さない無気硬口蓋音（「チャ」と「ティャ」の中間）。"],
+  ["c1_d","c1","Single Consonant","d","/ʔd/","dej","water","nước","물","水","Crisp voiced 'd' with a slight glottal onset (like Vietnamese 'đ').","Giống âm 'đ' trong tiếng Việt (dej = nước).","성문을 살짝 닫았다가 터뜨리는 선명한 'ㄷ' 소리.","ベトナム語の「đ」のようなはっきりした「ド」音。"],
+  ["c1_f","c1","Single Consonant","f","/f/","faj","be alert (tsom faj)","chú ý / tỉnh thức","깨어 있다 (파수)","見張る","Same as English 'f' (upper teeth on lower lip).","Giống âm 'ph/f' (răng trên chạm môi dưới).","영어 'f'와 같음 (윗니를 아랫입술에 가볍게 댐).","英語の「f」と同じ（上の歯を下唇に当てる）。"],
+  ["c1_h","c1","Single Consonant","h","/h/","hais","speak","nói","말하다","話す","Same as English 'h' in 'hat'.","Giống âm 'h' tiếng Việt.","한국어·영어 'ㅎ(h)'과 동일.","日本語の「ハ行 (h)」と同じ。"],
+  ["c1_k","c1","Single Consonant","k","/k/","kuv","I / me","tôi","나 / 저","私","Unaspirated 'k' as in 'sky' (NO puff of air; 'kh' has the puff).","Giống âm 'c/k' tiếng Việt (không bật hơi).","바람이 나오지 않는 무기음 'ㄱ/ㄲ' (영어 sky의 k).","息を出さない無気音の「k」（英語 sky の k）。"],
+  ["c1_l","c1","Single Consonant","l","/l/","lus","language / word","tiếng / lời nói","언어 / 말","言葉 / 言語","Clear 'l' as in 'light'.","Giống âm 'l' tiếng Việt.","설측음 'ㄹ(l)'.","英語の「l」と同じ。"],
+  ["c1_m","c1","Single Consonant","m","/m/","mus","go","đi","가다","行く","Same as English 'm'.","Giống âm 'm' tiếng Việt.","양순 비음 'ㅁ(m)'.","「マ行 (m)」と同じ。"],
+  ["c1_n","c1","Single Consonant","n","/n/","noj","eat","ăn","먹다","食べる","Same as English 'n'.","Giống âm 'n' tiếng Việt.","치조 비음 'ㄴ(n)'.","「ナ行 (n)」と同じ。"],
+  ["c1_p","c1","Single Consonant","p","/p/","pab","help","giúp đỡ","돕다","助ける","Unaspirated 'p' as in 'spin' (NO puff of air; 'ph' has the puff).","Giống âm 'p' không bật hơi (như trong từ 'pin').","바람을 빼지 않는 무기음 'ㅂ/ㅃ' (영어 spin의 p).","息を出さない無気音の「p」（英語 spin の p）。"],
+  ["c1_q","c1","Single Consonant","q","/q/","qhov","place / thing (qhov twg)","nơi / cái (ở đâu)","곳 / 것 (어디)","場所 / もの","Uvular stop: back of tongue touches the very back of the soft palate/uvula (deeper than 'k', unaspirated).","Âm tắc sâu trong cuống họng (lùi sâu hơn chữ 'k', không bật hơi).","목구멍 깊은 곳(구개수/목젖)에서 나는 깊은 '크/끄' 소리 (무기음).","喉の奥（口蓋垂）で鳴らす深い無気音の「k/q」。"],
+  ["c1_r","c1","Single Consonant","r","/ʈ/","rov","return (rov mus xyuas)","quay lại (thăm lại)","돌아가다 (재방문)","戻る（再訪問）","Retroflex stop: curl the tip of the tongue back against the roof of the mouth and release cleanly like 'tr' (unaspirated).","Uốn cong đầu lưỡi lên vòm miệng (giống âm 'tr' miền Trung/Nam, không bật hơi).","혀끝을 입천장 뒤로 말아 올렸다 떼는 권설 파열음 (무기음 '뜨/트').","舌先を少し後ろに反らせて発音するそり舌音（無気音）。"],
+  ["c1_s","c1","Single Consonant","s","/ʂ/","sib","each other (sib txoos)","nhau (nhóm họp)","서로 (집회)","互いに（集会）","Retroflex 'sh' (curl tongue tip slightly back, like Mandarin 'sh' or Vietnamese southern 's').","Cong lưỡi nhẹ như âm 's' nặng (sh).","혀끝을 살짝 말아 내는 '쉬(sh)' 소리.","舌先を少し反らせる「sh（シャ行）」に近い音。"],
+  ["c1_t","c1","Single Consonant","t","/t/","tus","classifier (animate)","loại từ (người/con)","분류사 (사람/동물)","類別詞（人・動物）","Unaspirated 't' as in 'stop' (NO puff of air; 'th' has the puff).","Giống âm 't' tiếng Việt (không bật hơi).","바람을 빼지 않는 무기음 'ㄷ/ㄸ' (영어 stop의 t).","息を出さない無気音の「t」（英語 stop の t）。"],
+  ["c1_v","c1","Single Consonant","v","/v/","Vajtswv","God","Đức Chúa Trời","하느님","神","Same as English 'v' in 'voice'.","Giống âm 'v' tiếng Việt.","영어 'v' 발음 (윗니가 아랫입술에 닿는 유성음).","英語の「v」と同じ。"],
+  ["c1_x","c1","Single Consonant","x","/s/","xav","want / think","muốn / nghĩ","원하다 / 생각하다","〜したい / 思う","Crisp flat 's' as in English 'see' (tongue tip near front teeth).","Giống âm 'x' nhẹ tiếng Việt (như 'xa').","영어 'see'처럼 혀를 평평하게 두는 선명한 'ㅅ(s)' 소리.","英語の「see」のような歯茎の澄んだ「s」音。"],
+  ["c1_y","c1","Single Consonant","y","/j/","yuav","will (future)","sẽ (tương lai)","~할 것이다 (미래)","〜するつもり","Same as English 'y' in 'yes'.","Giống âm 'd/gi' miền Nam hoặc 'y' trong tiếng Anh 'yes'.","영어 'yes'의 '이(y)' 반모음.","英語の「yes」の「y（ヤ行）」と同じ。"],
+  ["c1_z","c1","Single Consonant","z","/ʐ/","zoo","good / well","tốt / khỏe","좋다 / 잘","良い / 元気","Voiced retroflex 'zh' (like the 's' in 'treasure' or 'measure' with tongue tip slightly curled).","Rung dây thanh như âm 'd/r' có uốn lưỡi nhẹ (như 's' trong từ tiếng Anh 'measure').","성대를 울리며 혀끝을 살짝 마는 유성음 (영어 measure의 s 소리).","舌先を少し反らせた有声音の「j/zh」（英語 measure の s）。"],
+
+  // 3. DOUBLE CONSONANTS (22)
+  ["c2_ch","c2","Aspirated Stop","ch","/cʰ/","cheb","sweep / clean","quét dọn","쓸다 / 청소하다","掃く / 掃除する","Like RPA 'c' + a strong puff of air (like English 'ch' in 'church' said on the flat palate).","Âm 'c' + bật hơi mạnh ra ngoài.","경구개 파찰음 'c'에 강한 바람(거센소리 'ㅊ')을 더한 소리.","RPAの「c」に強い息（有気音）を添えた「ch」音。"],
+  ["c2_dh","c2","Aspirated Stop","dh","/dʱ/","dhau","pass through / beyond","vượt qua / qua","지나가다 / 넘다","通り過ぎる","Say 'd' released immediately with a breathy puff of air.","Âm 'đ' kèm luồng hơi bật mạnh ra.","'d' 소리를 내면서 동시에 강한 숨소리를 내뱉는 소리.","「d」を発音しながら強い息を吐き出す音。"],
+  ["c2_hl","c2","Voiceless Sonorant","hl","/ɬ/","hlub","love / care for","yêu thương","사랑하다","愛する","Voiceless 'l': put tongue in 'l' position, blow air silently around the sides of the tongue first, then voice the vowel.","Đặt lưỡi ở vị trí chữ 'l', thổi hơi qua hai bên lưỡi trước rồi mới phát âm nguyên âm.","혀를 'l' 위치에 두고 양옆으로 바람을 먼저 뺀 뒤 모음을 발음.","舌を「l」の位置に置き、舌の両脇から息を吹いてから母音を出す無声の「l」。"],
+  ["c2_hm","c2","Voiceless Sonorant","hm","/m̥/","Hmoob","Hmong","người H'Mông","몽족 (Hmong)","モン族","Voiceless 'm': close lips for 'm', puff air quietly through your nose first, then voice 'm' into the vowel.","Ngậm môi chữ 'm', thở nhẹ một luồng hơi qua mũi trước rồi mới ngân âm 'm'.","입술을 닫고 코로 바람을 먼저 살짝 뿜은 뒤 'ㅁ(m)'을 발음!","唇を閉じて鼻からフッと息を抜いてから「m」を発音する無声鼻音。"],
+  ["c2_hn","c2","Voiceless Sonorant","hn","/n̥/","hnub","sun / day (niaj hnub)","mặt trời / ngày (hằng ngày)","해 / 날 (매일)","太陽 / 日（毎日）","Voiceless 'n': tongue at 'n' ridge, puff air through the nose first, then voice 'n'.","Đặt lưỡi chữ 'n', thổi nhẹ hơi qua mũi trước rồi mới phát âm 'n'.","혀를 'n' 위치에 두고 코로 바람을 먼저 뺀 뒤 'ㄴ(n)' 발음.","舌を「n」の位置に当て、鼻から息を抜いてから「n」を発音する音。"],
+  ["c2_kh","c2","Aspirated Stop","kh","/kʰ/","Khixatias","Christians","Cơ Đốc nhân","그리스도인","クリスチャン","Aspirated 'k' with a strong puff of air (like English 'k' in 'key').","Âm 'kh' bật hơi mạnh (như 'k' trong tiếng Anh 'key').","강하게 바람이 터져 나오는 거센소리 'ㅋ(kh)'.","強い息を伴う有気音の「kh」（英語 key の k）。"],
+  ["c2_ml","c2","Labial-Lateral","ml","/mˡ/","mloog","listen / obey","lắng nghe / vâng lời","듣다 / 순종하다","聴く / 従う","Close lips for 'm' while tongue is already set for 'l', releasing both together ('m-l' as one syllable).","Ngậm môi 'm' đồng thời đầu lưỡi chạm sẵn vị trí 'l' rồi bật ra cùng lúc (mloog = lắng nghe).","입술은 'm', 혀는 미리 'l'에 두고 한 음절로 빠르게 '믈(ml)'을 발음.","唇の「m」と舌の「l」を同時に構えて一気に放つ「ml」音。"],
+  ["c2_nc","c2","Prenasalized","nc","/ɲc/","nceeg","kingdom (Lub Nceeg Vaj)","Nước Trời (Nceeg Vaj)","왕국 (Nceeg Vaj)","王国 (Nceeg Vaj)","Hum a brief 'n' through the nose right into unaspirated 'c' (n + c).","Ngân nhẹ âm mũi 'n-' rồi nối liền vào âm 'c' không bật hơi.","코로 짧은 'ㄴ'을 울린 뒤 곧바로 무기음 'c'로 연결 (n+c).","鼻音の短い「n」から無気音「c」へ滑らかに繋げる音。"],
+  ["c2_nk","c2","Prenasalized","nk","/ŋk/","nkauj","song / sister (hu nkauj)","bài hát / chị em (hát)","노래 / 자매 (hu nkauj)","歌 / 姉妹 (hu nkauj)","Hum 'ng' (as in 'think') right into unaspirated 'k' (like 'nk' in 'bank' at the start of a word).","Ngân âm mũi 'ng-' rồi bật ngay sang âm 'k' không bật hơi.","코로 'ㅇ(ng)'을 살짝 울린 뒤 곧바로 무기음 'k' 발음.","短い鼻音「ng」から無気音「k」へ繋げる音。"],
+  ["c2_np","c2","Prenasalized","np","/mp/","Npe-ee","Bethel / Branch office","Bê-tên / Chi nhánh","베델 / 지부 사무실","ベテル / 支部","Hum 'm' with closed lips right into unaspirated 'p' (sounds like 'mb/mp' blended together).","Ngậm môi ngân nhẹ 'm-' rồi mở môi thành âm 'p' không bật hơi (nghe gần như 'mb/mp').","입술을 닫고 짧은 'ㅁ(m)'을 울린 뒤 곧바로 무기음 'p'로 연결 (mp/mb).","唇を閉じた短い「m」から無気音「p」へ繋げる音（mp/mb）。"],
+  ["c2_nq","c2","Prenasalized","nq","/ɴq/","nqe","price / ransom (nqe txhiv)","giá / giá chuộc","값 / 대속물 (nqe txhiv)","代価 / 贖い","Deep nasal hum in the back of the throat right into uvular 'q'.","Ngân âm mũi sâu trong cuống họng rồi bật sang âm 'q'.","목구멍 깊은 비음 뒤에 곧바로 구개수음 'q'를 연결.","喉の奥の鼻音から深い無気音「q」へ繋げる音。"],
+  ["c2_nr","c2","Prenasalized","nr","/ɳʈ/","nrhiav","search / seek (tshawb nrhiav)","tìm kiếm / tra xem","찾다 / 조사하다","探す / 調べる","Curl tongue back for 'r', hum through the nose first, then release into retroflex 'r'.","Uốn lưỡi ngân âm mũi 'n-' rồi bật sang âm uốn lưỡi 'r'.","혀를 말아 코로 'ㄴ'을 울린 뒤 곧바로 권설음 'r' 발음.","舌を反らせて鼻音「n」を鳴らし、そのまま「r」へ繋げる音。"],
+  ["c2_nt","c2","Prenasalized","nt","/nt/","ntawv","book / letter / paper","sách / chữ / giấy","책 / 글자 / 종이","本 / 文字 / 紙","Hum 'n' at the tooth ridge right into unaspirated 't' (sounds like a crisp 'nd/nt').","Ngân nhẹ âm mũi 'n-' rồi bật ngay sang âm 't' không bật hơi.","짧은 'ㄴ(n)' 비음 뒤에 곧바로 무기음 't'를 연결 (nt/nd).","短い鼻音「n」から無気音「t」へ一気に繋げる音。"],
+  ["c2_ny","c2","Palatal Nasal","ny","/ɲ/","nyob","live / stay / be well","sống / ở / khỏe","살다 / 지내다","住む / 元気である","Palatal nasal—identical to Vietnamese 'nh' (nhà) or Spanish 'ñ' (canyon).","Giống hệt âm 'nh' trong tiếng Việt (như 'nhà')!","스페인어 'ñ'이나 '냐/뇨'를 시작할 때처럼 혀바닥을 입천장에 대는 비음.","ベトナム語の「nh」やスペイン語の「ñ」（ニャ行の子音）と同じ。"],
+  ["c2_ph","c2","Aspirated Stop","ph","/pʰ/","phau","book classifier (phau ntawv)","loại từ quyển/cuốn sách","책 분류사 (권)","本の類別詞（冊）","IMPORTANT: In Hmong RPA, 'ph' is an aspirated 'p' with a strong puff of air (like English 'p' in 'pie'—NOT 'f'!).","LƯU Ý: Trong chữ H'Mông, 'ph' là âm 'p' bật hơi mạnh (như 'pie' tiếng Anh — KHÔNG đọc là 'f'!).","주의: 몽족어에서 'ph'는 'f'가 아니라 바람이 강하게 나오는 거센소리 'ㅍ(pʰ)'입니다!","注意：モン語の「ph」は「f」ではなく、強い息を伴う有気音の「p（パ行）」です！"],
+  ["c2_pl","c2","Labial-Lateral","pl","/pˡ/","pluas","meal (Tus Tswv Pluas Hmo)","bữa ăn (Lễ Tưởng Niệm)","식사 (주의 만찬)","食事（主の晩餐）","Unaspirated 'pl' as in 'play' (no puff of air).","Ghép âm 'p' và 'l' không bật hơi (như 'pl' trong 'play').","바람을 빼지 않고 빠르게 발음하는 '플/쁠(pl)'.","息を抑えて「p」と「l」を同時に放つ無気の「pl」。"],
+  ["c2_qh","c2","Aspirated Stop","qh","/qʰ/","qhia","teach (qhia Vajlugkub)","dạy (dạy Kinh Thánh)","가르치다 (성경을 가르치다)","教える（聖書を教える）","Deep uvular 'q' released with a strong puff of air.","Âm cuống họng 'q' kèm luồng hơi bật mạnh ra ngoài.","목구멍 깊은 곳에서 나는 'q'에 강한 바람(거센 숨)을 더한 소리.","喉の奥の「q」に強い息（有気音）を添えた音。"],
+  ["c2_rh","c2","Aspirated Stop","rh","/ʈʰ/","rhiab","ticklish / sensitive","nhột / nhạy cảm","간지럽다","くすぐったい","Retroflex 'r' (curled tongue tip) released with a strong puff of air.","Âm uốn lưỡi 'r' kèm luồng hơi bật mạnh.","혀끝을 말아 올린 권설음 'r'에 강한 바람을 더한 소리.","そり舌の「r」に強い息（有気音）を添えた音。"],
+  ["c2_th","c2","Aspirated Stop","th","/tʰ/","thov","please / pray","xin vui lòng / cầu nguyện","부탁하다 / 기도하다","どうか〜 / 祈る","Aspirated 't' with a strong puff of air (like English 't' in 'top' or Vietnamese 'th').","Giống hệt âm 'th' trong tiếng Việt (thov = xin / cầu nguyện).","강하게 바람이 나오는 거센소리 'ㅌ(th)' (영어 top의 t).","強い息を伴う有気音の「th」（英語 top の t）。"],
+  ["c2_ts","c2","Retroflex Affricate","ts","/ʈʂ/","tsis","not / no (negation)","không (phủ định)","안 / ~하지 않다 (부정)","〜ない（否定）","Unaspirated retroflex 'ch/j' (curl tongue tip slightly back, like 'j' in 'jaw' or Mandarin 'zh' with no puff of air).","Âm 'tr/ch' uốn lưỡi nhẹ, không bật hơi (tsis = không).","혀끝을 살짝 말아 바람 없이 내는 '쯔/츠' 파찰음 (tsis = 아니오).","舌先を少し反らせた無気音の「ts/ch」（息を強く出さない）。"],
+  ["c2_tx","c2","Alveolar Affricate","tx","/ts/","txoj","classifier (txoj xov zoo)","loại từ (tin mừng)","분류사 (좋은 소식)","類別詞（良い知らせ）","Unaspirated alveolar 'tz/ts' (tongue tip right behind front teeth, like 'ts' in 'cats', no puff of air).","Đầu lưỡi đặt ngay sau răng cửa, phát âm 'ts/tz' gọn, không bật hơi.","혀끝을 앞니 뒤에 대고 바람 없이 깔끔하게 내는 '쯔(ts)' 소리.","舌先を前歯の裏に当て、息を抑えて出す鋭い「ツ (ts)」音。"],
+  ["c2_xy","c2","Palatal Fricative","xy","/ɕ/","xyuas","visit (rov mus xyuas)","thăm (thăm lại)","방문하다 (재방문)","訪問する（再訪問）","Soft palatal 'sh/sy' (middle of tongue raised toward palate, like Mandarin 'x' in 'xi' or 'sh' in 'she' while smiling).","Âm 'x' mềm kết hợp 'y' (mỉm cười nhẹ khi nói 'sh/xi').","입꼬리를 살짝 당기며 부드럽게 내는 '시/쉬(ɕ)' 소리.","口角を少し引いて舌面を上げて出す柔らかい「sh/sy (/ɕ/)」音。"],
+
+  // 4. TRIPLE CONSONANTS (15)
+  ["c3_dhl","c3","Triple Consonant","dhl","/dˡʱ/","dhau / dhl-","breathy lateral release","âm đ + l bật hơi","유기 설측 파열음","息漏れを伴う dl 音","Say 'd' + 'l' together with a breathy release of air.","Phát âm 'đ' + 'l' cùng lúc kèm luồng hơi bật ra.","'d'와 'l'을 동시에 내면서 강한 숨소리를 덧붙이는 소리.","「d」と「l」を同時に放ちながら息を強く吐く音。"],
+  ["c3_hml","c3","Triple Consonant","hml","/m̥ˡ/","hmloog","listen (variant of mloog)","lắng nghe (biến thể của mloog)","듣다 (mloog의 변이형)","聴く（mloogの異形）","Voiceless 'hm' (puff air through nose with closed lips) releasing directly into 'l'.","Thổi nhẹ hơi qua mũi với môi khép ('hm') rồi mở ra chữ 'l'.","코로 바람을 먼저 빼는 'hm'에서 곧바로 'l'로 이어지는 소리.","鼻から息を抜く「hm」からそのまま舌の「l」へ繋げる音。"],
+  ["c3_hny","c3","Triple Consonant","hny","/ɲ̥/","hnyav","heavy / serious","nặng / nghiêm trọng","무겁다","重い","Voiceless 'ny': put tongue flat on the palate for 'ny', blow air quietly through your nose first, then voice 'ny'.","Đặt lưỡi ở vị trí 'nh (ny)', thổi nhẹ hơi qua mũi trước rồi mới ngân âm 'nh'.","혀를 'ny(냐)' 위치에 두고 코로 바람을 먼저 뺀 뒤 'ny'를 발음.","舌を「ny（ニャ）」の位置に置き、鼻から息を抜いてから発音する無声硬口蓋鼻音。"],
+  ["c3_nch","c3","Triple Consonant","nch","/ɲcʰ/","nchuav","pour out / spill","đổ ra / tràn ra","쏟다 / 붓다","注ぐ / こぼす","Hum 'n' through the nose + palatal 'c' + strong puff of air ('h').","Âm mũi 'n-' + 'c' + bật hơi mạnh ('-h').","비음 'n' + 경구개음 'c' + 강한 바람 'h'를 한 번에 연결.","鼻音「n」＋硬口蓋音「c」＋強い息「h」を一気に発音。"],
+  ["c3_nkh","c3","Triple Consonant","nkh","/ŋkʰ/","nkhaus","crooked / curved","cong / quanh co","구부러진 / 곡선의","曲がった","Hum 'ng' through the nose + 'k' + strong puff of air ('h').","Âm mũi 'ng-' + 'k' + bật hơi mạnh ('-h').","비음 'ng' + 'k' + 거센 바람 'h'를 한 음절로 발음.","鼻音「ng」＋「k」＋強い息「h」を1音節で発音。"],
+  ["c3_nph","c3","Triple Consonant","nph","/mpʰ/","npau / nphau","boil / overflow","sôi / trào","끓다 / 넘치다","沸く / あふれる","Hum 'm' with closed lips + 'p' + strong puff of air ('h').","Ngậm môi ngân nhẹ 'm-' rồi bật mạnh âm 'ph' (p bật hơi).","입술 비음 'm' 뒤에 거센소리 'ph(ㅍ)'를 곧바로 터뜨리는 소리.","唇を閉じた「m」から有気音「ph（強いp）」を一気に放つ音。"],
+  ["c3_npl","c3","Triple Consonant","npl","/mpˡ/","nplaum","sticky / glutinous","dính / dẻo (nếp)","끈적한 / 찰진","粘り気のある / もち米","Hum 'm' with closed lips + unaspirated 'pl' (like saying 'm-pl' in one smooth beat, no puff of air).","Ngân nhẹ 'm-' ở môi rồi mở ra cụm 'pl' không bật hơi.","입술 비음 'm' 뒤에 무기음 'pl'을 바람 없이 연결.","短い「m」から息を抑えた「pl」へ滑らかに繋げる音。"],
+  ["c3_nqh","c3","Triple Consonant","nqh","/ɴqʰ/","nqhis","thirsty / crave (nqhis dej)","khát (khát nước)","목마르다 / 갈망하다","喉が渇く","Deep nasal hum + uvular 'q' + strong puff of air ('h').","Âm mũi sâu + âm cuống họng 'q' + bật hơi mạnh ('-h').","깊은 비음 + 구개수음 'q' + 거센 바람 'h'의 결합.","喉の奥の鼻音＋深い「q」＋強い息「h」。"],
+  ["c3_nrh","c3","Triple Consonant","nrh","/ɳʈʰ/","nrhiav","search / examine daily","tìm kiếm / tra xem hằng ngày","찾다 / 매일 검토하다","探す / 毎日調べる","Hum 'n' with curled tongue + retroflex 'r' + strong puff of air ('h').","Uốn lưỡi ngân 'n-' + âm 'r' + bật hơi mạnh ('-h') như trong từ 'tshawb nrhiav'.","혀를 말아 비음 'n'을 울린 뒤 권설음 'r'을 거센 숨('h')과 함께 발음.","舌を反らせた鼻音「n」＋そり舌音「r」＋強い息「h」（例: tshawb nrhiav）。"],
+  ["c3_nth","c3","Triple Consonant","nth","/ntʰ/","nthuav","open up / unfold","mở ra / trải ra","펼치다 / 열다","広げる / 開く","Hum 'n' at tooth ridge + 't' + strong puff of air ('h').","Ngân nhẹ 'n-' rồi bật mạnh âm 'th' (t bật hơi).","비음 'n' 뒤에 거센소리 'th(ㅌ)'를 곧바로 연결.","短い鼻音「n」から有気音「th（強いt）」へ一気に繋げる音。"],
+  ["c3_nts","c3","Triple Consonant","nts","/ɳʈʂ/","Ntsuj Plig","spirit (Ntsuj Plig Dawb Huv)","thần khí (Thần khí thánh)","영 / 성령 (Ntsuj Plig)","霊 / 聖霊 (Ntsuj Plig)","Hum 'n' + retroflex 'ts' (unaspirated, tongue curled slightly back—used in 'Ntsuj Plig Dawb Huv' Holy Spirit).","Ngân nhẹ 'n-' rồi nối vào âm 'ts' uốn lưỡi không bật hơi (như trong Ntsuj Plig = Thần khí).","비음 'n' 뒤에 권설 파찰음 'ts'를 바람 없이 연결 (Ntsuj Plig = 성령).","鼻音「n」からそり舌の無気音「ts」へ繋げる音（Ntsuj Plig = 聖霊）。"],
+  ["c3_ntx","c3","Triple Consonant","ntx","/nts/","ntxov","early","sớm","일찍 / 이른","早い（朝早く）","Hum 'n' + alveolar 'tx' right behind the front teeth (unaspirated 'n-tz').","Ngân nhẹ 'n-' rồi nối vào âm 'tx' ở ngay sau răng cửa (không bật hơi).","비음 'n' 뒤에 치조 파찰음 'tx(쯔)'를 바람 없이 연결.","鼻音「n」から前歯の裏の無気音「tx（ツ）」へ繋げる音。"],
+  ["c3_plh","c3","Triple Consonant","plh","/pˡʰ/","plho","jump / leap","nhảy vọt","뛰어오르다","飛び跳ねる","Say 'pl' released with a strong puff of air ('p' + 'l' + 'h').","Phát âm cụm 'pl' kèm luồng hơi bật mạnh ra ngoài ('-h').","'pl' 소리에 강한 바람('h')을 더해 거세게 발음.","「pl」に強い息（有気音「h」）を添えて放つ音。"],
+  ["c3_tsh","c3","Triple Consonant","tsh","/ʈʂʰ/","tshaj tawm","preach / announce","rao giảng / công bố","전파하다 / 봉사하다","伝道する / 宣べ伝える","Retroflex 'ts' + strong puff of air (like English 'ch' in 'church' with tongue tip curled slightly back).","Âm 'ts' uốn lưỡi kèm luồng hơi bật mạnh (như trong 'tshaj tawm' = rao giảng).","권설 파찰음 'ts'에 강한 바람을 더한 거센 '취/치' 소리 (tshaj tawm = 전파하다).","そり舌の「ts」に強い息を添えた有気音（tshaj tawm = 伝道する）。"],
+  ["c3_txh","c3","Triple Consonant","txh","/tsʰ/","txhua","every / all (ib txhis)","mọi / tất cả (đời đời)","모든 / 영원히 (ib txhis)","すべての / 永遠に (ib txhis)","Alveolar 'tx' + strong puff of air (tongue tip behind front teeth, say 'ts' with a sharp burst of air).","Đặt đầu lưỡi sau răng cửa ('tx') và bật hơi mạnh ra ngoài ('-h').","앞니 뒤에서 나는 'tx(츠)' 소리에 강한 바람을 더한 거센소리.","前歯の裏の「tx（ツ）」に強い息を添えた有気音。"],
+
+  // 5. QUADRUPLE CONSONANTS (3)
+  ["c4_nplh","c4","Quadruple Consonant","nplh","/mpˡʰ/","nplhaib","ring (finger ring)","chiếc nhẫn","반지","指輪","All 4 layers in one smooth syllable: [n = hum 'm' with closed lips] + [p] + [l = tongue flick] + [h = strong puff of air]!","Kết hợp cả 4 bước trong 1 âm tiết: [ngậm môi ngân nhẹ m-] + [p] + [lưỡi l] + [bật hơi mạnh -h] (nplhaib = chiếc nhẫn).","4단계가 한 음절로: [입술 비음 m] + [p] + [설측음 l] + [강한 숨 h]! (nplhaib = 반지).","4要素を1音節で：[鼻音 m] ＋ [p] ＋ [舌の l] ＋ [強い息 h]！（nplhaib = 指輪）。"],
+  ["c4_ntsh","c4","Quadruple Consonant","ntsh","/ɳʈʂʰ/","ntshai","afraid / fear","sợ / e sợ","두려워하다","恐れる / 怖がる","4 letters, 3 smooth parts: [n = nasal hum] + [ts = curled-tongue retroflex affricate] + [h = strong puff of air]!","Gồm 3 bước liền nhau: [ngân nhẹ mũi n-] + [âm uốn lưỡi ts] + [bật hơi mạnh -h] (ntshai = sợ).","[비음 n] + [혀를 만 권설 파찰음 ts] + [강한 바람 h]를 한 번에 발음! (ntshai = 두려워하다).","[鼻音 n] ＋ [そり舌の ts] ＋ [強い息 h] を一気に発音！（ntshai = 恐れる）。"],
+  ["c4_ntxh","c4","Quadruple Consonant","ntxh","/ntsʰ/","ntxhais","daughter / girl","con gái / thiếu nữ","딸 / 소녀","娘 / 少女","4 letters, 3 smooth parts: [n = nasal hum] + [tx = front-teeth 'ts' affricate] + [h = strong puff of air]!","Gồm 3 bước liền nhau: [ngân nhẹ mũi n-] + [âm đầu lưỡi sau răng cửa tx] + [bật hơi mạnh -h] (ntxhais = con gái).","[비음 n] + [앞니 뒤 치조 파찰음 tx] + [강한 바람 h]를 한 번에 발음! (ntxhais = 딸/소녀).","[鼻音 n] ＋ [前歯の裏の tx] ＋ [強い息 h] を一気に発音！（ntxhais = 娘・少女）。"]
+];
+
+const PHONETICS_ITEMS = RAW_PHONETICS.map(r => ({
+  id: r[0], cat: r[1], subcat: r[2], glyph: r[3], ipa: r[4], exWord: r[5],
+  en: r[6], vi: r[7], ko: r[8], ja: r[9],
+  tipEn: r[10], tipVi: r[11], tipKo: r[12], tipJa: r[13]
+}));
+// Add c3_phl if not present so all 16 triple consonants (71 total items) are included
+if (!PHONETICS_ITEMS.some(x => x.id === 'c3_phl')) {
+  const idx = PHONETICS_ITEMS.findIndex(x => x.id === 'c3_plh');
+  const phlItem = {
+    id: "c3_phl", cat: "c3", subcat: "Triple Consonant", glyph: "phl", ipa: "/pʰˡ/", exWord: "phlu",
+    en: "cheek / face", vi: "má / khuôn mặt", ko: "뺨 / 볼", ja: "頬（ほお）",
+    tipEn: "Aspirated 'ph' + lateral 'l' released together with a strong puff of air (phlu = cheek).",
+    tipVi: "Âm 'ph' bật hơi kết hợp 'l' thoát hơi mạnh (phlu = má).",
+    tipKo: "거센소리 'ph(ㅍ)'와 설측음 'l(ㄹ)'을 강한 바람과 함께 동시에 발음 (phlu = 뺨).",
+    tipJa: "有気音「ph」と舌の「l」を強い息とともに同時に放つ音（phlu = 頬）。"
+  };
+  if (idx >= 0) PHONETICS_ITEMS.splice(idx, 0, phlItem);
+  else PHONETICS_ITEMS.push(phlItem);
+}
+
+const UI_TEXT = {
+  en: {
+    backHub: "← Back to Course Practice Hub",
+    toneTrainer: "🎵 7 Tones Trainer",
+    ulg: "🧩 Sentence Builder",
+    flashcards: "🃏 Visual Flashcards",
+    title: "Hmong Vowels & Consonants Soundboard",
+    subtitle: "Listen to Male & Female instructor pronunciations for all 71 White Hmong (RPA) vowels and single, double, triple & quadruple consonants.",
+    studioBtn: "🎙️ Instructor Studio",
+    studioClose: "✖ Close Studio",
+    formulaTitle: "💡 How Multi-Letter Hmong Consonants Work (Up to 4 Letters):",
+    formulaDesc: "White Hmong builds complex consonants in predictable layers from left to right—you never pronounce the letters separately:",
+    fPart1: "1. Pre-nasal (n-) = hum through nose first",
+    fPart2: "2. Core Stop / Affricate (p, t, c, k, q, ts, tx)",
+    fPart3: "3. Lateral release (-l-) = tongue flick",
+    fPart4: "4. Aspiration (-h) = strong puff of air",
+    fPartEx: "Example: n + p + l + h = nplh (nplhaib \"ring\")",
+    tabAll: "All Sounds (71)",
+    tabVowels: "1. Vowels (13)",
+    tabC1: "2. Single Consonants (17)",
+    tabC2: "3. Double Consonants (22)",
+    tabC3: "4. Triple Consonants (16)",
+    tabC4: "5. Quadruple Consonants (3)",
+    searchPh: "Search letter, example word, or meaning (e.g., nplh, Hmoob, water, ring)…",
+    playMale: "👨 Male",
+    playFem: "👩 Female",
+    playBoth: "▶▶ Play Both (Male → Female)",
+    exLabel: "Example:",
+    myRec: "🎤 Practice My Voice",
+    myStop: "⏹ Stop",
+    myPlay: "▶ Hear Me vs. Instructor",
+    unrecOnly: "Show unrecorded only"
+  },
+  vi: {
+    backHub: "← Quay lại Trung tâm Luyện tập",
+    toneTrainer: "🎵 Luyện 7 Thanh điệu",
+    ulg: "🧩 Ghép câu (ULG)",
+    flashcards: "🃏 Thẻ từ Hình ảnh",
+    title: "Bảng Âm thanh Nguyên âm & Phụ âm H'Mông",
+    subtitle: "Nghe giọng đọc mẫu Nam & Nữ cho toàn bộ 71 nguyên âm và phụ âm đơn, đôi, ba & bốn chữ cái trong tiếng H'Mông Trắng (RPA).",
+    studioBtn: "🎙️ Phòng thu Giáo viên",
+    studioClose: "✖ Đóng Phòng thu",
+    formulaTitle: "💡 Cách đọc Phụ âm Ghép tiếng H'Mông (tới 4 chữ cái):",
+    formulaDesc: "Tiếng H'Mông ghép các phụ âm theo từng lớp có quy tắc từ trái sang phải — đọc liền trong 1 âm tiết:",
+    fPart1: "1. Âm mũi đầu (n-) = ngân nhẹ qua mũi trước",
+    fPart2: "2. Âm chính (p, t, c, k, q, ts, tx)",
+    fPart3: "3. Âm bật lưỡi (-l-)",
+    fPart4: "4. Bật hơi mạnh (-h) ở cuối",
+    fPartEx: "Ví dụ: n + p + l + h = nplh (nplhaib \"chiếc nhẫn\")",
+    tabAll: "Tất cả (71)",
+    tabVowels: "1. Nguyên âm (13)",
+    tabC1: "2. Phụ âm đơn (17)",
+    tabC2: "3. Phụ âm đôi (22)",
+    tabC3: "4. Phụ âm 3 chữ (16)",
+    tabC4: "5. Phụ âm 4 chữ (3)",
+    searchPh: "Tìm chữ cái, từ ví dụ hoặc nghĩa (VD: nplh, Hmoob, nước, nhẫn)…",
+    playMale: "👨 Giọng Nam",
+    playFem: "👩 Giọng Nữ",
+    playBoth: "▶▶ Nghe cả hai (Nam → Nữ)",
+    exLabel: "Ví dụ:",
+    myRec: "🎤 Thu thử giọng bạn",
+    myStop: "⏹ Dừng",
+    myPlay: "▶ So sánh giọng tôi & GV",
+    unrecOnly: "Chỉ hiện âm chưa thu"
+  },
+  ko: {
+    backHub: "← 코스 연습 허브로 돌아가기",
+    toneTrainer: "🎵 7성조 트레이너",
+    ulg: "🧩 문장 생성기",
+    flashcards: "🃏 비주얼 플래시카드",
+    title: "몽족어 모음 & 자음 사운드보드 (남성·여성 음성)",
+    subtitle: "백몽어(RPA) 71개 모음 및 단일·이중·삼중·사중 자음의 남성(JC) 및 여성(Pang) 강사 발음을 듣고 비교해 보세요.",
+    studioBtn: "🎙️ 강사 녹음 스튜디오",
+    studioClose: "✖ 스튜디오 닫기",
+    formulaTitle: "💡 몽족어 복합 자음(최대 4글자) 발음 공식:",
+    formulaDesc: "백몽어의 복합 자음은 왼쪽에서 오른쪽으로 규칙적인 층을 이루며 한 음절로 발음됩니다:",
+    fPart1: "1. 선비음 (n-) = 코로 먼저 짧게 울림",
+    fPart2: "2. 핵심 파열/파찰음 (p, t, c, k, q, ts, tx)",
+    fPart3: "3. 설측 개방 (-l-) = 혀끝 튕김",
+    fPart4: "4. 유기음 (-h) = 강한 바람 내뱉기",
+    fPartEx: "예: n + p + l + h = nplh (nplhaib \"반지\")",
+    tabAll: "전체 소리 (71)",
+    tabVowels: "1. 모음 (13)",
+    tabC1: "2. 단일 자음 (17)",
+    tabC2: "3. 이중 자음 (22)",
+    tabC3: "4. 삼중 자음 (16)",
+    tabC4: "5. 사중 자음 (3)",
+    searchPh: "글자, 예시 단어 또는 뜻 검색 (예: nplh, Hmoob, 물, 반지)…",
+    playMale: "👨 남성 음성",
+    playFem: "👩 여성 음성",
+    playBoth: "▶▶ 연속 재생 (남성 → 여성)",
+    exLabel: "예시:",
+    myRec: "🎤 내 발음 녹음",
+    myStop: "⏹ 정지",
+    myPlay: "▶ 내 발음 vs 강사 비교",
+    unrecOnly: "미녹음 항목만 보기"
+  },
+  ja: {
+    backHub: "← 練習ハブに戻る",
+    toneTrainer: "🎵 7声調トレーナー",
+    ulg: "🧩 文ビルダー (ULG)",
+    flashcards: "🃏 絵カード",
+    title: "モン語 母音＆子音サウンドボード（男性・女性音声）",
+    subtitle: "白モン語（RPA）全71種類の母音および単子音・二重・三重・四重子音の男性（JC）・女性（Pang）講師の発音を聞き比べられます。",
+    studioBtn: "🎙️ 講師録音スタジオ",
+    studioClose: "✖ スタジオを閉じる",
+    formulaTitle: "💡 モン語の複合子音（最大4文字）の仕組み：",
+    formulaDesc: "白モン語の複合子音は左から右へ規則적인パーツが重なり、1つの音節として一気に発音します：",
+    fPart1: "1. 前鼻音 (n-) = まず鼻に短く響かせる",
+    fPart2: "2. 中心の音 (p, t, c, k, q, ts, tx)",
+    fPart3: "3. 側面開放 (-l-) = 舌を弾く",
+    fPart4: "4. 有気音 (-h) = 強い息を出す",
+    fPartEx: "例: n + p + l + h = nplh (nplhaib「指輪」)",
+    tabAll: "すべて (71)",
+    tabVowels: "1. 母音 (13)",
+    tabC1: "2. 単子音 (17)",
+    tabC2: "3. 二重子音 (22)",
+    tabC3: "4. 三重子音 (16)",
+    tabC4: "5. 四重子音 (3)",
+    searchPh: "文字・例語・意味で検索（例: nplh, Hmoob, 水, 指輪）…",
+    playMale: "👨 男性音声",
+    playFem: "👩 女性音声",
+    playBoth: "▶▶ 連続再生（男性 → 女性）",
+    exLabel: "例語:",
+    myRec: "🎤 自分の声を録音",
+    myStop: "⏹ 停止",
+    myPlay: "▶ 講師と聴き比べ",
+    unrecOnly: "未録音のみ表示"
+  }
+};
+
+let currentLang = 'en';
+let currentCat = 'all';
+let studioOpen = false;
+let studioVoice = 'male'; // 'male' | 'female'
+let speedIdx = 0;
+let uploadTargetId = null;
+
+// Audio storage: clips[id] = { male: dataUrl, female: dataUrl }
+const clips = {};
+const studentClips = {}; // temporary in-memory student recordings per id
+
+// Active recorder state
+let activeRec = null; // { mediaRecorder, stream, chunks, mode: 'studio'|'student', id, voice }
+
+// IndexedDB helper for persistent local cache
+const DB_NAME = 'HmongPhoneticsAudioDB';
+const STORE_NAME = 'clips';
+function openAudioDB() {
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open(DB_NAME, 1);
+    req.onupgradeneeded = (e) => {
+      const db = e.target.result;
+      if (!db.objectStoreNames.contains(STORE_NAME)) db.createObjectStore(STORE_NAME);
+    };
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error);
+  });
+}
+async function saveLocalClipsCache() {
+  try {
+    const db = await openAudioDB();
+    const tx = db.transaction(STORE_NAME, 'readwrite');
+    tx.objectStore(STORE_NAME).put(clips, 'all_clips');
+  } catch (e) { console.warn('IDB save warning', e); }
+}
+async function loadLocalClipsCache() {
+  try {
+    const db = await openAudioDB();
+    return await new Promise((resolve) => {
+      const tx = db.transaction(STORE_NAME, 'readonly');
+      const req = tx.objectStore(STORE_NAME).get('all_clips');
+      req.onsuccess = () => resolve(req.result || {});
+      req.onerror = () => resolve({});
+    });
+  } catch { return {}; }
+}
+
+// Web Audio fallback tone generator when no recording exists yet
+let audioCtx = null;
+function playFallbackSynth(item, voice) {
+  try {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    const baseHz = voice === 'female' ? 235 : 135;
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(baseHz, audioCtx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(baseHz * 1.12, audioCtx.currentTime + 0.32);
+    gain.gain.setValueAtTime(0.18, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.38);
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.38);
+  } catch {}
+}
+
+function playDataUrl(dataUrl) {
+  return new Promise((resolve) => {
+    if (!dataUrl) { resolve(false); return; }
+    const audio = new Audio(dataUrl);
+    audio.onended = () => resolve(true);
+    audio.onerror = () => resolve(false);
+    audio.play().catch(() => resolve(false));
+  });
+}
+
+async function playVoiceClip(id, voice) {
+  const item = PHONETICS_ITEMS.find(x => x.id === id);
+  const entry = clips[id] || {};
+  const dataUrl = entry[voice] || '';
+  if (dataUrl) {
+    await playDataUrl(dataUrl);
+  } else {
+    playFallbackSynth(item, voice);
+  }
+}
+
+async function playBothVoices(id) {
+  await playVoiceClip(id, 'male');
+  await new Promise(r => setTimeout(r, 260));
+  await playVoiceClip(id, 'female');
+}
+
+function updateClipCounts() {
+  let mCount = 0, fCount = 0;
+  for (const it of PHONETICS_ITEMS) {
+    const c = clips[it.id];
+    if (c && c.male) mCount++;
+    if (c && c.female) fCount++;
+  }
+  const badge = document.getElementById('clipCountBadge');
+  if (badge) badge.textContent = `🎙️ Recorded: ${mCount}/${PHONETICS_ITEMS.length} 👨 | ${fCount}/${PHONETICS_ITEMS.length} 👩`;
+}
+
+function getFilteredItems() {
+  const q = (document.getElementById('searchInput').value || '').trim().toLowerCase();
+  const unrecOnly = studioOpen && document.getElementById('filterUnrecordedChk').checked;
+  return PHONETICS_ITEMS.filter(it => {
+    if (currentCat !== 'all' && it.cat !== currentCat) return false;
+    if (unrecOnly) {
+      const c = clips[it.id] || {};
+      if (c[studioVoice]) return false;
+    }
+    if (!q) return true;
+    return (
+      it.glyph.toLowerCase().includes(q) ||
+      it.exWord.toLowerCase().includes(q) ||
+      it.en.toLowerCase().includes(q) ||
+      it.vi.toLowerCase().includes(q) ||
+      it.ko.toLowerCase().includes(q) ||
+      it.ja.toLowerCase().includes(q) ||
+      it.subcat.toLowerCase().includes(q)
+    );
+  });
+}
+
+function updateSpeedQueueBar() {
+  if (!studioOpen) return;
+  const list = getFilteredItems();
+  if (!list.length) {
+    document.getElementById('speedCurrentLabel').textContent = 'All items in this view are recorded!';
+    return;
+  }
+  if (speedIdx >= list.length) speedIdx = 0;
+  if (speedIdx < 0) speedIdx = list.length - 1;
+  const cur = list[speedIdx];
+  const hasClip = !!(clips[cur.id] && clips[cur.id][studioVoice]);
+  const vTag = studioVoice === 'male' ? '👨 Male' : '👩 Female';
+  document.getElementById('speedCurrentLabel').innerHTML =
+    `[${speedIdx + 1}/${list.length}] <code>${cur.glyph}</code> — "${cur.exWord}" (${cur[currentLang] || cur.en}) · ${vTag} ${hasClip ? '✅' : '⚪'}`;
+  const recBtn = document.getElementById('speedRecBtn');
+  if (activeRec && activeRec.mode === 'studio' && activeRec.id === cur.id) {
+    recBtn.textContent = '⏹ Stop Recording';
+    recBtn.className = 'rec-active';
+  } else {
+    recBtn.textContent = `● Record "${cur.glyph}" (${vTag})`;
+    recBtn.className = '';
+  }
+}
+
+function renderGrid() {
+  const t = UI_TEXT[currentLang] || UI_TEXT.en;
+  const list = getFilteredItems();
+  const grid = document.getElementById('soundGrid');
+  grid.innerHTML = '';
+
+  for (const it of list) {
+    const c = clips[it.id] || {};
+    const hasMale = !!c.male;
+    const hasFem = !!c.female;
+    const meaning = it[currentLang] || it.en;
+    const tip = currentLang === 'vi' ? it.tipVi : currentLang === 'ko' ? it.tipKo : currentLang === 'ja' ? it.tipJa : it.tipEn;
+    const isRecStudio = activeRec && activeRec.mode === 'studio' && activeRec.id === it.id;
+    const isRecStudent = activeRec && activeRec.mode === 'student' && activeRec.id === it.id;
+
+    const card = document.createElement('div');
+    card.className = 'sound-card';
+    card.innerHTML = `
+      <div>
+        <div class="sc-top">
+          <div class="sc-glyph">${it.glyph}</div>
+          <div class="sc-badges">
+            <span class="sc-ipa">${it.ipa}</span>
+            <span class="sc-group">${it.subcat}</span>
+          </div>
+        </div>
+        <div class="sc-example">
+          ${t.exLabel} <code>${it.exWord}</code> — <strong>${meaning}</strong>
+        </div>
+        <div class="sc-tip">${tip}</div>
+      </div>
+      <div>
+        <div class="voice-row">
+          <button type="button" class="play-btn male-btn ${hasMale ? 'has-clip' : ''}" data-play-id="${it.id}" data-voice="male">
+            ${t.playMale} ${hasMale ? '🔊' : '(synth)'}
+          </button>
+          <button type="button" class="play-btn fem-btn ${hasFem ? 'has-clip' : ''}" data-play-id="${it.id}" data-voice="female">
+            ${t.playFem} ${hasFem ? '🔊' : '(synth)'}
+          </button>
+          <button type="button" class="play-btn both-btn" data-both-id="${it.id}">
+            ${t.playBoth}
+          </button>
+        </div>
+        <div class="student-rec-row">
+          <button type="button" class="secondary ${isRecStudent ? 'rec-active' : ''}" data-stu-rec="${it.id}">
+            ${isRecStudent ? t.myStop : t.myRec}
+          </button>
+          ${studentClips[it.id] ? `<button type="button" class="secondary" data-stu-cmp="${it.id}">${t.myPlay}</button>` : ''}
+        </div>
+        ${studioOpen ? `
+        <div class="studio-card-controls">
+          <span style="font-size:0.76rem;font-weight:700;color:#92400e;">${studioVoice === 'male' ? '👨 Male:' : '👩 Female:'}</span>
+          <button type="button" class="${isRecStudio ? 'rec-active' : ''}" style="background:#dc2626;" data-studio-rec="${it.id}">
+            ${isRecStudio ? '⏹ Stop' : '● Record'}
+          </button>
+          <button type="button" class="secondary" data-studio-up="${it.id}">⬆ Upload</button>
+          ${c[studioVoice] ? `<button type="button" class="secondary" data-studio-clr="${it.id}">🗑 Clear</button>` : ''}
+        </div>` : ''}
+      </div>
+    `;
+    grid.appendChild(card);
+  }
+  updateClipCounts();
+  updateSpeedQueueBar();
+}
+
+async function syncSingleClipToCloud(id, voice, audioDataUrl) {
+  const statusEl = document.getElementById('cloudSyncStatus');
+  const item = PHONETICS_ITEMS.find(x => x.id === id);
+  try {
+    if (statusEl) statusEl.textContent = `☁️ Saving ${item ? item.glyph : id} (${voice})…`;
+    const res = await fetch('/api/phonetics-audio', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id, voice, label: item ? item.glyph : id, audioDataUrl: audioDataUrl || '' })
+    });
+    const data = await res.json();
+    if (data && data.ok) {
+      if (statusEl) statusEl.textContent = `☁️ Saved "${item ? item.glyph : id}" (${voice}) to cloud ✅`;
+    } else {
+      if (statusEl) statusEl.textContent = `⚠️ Saved locally on device (${(data && data.error) || 'offline'})`;
+    }
+  } catch {
+    if (statusEl) statusEl.textContent = '⚠️ Saved locally on device (offline)';
+  }
+}
+
+async function fetchClipsFromCloud() {
+  const statusEl = document.getElementById('cloudSyncStatus');
+  try {
+    if (statusEl) statusEl.textContent = '☁️ Loading instructor clips from cloud…';
+    const res = await fetch('/api/phonetics-audio', { cache: 'no-store' });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const data = await res.json();
+    if (data && data.ok && data.clips) {
+      for (const [id, val] of Object.entries(data.clips)) {
+        if (!clips[id]) clips[id] = { male: '', female: '' };
+        if (val.male) clips[id].male = val.male;
+        if (val.female) clips[id].female = val.female;
+      }
+      await saveLocalClipsCache();
+      renderGrid();
+      if (statusEl) statusEl.textContent = '☁️ Cloud audio synced ✅';
+    }
+  } catch {
+    if (statusEl) statusEl.textContent = '☁️ Using local cached audio';
+  }
+}
+
+function blobToDataUrl(blob) {
+  return new Promise((resolve, reject) => {
+    const r = new FileReader();
+    r.onloadend = () => resolve(r.result);
+    r.onerror = reject;
+    r.readAsDataURL(blob);
+  });
+}
+
+async function toggleRecording(mode, id) {
+  if (activeRec) {
+    const prev = activeRec;
+    activeRec = null;
+    try { prev.mediaRecorder.stop(); } catch {}
+    return;
+  }
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    let options = { audioBitsPerSecond: 24000 };
+    if (MediaRecorder.isTypeSupported('audio/webm;codecs=opus')) {
+      options.mimeType = 'audio/webm;codecs=opus';
+    } else if (MediaRecorder.isTypeSupported('audio/mp4')) {
+      options.mimeType = 'audio/mp4';
+    }
+    const mr = new MediaRecorder(stream, options);
+    const chunks = [];
+    const targetVoice = studioVoice;
+    activeRec = { mediaRecorder: mr, stream, chunks, mode, id, voice: targetVoice };
+
+    mr.ondataavailable = (e) => { if (e.data && e.data.size > 0) chunks.push(e.data); };
+    mr.onstop = async () => {
+      stream.getTracks().forEach(t => t.stop());
+      const blob = new Blob(chunks, { type: mr.mimeType || 'audio/webm' });
+      const dataUrl = await blobToDataUrl(blob);
+      if (mode === 'student') {
+        studentClips[id] = dataUrl;
+        renderGrid();
+        await playDataUrl(dataUrl);
+      } else {
+        if (!clips[id]) clips[id] = { male: '', female: '' };
+        clips[id][targetVoice] = dataUrl;
+        await saveLocalClipsCache();
+        renderGrid();
+        await syncSingleClipToCloud(id, targetVoice, dataUrl);
+      }
+    };
+    mr.start();
+    renderGrid();
+  } catch (err) {
+    alert('Microphone permission is needed to record audio: ' + err.message);
+  }
+}
+
+function setStudioVoice(v) {
+  studioVoice = v === 'female' ? 'female' : 'male';
+  document.getElementById('studioVoiceMaleBtn').classList.toggle('active', studioVoice === 'male');
+  document.getElementById('studioVoiceFemBtn').classList.toggle('active', studioVoice === 'female');
+  renderGrid();
+}
+
+function setUILang(lang) {
+  if (!UI_TEXT[lang]) lang = 'en';
+  currentLang = lang;
+  try { localStorage.setItem('hmong_ui_lang', lang); } catch {}
+  document.getElementById('uiBtnEn').classList.toggle('active', lang === 'en');
+  document.getElementById('uiBtnVi').classList.toggle('active', lang === 'vi');
+  document.getElementById('uiBtnKo').classList.toggle('active', lang === 'ko');
+  document.getElementById('uiBtnJa').classList.toggle('active', lang === 'ja');
+
+  const t = UI_TEXT[lang];
+  document.getElementById('backHubLink').textContent = t.backHub;
+  document.getElementById('toneTrainerLink').textContent = t.toneTrainer;
+  document.getElementById('ulgLink').textContent = t.ulg;
+  document.getElementById('flashcardsLink').textContent = t.flashcards;
+  document.getElementById('pageTitle').textContent = t.title;
+  document.getElementById('pageSubtitle').textContent = t.subtitle;
+  document.getElementById('toggleStudioBtn').textContent = studioOpen ? t.studioClose : t.studioBtn;
+  document.getElementById('formulaTitle').textContent = t.formulaTitle;
+  document.getElementById('formulaDesc').textContent = t.formulaDesc;
+  document.getElementById('fPart1').textContent = t.fPart1;
+  document.getElementById('fPart2').textContent = t.fPart2;
+  document.getElementById('fPart3').textContent = t.fPart3;
+  document.getElementById('fPart4').textContent = t.fPart4;
+  document.getElementById('fPartEx').textContent = t.fPartEx;
+  document.getElementById('tabAll').textContent = t.tabAll;
+  document.getElementById('tabVowels').textContent = t.tabVowels;
+  document.getElementById('tabC1').textContent = t.tabC1;
+  document.getElementById('tabC2').textContent = t.tabC2;
+  document.getElementById('tabC3').textContent = t.tabC3;
+  document.getElementById('tabC4').textContent = t.tabC4;
+  document.getElementById('searchInput').placeholder = t.searchPh;
+  document.getElementById('filterUnrecordedLbl').textContent = t.unrecOnly;
+  renderGrid();
+}
+
+// Event Listeners
+document.getElementById('toggleStudioBtn').addEventListener('click', () => {
+  studioOpen = !studioOpen;
+  document.getElementById('studioPanel').classList.toggle('hidden', !studioOpen);
+  document.getElementById('toggleStudioBtn').classList.toggle('active', studioOpen);
+  const t = UI_TEXT[currentLang] || UI_TEXT.en;
+  document.getElementById('toggleStudioBtn').textContent = studioOpen ? t.studioClose : t.studioBtn;
+  renderGrid();
+});
+
+document.getElementById('categoryTabs').addEventListener('click', (e) => {
+  const btn = e.target.closest('.tab-btn');
+  if (!btn) return;
+  currentCat = btn.dataset.cat;
+  speedIdx = 0;
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b === btn));
+  renderGrid();
+});
+
+document.getElementById('searchInput').addEventListener('input', () => { speedIdx = 0; renderGrid(); });
+document.getElementById('filterUnrecordedChk').addEventListener('change', () => { speedIdx = 0; renderGrid(); });
+
+document.getElementById('speedPrevBtn').addEventListener('click', () => { speedIdx--; updateSpeedQueueBar(); });
+document.getElementById('speedNextBtn').addEventListener('click', () => { speedIdx++; updateSpeedQueueBar(); });
+document.getElementById('speedRecBtn').addEventListener('click', () => {
+  const list = getFilteredItems();
+  if (!list.length) return;
+  if (speedIdx >= list.length) speedIdx = 0;
+  toggleRecording('studio', list[speedIdx].id);
+});
+
+document.getElementById('soundGrid').addEventListener('click', async (e) => {
+  const playBtn = e.target.closest('[data-play-id]');
+  if (playBtn) {
+    playVoiceClip(playBtn.dataset.playId, playBtn.dataset.voice);
+    return;
+  }
+  const bothBtn = e.target.closest('[data-both-id]');
+  if (bothBtn) {
+    playBothVoices(bothBtn.dataset.bothId);
+    return;
+  }
+  const stuRec = e.target.closest('[data-stu-rec]');
+  if (stuRec) {
+    toggleRecording('student', stuRec.dataset.stuRec);
+    return;
+  }
+  const stuCmp = e.target.closest('[data-stu-cmp]');
+  if (stuCmp) {
+    const id = stuCmp.dataset.stuCmp;
+    if (studentClips[id]) await playDataUrl(studentClips[id]);
+    await new Promise(r => setTimeout(r, 250));
+    const prefVoice = (clips[id] && clips[id].male) ? 'male' : (clips[id] && clips[id].female) ? 'female' : 'male';
+    await playVoiceClip(id, prefVoice);
+    return;
+  }
+  const studioRec = e.target.closest('[data-studio-rec]');
+  if (studioRec) {
+    toggleRecording('studio', studioRec.dataset.studioRec);
+    return;
+  }
+  const studioUp = e.target.closest('[data-studio-up]');
+  if (studioUp) {
+    uploadTargetId = studioUp.dataset.studioUp;
+    document.getElementById('singleClipUploadInput').value = '';
+    document.getElementById('singleClipUploadInput').click();
+    return;
+  }
+  const studioClr = e.target.closest('[data-studio-clr]');
+  if (studioClr) {
+    const id = studioClr.dataset.studioClr;
+    if (clips[id]) clips[id][studioVoice] = '';
+    await saveLocalClipsCache();
+    renderGrid();
+    await syncSingleClipToCloud(id, studioVoice, '');
+  }
+});
+
+document.getElementById('singleClipUploadInput').addEventListener('change', async (e) => {
+  const file = e.target.files && e.target.files[0];
+  if (!file || !uploadTargetId) return;
+  const dataUrl = await blobToDataUrl(file);
+  if (dataUrl.length > 95000) {
+    alert('Audio file is too large for cloud sync (max ~70KB / 4 seconds compressed). Try recording directly or trimming the clip.');
+    return;
+  }
+  if (!clips[uploadTargetId]) clips[uploadTargetId] = { male: '', female: '' };
+  clips[uploadTargetId][studioVoice] = dataUrl;
+  await saveLocalClipsCache();
+  renderGrid();
+  await syncSingleClipToCloud(uploadTargetId, studioVoice, dataUrl);
+});
+
+document.getElementById('syncFromCloudBtn').addEventListener('click', fetchClipsFromCloud);
+
+document.getElementById('exportAudioJsonBtn').addEventListener('click', () => {
+  const blob = new Blob([JSON.stringify({ exportedAt: new Date().toISOString(), clips }, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'hmong_phonetics_audio_backup.json';
+  a.click();
+});
+
+document.getElementById('importAudioJsonBtn').addEventListener('click', () => {
+  document.getElementById('importAudioFileInput').click();
+});
+
+document.getElementById('importAudioFileInput').addEventListener('change', async (e) => {
+  const file = e.target.files && e.target.files[0];
+  if (!file) return;
+  try {
+    const text = await file.text();
+    const parsed = JSON.parse(text);
+    const src = parsed.clips || parsed;
+    for (const [id, val] of Object.entries(src)) {
+      if (!clips[id]) clips[id] = { male: '', female: '' };
+      if (val.male) {
+        clips[id].male = val.male;
+        await syncSingleClipToCloud(id, 'male', val.male);
+      }
+      if (val.female) {
+        clips[id].female = val.female;
+        await syncSingleClipToCloud(id, 'female', val.female);
+      }
+    }
+    await saveLocalClipsCache();
+    renderGrid();
+  } catch (err) {
+    alert('Invalid JSON backup file: ' + err.message);
+  }
+});
+
+// Initialize on load
+(async function init() {
+  const params = new URLSearchParams(window.location.search);
+  const urlLang = params.get('lang');
+  let savedLang = 'en';
+  try { savedLang = localStorage.getItem('hmong_ui_lang') || 'en'; } catch {}
+  const cached = await loadLocalClipsCache();
+  for (const [id, val] of Object.entries(cached)) {
+    clips[id] = val;
+  }
+  setUILang(urlLang || savedLang || 'en');
+  fetchClipsFromCloud();
+})();
+</script>
+</body>
+</html>
