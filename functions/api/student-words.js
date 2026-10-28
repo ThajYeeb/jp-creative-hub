@@ -20,8 +20,8 @@ const ROSTER = {
   'HMOOB-12': 'Hoa Phạm (Phạm Thị Hoa)',
   'HMOOB-13': 'Student 13',
   'HMOOB-14': 'Student 14',
-  'HMOOB-15': 'Student 15',
-  'HMOOB-16': 'Student 16',
+  'HMOOB-15': 'Tsim Meej',
+  'HMOOB-16': 'Paj Nyiag',
 };
 
 const json = (obj, status = 200) =>
