@@ -528,19 +528,21 @@ function buildMasterDeck() {
   // 2. 51 Theocratic terms with verified wol.jw.org artwork
   if (typeof THEOCRATIC_TERMS_51 !== "undefined") {
     THEOCRATIC_TERMS_51.forEach(t => {
-      const wolUrl = THEO_51_WOL_URLS[t.hmong] || "";
+      const rawHm = String(t.hm || t.hmong || "").trim();
+      if (!rawHm) return;
+      const wolUrl = THEO_51_WOL_URLS[rawHm] || THEO_51_WOL_URLS[t.hm] || "";
       deck.push({
-        id: "theo:" + t.hmong.toLowerCase(),
-        hmong: t.hmong,
-        en: t.en,
-        vi: t.vi || t.en,
-        ko: t.ko || t.en,
-        ja: t.ja || t.en,
-        tone: t.cat || "Theocratic",
+        id: "theo:" + rawHm.toLowerCase(),
+        hmong: rawHm,
+        en: t.en || "",
+        vi: t.vi || t.en || "",
+        ko: t.ko || t.en || "",
+        ja: t.ja || t.en || "",
+        tone: t.note || t.cat || "Theocratic",
         pos: t.pos || "obj",
         source: "theo",
         img: wolUrl,
-        emoji: pickEmoji(t.hmong, t.en)
+        emoji: pickEmoji(rawHm, t.en || "")
       });
     });
   }
@@ -884,10 +886,19 @@ function getStorageKey(code) {
 }
 
 function loadLocalCustomWords(code) {
-  try {
-    const raw = localStorage.getItem(getStorageKey(code));
-    if (raw) customWords = JSON.parse(raw) || [];
-  } catch { customWords = []; }
+  let baseList = [];
+  let codeList = [];
+  try { baseList = JSON.parse(localStorage.getItem("ulgt_custom_words") || "[]") || []; } catch { baseList = []; }
+  if (code) {
+    try { codeList = JSON.parse(localStorage.getItem(getStorageKey(code)) || "[]") || []; } catch { codeList = []; }
+  }
+  const map = new Map();
+  [...baseList, ...codeList].forEach(w => {
+    if (!w || typeof w !== "object") return;
+    const h = String(w.hmong || w.w || "").trim();
+    if (h) map.set(h.toLowerCase(), { ...w, hmong: h });
+  });
+  customWords = Array.from(map.values());
 }
 
 function saveLocalCustomWords() {
@@ -1007,6 +1018,26 @@ document.addEventListener("keydown", e => {
   else if (e.code === "ArrowLeft") { e.preventDefault(); prevCard(); }
 });
 
+function focusWordIfRequested() {
+  const params = new URLSearchParams(window.location.search);
+  const targetWord = (params.get("word") || "").trim().toLowerCase();
+  const targetFilter = (params.get("deck") || "").trim().toLowerCase();
+  if (targetFilter && ["all", "core", "theo", "custom"].includes(targetFilter)) {
+    setDeckFilter(targetFilter);
+  }
+  if (!targetWord) return;
+  let idx = filteredCards.findIndex(c => c.hmong.toLowerCase() === targetWord);
+  if (idx < 0) {
+    setDeckFilter("all");
+    idx = filteredCards.findIndex(c => c.hmong.toLowerCase() === targetWord || c.hmong.toLowerCase().includes(targetWord));
+  }
+  if (idx >= 0) {
+    currentIndex = idx;
+    isFlipped = false;
+    renderCurrentCard();
+  }
+}
+
 // Initialize
 const params = new URLSearchParams(window.location.search);
 if (params.get("lang")) uiLang = params.get("lang");
@@ -1014,8 +1045,9 @@ if (params.get("code")) activeStudentCode = params.get("code").toUpperCase().rep
 loadLocalCustomWords(activeStudentCode);
 setUILang(uiLang);
 buildMasterDeck();
+focusWordIfRequested();
 if (activeStudentCode) {
-  connectStudentCode(activeStudentCode, true);
+  connectStudentCode(activeStudentCode, true).then(() => focusWordIfRequested());
 }
 
 </script>

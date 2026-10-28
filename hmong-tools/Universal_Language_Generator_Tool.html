@@ -433,7 +433,10 @@
 <body>
 
 <div class="nav-bar">
-  <a class="nav-link" href="./index.html" id="backHubLink">← Back to Course Practice Hub</a>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+    <a class="nav-link" href="./index.html" id="backHubLink">← Back to Course Practice Hub</a>
+    <a class="nav-link" href="./Hmong_Flashcards.html" id="openFlashcardsTopBtn" style="background:var(--accent);color:#fff;padding:6px 12px;border-radius:8px;font-weight:700;text-decoration:none;">🃏 Visual Flashcards →</a>
+  </div>
   <div class="lang-switch" role="group" aria-label="Instruction Language">
     <button class="lang-btn active" id="uiBtnEn" onclick="setUILang('en')">English</button>
     <button class="lang-btn" id="uiBtnVi" onclick="setUILang('vi')">Tiếng Việt</button>
@@ -456,6 +459,7 @@
     <input type="text" id="studentCodeInput" placeholder="Enter your code (e.g. HMOOB-01)" maxlength="24" aria-label="Student Code" style="width:230px;">
     <button id="connectCodeBtn">Load / Connect Code</button>
     <button class="secondary" id="openVocabDrawerBtn" type="button">My Saved Words (0)</button>
+    <a href="./Hmong_Flashcards.html?deck=custom" id="studyMyWordsFcBtn" style="display:inline-flex;align-items:center;background:#0d9488;color:#fff;text-decoration:none;padding:8px 13px;border-radius:8px;font-weight:700;font-size:0.88rem;">🃏 Study Flashcards</a>
   </div>
   <div id="syncBarSubnote" style="font-size:0.82rem;color:var(--muted);margin-top:6px;">
     Enter your personal Student Code (e.g. HMOOB-01) so your custom vocabulary stays saved across browsers and devices.
@@ -644,37 +648,37 @@
           <tr>
             <td>1. Subject</td>
             <td>Pronoun / Noun</td>
-            <td><code>kuv</code> (I), <code>koj</code> (you), <code>nws</code> (he/she), <code>peb</code> (we), <code>nej</code> (you pl.), <code>lawv</code> (they)</td>
+            <td><a href="./Hmong_Flashcards.html?word=kuv" style="color:var(--accent);text-decoration:underline;font-weight:600;" title="Open visual flashcard for kuv"><code>kuv</code></a> (I), <a href="./Hmong_Flashcards.html?word=koj" style="color:var(--accent);text-decoration:underline;font-weight:600;" title="Open visual flashcard for koj"><code>koj</code></a> (you), <a href="./Hmong_Flashcards.html?word=nws" style="color:var(--accent);text-decoration:underline;font-weight:600;" title="Open visual flashcard for nws"><code>nws</code></a> (he/she), <a href="./Hmong_Flashcards.html?word=peb" style="color:var(--accent);text-decoration:underline;font-weight:600;" title="Open visual flashcard for peb"><code>peb</code></a> (we), <a href="./Hmong_Flashcards.html?word=nej" style="color:var(--accent);text-decoration:underline;font-weight:600;" title="Open visual flashcard for nej"><code>nej</code></a> (you pl.), <a href="./Hmong_Flashcards.html?word=lawv" style="color:var(--accent);text-decoration:underline;font-weight:600;" title="Open visual flashcard for lawv"><code>lawv</code></a> (they)</td>
             <td>Starts the clause (SVO order).</td>
           </tr>
           <tr>
             <td>2. Tense / Aspect</td>
             <td>Time Marker</td>
-            <td><code>yuav</code> (will), <code>tau</code> (did/got), <code>tab tom</code> (currently -ing)</td>
-            <td>Placed after Subject, before <code>puas</code> / <code>tsis</code> / Verb.</td>
+            <td><a href="./Hmong_Flashcards.html?word=yuav" style="color:var(--accent);text-decoration:underline;font-weight:600;" title="Open visual flashcard for yuav"><code>yuav</code></a> (will), <a href="./Hmong_Flashcards.html?word=tau" style="color:var(--accent);text-decoration:underline;font-weight:600;" title="Open visual flashcard for tau"><code>tau</code></a> (did/got), <a href="./Hmong_Flashcards.html?word=tab tom" style="color:var(--accent);text-decoration:underline;font-weight:600;" title="Open visual flashcard for tab tom"><code>tab tom</code></a> (currently -ing)</td>
+            <td>Placed after Subject, before <a href="./Hmong_Flashcards.html?word=puas" style="color:var(--accent);text-decoration:underline;font-weight:600;" title="Open visual flashcard for puas"><code>puas</code></a> / <a href="./Hmong_Flashcards.html?word=tsis" style="color:var(--accent);text-decoration:underline;font-weight:600;" title="Open visual flashcard for tsis"><code>tsis</code></a> / Verb.</td>
           </tr>
           <tr>
             <td>3. Question</td>
             <td>Yes/No Particle</td>
-            <td><code>puas</code> (do/does/is/are?)</td>
-            <td>Placed directly before the verb (or before <code>tsis</code> / modal).</td>
+            <td><a href="./Hmong_Flashcards.html?word=puas" style="color:var(--accent);text-decoration:underline;font-weight:600;" title="Open visual flashcard for puas"><code>puas</code></a> (do/does/is/are?)</td>
+            <td>Placed directly before the verb (or before <a href="./Hmong_Flashcards.html?word=tsis" style="color:var(--accent);text-decoration:underline;font-weight:600;" title="Open visual flashcard for tsis"><code>tsis</code></a> / modal).</td>
           </tr>
           <tr>
             <td>4. Negation</td>
             <td>Negative Particle</td>
-            <td><code>tsis</code> (not / do not)</td>
-            <td>Placed right before the verb: <code>Kuv tsis paub</code>.</td>
+            <td><a href="./Hmong_Flashcards.html?word=tsis" style="color:var(--accent);text-decoration:underline;font-weight:600;" title="Open visual flashcard for tsis"><code>tsis</code></a> (not / do not)</td>
+            <td>Placed right before the verb: <a href="./Hmong_Flashcards.html?word=Kuv tsis paub" style="color:var(--accent);text-decoration:underline;font-weight:600;" title="Open visual flashcard for Kuv tsis paub"><code>Kuv tsis paub</code></a>.</td>
           </tr>
           <tr>
             <td>5. Verb Chain</td>
             <td>Modal + Main Verb</td>
-            <td><code>xav</code> (want), <code>nyiam</code> (like), <code>kawm</code> (learn), <code>hais</code> (speak), <code>mus</code> (go), <code>nyob</code> (live/be), <code>pab</code> (help), <code>nyeem</code> (read), <code>pom</code> (see)</td>
+            <td><a href="./Hmong_Flashcards.html?word=xav" style="color:var(--accent);text-decoration:underline;font-weight:600;" title="Open visual flashcard for xav"><code>xav</code></a> (want), <a href="./Hmong_Flashcards.html?word=nyiam" style="color:var(--accent);text-decoration:underline;font-weight:600;" title="Open visual flashcard for nyiam"><code>nyiam</code></a> (like), <a href="./Hmong_Flashcards.html?word=kawm" style="color:var(--accent);text-decoration:underline;font-weight:600;" title="Open visual flashcard for kawm"><code>kawm</code></a> (learn), <a href="./Hmong_Flashcards.html?word=hais" style="color:var(--accent);text-decoration:underline;font-weight:600;" title="Open visual flashcard for hais"><code>hais</code></a> (speak), <a href="./Hmong_Flashcards.html?word=mus" style="color:var(--accent);text-decoration:underline;font-weight:600;" title="Open visual flashcard for mus"><code>mus</code></a> (go), <a href="./Hmong_Flashcards.html?word=nyob" style="color:var(--accent);text-decoration:underline;font-weight:600;" title="Open visual flashcard for nyob"><code>nyob</code></a> (live/be), <a href="./Hmong_Flashcards.html?word=pab" style="color:var(--accent);text-decoration:underline;font-weight:600;" title="Open visual flashcard for pab"><code>pab</code></a> (help), <a href="./Hmong_Flashcards.html?word=nyeem" style="color:var(--accent);text-decoration:underline;font-weight:600;" title="Open visual flashcard for nyeem"><code>nyeem</code></a> (read), <a href="./Hmong_Flashcards.html?word=pom" style="color:var(--accent);text-decoration:underline;font-weight:600;" title="Open visual flashcard for pom"><code>pom</code></a> (see)</td>
             <td>Verbs never conjugate for tense or person.</td>
           </tr>
           <tr>
             <td>6. Object / Tail</td>
             <td>Noun / Classifier / Wh-word</td>
-            <td><code>lus Hmoob</code>, <code>ib tug phooj ywg</code>, <code>ob phau ntawv</code>, <code>dab tsi</code> (what), <code>qhov twg</code> (where)</td>
+            <td><a href="./Hmong_Flashcards.html?word=lus Hmoob" style="color:var(--accent);text-decoration:underline;font-weight:600;" title="Open visual flashcard for lus Hmoob"><code>lus Hmoob</code></a>, <a href="./Hmong_Flashcards.html?word=ib tug phooj ywg" style="color:var(--accent);text-decoration:underline;font-weight:600;" title="Open visual flashcard for ib tug phooj ywg"><code>ib tug phooj ywg</code></a>, <a href="./Hmong_Flashcards.html?word=ob phau ntawv" style="color:var(--accent);text-decoration:underline;font-weight:600;" title="Open visual flashcard for ob phau ntawv"><code>ob phau ntawv</code></a>, <a href="./Hmong_Flashcards.html?word=dab tsi" style="color:var(--accent);text-decoration:underline;font-weight:600;" title="Open visual flashcard for dab tsi"><code>dab tsi</code></a> (what), <a href="./Hmong_Flashcards.html?word=qhov twg" style="color:var(--accent);text-decoration:underline;font-weight:600;" title="Open visual flashcard for qhov twg"><code>qhov twg</code></a> (where)</td>
             <td>Classifiers follow <code>Number + Classifier + Noun</code>.</td>
           </tr>
         </tbody>
@@ -1084,13 +1088,15 @@ function renderTiles() {
 
 function buildGlossHTML(words) {
   let html = `<div class="gloss-row">`;
+  const lang = typeof uiLang !== "undefined" ? uiLang : "en";
   words.forEach(w => {
     const lex = findLex(w);
-    html += `<div class="gloss-chip">
-      <strong>${w}</strong>
+    const fcUrl = `./Hmong_Flashcards.html?lang=${encodeURIComponent(lang)}${activeStudentCode ? '&code=' + encodeURIComponent(activeStudentCode) : ''}&word=${encodeURIComponent(w)}`;
+    html += `<a href="${fcUrl}" class="gloss-chip" title="Open visual flashcard for ${w}" style="text-decoration:none;color:inherit;display:inline-block;">
+      <strong style="color:var(--accent);text-decoration:underline;">🃏 ${w}</strong>
       <div>${lex ? lex.en : "course word"}</div>
       <div style="color:#64748b;font-size:0.75rem;">${lex ? lex.role.toUpperCase() + " • Tone: " + lex.tone : ""}</div>
-    </div>`;
+    </a>`;
   });
   html += `</div>`;
   return html;
@@ -1428,7 +1434,10 @@ function normalizeCustomWordObj(item) {
   const ja = String(item.ja || item.en || item.vi || item.ko || "").trim();
   const pos = String(item.pos || item.role || "obj").trim() || "obj";
   if (!hmong || !en) return null;
-  return { hmong, en, vi, ko, ja, pos };
+  const out = { hmong, en, vi, ko, ja, pos };
+  if (item.img) out.img = String(item.img);
+  if (item.emoji) out.emoji = String(item.emoji);
+  return out;
 }
 
 function mergeWordLists(listA, listB) {
@@ -1578,7 +1587,8 @@ function renderCustomWordsUI() {
     const chip = document.createElement("div");
     chip.className = "custom-chip";
     const meaning = lang === "vi" ? (cw.vi || cw.en) : (lang === "ko" ? (cw.ko || cw.en) : (lang === "ja" ? (cw.ja || cw.en) : cw.en));
-    chip.innerHTML = `<strong>${cw.hmong}</strong> <span>(${meaning})</span> <small style="color:#64748b;">[${cw.pos}]</small>`;
+    const fcHref = `./Hmong_Flashcards.html?lang=${encodeURIComponent(lang)}${activeStudentCode ? '&code=' + encodeURIComponent(activeStudentCode) : ''}&word=${encodeURIComponent(cw.hmong)}`;
+    chip.innerHTML = `<a href="${fcHref}" title="Open visual flashcard for ${cw.hmong}" style="color:inherit;text-decoration:none;display:inline-flex;align-items:center;gap:4px;">🃏 <strong style="text-decoration:underline;color:var(--accent);">${cw.hmong}</strong> <span>(${meaning})</span></a> <small style="color:#64748b;">[${cw.pos}]</small>`;
     const delBtn = document.createElement("button");
     delBtn.className = "del-word";
     delBtn.title = lang === "vi" ? "Xóa từ này" : (lang === "ko" ? "이 단어 삭제" : (lang === "ja" ? "この単語を削除" : "Remove word"));
@@ -1823,7 +1833,25 @@ document.getElementById("addWordBtn").onclick = async () => {
   const role = document.getElementById("newWordRole").value;
   const meaning = document.getElementById("newWordEn").value.trim();
   if (!w || !meaning) return;
-  customWords = mergeWordLists(customWords, [{ hmong: w, en: meaning, vi: meaning, ko: meaning, ja: meaning, pos: role }]);
+  let autoImg = "";
+  try {
+    const cleanTerm = meaning.split("/")[0].split("(")[0].trim().toLowerCase();
+    if (cleanTerm) {
+      const wr = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(cleanTerm)}`);
+      if (wr.ok) {
+        const wd = await wr.json();
+        if (wd && wd.thumbnail && wd.thumbnail.source) autoImg = wd.thumbnail.source;
+      }
+      if (!autoImg) {
+        const wolr = await fetch(`/api/wol-image?q=${encodeURIComponent(cleanTerm)}`);
+        if (wolr.ok) {
+          const wold = await wolr.json();
+          if (wold && wold.ok && wold.img) autoImg = wold.img;
+        }
+      }
+    }
+  } catch (e) {}
+  customWords = mergeWordLists(customWords, [{ hmong: w, en: meaning, vi: meaning, ko: meaning, ja: meaning, pos: role, ...(autoImg ? { img: autoImg } : {}) }]);
   saveCustomWordsLocal();
   document.getElementById("customWordStatus").style.color = "var(--ok-border)";
   document.getElementById("customWordStatus").textContent = lang === "vi"
@@ -2757,12 +2785,13 @@ function renderTheocraticTable() {
     const isSaved = savedSet.has(cleanHm.toLowerCase());
     return `<tr>
       <td>${idx + 1}</td>
-      <td><strong><code>${cleanHm}</code></strong></td>
+      <td><a href="./Hmong_Flashcards.html?lang=${encodeURIComponent(lang)}${activeStudentCode ? '&code=' + encodeURIComponent(activeStudentCode) : ''}&word=${encodeURIComponent(cleanHm)}" title="View Visual Flashcard for ${cleanHm}" style="color:var(--accent);text-decoration:underline;font-weight:700;">🃏 <code>${cleanHm}</code></a></td>
       <td>${item.en}</td>
       <td>${item.vi}</td>
       <td>${item.ko}<br><span style="color:var(--muted);font-size:0.84rem;">${item.ja}</span></td>
       <td style="font-size:0.84rem;color:var(--muted);">${item.note || item.pos}</td>
-      <td>
+      <td style="display:flex;gap:4px;flex-wrap:wrap;align-items:center;">
+        <a href="./Hmong_Flashcards.html?lang=${encodeURIComponent(lang)}${activeStudentCode ? '&code=' + encodeURIComponent(activeStudentCode) : ''}&word=${encodeURIComponent(cleanHm)}" style="background:#eef4fa;color:var(--accent);border:1px solid #cbd5e1;padding:4px 8px;border-radius:6px;font-size:0.76rem;font-weight:700;text-decoration:none;">🃏 Card</a>
         <button type="button" class="${isSaved ? 'secondary' : ''}" style="padding:4px 9px;font-size:0.78rem;" data-theo-idx="${THEOCRATIC_TERMS_51.indexOf(item)}">
           ${isSaved ? addedLbl : addLbl}
         </button>
