@@ -165,7 +165,167 @@
     display: inline-block; font-size: 0.82rem; padding: 4px 10px; border-radius: 999px;
     background: #e0f2fe; color: #0369a1; font-weight: 700;
   }
+
+  /* Shared Light / Dark Mode Theme Overrides */
+  html[data-theme="dark"] {
+    --bg: #0f172a;
+    --card: #1e293b;
+    --accent: #60a5fa;
+    --accent2: #3b82f6;
+    --accent-soft: #1e3a5f;
+    --text: #f1f5f9;
+    --muted: #94a3b8;
+    --border: #334155;
+    --male-bg: #1e3a8a;
+    --male-border: #3b82f6;
+    --male-text: #bfdbfe;
+    --fem-bg: #831843;
+    --fem-border: #ec4899;
+    --fem-text: #fbcfe8;
+    --ok-bg: #064e3b;
+    --ok-border: #10b981;
+    --warn-bg: #451a03;
+    --warn-border: #f59e0b;
+    --err-bg: #450a0a;
+    --err-border: #ef4444;
+    color-scheme: dark;
+  }
+  html[data-theme="dark"] body { background: var(--bg); color: var(--text); }
+  html[data-theme="dark"] .card,
+  html[data-theme="dark"] .panel,
+  html[data-theme="dark"] .sound-card,
+  html[data-theme="dark"] .flashcard {
+    background: var(--card) !important;
+    color: var(--text) !important;
+    border-color: var(--border) !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.35) !important;
+  }
+  html[data-theme="dark"] .lang-switch { background: #334155 !important; }
+  html[data-theme="dark"] .lang-btn { color: #cbd5e1 !important; }
+  html[data-theme="dark"] .lang-btn.active { background: #2563eb !important; color: #fff !important; }
+  html[data-theme="dark"] .tone,
+  html[data-theme="dark"] .sc-example,
+  html[data-theme="dark"] .gloss-grid,
+  html[data-theme="dark"] .preview-strip,
+  html[data-theme="dark"] .visual-box,
+  html[data-theme="dark"] .speed-box,
+  html[data-theme="dark"] .sentence-box,
+  html[data-theme="dark"] .slot-col,
+  html[data-theme="dark"] .pair span,
+  html[data-theme="dark"] .sc-glyph {
+    background: #0f172a !important;
+    color: var(--text) !important;
+    border-color: var(--border) !important;
+  }
+  html[data-theme="dark"] .sc-ipa,
+  html[data-theme="dark"] .pill,
+  html[data-theme="dark"] .tab-btn:not(.active),
+  html[data-theme="dark"] button.secondary,
+  html[data-theme="dark"] .btn-outline:not(.active),
+  html[data-theme="dark"] .nav-links a:not(.active),
+  html[data-theme="dark"] .quiz-btn:not(.correct):not(.wrong) {
+    background: #334155 !important;
+    color: #f1f5f9 !important;
+    border-color: #475569 !important;
+  }
+  html[data-theme="dark"] .formula-banner {
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%) !important;
+    border-color: #3b82f6 !important;
+    color: #e2e8f0 !important;
+  }
+  html[data-theme="dark"] .formula-banner div { color: #cbd5e1 !important; }
+  html[data-theme="dark"] .f-chip {
+    background: #0f172a !important;
+    color: #93c5fd !important;
+    border-color: #3b82f6 !important;
+  }
+  html[data-theme="dark"] .note,
+  html[data-theme="dark"] .studio-panel,
+  html[data-theme="dark"] .studio-card-controls {
+    background: #2e2310 !important;
+    color: #fde68a !important;
+    border-color: #b45309 !important;
+  }
+  html[data-theme="dark"] .studio-panel strong,
+  html[data-theme="dark"] .studio-panel div,
+  html[data-theme="dark"] .studio-card-controls span {
+    color: #fde68a !important;
+  }
+  html[data-theme="dark"] input,
+  html[data-theme="dark"] select,
+  html[data-theme="dark"] textarea {
+    background: #0f172a !important;
+    color: #f1f5f9 !important;
+    border-color: #475569 !important;
+  }
+  html[data-theme="dark"] table,
+  html[data-theme="dark"] th,
+  html[data-theme="dark"] td {
+    border-color: #334155 !important;
+    color: #e2e8f0 !important;
+  }
+  html[data-theme="dark"] th { background: #0f172a !important; }
+  html[data-theme="dark"] tr:nth-child(even) { background: rgba(255,255,255,0.03) !important; }
+  html[data-theme="dark"] .meaning-main,
+  html[data-theme="dark"] .sc-tip,
+  html[data-theme="dark"] .research,
+  html[data-theme="dark"] p {
+    color: #cbd5e1 !important;
+  }
+  html[data-theme="dark"] .play-btn.both-btn {
+    background: #064e3b !important;
+    color: #a7f3d0 !important;
+    border-color: #059669 !important;
+  }
+  .theme-toggle-btn {
+    background: #e2e8f0;
+    color: #1e293b;
+    border: 1px solid #cbd5e1;
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin: 0;
+  }
+  .theme-toggle-btn:hover { background: #cbd5e1; }
+  html[data-theme="dark"] .theme-toggle-btn {
+    background: #334155 !important;
+    color: #f8fafc !important;
+    border-color: #475569 !important;
+  }
+
 </style>
+
+<script>
+(function(){
+  function applyTheme(t) {
+    document.documentElement.setAttribute('data-theme', t);
+    var btn = document.getElementById('themeToggleBtn');
+    if (btn) {
+      btn.innerHTML = t === 'dark' ? '☀️ Light' : '🌙 Dark';
+      btn.title = t === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode';
+    }
+  }
+  window.toggleHmongTheme = function() {
+    var cur = document.documentElement.getAttribute('data-theme') || 'light';
+    var next = cur === 'dark' ? 'light' : 'dark';
+    try { localStorage.setItem('hmong_theme', next); } catch(e) {}
+    applyTheme(next);
+  };
+  var saved = 'light';
+  try {
+    saved = localStorage.getItem('hmong_theme') ||
+      (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  } catch(e) {}
+  applyTheme(saved);
+  document.addEventListener('DOMContentLoaded', function() { applyTheme(saved); });
+})();
+</script>
+
 </head>
 <body>
 
@@ -176,12 +336,12 @@
     <a class="nav-link" href="./Universal_Language_Generator_Tool.html" id="ulgLink">🧩 Sentence Builder</a>
     <a class="nav-link" href="./Hmong_Flashcards.html" id="flashcardsLink">🃏 Visual Flashcards</a>
   </div>
-  <div class="lang-switch" role="group" aria-label="Instruction Language">
+  <div style="display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap;"><button type="button" class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleHmongTheme()">🌙 Dark</button><div class="lang-switch" role="group" aria-label="Instruction Language">
     <button class="lang-btn active" id="uiBtnEn" onclick="setUILang('en')">English</button>
     <button class="lang-btn" id="uiBtnVi" onclick="setUILang('vi')">Tiếng Việt</button>
     <button class="lang-btn" id="uiBtnKo" onclick="setUILang('ko')">한국어</button>
     <button class="lang-btn" id="uiBtnJa" onclick="setUILang('ja')">日本語</button>
-  </div>
+  </div></div>
 </div>
 
 <div class="card">
