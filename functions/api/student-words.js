@@ -1,4 +1,4 @@
-// Cloudflare Pages Function: GET & POST /api/student-words (rev 2026-10-27)
+// Cloudflare Pages Function: GET & POST /api/student-words (rev 2026-10-28)
 // Cloud-syncs each student's personal vocabulary collection for the 10-Day White Hmong Language Course.
 const BASE_ID_DEFAULT = 'app3EYXcC98lSdj46'; // Hmong Language Course
 const TABLE_ID_DEFAULT = 'tbl1BVwFM2yXr4xAk'; // Student Words
@@ -54,19 +54,24 @@ function sanitizeWords(rawWords) {
     const ko = clean(item.ko || '', 120);
     const ja = clean(item.ja || '', 120);
     const pos = clean(item.pos || item.role || 'obj', 32) || 'obj';
+    const img = clean(item.img || '', 400);
+    const emoji = clean(item.emoji || '', 24);
     const fallback = en || vi || ko || ja;
     if (!hmong || !fallback) continue;
     const key = hmong.toLowerCase();
     if (seen.has(key)) continue;
     seen.add(key);
-    out.push({
+    const wordObj = {
       hmong,
       en: en || fallback,
       vi: vi || fallback,
       ko: ko || fallback,
       ja: ja || fallback,
       pos,
-    });
+    };
+    if (img) wordObj.img = img;
+    if (emoji) wordObj.emoji = emoji;
+    out.push(wordObj);
     if (out.length >= MAX_WORDS) break;
   }
   return out;
