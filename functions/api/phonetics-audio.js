@@ -1,5 +1,5 @@
 // Cloudflare Pages Function: GET & POST /api/phonetics-audio (rev 2026-10-28)
-// Cloud-syncs Male (JC) and Female (Pang) instructor audio clips for the 71 White Hmong (RPA) phonetics items.
+// Cloud-syncs Male and Female instructor audio clips for the 71 White Hmong (RPA) phonetics items.
 // Uses Airtable table tbl1BVwFM2yXr4xAk (Student Words) in base app3EYXcC98lSdj46 (Hmong Language Course)
 // with Student Code = "PHON-<ID>" so each phonetic item stays well under Airtable's 100KB cell limit:
 //   - Custom Words JSON -> Male voice audio Data URL (up to 95,000 chars)
