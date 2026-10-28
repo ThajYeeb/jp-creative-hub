@@ -1,0 +1,1199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>DRAFT – Hmong Time, Cardinal Directions &amp; Moving Through Space</title>
+<style>
+  :root {
+    --bg: #f8f9fa; --card: #ffffff; --accent: #1F4E79; --accent2: #2E75B6;
+    --text: #1e293b; --muted: #64748b; --border: #cbd5e1; --soft: #f1f5f9;
+    --chip-bg: #e0f2fe; --chip-text: #0369a1;
+  }
+  html[data-theme="dark"] {
+    --bg: #0f172a; --card: #1e293b; --accent: #60a5fa; --accent2: #3b82f6;
+    --text: #f1f5f9; --muted: #94a3b8; --border: #334155; --soft: #0f172a;
+    --chip-bg: #1e3a8a; --chip-text: #bfdbfe;
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    background: var(--bg); color: var(--text); margin: 0; padding: 18px 14px 56px;
+    line-height: 1.5; max-width: 1080px; margin-left: auto; margin-right: auto;
+  }
+  .top-bar {
+    display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center;
+    gap: 10px; margin-bottom: 12px;
+  }
+  .draft-badge {
+    background: #fef3c7; color: #92400e; border: 1px solid #f59e0b;
+    padding: 5px 12px; border-radius: 999px; font-size: 0.82rem; font-weight: 800;
+  }
+  html[data-theme="dark"] .draft-badge { background: #451a03; color: #fde68a; border-color: #d97706; }
+  .lang-switch {
+    display: inline-flex; flex-wrap: wrap; background: var(--border); border-radius: 999px; padding: 3px; gap: 2px;
+  }
+  .lang-btn {
+    background: transparent; color: var(--text); border: none; padding: 6px 13px;
+    border-radius: 999px; font-size: 0.86rem; font-weight: 700; cursor: pointer;
+  }
+  .lang-btn.active { background: var(--accent); color: #fff; }
+  html[data-theme="dark"] .lang-btn.active { background: #2563eb; color: #fff; }
+  .theme-toggle-btn {
+    background: var(--soft); color: var(--text); border: 1px solid var(--border);
+    padding: 6px 12px; border-radius: 999px; font-size: 0.85rem; font-weight: 700; cursor: pointer;
+  }
+  .card {
+    background: var(--card); border-radius: 14px; padding: 18px; margin-bottom: 16px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.07); border: 1px solid var(--border);
+  }
+  h1 { color: var(--accent); font-size: 1.55rem; margin: 0 0 4px 0; }
+  .subtitle { color: var(--muted); font-size: 0.94rem; margin: 0; }
+  .mod-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0; }
+  .mod-tab {
+    background: var(--card); color: var(--text); border: 2px solid var(--border);
+    padding: 10px 18px; border-radius: 12px; font-size: 0.95rem; font-weight: 800; cursor: pointer;
+    transition: all 0.15s;
+  }
+  .mod-tab.active {
+    background: var(--accent); color: #fff; border-color: var(--accent);
+    box-shadow: 0 4px 12px rgba(31,78,121,0.25);
+  }
+  html[data-theme="dark"] .mod-tab.active { background: #2563eb; border-color: #3b82f6; }
+  .hidden { display: none !important; }
+
+  /* MODULE 1: TIME EXPLORER */
+  .sky-stage {
+    border-radius: 14px; padding: 18px; color: #fff; position: relative; overflow: hidden;
+    min-height: 230px; display: flex; flex-direction: column; justify-content: space-between;
+    transition: background 0.45s ease; border: 1px solid rgba(255,255,255,0.2);
+    box-shadow: inset 0 0 40px rgba(0,0,0,0.18);
+  }
+  .celestial-orb {
+    width: 48px; height: 48px; border-radius: 50%; position: absolute;
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    display: flex; align-items: center; justify-content: center; font-size: 1.7rem;
+    box-shadow: 0 0 24px rgba(255,255,200,0.8);
+  }
+  .time-main-grid {
+    display: grid; grid-template-columns: 1fr 270px; gap: 16px; align-items: stretch; margin-top: 14px;
+  }
+  @media (max-width: 780px) { .time-main-grid { grid-template-columns: 1fr; } }
+  .timeline-box {
+    background: var(--soft); border: 1px solid var(--border); border-radius: 12px; padding: 16px;
+  }
+  .day-nodes {
+    display: grid; grid-template-columns: repeat(8, 1fr); gap: 6px; margin-top: 12px;
+  }
+  @media (max-width: 700px) { .day-nodes { grid-template-columns: repeat(4, 1fr); } }
+  .day-node {
+    background: var(--card); border: 2px solid var(--border); border-radius: 10px;
+    padding: 8px 6px; text-align: center; cursor: pointer; transition: all 0.15s;
+  }
+  .day-node.today-marker { border-style: dashed; border-color: var(--accent2); }
+  .day-node.active {
+    background: var(--accent); color: #fff; border-color: var(--accent); border-style: solid;
+    transform: translateY(-2px);
+  }
+  html[data-theme="dark"] .day-node.active { background: #2563eb; border-color: #60a5fa; }
+  .day-node .hm { font-weight: 800; font-size: 0.92rem; display: block; }
+  .day-node .gl { font-size: 0.73rem; opacity: 0.85; display: block; margin-top: 2px; }
+  .vert-panel {
+    background: var(--soft); border: 1px solid var(--border); border-radius: 12px;
+    padding: 14px; display: flex; flex-direction: column; justify-content: space-between;
+  }
+  .tod-list { display: flex; flex-direction: column; gap: 5px; margin-top: 8px; }
+  .tod-step {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 7px 10px; border-radius: 8px; border: 1px solid var(--border);
+    background: var(--card); cursor: pointer; font-size: 0.85rem; transition: all 0.12s;
+  }
+  .tod-step.active {
+    background: var(--accent); color: #fff; border-color: var(--accent); font-weight: 700;
+  }
+  html[data-theme="dark"] .tod-step.active { background: #2563eb; border-color: #60a5fa; }
+  .phrase-result-box {
+    margin-top: 14px; padding: 14px 16px; border-radius: 12px;
+    background: var(--chip-bg); color: var(--chip-text); border: 1px solid var(--accent2);
+  }
+
+  /* MODULE 2: CARDINAL & RELATIVE DIRECTIONS */
+  .compass-layout {
+    display: grid; grid-template-columns: 340px 1fr; gap: 18px; align-items: start;
+  }
+  @media (max-width: 780px) { .compass-layout { grid-template-columns: 1fr; } }
+  .compass-wheel {
+    width: 310px; height: 310px; margin: 0 auto; position: relative;
+    border-radius: 50%; background: radial-gradient(circle, var(--card) 55%, var(--soft) 100%);
+    border: 4px solid var(--accent); box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+  }
+  .c-btn {
+    position: absolute; transform: translate(-50%, -50%);
+    background: var(--card); color: var(--text); border: 2px solid var(--border);
+    border-radius: 10px; padding: 6px 10px; font-size: 0.8rem; font-weight: 800;
+    cursor: pointer; text-align: center; min-width: 78px; transition: all 0.15s;
+  }
+  .c-btn:hover, .c-btn.active {
+    background: var(--accent); color: #fff; border-color: var(--accent); z-index: 3;
+    transform: translate(-50%, -50%) scale(1.07);
+  }
+  html[data-theme="dark"] .c-btn.active { background: #2563eb; border-color: #60a5fa; }
+  .compass-needle {
+    position: absolute; left: 50%; top: 50%; width: 8px; height: 110px;
+    transform-origin: bottom center; transform: translate(-50%, -100%) rotate(0deg);
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    background: linear-gradient(to top, var(--accent2), #ef4444);
+    border-radius: 999px; pointer-events: none;
+  }
+  .compass-center {
+    position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+    width: 24px; height: 24px; border-radius: 50%; background: var(--accent); border: 3px solid #fff;
+  }
+  .dir-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; margin-top: 12px;
+  }
+  .dir-card {
+    background: var(--soft); border: 2px solid var(--border); border-radius: 10px;
+    padding: 11px; cursor: pointer; transition: all 0.15s;
+  }
+  .dir-card.active { border-color: var(--accent); background: var(--chip-bg); }
+
+  /* MODULE 3: MOVING THROUGH SPACE */
+  .space-layout {
+    display: grid; grid-template-columns: 360px 1fr; gap: 18px; align-items: start;
+  }
+  @media (max-width: 780px) { .space-layout { grid-template-columns: 1fr; } }
+  .grid-arena {
+    width: 330px; height: 330px; margin: 0 auto; background: var(--soft);
+    border: 3px solid var(--accent); border-radius: 14px; position: relative;
+    background-image:
+      linear-gradient(to right, var(--border) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--border) 1px, transparent 1px);
+    background-size: 66px 66px; overflow: hidden;
+  }
+  .arena-house {
+    position: absolute; left: 132px; top: 132px; width: 66px; height: 66px;
+    border: 2px dashed var(--accent2); border-radius: 10px;
+    display: flex; align-items: center; justify-content: center; font-size: 0.72rem;
+    color: var(--muted); font-weight: 700; text-align: center; pointer-events: none;
+  }
+  .walker-avatar {
+    position: absolute; width: 52px; height: 52px; border-radius: 50%;
+    background: var(--accent); color: #fff; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; font-weight: 800;
+    transition: all 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25); z-index: 2;
+  }
+  .dpad-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; max-width: 330px; margin: 12px auto 0;
+  }
+  .move-btn {
+    background: var(--card); color: var(--text); border: 2px solid var(--border);
+    padding: 9px 8px; border-radius: 10px; font-weight: 700; font-size: 0.83rem;
+    cursor: pointer; text-align: center; transition: all 0.12s;
+  }
+  .move-btn:hover, .move-btn.active {
+    background: var(--accent); color: #fff; border-color: var(--accent);
+  }
+  html[data-theme="dark"] .move-btn.active { background: #2563eb; border-color: #60a5fa; }
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <span class="draft-badge" id="draftBadge">🛠️ INTERACTIVE SANDBOX DRAFT (Not Live on Hub Yet)</span>
+  <div style="display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap;">
+    <button type="button" class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleTheme()">🌙 Dark</button>
+    <div class="lang-switch" role="group" aria-label="Language">
+      <button class="lang-btn active" id="btnEn" onclick="setLang('en')">English</button>
+      <button class="lang-btn" id="btnVi" onclick="setLang('vi')">Tiếng Việt</button>
+      <button class="lang-btn" id="btnKo" onclick="setLang('ko')">한국어</button>
+      <button class="lang-btn" id="btnJa" onclick="setLang('ja')">日本語</button>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <h1 id="mainTitle">Hmong Time, Cardinal Directions &amp; Moving Through Space</h1>
+  <p class="subtitle" id="mainSub">Interactive visual sliders, compass rose, and spatial movement controller for White Hmong (RPA).</p>
+
+  <div class="mod-tabs">
+    <button type="button" class="mod-tab active" id="tabTimeBtn" onclick="switchTab('time')">⏳ 1. Time, Clock &amp; Calendar</button>
+    <button type="button" class="mod-tab" id="tabDirBtn" onclick="switchTab('dir')">🧭 2. Cardinal &amp; Hill Directions</button>
+    <button type="button" class="mod-tab" id="tabSpaceBtn" onclick="switchTab('space')">🚶 3. Moving Through Space</button>
+    <button type="button" class="mod-tab" id="tabPrepBtn" onclick="switchTab('prep')">📦 4. Prepositions &amp; Distance (no / ntawd / ub)</button>
+    <button type="button" class="mod-tab" id="tabPerspBtn" onclick="switchTab('persp')">🔄 5. Mus vs. Los vs. Tuaj</button>
+  </div>
+</div>
+
+<!-- MODULE 1: TIME -->
+<div class="card" id="modTime">
+  <div class="sky-stage" id="skyStage">
+    <div class="celestial-orb" id="celestialOrb">☀️</div>
+    <div style="z-index:2;max-width:75%;">
+      <div style="font-size:0.82rem;text-transform:uppercase;letter-spacing:0.8px;opacity:0.9;" id="skyCombinedLabel">COMBINED HMONG TIME EXPRESSION</div>
+      <div style="font-size:2rem;font-weight:900;margin:2px 0;text-shadow:0 2px 8px rgba(0,0,0,0.35);" id="skyHmongPhrase">hnub no tav su</div>
+      <div style="font-size:1.08rem;font-weight:700;opacity:0.95;" id="skyMeaningPhrase">Today at Noon (Midday)</div>
+    </div>
+    <div style="z-index:2;margin-top:14px;background:rgba(0,0,0,0.32);backdrop-filter:blur(6px);padding:10px 14px;border-radius:10px;">
+      <div style="font-size:0.96rem;font-weight:700;" id="skyExampleHmong">🗣️ Example: Hnub no tav su kuv yuav noj mov.</div>
+      <div style="font-size:0.85rem;opacity:0.9;" id="skyExampleGloss">"Today at noon I will eat a meal."</div>
+    </div>
+  </div>
+
+  <div class="time-main-grid">
+    <div class="timeline-box">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;">
+        <strong id="horizTitle" style="color:var(--accent);font-size:1.02rem;">↔️ Horizontal Timeline: Relative Days (Center = Today / hnub no)</strong>
+        <button type="button" class="theme-toggle-btn" onclick="setDayIndex(3)" id="resetTodayBtn">🎯 Jump to Today (hnub no)</button>
+      </div>
+      <input type="range" id="dayRange" min="0" max="7" step="1" value="3" style="width:100%;margin:14px 0 6px;accent-color:var(--accent);cursor:pointer;">
+      <div class="day-nodes" id="dayNodesContainer"></div>
+
+      <div class="phrase-result-box" id="dayDetailBox"></div>
+    </div>
+
+    <div class="vert-panel">
+      <div>
+        <strong id="vertTitle" style="color:var(--accent);font-size:0.98rem;">↕️ Vertical Slider: Time of Day</strong>
+        <div style="font-size:0.8rem;color:var(--muted);margin-top:2px;" id="vertSub">Slide or click from Dawn to Night:</div>
+      </div>
+      <div style="display:flex;gap:12px;align-items:stretch;margin-top:8px;">
+        <input type="range" id="todRange" min="0" max="7" step="1" value="2" style="writing-mode:bt-lr;-webkit-appearance:slider-vertical;width:28px;accent-color:var(--accent);cursor:pointer;">
+        <div class="tod-list" id="todListContainer" style="flex:1;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUB-PANEL 1B: INTERACTIVE CLOCK FACE (teev, feeb, ib nrab) -->
+  <div class="timeline-box" style="margin-top:16px;">
+    <strong id="clockHeading" style="color:var(--accent);font-size:1.05rem;">🕰️ Interactive Hmong Clock: Hours (`teev`), Minutes (`feeb`) &amp; Half-Hours (`ib nrab`)</strong>
+    <div style="display:grid;grid-template-columns:230px 1fr;gap:16px;align-items:center;margin-top:12px;">
+      <div style="width:200px;height:200px;border-radius:50%;border:5px solid var(--accent);background:var(--card);position:relative;margin:0 auto;box-shadow:0 4px 14px rgba(0,0,0,0.1);" id="analogClock">
+        <div style="position:absolute;left:50%;top:10px;transform:translateX(-50%);font-weight:800;font-size:0.85rem;">12</div>
+        <div style="position:absolute;right:12px;top:50%;transform:translateY(-50%);font-weight:800;font-size:0.85rem;">3</div>
+        <div style="position:absolute;left:50%;bottom:10px;transform:translateX(-50%);font-weight:800;font-size:0.85rem;">6</div>
+        <div style="position:absolute;left:12px;top:50%;transform:translateY(-50%);font-weight:800;font-size:0.85rem;">9</div>
+        <div id="clockHourHand" style="position:absolute;left:50%;top:50%;width:6px;height:52px;background:var(--accent);transform-origin:bottom center;transform:translate(-50%,-100%) rotate(90deg);border-radius:999px;transition:transform 0.25s;"></div>
+        <div id="clockMinHand" style="position:absolute;left:50%;top:50%;width:4px;height:74px;background:#ef4444;transform-origin:bottom center;transform:translate(-50%,-100%) rotate(0deg);border-radius:999px;transition:transform 0.25s;"></div>
+        <div style="position:absolute;left:50%;top:50%;width:14px;height:14px;background:var(--accent);border:2px solid #fff;border-radius:50%;transform:translate(-50%,-50%);"></div>
+      </div>
+      <div>
+        <div style="display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin-bottom:10px;">
+          <label style="font-weight:700;font-size:0.9rem;">Hour (1–12):
+            <input type="range" id="clockHourRange" min="1" max="12" step="1" value="3" style="width:130px;accent-color:var(--accent);vertical-align:middle;">
+            <span id="clockHourVal" style="font-weight:800;color:var(--accent);">3</span>
+          </label>
+          <label style="font-weight:700;font-size:0.9rem;">Minutes (0–55):
+            <input type="range" id="clockMinRange" min="0" max="55" step="5" value="30" style="width:140px;accent-color:var(--accent);vertical-align:middle;">
+            <span id="clockMinVal" style="font-weight:800;color:#ef4444;">:30</span>
+          </label>
+        </div>
+        <div class="phrase-result-box" id="clockResultBox" style="margin-top:6px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUB-PANEL 1C: DAYS OF THE WEEK & RELATIVE WEEKS / MONTHS / YEARS -->
+  <div class="timeline-box" style="margin-top:16px;">
+    <strong id="calHeading" style="color:var(--accent);font-size:1.05rem;">📆 Days of the Week (`Hnub`), Weeks (`Lim tiam`), Months (`Hli`) &amp; Years (`Xyoo`)</strong>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;" id="dowButtonsRow"></div>
+    <div class="phrase-result-box" id="dowResultBox" style="margin-top:10px;"></div>
+    <div class="dir-grid" id="wmyGridContainer" style="margin-top:12px;"></div>
+  </div>
+
+</div>
+
+<!-- MODULE 2: CARDINAL DIRECTIONS -->
+<div class="card hidden" id="modDir">
+  <div class="compass-layout">
+    <div>
+      <div class="compass-wheel" id="compassWheel">
+        <div class="compass-needle" id="compassNeedle"></div>
+        <div class="compass-center"></div>
+        <button type="button" class="c-btn active" style="left:50%;top:12%;" onclick="selectDirection(0)" id="cBtn0">⬆️ N<br>qaum teb</button>
+        <button type="button" class="c-btn" style="left:86%;top:50%;" onclick="selectDirection(1)" id="cBtn1">➡️ E<br>hnub tuaj</button>
+        <button type="button" class="c-btn" style="left:50%;top:88%;" onclick="selectDirection(2)" id="cBtn2">⬇️ S<br>qab teb</button>
+        <button type="button" class="c-btn" style="left:14%;top:50%;" onclick="selectDirection(3)" id="cBtn3">⬅️ W<br>hnub poob</button>
+      </div>
+    </div>
+    <div>
+      <div class="phrase-result-box" id="dirDetailBox" style="margin-top:0;"></div>
+      <h3 style="margin:14px 0 6px;color:var(--accent);font-size:1rem;" id="dirGridHeading">All Cardinal &amp; Hmong Mountain/Valley Spatial Directions:</h3>
+      <div class="dir-grid" id="dirGridContainer"></div>
+    </div>
+  </div>
+</div>
+
+<!-- MODULE 3: MOVING THROUGH SPACE -->
+<div class="card hidden" id="modSpace">
+  <div class="space-layout">
+    <div>
+      <div class="grid-arena" id="gridArena">
+        <div class="arena-house" id="arenaHouse">🏠 Tsev<br>(House)</div>
+        <div class="walker-avatar" id="walkerAvatar" style="left:139px;top:139px;">
+          <span id="walkerArrow" style="font-size:1.1rem;line-height:1;">⬆️</span>
+          <span style="font-size:0.68rem;">Kuv</span>
+        </div>
+      </div>
+      <div style="text-align:center;margin-top:8px;font-size:0.84rem;color:var(--muted);" id="elevStatus">
+        ⛰️ Elevation: Ground Level (0) · Facing: North (⬆️)
+      </div>
+      <div class="dpad-grid">
+        <button type="button" class="move-btn" onclick="triggerSpaceAction('turn_left')" id="mBtnTL">↺ Turn Left<br><code>tig sab laug</code></button>
+        <button type="button" class="move-btn" onclick="triggerSpaceAction('forward')" id="mBtnFwd">⬆️ Forward<br><code>mus tom ntej</code></button>
+        <button type="button" class="move-btn" onclick="triggerSpaceAction('turn_right')" id="mBtnTR">↻ Turn Right<br><code>tig sab xis</code></button>
+        <button type="button" class="move-btn" onclick="triggerSpaceAction('up')" id="mBtnUp">⛰️ Go Up<br><code>nce mus saum</code></button>
+        <button type="button" class="move-btn" onclick="triggerSpaceAction('backward')" id="mBtnBack">⬇️ Backward<br><code>thim rov qab</code></button>
+        <button type="button" class="move-btn" onclick="triggerSpaceAction('down')" id="mBtnDown">🏞️ Go Down<br><code>nqis los qab</code></button>
+        <button type="button" class="move-btn" onclick="triggerSpaceAction('enter')" id="mBtnIn">🚪 Go Inside<br><code>nkag mus hauv</code></button>
+        <button type="button" class="move-btn" onclick="triggerSpaceAction('turn_around')" id="mBtnAround">🔄 Turn Around<br><code>tig rov qab</code></button>
+        <button type="button" class="move-btn" onclick="triggerSpaceAction('exit')" id="mBtnOut">🌳 Go Outside<br><code>tawm nraum zoov</code></button>
+      </div>
+    </div>
+    <div>
+      <div class="phrase-result-box" id="spaceDetailBox" style="margin-top:0;"></div>
+      <h3 style="margin:14px 0 6px;color:var(--accent);font-size:1rem;" id="spaceListHeading">All 12 Core Spatial Movement Phrases (Click any card to test):</h3>
+      <div class="dir-grid" id="spaceCardsContainer"></div>
+    </div>
+  </div>
+</div>
+
+<!-- MODULE 4: PREPOSITIONS & DISTANCE (NO / NTAWD / UB) -->
+<div class="card hidden" id="modPrep">
+  <div class="timeline-box">
+    <strong id="prepTitle" style="color:var(--accent);font-size:1.08rem;">📦 1. "Where Is It?" Prepositions Visualizer (`nyob qhov twg?`)</strong>
+    <p style="font-size:0.88rem;color:var(--muted);margin:4px 0 12px;" id="prepSub">Click any position button below to move the 📖 Bible (`Phau Vajlugkub`) around the 🪑 Table (`lub rooj`) and 🏠 Box/Room:</p>
+    <div style="display:grid;grid-template-columns:300px 1fr;gap:18px;align-items:center;">
+      <div style="width:280px;height:240px;margin:0 auto;background:var(--card);border:3px solid var(--accent);border-radius:14px;position:relative;overflow:hidden;" id="prepStage">
+        <!-- Table / Box Reference -->
+        <div style="position:absolute;left:85px;top:95px;width:110px;height:75px;border:3px solid var(--accent2);background:var(--soft);border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.8rem;color:var(--muted);z-index:2;" id="prepRefBox">
+          🪑 Lub Rooj<br>(Table / Box)
+        </div>
+        <!-- Moving Item -->
+        <div id="prepBall" style="position:absolute;left:118px;top:40px;width:44px;height:44px;border-radius:10px;background:#f59e0b;color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.45rem;box-shadow:0 4px 12px rgba(0,0,0,0.25);transition:all 0.3s cubic-bezier(0.22,1,0.36,1);z-index:3;">
+          📖
+        </div>
+      </div>
+      <div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;" id="prepButtonsRow"></div>
+        <div class="phrase-result-box" id="prepDetailBox" style="margin-top:0;"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="timeline-box" style="margin-top:16px;">
+    <strong id="distTitle" style="color:var(--accent);font-size:1.08rem;">👉 2. Three-Zone Hmong Distance &amp; Pointing Slider (`no` vs. `ntawd` vs. `ub`)</strong>
+    <p style="font-size:0.88rem;color:var(--muted);margin:4px 0 10px;" id="distSub">Slide between Zone 1 (Right here by me), Zone 2 (There by you / middle distance), and Zone 3 (Way over yonder):</p>
+    <input type="range" id="distRange" min="0" max="2" step="1" value="0" style="width:100%;accent-color:var(--accent);cursor:pointer;">
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px;" id="distZonesRow"></div>
+    <div class="phrase-result-box" id="distDetailBox" style="margin-top:12px;"></div>
+  </div>
+</div>
+
+<!-- MODULE 5: MUS vs. LOS vs. TUAJ (MOVEMENT PERSPECTIVE) -->
+<div class="card hidden" id="modPersp">
+  <div class="timeline-box">
+    <strong id="perspTitle" style="color:var(--accent);font-size:1.1rem;">🔄 "Go" vs. "Come Home" vs. "Come Visit" (`mus` vs. `los` vs. `tuaj`)</strong>
+    <p style="font-size:0.9rem;color:var(--muted);margin:4px 0 12px;" id="perspSub">
+      In White Hmong, choosing between <code>mus</code>, <code>los</code>, and <code>tuaj</code> tells the listener <strong>whose home</strong> the movement is heading toward. Click each scenario to see the animation:
+    </p>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;" id="perspButtonsRow"></div>
+
+    <div style="background:var(--card);border:2px solid var(--border);border-radius:14px;padding:18px;position:relative;min-height:135px;display:flex;align-items:center;justify-content:space-between;" id="perspStage">
+      <div style="text-align:center;z-index:2;width:130px;">
+        <div style="font-size:2rem;" id="perspLeftIcon">🏠</div>
+        <div style="font-weight:800;font-size:0.86rem;" id="perspLeftLabel">Home Base</div>
+      </div>
+      <div style="flex:1;height:6px;background:var(--border);margin:0 16px;position:relative;border-radius:999px;">
+        <div id="perspTraveler" style="position:absolute;top:-22px;left:15%;font-size:1.7rem;transition:left 0.45s cubic-bezier(0.22,1,0.36,1);">🚶➡️</div>
+      </div>
+      <div style="text-align:center;z-index:2;width:130px;">
+        <div style="font-size:2rem;" id="perspRightIcon">🏛️</div>
+        <div style="font-weight:800;font-size:0.86rem;" id="perspRightLabel">Destination</div>
+      </div>
+    </div>
+
+    <div class="phrase-result-box" id="perspDetailBox" style="margin-top:14px;"></div>
+  </div>
+</div>
+
+
+<script>
+// 1. HORIZONTAL TIMELINE: 8 Relative Days (Index 3 = Today / hnub no)
+const DAYS_DATA = [
+  {
+    offset: -3, hmong: "hnub i ub", alt: "puag nram ub (3 hnub dhau los)", tense: "past",
+    en: "3 days ago", vi: "3 ngày trước (hôm kìa)", ko: "3일 전 (그끄저께)", ja: "3日前（一昨々日）",
+    noteEn: "Adding 'ub' (yonder/far) to 'hnub i' pushes it one day further back into the past.",
+    noteVi: "Thêm chữ 'ub' (xa hơn) sau 'hnub i' để chỉ 3 ngày trước.",
+    noteKo: "'hnub i'(그저께) 뒤에 'ub'(저 멀리)를 붙여 3일 전을 나타냅니다.",
+    noteJa: "「hnub i（一昨日）」に「ub（向こう）」を添えて3日前を表します。"
+  },
+  {
+    offset: -2, hmong: "hnub i", alt: "ob hnub dhau los", tense: "past",
+    en: "Day before yesterday", vi: "Hôm kia (2 ngày trước)", ko: "그저께 (2일 전)", ja: "一昨日（おととい）",
+    noteEn: "Used for two days ago. With past actions, pair the verb with 'tau' (e.g., Hnub i kuv tau mus...).",
+    noteVi: "Dùng cho 2 ngày trước. Khi kể việc đã qua, thêm 'tau' trước động từ.",
+    noteKo: "이틀 전(그저께)을 뜻하며, 과거 동작에는 동사 앞에 'tau'를 함께 씁니다.",
+    noteJa: "2日前（一昨日）。過去の動作には動詞の前に「tau」を置きます。"
+  },
+  {
+    offset: -1, hmong: "nag hmo", alt: "tsoob hmo", tense: "past",
+    en: "Yesterday", vi: "Hôm qua", ko: "어제", ja: "昨日（きのう）",
+    noteEn: "'nag hmo' means yesterday (or last night when referring to the evening). Pair past verbs with 'tau'.",
+    noteVi: "'nag hmo' nghĩa là hôm qua (hoặc tối qua). Dùng với 'tau' cho hành động đã xảy ra.",
+    noteKo: "'nag hmo'는 어제(또는 어젯밤)를 뜻합니다.",
+    noteJa: "「nag hmo」は昨日（または昨夜）を意味します。"
+  },
+  {
+    offset: 0, hmong: "hnub no", alt: "niaj hnub no", tense: "present",
+    en: "Today (Center)", vi: "Hôm nay (Trung tâm)", ko: "오늘 (중심)", ja: "今日（現在）",
+    noteEn: "'hnub' = day/sun, 'no' = this → 'hnub no' = today! The anchor point of the Hmong timeline.",
+    noteVi: "'hnub' = ngày/mặt trời, 'no' = này → 'hnub no' = hôm nay!",
+    noteKo: "'hnub'(날/해) + 'no'(이것) = 'hnub no'(오늘)! 시간축의 중심입니다.",
+    noteJa: "「hnub（日・太陽）」＋「no（この）」＝「hnub no（今日）」！時間軸の中心です。"
+  },
+  {
+    offset: 1, hmong: "tagkis", alt: "พรุ่ง / tag kis", tense: "future",
+    en: "Tomorrow", vi: "Ngày mai", ko: "내일", ja: "明日（あした）",
+    noteEn: "'tagkis' means tomorrow (and is also used for 'morning'). Pair future actions with 'yuav' (will).",
+    noteVi: "'tagkis' nghĩa là ngày mai (cũng dùng cho buổi sáng). Dùng kèm 'yuav' (sẽ) trước động từ.",
+    noteKo: "'tagkis'는 내일(또는 아침)을 뜻합니다. 미래 표현에는 동사 앞에 'yuav'(~할 것이다)를 씁니다.",
+    noteJa: "「tagkis」は明日（または朝）を意味します。未来の動作には動詞の前に「yuav」を置きます。"
+  },
+  {
+    offset: 2, hmong: "nagkis", alt: "hnub tom qab tagkis", tense: "future",
+    en: "Day after tomorrow", vi: "Ngày mốt (2 ngày tới)", ko: "모레 (내일모레)", ja: "明後日（あさって）",
+    noteEn: "Slide one step past 'tagkis' (tomorrow) and you get 'nagkis' = the day after tomorrow!",
+    noteVi: "Sau 'tagkis' (ngày mai) là 'nagkis' = ngày mốt (2 ngày nữa)!",
+    noteKo: "'tagkis'(내일) 다음 날은 'nagkis'(모레)입니다!",
+    noteJa: "「tagkis（明日）」の次の日は「nagkis（明後日）」です！"
+  },
+  {
+    offset: 3, hmong: "puag nraus", alt: "peb hnub tom ntej", tense: "future",
+    en: "2 days after tomorrow", vi: "Ngày kia (3 ngày tới)", ko: "글피 (3일 후)", ja: "明々後日（3日後）",
+    noteEn: "'puag nraus' (lit. way out beyond) means two days after tomorrow (3 days from today).",
+    noteVi: "'puag nraus' chỉ hai ngày sau ngày mai (tức 3 ngày tính từ hôm nay).",
+    noteKo: "'puag nraus'는 내일모레 다음 날(오늘부터 3일 후, 글피)을 뜻합니다.",
+    noteJa: "「puag nraus」は明後日の翌日（今日から3日後・明々後日）を表します。"
+  },
+  {
+    offset: 4, hmong: "puag nraus ub", alt: "plaub hnub tom ntej", tense: "future",
+    en: "3 days after tomorrow", vi: "4 ngày tới (xa hơn ngày kia)", ko: "그글피 (4일 후)", ja: "4日後（弥の明後日）",
+    noteEn: "Adding 'ub' (yonder/far) to 'puag nraus' stretches it one day further: three days after tomorrow (4 days from today)!",
+    noteVi: "Thêm 'ub' vào 'puag nraus' đẩy xa thêm 1 ngày nữa: 3 ngày sau ngày mai (4 ngày từ hôm nay)!",
+    noteKo: "'puag nraus'에 'ub'(저 멀리)를 더해 3일 뒤의 내일(오늘부터 4일 후, 그글피)을 나타냅니다!",
+    noteJa: "「puag nraus」に「ub（さらに向こう）」を添えて、明日の3日後（4日後）を表します！"
+  }
+];
+
+// 2. VERTICAL SLIDER: 8 Times of Day (Dawn -> Night)
+const TOD_DATA = [
+  {
+    idx: 0, hmong: "kaj ntug", alt: "ntuj kaj (daybreak)", icon: "🌅",
+    bg: "linear-gradient(135deg, #312e81 0%, #be185d 55%, #f59e0b 100%)", orbLeft: "14%", orbTop: "68%",
+    en: "Dawn (Daybreak)", vi: "Bình minh (Rạng đông)", ko: "새벽 (동틀 녘)", ja: "夜明け（暁）",
+    tipEn: "'kaj' = bright/clear, 'ntug' = sky/horizon → when the sky first turns bright at daybreak.",
+    tipVi: "'kaj' = sáng rõ, 'ntug' = bầu trời/chân trời → lúc trời vừaửng sáng.",
+    tipKo: "'kaj'(밝아지다) + 'ntug'(하늘) → 하늘이 처음 밝아오는 새벽녘.",
+    tipJa: "「kaj（明るくなる）」＋「ntug（空）」＝空が白み始める夜明け。"
+  },
+  {
+    idx: 1, hmong: "sawv ntxov", alt: "yav tagkis (morning)", icon: "🌤️",
+    bg: "linear-gradient(135deg, #0284c7 0%, #38bdf8 60%, #fde047 100%)", orbLeft: "28%", orbTop: "36%",
+    en: "Morning", vi: "Buổi sáng", ko: "아침 (오전)", ja: "朝（午前）",
+    tipEn: "'sawv' = rise/get up, 'ntxov' = early → early morning! ('yav tagkis' is also used for during the morning).",
+    tipVi: "'sawv' = thức dậy, 'ntxov' = sớm → buổi sáng sớm! (cũng nói 'yav tagkis').",
+    tipKo: "'sawv'(일어나다) + 'ntxov'(일찍) → 이른 아침! ('yav tagkis'도 오전이라는 뜻으로 쓰임).",
+    tipJa: "「sawv（起きる）」＋「ntxov（早い）」＝朝早く！（午前中は yav tagkis とも言います）。"
+  },
+  {
+    idx: 2, hmong: "tav su", alt: "ib tag su (midday)", icon: "☀️",
+    bg: "linear-gradient(135deg, #0369a1 0%, #0ea5e9 55%, #7dd3fc 100%)", orbLeft: "50%", orbTop: "14%",
+    en: "Noon (Midday)", vi: "Buổi trưa (Giữa trưa)", ko: "정오 (낮 12시 / 한낮)", ja: "正午（昼）",
+    tipEn: "'tav su' means noon / lunchtime ('noj su' = eat lunch).",
+    tipVi: "'tav su' là giữa trưa / giờ ăn trưa ('noj su' = ăn trưa).",
+    tipKo: "'tav su'는 정오/점심시간을 뜻합니다 ('noj su' = 점심을 먹다).",
+    tipJa: "「tav su」は正午・昼時を意味します（「noj su」＝昼食をとる）。"
+  },
+  {
+    idx: 3, hmong: "yav lig tav su", alt: "qaij hnub (early afternoon)", icon: "⛅",
+    bg: "linear-gradient(135deg, #1d4ed8 0%, #38bdf8 55%, #fbbf24 100%)", orbLeft: "66%", orbTop: "28%",
+    en: "Afternoon", vi: "Buổi chiều (Sau giờ trưa)", ko: "오후", ja: "午後（昼過ぎ）",
+    tipEn: "'lig tav su' = past noon, or 'qaij hnub' = when the sun tilts westward in the afternoon.",
+    tipVi: "'lig tav su' = quá trưa, hoặc 'qaij hnub' = khi mặt trời nghiêng bóng buổi chiều.",
+    tipKo: "'lig tav su'(정오가 지난 시간) 또는 해가 서쪽으로 기우는 오후('qaij hnub').",
+    tipJa: "「lig tav su（正午過ぎ）」または太陽が傾き始める午後（「qaij hnub」）。"
+  },
+  {
+    idx: 4, hmong: "yav tsaus ntuj", alt: "yuav tsaus ntuj", icon: "🌇",
+    bg: "linear-gradient(135deg, #1e3a8a 0%, #7e22ce 50%, #f97316 100%)", orbLeft: "76%", orbTop: "48%",
+    en: "Evening", vi: "Buổi chiều tối", ko: "저녁", ja: "夕方",
+    tipEn: "'yav' = time period, 'tsaus ntuj' = sky darkening → late afternoon / evening time.",
+    tipVi: "'yav' = khoảng thời gian, 'tsaus ntuj' = trời tối dần → buổi chiều tối.",
+    tipKo: "'yav'(시간대) + 'tsaus ntuj'(하늘이 어두워짐) → 저녁 시간대.",
+    tipJa: "「yav（時間帯）」＋「tsaus ntuj（空が暗くなる）」＝夕方〜宵の口。"
+  },
+  {
+    idx: 5, hmong: "tsaus ntuj zuag", alt: "hnubliag (twilight)", icon: "🌆",
+    bg: "linear-gradient(135deg, #0f172a 0%, #4c1d95 55%, #db2777 100%)", orbLeft: "84%", orbTop: "64%",
+    en: "Dusk (Twilight)", vi: "Chập choạng tối (Hoàng hôn)", ko: "황혼 (땅거미 질 무렵)", ja: "夕暮れ（黄昏・薄暮）",
+    tipEn: "'tsaus ntuj zuag' describes dusk when twilight softly settles over the land.",
+    tipVi: "'tsaus ntuj zuag' tả lúc chập choạng tối khi bóng chiều vừa buông xuống.",
+    tipKo: "'tsaus ntuj zuag'는 땅거미가 은은하게 내려앉는 황혼 무렵을 뜻합니다.",
+    tipJa: "「tsaus ntuj zuag」はあたりが薄暗くなり始める夕暮れ（たそがれ時）を表します。"
+  },
+  {
+    idx: 6, hmong: "hnub poob", alt: "hnub poob qab roob", icon: "🌄",
+    bg: "linear-gradient(135deg, #111827 0%, #7c2d12 55%, #ea580c 100%)", orbLeft: "88%", orbTop: "76%",
+    en: "Sunset", vi: "Mặt trời lặn", ko: "일몰 (해질녘)", ja: "日没（日の入り）",
+    tipEn: "'hnub' = sun, 'poob' = fall/drop → 'hnub poob' = sunset! (This also gives Hmong the word for West: sab hnub poob).",
+    note: "",
+    tipVi: "'hnub' = mặt trời, 'poob' = rơi/lặn → 'hnub poob' = mặt trời lặn! (Cũng là gốc của hướng Tây: sab hnub poob).",
+    tipKo: "'hnub'(해) + 'poob'(떨어지다/지다) = 일몰! (서쪽을 뜻하는 'sab hnub poob'의 유래이기도 합니다).",
+    tipJa: "「hnub（太陽）」＋「poob（落ちる・沈む）」＝日没！（西＝sab hnub poob の語源でもあります）。"
+  },
+  {
+    idx: 7, hmong: "hmo ntuj", alt: "ib tag hmo (midnight)", icon: "🌙",
+    bg: "linear-gradient(135deg, #020617 0%, #0f172a 60%, #1e1b4b 100%)", orbLeft: "52%", orbTop: "22%",
+    en: "Night (Midnight = ib tag hmo)", vi: "Ban đêm (Nửa đêm = ib tag hmo)", ko: "밤 (자정 = ib tag hmo)", ja: "夜（真夜中 = ib tag hmo）",
+    tipEn: "'hmo ntuj' = nighttime. For midnight specifically, say 'ib tag hmo'.",
+    tipVi: "'hmo ntuj' = ban đêm. Nếu nói đúng nửa đêm (12h đêm) thì dùng 'ib tag hmo'.",
+    tipKo: "'hmo ntuj'는 밤입니다. 자정(밤 12시)은 'ib tag hmo'라고 합니다.",
+    tipJa: "「hmo ntuj」は夜。真夜中（深夜0時）は「ib tag hmo」と言います。"
+  }
+];
+
+// 3. CARDINAL & HMONG MOUNTAIN/VALLEY SPATIAL DIRECTIONS
+const DIR_DATA = [
+  { id: 0, deg: 0, code: "N", hmong: "sab qaum teb", lit: "upper/top land side", en: "North", vi: "Hướng Bắc", ko: "북쪽", ja: "北", ex: "Mus lawm sab qaum teb.", exEn: "Go toward the North." },
+  { id: 1, deg: 90, code: "E", hmong: "sab hnub tuaj", lit: "side where the sun comes/rises", en: "East", vi: "Hướng Đông", ko: "동쪽", ja: "東", ex: "Lub hnub tawm sab hnub tuaj.", exEn: "The sun rises in the East." },
+  { id: 2, deg: 180, code: "S", hmong: "sab qab teb", lit: "lower/bottom land side", en: "South", vi: "Hướng Nam", ko: "남쪽", ja: "南", ex: "Peb mus sab qab teb.", exEn: "We go to the South." },
+  { id: 3, deg: 270, code: "W", hmong: "sab hnub poob", lit: "side where the sun falls/sets", en: "West", vi: "Hướng Tây", ko: "서쪽", ja: "西", ex: "Lub hnub poob mus sab hnub poob.", exEn: "The sun sets in the West." },
+  { id: 4, deg: 0, code: "UPHILL", hmong: "sab pem ub / pem suab", lit: "uphill / higher slope yonder", en: "Uphill / Higher Up", vi: "Phía trên đồi / Dốc trên", ko: "언덕 위쪽 / 위쪽 경사", ja: "坂の上・上方", ex: "Nws lub tsev nyob pem ub.", exEn: "His/her house is up the hill yonder." },
+  { id: 5, deg: 180, code: "DOWNHILL", hmong: "sab nram ub / nram hav", lit: "downhill / down in the valley", en: "Downhill / Down in the Valley", vi: "Phía dưới dốc / Dưới thung lũng", ko: "언덕 아래쪽 / 골짜기 아래", ja: "坂の下・谷の下方", ex: "Mus nram hav dej.", exEn: "Go down to the river valley." },
+  { id: 6, deg: 90, code: "ACROSS", hmong: "sab tim ub / tim nrau", lit: "across on the opposite side (same level)", en: "Across / Opposite Side", vi: "Phía bên kia (ngang tầm, qua sông/đường)", ko: "건너편 / 맞은편 (강·길 건너)", ja: "向こう側・対岸（同じ高さ）", ex: "Lub Tuam Tsev Npaj Rau Kev Sib Txoos nyob tim ub.", exEn: "The Kingdom Hall is right across over there." }
+];
+
+// 4. MOVING THROUGH SPACE (12 Interactive Actions)
+const SPACE_DATA = [
+  { key: "forward", icon: "⬆️", hmong: "mus lawm tom ntej", shortHm: "tom ntej", en: "Move Forward / Ahead", vi: "Đi về phía trước / Tiến lên", ko: "앞으로 가다 / 전진하다", ja: "前へ進む・前進する", ex: "Thov mus lawm tom ntej.", exEn: "Please move forward." },
+  { key: "backward", icon: "⬇️", hmong: "thim rov qab / nyob tom qab", shortHm: "tom qab", en: "Move Backward / Behind", vi: "Lùi lại phía sau / Đằng sau", ko: "뒤로 물러나다 / 뒤쪽", ja: "後ろへ下がる・後方", ex: "Saib tom qab.", exEn: "Look behind / in the back." },
+  { key: "turn_left", icon: "↺", hmong: "tig mus sab laug", shortHm: "sab laug", en: "Turn Left", vi: "Rẽ trái / Quay sang trái", ko: "왼쪽으로 돌다 (좌회전)", ja: "左へ曲がる・左を向く", ex: "Tig mus sab laug ntawm txoj kev.", exEn: "Turn left at the road." },
+  { key: "turn_right", icon: "↻", hmong: "tig mus sab xis", shortHm: "sab xis", en: "Turn Right", vi: "Rẽ phải / Quay sang phải", ko: "오른쪽으로 돌다 (우회전)", ja: "右へ曲がる・右を向く", ex: "Tig mus sab xis.", exEn: "Turn to the right side." },
+  { key: "turn_around", icon: "🔄", hmong: "tig rov qab", shortHm: "tig rov qab", en: "Turn Around (180°)", vi: "Quay ngược lại (180°)", ko: "뒤돌아보다 / 방향을 돌리다", ja: "振り返る・Uターンする", ex: "Nws tig rov qab los.", exEn: "He/she turned around and came back." },
+  { key: "straight", icon: "⏫", hmong: "mus ncaj nraim", shortHm: "ncaj nraim", en: "Go Straight Ahead", vi: "Đi thẳng một mạch", ko: "곧장 직진하다", ja: "まっすぐ進む（直進する）", ex: "Mus ncaj nraim tom ntej.", exEn: "Go straight ahead." },
+  { key: "up", icon: "⛰️", hmong: "nce mus saum / mus pem", shortHm: "saum / nce", en: "Go Up / Ascend / Above", vi: "Đi lên trên / Leo lên", ko: "위로 올라가다 (`saum` = 위)", ja: "上へ登る・上がる（saum＝上）", ex: "Nce mus saum lub roob.", exEn: "Climb up the mountain." },
+  { key: "down", icon: "🏞️", hmong: "nqis los qab / mus nram", shortHm: "qab / nqis", en: "Go Down / Descend / Below", vi: "Đi xuống dưới", ko: "아래로 내려오다 (`qab/nram` = 아래)", ja: "下へ降りる・下がる（qab＝下）", ex: "Nqis los nram tsev.", exEn: "Come down to the house below." },
+  { key: "enter", icon: "🚪", hmong: "nkag mus hauv", shortHm: "hauv (inside)", en: "Go Inside / Enter", vi: "Đi vào bên trong", ko: "안으로 들어가다 (`hauv` = 안)", ja: "中へ入る（hauv＝中・内側）", ex: "Thov nkag los hauv tsev.", exEn: "Please come inside the house." },
+  { key: "exit", icon: "🌳", hmong: "tawm mus nraum zoov", shortHm: "nraum zoov (outside)", en: "Go Outside / Exit", vi: "Đi ra bên ngoài", ko: "밖으로 나가다 (`nraum zoov` = 밖)", ja: "外へ出る（nraum zoov＝外）", ex: "Cov menyuam tawm mus nraum zoov.", exEn: "The children went outside." },
+  { key: "return", icon: "🏠", hmong: "rov qab los", shortHm: "rov los", en: "Come Back / Return Here", vi: "Quay trở về đây", ko: "되돌아오다 (화자 쪽으로)", ja: "戻ってくる（話し手の方へ）", ex: "Kuv yuav rov qab los xyuas koj.", exEn: "I will return to visit you." },
+  { key: "cross", icon: "🌉", hmong: "hlob mus tim ub", shortHm: "hlob / tim ub", en: "Cross Over to the Other Side", vi: "Băng qua phía bên kia", ko: "건너편으로 건너가다", ja: "向こう側へ渡る・横断する", ex: "Hlob mus tim ub.", exEn: "Cross over to the other side." }
+];
+const UI_LABELS = {
+  en: {
+    draftBadge: "🛠️ INTERACTIVE SANDBOX DRAFT (Not Live on Hub Yet)",
+    mainTitle: "Hmong Time, Cardinal Directions & Moving Through Space",
+    mainSub: "Slide through days & times of day, spin the Hmong compass rose, and move through space in real time.",
+    tabTime: "⏳ 1. Time & Sky Timeline",
+    tabDir: "🧭 2. Cardinal & Hill Directions",
+    tabSpace: "🚶 3. Moving Through Space",
+    horizTitle: "↔️ Horizontal Timeline: Relative Days (Center = Today / hnub no)",
+    resetToday: "🎯 Jump to Today (hnub no)",
+    vertTitle: "↕️ Vertical Slider: Time of Day",
+    vertSub: "Slide or click from Dawn to Night:",
+    combinedLabel: "COMBINED HMONG TIME EXPRESSION",
+    dirGridHeading: "All Cardinal & Hmong Mountain/Valley Spatial Directions:",
+    spaceListHeading: "All 12 Core Spatial Movement Phrases (Click any card or use buttons to move):"
+  },
+  vi: {
+    draftBadge: "🛠️ BẢN NHÁP THỬ NGHIỆM (Chưa đưa lên Trang chính)",
+    mainTitle: "Thời Gian, Phương Hướng & Di Chuyển Trong Không Gian Tiếng H'Mông",
+    mainSub: "Kéo thanh trượt ngày & buổi trong ngày, xoay la bàn phương hướng và điều khiển di chuyển trực quan.",
+    tabTime: "⏳ 1. Trục Thời Gian & Bầu Trời",
+    tabDir: "🧭 2. Phương Hướng & Địa Hình",
+    tabSpace: "🚶 3. Di Chuyển Trong Không Gian",
+    horizTitle: "↔️ Trục Ngang: Các Ngày Tương Đối (Giữa = Hôm nay / hnub no)",
+    resetToday: "🎯 Về Hôm nay (hnub no)",
+    vertTitle: "↕️ Thanh Trượt Dọc: Các Buổi Trong Ngày",
+    vertSub: "Kéo hoặc bấm từ Bình minh đến Ban đêm:",
+    combinedLabel: "CỤM TỪ THỜI GIAN TIẾNG H'MÔNG KẾT HỢP",
+    dirGridHeading: "Toàn bộ Phương Hướng La Bàn & Địa Hình Đồi Núi H'Mông:",
+    spaceListHeading: "12 Cụm Từ Di Chuyển Không Gian Cốt Lõi (Bấm để di chuyển thử):"
+  },
+  ko: {
+    draftBadge: "🛠️ 인터랙티브 샌드박스 초안 (아직 라이브 허브에 게시되지 않음)",
+    mainTitle: "몽족어 시간 · 방위 · 공간 이동 인터랙티브 모듈",
+    mainSub: "날짜와 시간대 슬라이더를 움직이고, 나침반과 공간 이동 컨트롤러를 직접 조작해 보세요.",
+    tabTime: "⏳ 1. 시간 & 하늘 타임라인",
+    tabDir: "🧭 2. 동서남북 & 지형 방위",
+    tabSpace: "🚶 3. 공간 이동 시뮬레이터",
+    horizTitle: "↔️ 가로 타임라인: 상대적 날짜 (중심 = 오늘 / hnub no)",
+    resetToday: "🎯 오늘(hnub no)로 이동",
+    vertTitle: "↕️ 세로 슬라이더: 하루의 시간대",
+    vertSub: "새벽부터 밤까지 슬라이드하거나 클릭하세요:",
+    combinedLabel: "결합된 몽족어 시간 표현",
+    dirGridHeading: "기본 4방위(동·서·남·북) 및 몽족어 산악·계곡 상대 방위:",
+    spaceListHeading: "핵심 공간 이동 표현 12가지 (카드를 클릭해 이동해 보세요):"
+  },
+  ja: {
+    draftBadge: "🛠️ インタラクティブ試作ドラフト（まだ本番ハブには未公開）",
+    mainTitle: "モン語 時間・방位・空間移動 インタラクティブモジュール",
+    mainSub: "日付と時間帯の2軸スライダー、方位コンパス、空間移動シミュレーターを動かして体験できます。",
+    tabTime: "⏳ 1. 時間＆空タイムライン",
+    tabDir: "🧭 2. 東西南北＆地形方位",
+    tabSpace: "🚶 3. 空間移動シミュレーター",
+    horizTitle: "↔️ 横タイムライン：相対的な日付（中央＝今日 / hnub no）",
+    resetToday: "🎯 今日 (hnub no) に戻る",
+    vertTitle: "↕️ 縦スライダー：1日の時間帯",
+    vertSub: "夜明けから夜までスライドまたはクリック：",
+    combinedLabel: "組み合わせたモン語の時間表現",
+    dirGridHeading: "基本4方位（東西南北）およびモン語の山・谷の空間方位：",
+    spaceListHeading: "空間移動の重要表現12選（カードやボタンをクリックして移動）："
+  }
+};
+
+let curLang = 'en';
+let curTab = 'time';
+let dayIdx = 3; // 3 = Today (hnub no)
+let todIdx = 2; // 2 = Noon (tav su)
+let curDirIdx = 0;
+
+// Avatar state for Module 3 (Moving Through Space)
+let walker = { x: 2, y: 2, facing: 0, elev: 0, inside: true, lastKey: 'forward' };
+const FACING_ARROWS = ['⬆️', '➡️', '⬇️', '⬅️'];
+const FACING_NAMES = ['North (qaum teb)', 'East (hnub tuaj)', 'South (qab teb)', 'West (hnub poob)'];
+
+function toggleTheme() {
+  const cur = document.documentElement.getAttribute('data-theme') || 'light';
+  const next = cur === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  try { localStorage.setItem('hmong_theme', next); } catch(e) {}
+  const btn = document.getElementById('themeToggleBtn');
+  if (btn) btn.innerHTML = next === 'dark' ? '☀️ Light' : '🌙 Dark';
+}
+
+function switchTab(tab) {
+  curTab = tab;
+  document.getElementById('modTime').classList.toggle('hidden', tab !== 'time');
+  document.getElementById('modDir').classList.toggle('hidden', tab !== 'dir');
+  document.getElementById('modSpace').classList.toggle('hidden', tab !== 'space');
+  document.getElementById('modPrep').classList.toggle('hidden', tab !== 'prep');
+  document.getElementById('modPersp').classList.toggle('hidden', tab !== 'persp');
+  document.getElementById('tabTimeBtn').classList.toggle('active', tab === 'time');
+  document.getElementById('tabDirBtn').classList.toggle('active', tab === 'dir');
+  document.getElementById('tabSpaceBtn').classList.toggle('active', tab === 'space');
+  document.getElementById('tabPrepBtn').classList.toggle('active', tab === 'prep');
+  document.getElementById('tabPerspBtn').classList.toggle('active', tab === 'persp');
+}
+
+function setLang(lang) {
+  if (!UI_LABELS[lang]) lang = 'en';
+  curLang = lang;
+  try { localStorage.setItem('hmong_ui_lang', lang); } catch(e) {}
+  document.getElementById('btnEn').classList.toggle('active', lang === 'en');
+  document.getElementById('btnVi').classList.toggle('active', lang === 'vi');
+  document.getElementById('btnKo').classList.toggle('active', lang === 'ko');
+  document.getElementById('btnJa').classList.toggle('active', lang === 'ja');
+
+  const t = UI_LABELS[lang];
+  document.getElementById('draftBadge').textContent = t.draftBadge;
+  document.getElementById('mainTitle').textContent = t.mainTitle;
+  document.getElementById('mainSub').textContent = t.mainSub;
+  document.getElementById('tabTimeBtn').textContent = t.tabTime;
+  document.getElementById('tabDirBtn').textContent = t.tabDir;
+  document.getElementById('tabSpaceBtn').textContent = t.tabSpace;
+  document.getElementById('horizTitle').textContent = t.horizTitle;
+  document.getElementById('resetTodayBtn').textContent = t.resetToday;
+  document.getElementById('vertTitle').textContent = t.vertTitle;
+  document.getElementById('vertSub').textContent = t.vertSub;
+  document.getElementById('skyCombinedLabel').textContent = t.combinedLabel;
+  document.getElementById('dirGridHeading').textContent = t.dirGridHeading;
+  document.getElementById('spaceListHeading').textContent = t.spaceListHeading;
+
+  renderTimeModule();
+  renderClockModule();
+  renderCalModule();
+  renderDirModule();
+  renderSpaceModule();
+  renderPrepModule();
+  renderDistModule();
+  renderPerspModule();
+}
+
+function setDayIndex(i) {
+  dayIdx = Math.max(0, Math.min(DAYS_DATA.length - 1, Number(i)));
+  document.getElementById('dayRange').value = String(dayIdx);
+  renderTimeModule();
+}
+
+function setTodIndex(i) {
+  todIdx = Math.max(0, Math.min(TOD_DATA.length - 1, Number(i)));
+  document.getElementById('todRange').value = String(7 - todIdx);
+  renderTimeModule();
+}
+
+function renderTimeModule() {
+  const d = DAYS_DATA[dayIdx];
+  const tod = TOD_DATA[todIdx];
+
+  // Update sky stage
+  const stage = document.getElementById('skyStage');
+  stage.style.background = tod.bg;
+  const orb = document.getElementById('celestialOrb');
+  orb.textContent = tod.icon;
+  orb.style.left = tod.orbLeft;
+  orb.style.top = tod.orbTop;
+
+  const combinedHmong = `${d.hmong} ${tod.hmong}`;
+  const dGloss = d[curLang] || d.en;
+  const todGloss = tod[curLang] || tod.en;
+  document.getElementById('skyHmongPhrase').textContent = combinedHmong;
+  document.getElementById('skyMeaningPhrase').textContent = `${dGloss} · ${todGloss}`;
+
+  // Build dynamic example sentence showing past (tau) vs present vs future (yuav)
+  let exHm = '', exTr = '';
+  const capPhrase = combinedHmong.charAt(0).toUpperCase() + combinedHmong.slice(1);
+  if (d.tense === 'past') {
+    exHm = `${capPhrase} kuv tau kawm lus Hmoob.`;
+    exTr = curLang === 'vi' ? `"${dGloss} (${todGloss}) tôi đã học tiếng H'Mông." (dùng 'tau' cho quá khứ)`
+      : curLang === 'ko' ? `"${dGloss} (${todGloss})에 저는 몽족어를 배웠습니다." (과거 표지 'tau' 사용)`
+      : curLang === 'ja' ? `「${dGloss}（${todGloss}）、私はモン語を学びました。」（過去マーカー tau を使用）`
+      : `"${dGloss} (${todGloss}), I studied Hmong." (uses past marker 'tau')`;
+  } else if (d.tense === 'future') {
+    exHm = `${capPhrase} peb yuav mus tshaj tawm.`;
+    exTr = curLang === 'vi' ? `"${dGloss} (${todGloss}) chúng tôi sẽ đi rao giảng." (dùng 'yuav' cho tương lai)`
+      : curLang === 'ko' ? `"${dGloss} (${todGloss})에 우리는 전파하러 갈 것입니다." (미래 표지 'yuav' 사용)`
+      : curLang === 'ja' ? `「${dGloss}（${todGloss}）、私たちは伝道に行くつもりです。」（未来マーカー yuav を使用）`
+      : `"${dGloss} (${todGloss}), we will go preach." (uses future marker 'yuav')`;
+  } else {
+    exHm = `${capPhrase} kuv nyob hauv tsev.`;
+    exTr = curLang === 'vi' ? `"${dGloss} (${todGloss}) tôi ở trong nhà."`
+      : curLang === 'ko' ? `"${dGloss} (${todGloss}) 저는 집에 있습니다."`
+      : curLang === 'ja' ? `「${dGloss}（${todGloss}）、私は家にいます。」`
+      : `"${dGloss} (${todGloss}), I am at home."`;
+  }
+  document.getElementById('skyExampleHmong').textContent = `🗣️ ${exHm}`;
+  document.getElementById('skyExampleGloss').textContent = exTr;
+
+  // Render 8 horizontal day nodes
+  const nodesEl = document.getElementById('dayNodesContainer');
+  nodesEl.innerHTML = '';
+  DAYS_DATA.forEach((item, idx) => {
+    const div = document.createElement('div');
+    div.className = 'day-node' + (idx === 3 ? ' today-marker' : '') + (idx === dayIdx ? ' active' : '');
+    const sign = item.offset === 0 ? '● 0' : (item.offset > 0 ? `+${item.offset}d` : `${item.offset}d`);
+    div.innerHTML = `<span style="font-size:0.7rem;opacity:0.75;">${sign}</span><span class="hm">${item.hmong}</span><span class="gl">${item[curLang] || item.en}</span>`;
+    div.onclick = () => setDayIndex(idx);
+    nodesEl.appendChild(div);
+  });
+
+  // Render Day + Time detail notes
+  const dNote = curLang === 'vi' ? d.noteVi : curLang === 'ko' ? d.noteKo : curLang === 'ja' ? d.noteJa : d.noteEn;
+  const tNote = curLang === 'vi' ? tod.tipVi : curLang === 'ko' ? tod.tipKo : curLang === 'ja' ? tod.tipJa : tod.tipEn;
+  document.getElementById('dayDetailBox').innerHTML = `
+    <div style="margin-bottom:6px;"><strong>📅 Day (<code>${d.hmong}</code> — ${dGloss}):</strong> ${dNote}</div>
+    <div><strong>${tod.icon} Time of Day (<code>${tod.hmong}</code> / <em>${tod.alt}</em> — ${todGloss}):</strong> ${tNote}</div>
+  `;
+
+  // Render 8 vertical time-of-day steps
+  const todEl = document.getElementById('todListContainer');
+  todEl.innerHTML = '';
+  TOD_DATA.forEach((item, idx) => {
+    const step = document.createElement('div');
+    step.className = 'tod-step' + (idx === todIdx ? ' active' : '');
+    step.innerHTML = `<span>${item.icon} <strong>${item.hmong}</strong></span><span style="font-size:0.78rem;opacity:0.9;">${item[curLang] || item.en}</span>`;
+    step.onclick = () => setTodIndex(idx);
+    todEl.appendChild(step);
+  });
+  if (typeof renderClockModule === "function") renderClockModule();
+}
+
+function selectDirection(idx) {
+  curDirIdx = idx;
+  renderDirModule();
+}
+
+function renderDirModule() {
+  const item = DIR_DATA[curDirIdx] || DIR_DATA[0];
+  const needle = document.getElementById('compassNeedle');
+  if (needle) needle.style.transform = `translate(-50%, -100%) rotate(${item.deg}deg)`;
+
+  for (let i = 0; i < 4; i++) {
+    const btn = document.getElementById('cBtn' + i);
+    if (btn) btn.classList.toggle('active', i === curDirIdx);
+  }
+
+  const label = item[curLang] || item.en;
+  const hmDisplay = item.hmongClean || item.hmong;
+  document.getElementById('dirDetailBox').innerHTML = `
+    <div style="font-size:1.35rem;font-weight:900;color:var(--accent);">${hmDisplay} — ${label}</div>
+    <div style="font-size:0.88rem;margin:4px 0;"><strong>Literal Hmong meaning:</strong> <em>"${item.lit}"</em></div>
+    <div style="font-size:0.92rem;margin-top:6px;">🗣️ <code>${item.ex}</code> — "${item.exEn}"</div>
+  `;
+
+  const grid = document.getElementById('dirGridContainer');
+  grid.innerHTML = '';
+  DIR_DATA.forEach((d, idx) => {
+    const c = document.createElement('div');
+    c.className = 'dir-card' + (idx === curDirIdx ? ' active' : '');
+    const hm = d.hmongClean || d.hmong;
+    c.innerHTML = `
+      <div style="font-weight:800;color:var(--accent);font-size:0.98rem;">${hm}</div>
+      <div style="font-weight:700;font-size:0.86rem;margin-top:2px;">${d[curLang] || d.en}</div>
+      <div style="font-size:0.78rem;color:var(--muted);margin-top:2px;">Lit: "${d.lit}"</div>
+    `;
+    c.onclick = () => selectDirection(idx);
+    grid.appendChild(c);
+  });
+}
+
+function triggerSpaceAction(key) {
+  walker.lastKey = key;
+  const dx = [0, 1, 0, -1][walker.facing];
+  const dy = [-1, 0, 1, 0][walker.facing];
+
+  if (key === 'forward' || key === 'straight') {
+    walker.x = Math.max(0, Math.min(4, walker.x + dx));
+    walker.y = Math.max(0, Math.min(4, walker.y + dy));
+  } else if (key === 'backward') {
+    walker.x = Math.max(0, Math.min(4, walker.x - dx));
+    walker.y = Math.max(0, Math.min(4, walker.y - dy));
+  } else if (key === 'turn_left') {
+    walker.facing = (walker.facing + 3) % 4;
+  } else if (key === 'turn_right') {
+    walker.facing = (walker.facing + 1) % 4;
+  } else if (key === 'turn_around') {
+    walker.facing = (walker.facing + 2) % 4;
+  } else if (key === 'up') {
+    walker.elev = Math.min(3, walker.elev + 1);
+  } else if (key === 'down') {
+    walker.elev = Math.max(-2, walker.elev - 1);
+  } else if (key === 'enter') {
+    walker.x = 2; walker.y = 2; walker.inside = true;
+  } else if (key === 'exit') {
+    walker.x = 2; walker.y = 4; walker.inside = false;
+  } else if (key === 'return') {
+    walker.x = 2; walker.y = 2; walker.elev = 0; walker.facing = 0;
+  } else if (key === 'cross') {
+    walker.x = walker.x < 2 ? 4 : 0;
+  }
+  walker.inside = (walker.x === 2 && walker.y === 2);
+  renderSpaceModule();
+}
+
+function renderSpaceModule() {
+  const av = document.getElementById('walkerAvatar');
+  if (av) {
+    av.style.left = (walker.x * 66 + 7) + 'px';
+    av.style.top = (walker.y * 66 + 7) + 'px';
+    const scale = 1 + walker.elev * 0.08;
+    av.style.transform = `scale(${scale})`;
+  }
+  const arr = document.getElementById('walkerArrow');
+  if (arr) arr.textContent = FACING_ARROWS[walker.facing];
+
+  const elevText = walker.elev > 0 ? `⛰️ High (+${walker.elev} saum/pem)` : walker.elev < 0 ? `🏞️ Low (${walker.elev} qab/nram)` : `Ground (0)`;
+  const locText = walker.inside ? `🏠 Inside House (hauv tsev)` : `🌳 Outside (nraum zoov)`;
+  document.getElementById('elevStatus').textContent =
+    `${elevText} · Facing: ${FACING_NAMES[walker.facing]} · ${locText}`;
+
+  const item = SPACE_DATA.find(x => x.key === walker.lastKey) || SPACE_DATA[0];
+  document.getElementById('spaceDetailBox').innerHTML = `
+    <div style="font-size:1.35rem;font-weight:900;color:var(--accent);">${item.icon} ${item.hmong}</div>
+    <div style="font-size:1rem;font-weight:700;margin-top:2px;">${item[curLang] || item.en} (Core keyword: <code>${item.shortHm}</code>)</div>
+    <div style="font-size:0.92rem;margin-top:6px;">🗣️ <code>${item.ex}</code> — "${item.exEn}"</div>
+  `;
+
+  const container = document.getElementById('spaceCardsContainer');
+  container.innerHTML = '';
+  SPACE_DATA.forEach(s => {
+    const card = document.createElement('div');
+    card.className = 'dir-card' + (s.key === walker.lastKey ? ' active' : '');
+    card.innerHTML = `
+      <div style="font-weight:800;color:var(--accent);font-size:0.95rem;">${s.icon} ${s.hmong}</div>
+      <div style="font-weight:700;font-size:0.84rem;margin-top:2px;">${s[curLang] || s.en}</div>
+      <div style="font-size:0.76rem;color:var(--muted);margin-top:2px;"><code>${s.ex}</code></div>
+    `;
+    card.onclick = () => triggerSpaceAction(s.key);
+    container.appendChild(card);
+  });
+}
+
+// HMONG NUMBERS 1..55 FOR CLOCK
+const HM_NUM_MAP = {
+  0: "", 1: "ib", 2: "ob", 3: "peb", 4: "plaub", 5: "tsib", 6: "rau",
+  7: "xya", 8: "yim", 9: "cuaj", 10: "kaum", 11: "kaum ib", 12: "kaum ob",
+  15: "kaum tsib", 20: "nees nkaum", 25: "nees nkaum tsib", 30: "peb caug",
+  35: "peb caug tsib", 40: "plaub caug", 45: "plaub caug tsib", 50: "tsib caug", 55: "tsib caug tsib"
+};
+
+const DOW_DATA = [
+  { hm: "Hnub Ib (Vasthiv)", en: "Monday", vi: "Thứ Hai", ko: "월요일", ja: "月曜日", ex: "Hnub Ib peb pib kawm ntawv.", exEn: "On Monday we start studying." },
+  { hm: "Hnub Ob (Vasxuv)", en: "Tuesday", vi: "Thứ Ba", ko: "화요일", ja: "火曜日", ex: "Hnub Ob kuv mus ua haujlwm.", exEn: "On Tuesday I go to work." },
+  { hm: "Hnub Peb (Vaspuv)", en: "Wednesday", vi: "Thứ Tư", ko: "수요일", ja: "水曜日", ex: "Hnub Peb muaj kev sib txoos.", exEn: "On Wednesday there is a meeting." },
+  { hm: "Hnub Plaub (Vasphav)", en: "Thursday", vi: "Thứ Năm", ko: "목요일", ja: "木曜日", ex: "Hnub Plaub kuv rov mus xyuas.", exEn: "On Thursday I make return visits." },
+  { hm: "Hnub Tsib (Vasxaus)", en: "Friday", vi: "Thứ Sáu", ko: "금요일", ja: "金曜日", ex: "Hnub Tsib peb npaj tshaj tawm.", exEn: "On Friday we prepare for the ministry." },
+  { hm: "Hnub Rau (Vasxaum)", en: "Saturday", vi: "Thứ Bảy", ko: "토요일", ja: "土曜日", ex: "Hnub Rau peb mus tshaj tawm.", exEn: "On Saturday we go out in the ministry." },
+  { hm: "Hnub Xya (Vasthiv / Hnub Caiv)", en: "Sunday", vi: "Chủ Nhật", ko: "일요일", ja: "日曜日", ex: "Hnub Xya peb mus Lub Tuam Tsev Npaj Rau Kev Sib Txoos.", exEn: "On Sunday we go to the Kingdom Hall." }
+];
+
+const WMY_DATA = [
+  { group: "Week (lim tiam)", hm: "lub lim tiam dhau los", en: "Last week", vi: "Tuần trước", ko: "지난주", ja: "先週" },
+  { group: "Week (lim tiam)", hm: "lub lim tiam no", en: "This week", vi: "Tuần này", ko: "이번 주", ja: "今週" },
+  { group: "Week (lim tiam)", hm: "lub lim tiam tom ntej", en: "Next week", vi: "Tuần tới (tuần sau)", ko: "다음 주", ja: "来週" },
+  { group: "Month (hli)", hm: "lub hli dhau los", en: "Last month (Months 1–12 = Lub Ib Hlis .. Lub Kaum Ob Hlis)", vi: "Tháng trước (Tháng 1–12 = Lub Ib Hlis .. Lub Kaum Ob Hlis)", ko: "지난달 (1~12월 = Lub Ib Hlis .. Lub Kaum Ob Hlis)", ja: "先月（1〜12月 = Lub Ib Hlis .. Lub Kaum Ob Hlis）" },
+  { group: "Month (hli)", hm: "lub hli no", en: "This month", vi: "Tháng này", ko: "이번 달", ja: "今月" },
+  { group: "Month (hli)", hm: "lub hli tom ntej", en: "Next month", vi: "Tháng tới (tháng sau)", ko: "다음 달", ja: "来月" },
+  { group: "Year (xyoo)", hm: "xyoo tag los", en: "Last year", vi: "Năm ngoái", ko: "작년 (지난해)", ja: "昨年（去年）" },
+  { group: "Year (xyoo)", hm: "xyoo no", en: "This year", vi: "Năm nay", ko: "올해 (금년)", ja: "今年" },
+  { group: "Year (xyoo)", hm: "lwm xyoo / xyoo tom ntej", en: "Next year", vi: "Sang năm (năm tới)", ko: "내년 (다음 해)", ja: "来年" }
+];
+
+const PREP_DATA = [
+  { id: "on", hm: "nyob saum", left: "118px", top: "42px", en: "On top of / Above (`saum`)", vi: "Ở trên mặt / Phía trên (`saum`)", ko: "~ 위에 (`saum`)", ja: "〜の上に（saum）", ex: "Phau Vajlugkub nyob saum lub rooj.", exEn: "The Bible is on top of the table." },
+  { id: "under", hm: "nyob qab", left: "118px", top: "176px", en: "Underneath / Below (`qab`)", vi: "Ở dưới gầm / Phía dưới (`qab`)", ko: "~ 아래에 / 밑에 (`qab`)", ja: "〜の下に（qab）", ex: "Lub hnab nyob qab lub rooj.", exEn: "The bag is under the table." },
+  { id: "inside", hm: "nyob hauv", left: "118px", top: "110px", en: "Inside (`hauv`)", vi: "Ở bên trong (`hauv`)", ko: "~ 안에 / 속에 (`hauv`)", ja: "〜の中に（hauv）", ex: "Phau ntawv nyob hauv lub thawv.", exEn: "The book is inside the box." },
+  { id: "outside", hm: "nyob nraum", left: "18px", top: "24px", en: "Outside (`nraum`)", vi: "Ở bên ngoài (`nraum`)", ko: "~ 밖에 (`nraum`)", ja: "〜の外に（nraum）", ex: "Nws nyob nraum zoov.", exEn: "He/she is outside." },
+  { id: "left", hm: "nyob ntawm sab laug", left: "26px", top: "110px", en: "On the left side (`ntawm sab laug`)", vi: "Ở bên trái (`ntawm sab laug`)", ko: "왼쪽에 (`ntawm sab laug`)", ja: "左側に（ntawm sab laug）", ex: "Phau ntawv nyob ntawm sab laug.", exEn: "The book is on the left side." },
+  { id: "right", hm: "nyob ntawm sab xis", left: "208px", top: "110px", en: "On the right side (`ntawm sab xis`)", vi: "Ở bên phải (`ntawm sab xis`)", ko: "오른쪽에 (`ntawm sab xis`)", ja: "右側に（ntawm sab xis）", ex: "Phau ntawv nyob ntawm sab xis.", exEn: "The book is on the right side." },
+  { id: "front", hm: "nyob ntawm hauv ntej", left: "165px", top: "162px", en: "In front of (`ntawm hauv ntej`)", vi: "Ở phía trước (`ntawm hauv ntej`)", ko: "~ 앞에 (`ntawm hauv ntej`)", ja: "〜の前に（ntawm hauv ntej）", ex: "Nws sawv ntawm lub rooj hauv ntej.", exEn: "He/she stands in front of the table." },
+  { id: "behind", hm: "nyob ntawm qab", left: "72px", top: "54px", en: "Behind / In back of (`ntawm qab`)", vi: "Ở đằng sau (`ntawm qab`)", ko: "~ 뒤에 (`ntawm qab`)", ja: "〜の後ろに（ntawm qab）", ex: "Nyob ntawm lub tsev qab.", exEn: "Behind the house." },
+  { id: "middle", hm: "nyob hauv nruab nrab", left: "118px", top: "110px", en: "In the middle / Between (`hauv nruab nrab`)", vi: "Ở chính giữa (`hauv nruab nrab`)", ko: "한가운데에 / 사이에 (`hauv nruab nrab`)", ja: "真ん中に・間に（hauv nruab nrab）", ex: "Nyob hauv nruab nrab ntawm ob lub rooj.", exEn: "In the middle between two tables." }
+];
+
+const DIST_DATA = [
+  {
+    idx: 0, hm: "no / ntawm no / qhov no", badge: "📍 Zone 1: Near Speaker (Here)",
+    en: "This / Right Here (within reach of speaker)", vi: "Này / Ở ngay đây (gần người nói)", ko: "이것 / 여기 (말하는 사람 바로 근처)", ja: "これ・ここ（話し手のすぐそば）",
+    ex: "Phau ntawv no nyob ntawm no.", exEn: "This book is right here."
+  },
+  {
+    idx: 1, hm: "ntawd / ntawm ko / qhov ntawd", badge: "👉 Zone 2: Near Listener / Mid-Distance (There)",
+    en: "That / Right There (near listener or medium distance)", vi: "Đó / Ở chỗ bạn (`ntawm ko` = chỗ bạn, `ntawd` = chỗ đó)", ko: "그것 / 거기 (`ntawm ko` = 듣는 사람 근처, `ntawd` = 거기)", ja: "それ・そこ（聞き手のそば＝ntawm ko、少し離れた場所＝ntawd）",
+    ex: "Muab phau ntawv ntawd ntawm ko rau kuv.", exEn: "Hand me that book right there by you."
+  },
+  {
+    idx: 2, hm: "ub / tim ub / pem ub / nram ub", badge: "🏔️ Zone 3: Far / Yonder (Way Over There)",
+    en: "Way Over Yonder (`tim ub` level, `pem ub` uphill, `nram ub` downhill)", vi: "Đằng kia / Ở tận đằng xa (`tim ub` ngang, `pem ub` trên đồi, `nram ub` dưới dốc)", ko: "저것 / 저 멀리 (`tim ub` 건너편, `pem ub` 언덕 위, `nram ub` 아래쪽)", ja: "あれ・あそこ（tim ub＝向こう、pem ub＝坂の上、nram ub＝坂の下）",
+    ex: "Lawv lub tsev nyob puag pem ub.", exEn: "Their house is way up on the hill yonder."
+  }
+];
+
+const PERSP_DATA = [
+  {
+    key: "mus", hm: "mus (Go away from here)",
+    leftIcon: "🏠", leftLbl: "Speaker's Location (Here)", rightIcon: "🏞️", rightLbl: "Somewhere Else",
+    travelPos: "82%", travelIcon: "🚶➡️",
+    en: "Moving AWAY from where the speaker currently is toward another destination.",
+    vi: "Đi RA XA khỏi vị trí hiện tại của người nói để đến nơi khác.",
+    ko: "현재 화자가 있는 곳에서 다른 장소로 '떠나갈 때' 사용합니다.",
+    ja: "話し手が今いる場所から別の場所へ「行く（離れる）」ときに使います。",
+    ex: "Tagkis kuv yuav mus xyuas lawv.", exEn: "Tomorrow I will GO visit them."
+  },
+  {
+    key: "los", hm: "los (Come back HOME)",
+    leftIcon: "🏠", leftLbl: "Home Base (tsev)", rightIcon: "🛒", rightLbl: "Outside / Work",
+    travelPos: "18%", travelIcon: "⬅️🚶",
+    en: "Coming BACK to one's own HOME (or inviting someone into YOUR home: 'Los tsev!').",
+    vi: "Trở VỀ NHÀ của mình (hoặc chủ nhà mời khách vào nhà mình: 'Los tsev!').",
+    ko: "자기 '집(본거지)'으로 돌아오거나, 집주인이 손님에게 '우리 집으로 들어오세요(Los tsev!)'라고 할 때 씁니다.",
+    ja: "自分の「家（本拠地）」へ帰ってくるとき、または自宅に客を招き入れるとき（Los tsev!）に使います。",
+    ex: "Kuv rov qab los tsev. / Thov los hauv tsev!", exEn: "I am coming back home. / Please come into (my) house!"
+  },
+  {
+    key: "tuaj", hm: "tuaj (Come visit a NON-home place)",
+    leftIcon: "🏡", leftLbl: "Visitor's Own Home", rightIcon: "🏛️", rightLbl: "Kingdom Hall / Your House",
+    travelPos: "78%", travelIcon: "🚗➡️",
+    en: "Coming/arriving at the current place when it is NOT the traveler's own home (e.g., coming to the Kingdom Hall, or a guest coming to visit your home!).",
+    vi: "Đến nơi hiện tại nhưng ĐÓ KHÔNG PHẢI NHÀ của người đang đi (VD: đến Phòng Nước Trời, hoặc khách đến thăm nhà bạn!).",
+    ko: "이곳으로 오지만 이동하는 사람의 '자기 집이 아닌 곳'(왕국회관에 오거나 손님이 내 집에 방문할 때)에 쓰입니다!",
+    ja: "ここへ来るが、移動する人自身の「自宅ではない場所」（王国会館に来る時や、客があなたの家を訪ねる時）に使います！",
+    ex: "Zoo siab koj tuaj xyuas peb! / Tuaj sib txoos.", exEn: "Glad you CAME to visit us! / Come to the meeting."
+  }
+];
+
+let curDowIdx = 0;
+let curPrepIdx = 0;
+let curDistIdx = 0;
+let curPerspIdx = 0;
+
+function renderClockModule() {
+  const hr = Number(document.getElementById('clockHourRange').value || 3);
+  const mn = Number(document.getElementById('clockMinRange').value || 30);
+  document.getElementById('clockHourVal').textContent = String(hr);
+  document.getElementById('clockMinVal').textContent = ':' + (mn < 10 ? '0' + mn : mn);
+
+  const hrDeg = ((hr % 12) * 30) + (mn * 0.5);
+  const mnDeg = mn * 6;
+  document.getElementById('clockHourHand').style.transform = `translate(-50%,-100%) rotate(${hrDeg}deg)`;
+  document.getElementById('clockMinHand').style.transform = `translate(-50%,-100%) rotate(${mnDeg}deg)`;
+
+  const hrHm = `${HM_NUM_MAP[hr]} teev`;
+  let mnHm = '';
+  if (mn === 30) {
+    mnHm = 'thiab ib nrab (or peb caug feeb)';
+  } else if (mn > 0) {
+    mnHm = `${HM_NUM_MAP[mn]} feeb`;
+  }
+  const tod = TOD_DATA[todIdx];
+  const fullHm = `${HM_NUM_MAP[hr]} teev${mn === 30 ? ' thiab ib nrab' : (mn > 0 ? ' ' + HM_NUM_MAP[mn] + ' feeb' : '')} (${tod.hmong})`;
+  const timeStr = `${hr}:${mn < 10 ? '0' + mn : mn}`;
+
+  document.getElementById('clockResultBox').innerHTML = `
+    <div style="font-size:1.25rem;font-weight:900;color:var(--accent);">🕰️ ${timeStr} → <code>${fullHm}</code></div>
+    <div style="font-size:0.86rem;margin-top:4px;">
+      <strong>Formula:</strong> <code>${hrHm}</code> (${hr} o'clock)
+      ${mn > 0 ? ` + <code>${mnHm}</code> (${mn} minutes)` : ' (exact hour)'}
+      + time of day <code>${tod.hmong}</code> (${tod[curLang] || tod.en})
+    </div>
+    <div style="font-size:0.86rem;margin-top:4px;">❓ Question: <code>Tam sim no yog pes tsawg teev lawm?</code> ("What time is it right now?")</div>
+  `;
+}
+
+function renderCalModule() {
+  const row = document.getElementById('dowButtonsRow');
+  row.innerHTML = '';
+  DOW_DATA.forEach((d, idx) => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'move-btn' + (idx === curDowIdx ? ' active' : '');
+    b.innerHTML = `<div>${d.hm.split(' ')[0]} ${d.hm.split(' ')[1]}</div><div style="font-size:0.75rem;opacity:0.85;">${d[curLang] || d.en}</div>`;
+    b.onclick = () => { curDowIdx = idx; renderCalModule(); };
+    row.appendChild(b);
+  });
+
+  const cur = DOW_DATA[curDowIdx];
+  document.getElementById('dowResultBox').innerHTML = `
+    <div style="font-size:1.15rem;font-weight:900;color:var(--accent);">📅 ${cur.hm} — ${cur[curLang] || cur.en}</div>
+    <div style="font-size:0.9rem;margin-top:4px;">🗣️ <code>${cur.ex}</code> — "${cur.exEn}"</div>
+  `;
+
+  const grid = document.getElementById('wmyGridContainer');
+  grid.innerHTML = '';
+  WMY_DATA.forEach(w => {
+    const c = document.createElement('div');
+    c.className = 'dir-card';
+    c.innerHTML = `
+      <div style="font-size:0.74rem;font-weight:700;color:var(--muted);text-transform:uppercase;">${w.group}</div>
+      <div style="font-weight:800;color:var(--accent);font-size:0.95rem;margin-top:2px;">${w.hm}</div>
+      <div style="font-size:0.84rem;margin-top:2px;">${w[curLang] || w.en}</div>
+    `;
+    grid.appendChild(c);
+  });
+}
+
+function renderPrepModule() {
+  const row = document.getElementById('prepButtonsRow');
+  row.innerHTML = '';
+  PREP_DATA.forEach((p, idx) => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'move-btn' + (idx === curPrepIdx ? ' active' : '');
+    b.textContent = p.hm;
+    b.onclick = () => { curPrepIdx = idx; renderPrepModule(); };
+    row.appendChild(b);
+  });
+
+  const cur = PREP_DATA[curPrepIdx];
+  const ball = document.getElementById('prepBall');
+  if (ball) {
+    ball.style.left = cur.left;
+    ball.style.top = cur.top;
+    ball.style.opacity = cur.id === 'behind' ? '0.65' : '1';
+    ball.style.zIndex = cur.id === 'behind' ? '1' : '3';
+  }
+  document.getElementById('prepDetailBox').innerHTML = `
+    <div style="font-size:1.3rem;font-weight:900;color:var(--accent);">📖 ${cur.hm}</div>
+    <div style="font-size:0.95rem;font-weight:700;margin-top:2px;">${cur[curLang] || cur.en}</div>
+    <div style="font-size:0.9rem;margin-top:6px;">🗣️ <code>${cur.ex}</code> — "${cur.exEn}"</div>
+  `;
+}
+
+function renderDistModule() {
+  const row = document.getElementById('distZonesRow');
+  row.innerHTML = '';
+  DIST_DATA.forEach((d, idx) => {
+    const c = document.createElement('div');
+    c.className = 'day-node' + (idx === curDistIdx ? ' active' : '');
+    c.innerHTML = `<span class="hm">${d.hm.split('/')[0].trim()}</span><span class="gl">${d.badge}</span>`;
+    c.onclick = () => {
+      curDistIdx = idx;
+      document.getElementById('distRange').value = String(idx);
+      renderDistModule();
+    };
+    row.appendChild(c);
+  });
+
+  const cur = DIST_DATA[curDistIdx];
+  document.getElementById('distDetailBox').innerHTML = `
+    <div style="font-size:1.2rem;font-weight:900;color:var(--accent);">${cur.badge}: <code>${cur.hm}</code></div>
+    <div style="font-size:0.92rem;margin-top:4px;">${cur[curLang] || cur.en}</div>
+    <div style="font-size:0.9rem;margin-top:6px;">🗣️ <code>${cur.ex}</code> — "${cur.exEn}"</div>
+  `;
+}
+
+function renderPerspModule() {
+  const row = document.getElementById('perspButtonsRow');
+  row.innerHTML = '';
+  PERSP_DATA.forEach((p, idx) => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'mod-tab' + (idx === curPerspIdx ? ' active' : '');
+    b.textContent = p.hm;
+    b.onclick = () => { curPerspIdx = idx; renderPerspModule(); };
+    row.appendChild(b);
+  });
+
+  const cur = PERSP_DATA[curPerspIdx];
+  document.getElementById('perspLeftIcon').textContent = cur.leftIcon;
+  document.getElementById('perspLeftLabel').textContent = cur.leftLbl;
+  document.getElementById('perspRightIcon').textContent = cur.rightIcon;
+  document.getElementById('perspRightLabel').textContent = cur.rightLbl;
+  const trav = document.getElementById('perspTraveler');
+  trav.style.left = cur.travelPos;
+  trav.textContent = cur.travelIcon;
+
+  document.getElementById('perspDetailBox').innerHTML = `
+    <div style="font-size:1.3rem;font-weight:900;color:var(--accent);">${cur.hm}</div>
+    <div style="font-size:0.95rem;margin-top:4px;">${cur[curLang] || cur.en}</div>
+    <div style="font-size:0.92rem;margin-top:8px;">🗣️ <code>${cur.ex}</code> — "${cur.exEn}"</div>
+  `;
+}
+
+
+// Slider bindings
+document.getElementById('dayRange').addEventListener('input', (e) => {
+  dayIdx = Number(e.target.value);
+  renderTimeModule();
+});
+document.getElementById('todRange').addEventListener('input', (e) => {
+  todIdx = 7 - Number(e.target.value);
+  renderTimeModule();
+});
+document.getElementById('clockHourRange').addEventListener('input', renderClockModule);
+document.getElementById('clockMinRange').addEventListener('input', renderClockModule);
+document.getElementById('distRange').addEventListener('input', (e) => {
+  curDistIdx = Number(e.target.value);
+  renderDistModule();
+});
+
+
+// Init
+(function init() {
+  let savedTheme = 'light';
+  try { savedTheme = localStorage.getItem('hmong_theme') || 'light'; } catch(e) {}
+  document.documentElement.setAttribute('data-theme', savedTheme);
+  const btn = document.getElementById('themeToggleBtn');
+  if (btn) btn.innerHTML = savedTheme === 'dark' ? '☀️ Light' : '🌙 Dark';
+
+  let savedLang = 'en';
+  try { savedLang = localStorage.getItem('hmong_ui_lang') || 'en'; } catch(e) {}
+  setLang(savedLang);
+})();
+</script>
+</body>
+</html>
