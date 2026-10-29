@@ -735,6 +735,9 @@ function playDataUrl(dataUrl) {
 const STATIC_MALE_IDS = new Set(["c1_c", "c1_d", "c1_f", "c1_h", "c1_k", "c1_l", "c1_m", "c1_n", "c1_p", "c1_q", "c1_r", "c1_s", "c1_t", "c1_v", "c1_x", "c1_y", "c1_z", "c2_ch", "c2_dh", "c2_hl", "c2_hm", "c2_hn", "c2_kh", "c2_ml", "c2_nc", "c2_nk", "c2_np", "c2_nq", "c2_nr", "c2_nt", "c2_ny", "c2_ph", "c2_pl", "c2_qh", "c2_rh", "c2_th", "c2_ts", "c2_tx", "c2_xy", "c3_hml", "c3_hny", "c3_nch", "c3_nkh", "c3_nph", "c3_npl", "c3_nqh", "c3_nrh", "c3_nth", "c3_nts", "c3_ntx", "c3_plh", "c3_tsh", "c3_txh", "c4_nplh", "c4_ntsh", "c4_ntxh", "v_a", "v_ai", "v_au", "v_aw", "v_e", "v_ee", "v_i", "v_ia", "v_o", "v_oo", "v_u", "v_ua", "v_w"]);
 function hasStaticMale(id) { return STATIC_MALE_IDS.has(id); }
 function hasMaleClip(id) { return !!(clips[id] && clips[id].male) || hasStaticMale(id); }
+const STATIC_FEMALE_IDS = STATIC_MALE_IDS;
+function hasStaticFemale(id) { return STATIC_FEMALE_IDS.has(id); }
+function hasFemaleClip(id) { return !!(clips[id] && clips[id].female) || hasStaticFemale(id); }
 
 async function playVoiceClip(id, voice) {
   const item = PHONETICS_ITEMS.find(x => x.id === id);
@@ -746,7 +749,10 @@ async function playVoiceClip(id, voice) {
   if (voice === 'male' && hasStaticMale(id)) {
     if (await playDataUrl('audio/male/' + encodeURIComponent(id) + '.mp3')) return;
   }
-  if (!dataUrl || voice === 'male') playFallbackSynth(item, voice);
+  if (voice === 'female' && hasStaticFemale(id)) {
+    if (await playDataUrl('audio/female/' + encodeURIComponent(id) + '.mp3')) return;
+  }
+  if (!dataUrl || voice === 'male' || hasStaticFemale(id)) playFallbackSynth(item, voice);
 }
 
 async function playBothVoices(id) {
@@ -760,7 +766,7 @@ function updateClipCounts() {
   for (const it of PHONETICS_ITEMS) {
     const c = clips[it.id];
     if (hasMaleClip(it.id)) mCount++;
-    if (c && c.female) fCount++;
+    if (hasFemaleClip(it.id)) fCount++;
   }
   const badge = document.getElementById('clipCountBadge');
   if (badge) badge.textContent = `🎙️ Recorded: ${mCount}/${PHONETICS_ITEMS.length} 👨 | ${fCount}/${PHONETICS_ITEMS.length} 👩`;
@@ -821,7 +827,7 @@ function renderGrid() {
   for (const it of list) {
     const c = clips[it.id] || {};
     const hasMale = hasMaleClip(it.id);
-    const hasFem = !!c.female;
+    const hasFem = hasFemaleClip(it.id);
     const meaning = it[currentLang] || it.en;
     const tip = currentLang === 'vi' ? it.tipVi : currentLang === 'ko' ? it.tipKo : currentLang === 'ja' ? it.tipJa : it.tipEn;
     const isRecStudio = activeRec && activeRec.mode === 'studio' && activeRec.id === it.id;
@@ -1068,7 +1074,7 @@ document.getElementById('soundGrid').addEventListener('click', async (e) => {
     const id = stuCmp.dataset.stuCmp;
     if (studentClips[id]) await playDataUrl(studentClips[id]);
     await new Promise(r => setTimeout(r, 250));
-    const prefVoice = hasMaleClip(id) ? 'male' : (clips[id] && clips[id].female) ? 'female' : 'male';
+    const prefVoice = hasMaleClip(id) ? 'male' : hasFemaleClip(id) ? 'female' : 'male';
     await playVoiceClip(id, prefVoice);
     return;
   }
