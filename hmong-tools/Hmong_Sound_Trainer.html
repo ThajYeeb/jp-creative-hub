@@ -662,15 +662,21 @@ startBtn.onclick = async () => {
   const s = UI_STRINGS[currentUILang];
   try {
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    mediaRecorder = new MediaRecorder(stream);
+    const types = ['audio/mp4', 'audio/webm;codecs=opus', 'audio/webm', 'audio/ogg'];
+    const mt = (window.MediaRecorder && MediaRecorder.isTypeSupported) ? types.find(t => MediaRecorder.isTypeSupported(t)) : null;
+    mediaRecorder = mt ? new MediaRecorder(stream, { mimeType: mt }) : new MediaRecorder(stream);
     chunks = [];
-    mediaRecorder.ondataavailable = e => chunks.push(e.data);
+    mediaRecorder.ondataavailable = e => { if (e.data && e.data.size) chunks.push(e.data); };
     mediaRecorder.onstop = () => {
-      const blob = new Blob(chunks, { type: 'audio/webm' });
+      stream.getTracks().forEach(tr => tr.stop());
+      const type = mediaRecorder.mimeType || mt || (chunks[0] && chunks[0].type) || 'audio/mp4';
+      const blob = new Blob(chunks, { type });
+      if (playback.src && playback.src.startsWith('blob:')) URL.revokeObjectURL(playback.src);
       playback.src = URL.createObjectURL(blob);
+      playback.load();
       status.textContent = UI_STRINGS[currentUILang].saved;
     };
-    mediaRecorder.start();
+    mediaRecorder.start(250);
     startBtn.disabled = true;
     stopBtn.disabled = false;
     status.textContent = s.recording;
