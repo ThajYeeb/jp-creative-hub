@@ -348,7 +348,7 @@
   <div class="header-row">
     <div>
       <h1 id="pageTitle">Hmong Vowels &amp; Consonants Soundboard</h1>
-      <p class="subtitle" id="pageSubtitle">Listen to Male &amp; Female instructor pronunciations for all 70 White Hmong (RPA) vowels and single, double, triple &amp; quadruple consonants.</p>
+      <p class="subtitle" id="pageSubtitle">Listen to Male &amp; Female instructor pronunciations for all 69 White Hmong (RPA) vowels and single, double, triple &amp; quadruple consonants.</p>
     </div>
     <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;">
       <span class="status-pill" id="clipCountBadge">Clips: 0M / 0F</span>
@@ -418,11 +418,11 @@
 </div>
 
 <div class="tabs-bar" id="categoryTabs">
-  <button class="tab-btn active" data-cat="all" id="tabAll">All Sounds (70)</button>
+  <button class="tab-btn active" data-cat="all" id="tabAll">All Sounds (69)</button>
   <button class="tab-btn" data-cat="vowels" id="tabVowels">1. Vowels (13)</button>
   <button class="tab-btn" data-cat="c1" id="tabC1">2. Single Consonants (17)</button>
   <button class="tab-btn" data-cat="c2" id="tabC2">3. Double Consonants (22)</button>
-  <button class="tab-btn" data-cat="c3" id="tabC3">4. Triple Consonants (15)</button>
+  <button class="tab-btn" data-cat="c3" id="tabC3">4. Triple Consonants (14)</button>
   <button class="tab-btn" data-cat="c4" id="tabC4">5. Quadruple Consonants (3)</button>
 </div>
 
@@ -432,7 +432,7 @@
 
 <div class="sound-grid" id="soundGrid"></div>
 <script>
-// 70 White Hmong (RPA) Vowels & Single, Double, Triple, Quadruple Consonants
+// 69 White Hmong (RPA) Vowels & Single, Double, Triple, Quadruple Consonants
 // Tuple format: [id, cat, subcat, glyph, ipa, exWord, exEn, exVi, exKo, exJa, tipEn, tipVi, tipKo, tipJa]
 const RAW_PHONETICS = [
   // 1. VOWELS — 6 Single Vowels (Monophthongs)
@@ -495,17 +495,17 @@ const RAW_PHONETICS = [
   ["c2_tx","c2","Alveolar Affricate","tx","/ts/","txoj","classifier (txoj xov zoo)","loại từ (tin mừng)","분류사 (좋은 소식)","類別詞（良い知らせ）","Unaspirated alveolar 'tz/ts' (tongue tip right behind front teeth, like 'ts' in 'cats', no puff of air).","Đầu lưỡi đặt ngay sau răng cửa, phát âm 'ts/tz' gọn, không bật hơi.","혀끝을 앞니 뒤에 대고 바람 없이 깔끔하게 내는 '쯔(ts)' 소리.","舌先を前歯の裏に当て、息を抑えて出す鋭い「ツ (ts)」音。"],
   ["c2_xy","c2","Palatal Fricative","xy","/ɕ/","xyuas","visit (rov mus xyuas)","thăm (thăm lại)","방문하다 (재방문)","訪問する（再訪問）","Soft palatal 'sh/sy' (middle of tongue raised toward palate, like Mandarin 'x' in 'xi' or 'sh' in 'she' while smiling).","Âm 'x' mềm kết hợp 'y' (mỉm cười nhẹ khi nói 'sh/xi').","입꼬리를 살짝 당기며 부드럽게 내는 '시/쉬(ɕ)' 소리.","口角を少し引いて舌面を上げて出す柔らかい「sh/sy (/ɕ/)」音。"],
 
-  // 4. TRIPLE CONSONANTS (15)
+  // 4. TRIPLE CONSONANTS (14)
   ["c3_hml","c3","Triple Consonant","hml","/m̥ˡ/","hmloog","listen (variant of mloog)","lắng nghe (biến thể của mloog)","듣다 (mloog의 변이형)","聴く（mloogの異形）","Voiceless 'hm' (puff air through nose with closed lips) releasing directly into 'l'.","Thổi nhẹ hơi qua mũi với môi khép ('hm') rồi mở ra chữ 'l'.","코로 바람을 먼저 빼는 'hm'에서 곧바로 'l'로 이어지는 소리.","鼻から息を抜く「hm」からそのまま舌の「l」へ繋げる音。"],
   ["c3_hny","c3","Triple Consonant","hny","/ɲ̥/","hnyav","heavy / serious","nặng / nghiêm trọng","무겁다","重い","Voiceless 'ny': put tongue flat on the palate for 'ny', blow air quietly through your nose first, then voice 'ny'.","Đặt lưỡi ở vị trí 'nh (ny)', thổi nhẹ hơi qua mũi trước rồi mới ngân âm 'nh'.","혀를 'ny(냐)' 위치에 두고 코로 바람을 먼저 뺀 뒤 'ny'를 발음.","舌を「ny（ニャ）」の位置に置き、鼻から息を抜いてから発音する無声硬口蓋鼻音。"],
   ["c3_nch","c3","Triple Consonant","nch","/ɲcʰ/","nchuav","pour out / spill","đổ ra / tràn ra","쏟다 / 붓다","注ぐ / こぼす","Hum 'n' through the nose + palatal 'c' + strong puff of air ('h').","Âm mũi 'n-' + 'c' + bật hơi mạnh ('-h').","비음 'n' + 경구개음 'c' + 강한 바람 'h'를 한 번에 연결.","鼻音「n」＋硬口蓋音「c」＋強い息「h」を一気に発音。"],
   ["c3_nkh","c3","Triple Consonant","nkh","/ŋkʰ/","nkhaus","crooked / curved","cong / quanh co","구부러진 / 곡선의","曲がった","Hum 'ng' through the nose + 'k' + strong puff of air ('h').","Âm mũi 'ng-' + 'k' + bật hơi mạnh ('-h').","비음 'ng' + 'k' + 거센 바람 'h'를 한 음절로 발음.","鼻音「ng」＋「k」＋強い息「h」を1音節で発音。"],
-  ["c3_nph","c3","Triple Consonant","nph","/mpʰ/","npau / nphau","boil / overflow","sôi / trào","끓다 / 넘치다","沸く / あふれる","Hum 'm' with closed lips + 'p' + strong puff of air ('h').","Ngậm môi ngân nhẹ 'm-' rồi bật mạnh âm 'ph' (p bật hơi).","입술 비음 'm' 뒤에 거센소리 'ph(ㅍ)'를 곧바로 터뜨리는 소리.","唇を閉じた「m」から有気音「ph（強いp）」を一気に放つ音。"],
+  ["c3_nph","c3","Triple Consonant","nph","/mpʰ/","nphav","to knock / bump against","va / chạm vào","부딪치다 / 두드리다","ぶつかる / 打ち当たる","Hum 'm' with closed lips + 'p' + strong puff of air ('h').","Ngậm môi ngân nhẹ 'm-' rồi bật mạnh âm 'ph' (p bật hơi).","입술 비음 'm' 뒤에 거센소리 'ph(ㅍ)'를 곧바로 터뜨리는 소리.","唇を閉じた「m」から有気音「ph（強いp）」を一気に放つ音。"],
   ["c3_npl","c3","Triple Consonant","npl","/mpˡ/","nplaum","sticky / glutinous","dính / dẻo (nếp)","끈적한 / 찰진","粘り気のある / もち米","Hum 'm' with closed lips + unaspirated 'pl' (like saying 'm-pl' in one smooth beat, no puff of air).","Ngân nhẹ 'm-' ở môi rồi mở ra cụm 'pl' không bật hơi.","입술 비음 'm' 뒤에 무기음 'pl'을 바람 없이 연결.","短い「m」から息を抑えた「pl」へ滑らかに繋げる音。"],
   ["c3_nqh","c3","Triple Consonant","nqh","/ɴqʰ/","nqhis","thirsty / crave (nqhis dej)","khát (khát nước)","목마르다 / 갈망하다","喉が渇く","Deep nasal hum + uvular 'q' + strong puff of air ('h').","Âm mũi sâu + âm cuống họng 'q' + bật hơi mạnh ('-h').","깊은 비음 + 구개수음 'q' + 거센 바람 'h'의 결합.","喉の奥の鼻音＋深い「q」＋強い息「h」。"],
   ["c3_nrh","c3","Triple Consonant","nrh","/ɳʈʰ/","nrhiav","search / examine daily","tìm kiếm / tra xem hằng ngày","찾다 / 매일 검토하다","探す / 毎日調べる","Hum 'n' with curled tongue + retroflex 'r' + strong puff of air ('h').","Uốn lưỡi ngân 'n-' + âm 'r' + bật hơi mạnh ('-h') như trong từ 'tshawb nrhiav'.","혀를 말아 비음 'n'을 울린 뒤 권설음 'r'을 거센 숨('h')과 함께 발음.","舌を反らせた鼻音「n」＋そり舌音「r」＋強い息「h」（例: tshawb nrhiav）。"],
   ["c3_nth","c3","Triple Consonant","nth","/ntʰ/","nthuav","open up / unfold","mở ra / trải ra","펼치다 / 열다","広げる / 開く","Hum 'n' at tooth ridge + 't' + strong puff of air ('h').","Ngân nhẹ 'n-' rồi bật mạnh âm 'th' (t bật hơi).","비음 'n' 뒤에 거센소리 'th(ㅌ)'를 곧바로 연결.","短い鼻音「n」から有気音「th（強いt）」へ一気に繋げる音。"],
-  ["c3_nts","c3","Triple Consonant","nts","/ɳʈʂ/","Ntsuj Plig","spirit (Ntsuj Plig Dawb Huv)","thần khí (Thần khí thánh)","영 / 성령 (Ntsuj Plig)","霊 / 聖霊 (Ntsuj Plig)","Hum 'n' + retroflex 'ts' (unaspirated, tongue curled slightly back—used in 'Ntsuj Plig Dawb Huv' Holy Spirit).","Ngân nhẹ 'n-' rồi nối vào âm 'ts' uốn lưỡi không bật hơi (như trong Ntsuj Plig = Thần khí).","비음 'n' 뒤에 권설 파찰음 'ts'를 바람 없이 연결 (Ntsuj Plig = 성령).","鼻音「n」からそり舌の無気音「ts」へ繋げる音（Ntsuj Plig = 聖霊）。"],
+  ["c3_nts","c3","Triple Consonant","nts","/ɳʈʂ/","ntses","fish","con cá","물고기","魚","Hum 'n' + retroflex 'ts' (unaspirated, tongue curled slightly back—as in 'ntses' = fish).","Ngân nhẹ 'n-' rồi nối vào âm 'ts' uốn lưỡi không bật hơi (như trong ntses = con cá).","비음 'n' 뒤에 권설 파찰음 'ts'를 바람 없이 연결 (ntses = 물고기).","鼻音「n」からそり舌の無気音「ts」へ繋げる音（ntses = 魚）。"],
   ["c3_ntx","c3","Triple Consonant","ntx","/nts/","ntxov","early","sớm","일찍 / 이른","早い（朝早く）","Hum 'n' + alveolar 'tx' right behind the front teeth (unaspirated 'n-tz').","Ngân nhẹ 'n-' rồi nối vào âm 'tx' ở ngay sau răng cửa (không bật hơi).","비음 'n' 뒤에 치조 파찰음 'tx(쯔)'를 바람 없이 연결.","鼻音「n」から前歯の裏の無気音「tx（ツ）」へ繋げる音。"],
   ["c3_plh","c3","Triple Consonant","plh","/pˡʰ/","plhom moj","silly / insolent","hỗn láo / láo xược","건방진 / 버릇없는","生意気な / 無礼な","Say 'pl' released with a strong puff of air ('p' + 'l' + 'h').","Phát âm cụm 'pl' kèm luồng hơi bật mạnh ra ngoài ('-h').","'pl' 소리에 강한 바람('h')을 더해 거세게 발음.","「pl」に強い息（有気音「h」）を添えて放つ音。"],
   ["c3_tsh","c3","Triple Consonant","tsh","/ʈʂʰ/","tshaj tawm","preach / announce","rao giảng / công bố","전파하다 / 봉사하다","伝道する / 宣べ伝える","Retroflex 'ts' + strong puff of air (like English 'ch' in 'church' with tongue tip curled slightly back).","Âm 'ts' uốn lưỡi kèm luồng hơi bật mạnh (như trong 'tshaj tawm' = rao giảng).","권설 파찰음 'ts'에 강한 바람을 더한 거센 '취/치' 소리 (tshaj tawm = 전파하다).","そり舌の「ts」に強い息を添えた有気音（tshaj tawm = 伝道する）。"],
@@ -522,20 +522,6 @@ const PHONETICS_ITEMS = RAW_PHONETICS.map(r => ({
   en: r[6], vi: r[7], ko: r[8], ja: r[9],
   tipEn: r[10], tipVi: r[11], tipKo: r[12], tipJa: r[13]
 }));
-// Add c3_phl if not present so all 15 triple consonants (70 total items) are included
-if (!PHONETICS_ITEMS.some(x => x.id === 'c3_phl')) {
-  const idx = PHONETICS_ITEMS.findIndex(x => x.id === 'c3_plh');
-  const phlItem = {
-    id: "c3_phl", cat: "c3", subcat: "Triple Consonant", glyph: "phl", ipa: "/pʰˡ/", exWord: "phlu",
-    en: "cheek / face", vi: "má / khuôn mặt", ko: "뺨 / 볼", ja: "頬（ほお）",
-    tipEn: "Aspirated 'ph' + lateral 'l' released together with a strong puff of air (phlu = cheek).",
-    tipVi: "Âm 'ph' bật hơi kết hợp 'l' thoát hơi mạnh (phlu = má).",
-    tipKo: "거센소리 'ph(ㅍ)'와 설측음 'l(ㄹ)'을 강한 바람과 함께 동시에 발음 (phlu = 뺨).",
-    tipJa: "有気音「ph」と舌の「l」を強い息とともに同時に放つ音（phlu = 頬）。"
-  };
-  if (idx >= 0) PHONETICS_ITEMS.splice(idx, 0, phlItem);
-  else PHONETICS_ITEMS.push(phlItem);
-}
 
 const UI_TEXT = {
   en: {
@@ -544,7 +530,7 @@ const UI_TEXT = {
     ulg: "🧩 Sentence Builder",
     flashcards: "🃏 Visual Flashcards",
     title: "Hmong Vowels & Consonants Soundboard",
-    subtitle: "Listen to Male & Female instructor pronunciations for all 70 White Hmong (RPA) vowels and single, double, triple & quadruple consonants.",
+    subtitle: "Listen to Male & Female instructor pronunciations for all 69 White Hmong (RPA) vowels and single, double, triple & quadruple consonants.",
     studioBtn: "🎙️ Instructor Studio",
     studioClose: "✖ Close Studio",
     formulaTitle: "💡 How Multi-Letter Hmong Consonants Work (Up to 4 Letters):",
@@ -554,11 +540,11 @@ const UI_TEXT = {
     fPart3: "3. Lateral release (-l-) = tongue flick",
     fPart4: "4. Aspiration (-h) = strong puff of air",
     fPartEx: "Example: n + p + l + h = nplh (nplhaib \"ring\")",
-    tabAll: "All Sounds (70)",
+    tabAll: "All Sounds (69)",
     tabVowels: "1. Vowels (13)",
     tabC1: "2. Single Consonants (17)",
     tabC2: "3. Double Consonants (22)",
-    tabC3: "4. Triple Consonants (15)",
+    tabC3: "4. Triple Consonants (14)",
     tabC4: "5. Quadruple Consonants (3)",
     searchPh: "Search letter, example word, or meaning (e.g., nplh, Hmoob, water, ring)…",
     playMale: "👨 Male",
@@ -576,7 +562,7 @@ const UI_TEXT = {
     ulg: "🧩 Ghép câu (ULG)",
     flashcards: "🃏 Thẻ từ Hình ảnh",
     title: "Bảng Âm thanh Nguyên âm & Phụ âm H'Mông",
-    subtitle: "Nghe giọng đọc mẫu Nam & Nữ cho toàn bộ 70 nguyên âm và phụ âm đơn, đôi, ba & bốn chữ cái trong tiếng H'Mông Trắng (RPA).",
+    subtitle: "Nghe giọng đọc mẫu Nam & Nữ cho toàn bộ 69 nguyên âm và phụ âm đơn, đôi, ba & bốn chữ cái trong tiếng H'Mông Trắng (RPA).",
     studioBtn: "🎙️ Phòng thu Giáo viên",
     studioClose: "✖ Đóng Phòng thu",
     formulaTitle: "💡 Cách đọc Phụ âm Ghép tiếng H'Mông (tới 4 chữ cái):",
@@ -586,11 +572,11 @@ const UI_TEXT = {
     fPart3: "3. Âm bật lưỡi (-l-)",
     fPart4: "4. Bật hơi mạnh (-h) ở cuối",
     fPartEx: "Ví dụ: n + p + l + h = nplh (nplhaib \"chiếc nhẫn\")",
-    tabAll: "Tất cả (70)",
+    tabAll: "Tất cả (69)",
     tabVowels: "1. Nguyên âm (13)",
     tabC1: "2. Phụ âm đơn (17)",
     tabC2: "3. Phụ âm đôi (22)",
-    tabC3: "4. Phụ âm 3 chữ (15)",
+    tabC3: "4. Phụ âm 3 chữ (14)",
     tabC4: "5. Phụ âm 4 chữ (3)",
     searchPh: "Tìm chữ cái, từ ví dụ hoặc nghĩa (VD: nplh, Hmoob, nước, nhẫn)…",
     playMale: "👨 Giọng Nam",
@@ -608,7 +594,7 @@ const UI_TEXT = {
     ulg: "🧩 문장 생성기",
     flashcards: "🃏 비주얼 플래시카드",
     title: "몽족어 모음 & 자음 사운드보드 (남성·여성 음성)",
-    subtitle: "백몽어(RPA) 70개 모음 및 단일·이중·삼중·사중 자음의 남성 및 여성 강사 발음을 듣고 비교해 보세요.",
+    subtitle: "백몽어(RPA) 69개 모음 및 단일·이중·삼중·사중 자음의 남성 및 여성 강사 발음을 듣고 비교해 보세요.",
     studioBtn: "🎙️ 강사 녹음 스튜디오",
     studioClose: "✖ 스튜디오 닫기",
     formulaTitle: "💡 몽족어 복합 자음(최대 4글자) 발음 공식:",
@@ -618,11 +604,11 @@ const UI_TEXT = {
     fPart3: "3. 설측 개방 (-l-) = 혀끝 튕김",
     fPart4: "4. 유기음 (-h) = 강한 바람 내뱉기",
     fPartEx: "예: n + p + l + h = nplh (nplhaib \"반지\")",
-    tabAll: "전체 소리 (70)",
+    tabAll: "전체 소리 (69)",
     tabVowels: "1. 모음 (13)",
     tabC1: "2. 단일 자음 (17)",
     tabC2: "3. 이중 자음 (22)",
-    tabC3: "4. 삼중 자음 (15)",
+    tabC3: "4. 삼중 자음 (14)",
     tabC4: "5. 사중 자음 (3)",
     searchPh: "글자, 예시 단어 또는 뜻 검색 (예: nplh, Hmoob, 물, 반지)…",
     playMale: "👨 남성 음성",
@@ -640,7 +626,7 @@ const UI_TEXT = {
     ulg: "🧩 文ビルダー (ULG)",
     flashcards: "🃏 絵カード",
     title: "モン語 母音＆子音サウンドボード（男性・女性音声）",
-    subtitle: "白モン語（RPA）全70種類の母音および単子音・二重・三重・四重子音の男性・女性講師の発音を聞き比べられます。",
+    subtitle: "白モン語（RPA）全69種類の母音および単子音・二重・三重・四重子音の男性・女性講師の発音を聞き比べられます。",
     studioBtn: "🎙️ 講師録音スタジオ",
     studioClose: "✖ スタジオを閉じる",
     formulaTitle: "💡 モン語の複合子音（最大4文字）の仕組み：",
@@ -650,11 +636,11 @@ const UI_TEXT = {
     fPart3: "3. 側面開放 (-l-) = 舌を弾く",
     fPart4: "4. 有気音 (-h) = 強い息を出す",
     fPartEx: "例: n + p + l + h = nplh (nplhaib「指輪」)",
-    tabAll: "すべて (70)",
+    tabAll: "すべて (69)",
     tabVowels: "1. 母音 (13)",
     tabC1: "2. 単子音 (17)",
     tabC2: "3. 二重子音 (22)",
-    tabC3: "4. 三重子音 (15)",
+    tabC3: "4. 三重子音 (14)",
     tabC4: "5. 四重子音 (3)",
     searchPh: "文字・例語・意味で検索（例: nplh, Hmoob, 水, 指輪）…",
     playMale: "👨 男性音声",
