@@ -1072,7 +1072,8 @@ function saveLocalCustomWords() {
 
 async function addNewCustomCard() {
   const hmong = (document.getElementById("newHmong").value || "").trim();
-  const en = (document.getElementById("newEn").value || "").trim();
+  const _sel = (document.getElementById({en:"newEn",vi:"newVi",ko:"newKo",ja:"newJa"}[uiLang]).value || "").trim();
+  const en = (document.getElementById("newEn").value || "").trim() || _sel;
   const vi = (document.getElementById("newVi").value || "").trim() || en;
   const ko = (document.getElementById("newKo").value || "").trim() || en;
   const ja = (document.getElementById("newJa").value || "").trim() || en;
@@ -1150,6 +1151,7 @@ async function connectStudentCode(rawCode, silent) {
 function setUILang(lang) {
   uiLang = (lang === "vi" || lang === "ko" || lang === "ja") ? lang : "en";
   localStorage.setItem("hmong_ui_lang", uiLang);
+  ["En","Vi","Ko","Ja"].forEach(k => { const el = document.getElementById("new"+k); if (el) el.style.display = (k.toLowerCase() === uiLang) ? "" : "none"; });
   document.getElementById("btnEn").classList.toggle("active", uiLang === "en");
   document.getElementById("btnVi").classList.toggle("active", uiLang === "vi");
   document.getElementById("btnKo").classList.toggle("active", uiLang === "ko");
