@@ -4,6 +4,10 @@ const BASE_ID_DEFAULT = 'app3EYXcC98lSdj46'; // Hmong Language Course
 const TABLE_ID_DEFAULT = 'tbl1BVwFM2yXr4xAk'; // Student Words
 const MAX_BODY = 100000;
 const MAX_WORDS = 300;
+const MAX_UPLOAD_BODY = 300000; // base64 of a <=200KB photo + JSON wrapper
+const MAX_PHOTO_BYTES = 200 * 1024;
+const MAX_PHOTOS = 50;
+const PHOTO_FIELD = 'Photo';
 
 const ROSTER = {
   'HMOOB-01': 'Stephen Trumble (Bền)',
@@ -107,6 +111,78 @@ async function findRecordByCode(cfg, code) {
   return { record: rec };
 }
 
+function photoProxyUrl(code, attId) {
+  return `/api/student-words?code=${encodeURIComponent(code)}&photo=${encodeURIComponent(attId)}`;
+}
+
+async function getOrCreateRecord(cfg, code, studentName) {
+  const lookup = await findRecordByCode(cfg, code);
+  if (lookup.error) return lookup;
+  if (lookup.record) return lookup;
+  const fields = { 'Student Code': code, 'Custom Words JSON': '[]', 'Updated At': new Date().toISOString() };
+  const name = ROSTER[code] || studentName;
+  if (name) fields['Student Name'] = name;
+  const cr = await fetch(`https://api.airtable.com/v0/${cfg.base}/${encodeURIComponent(cfg.table)}`, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${cfg.token}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ records: [{ fields }], typecast: false }),
+  });
+  if (!cr.ok) return { error: 'upstream', status: cr.status };
+  const d = await cr.json();
+  return { record: d.records && d.records[0] };
+}
+
+async function handleUploadPhoto(cfg, raw, code) {
+  let b64 = typeof raw.data === 'string' ? raw.data.trim() : '';
+  const m = /^data:image\/jpeg;base64,/i.exec(b64);
+  if (m) b64 = b64.slice(m[0].length);
+  if (!b64 || !/^[A-Za-z0-9+/=]+$/.test(b64)) return json({ ok: false, error: 'bad_image' }, 400);
+  const bytes = Math.floor((b64.length * 3) / 4) - (b64.endsWith('==') ? 2 : b64.endsWith('=') ? 1 : 0);
+  if (bytes > MAX_PHOTO_BYTES) return json({ ok: false, error: 'photo_too_large', maxBytes: MAX_PHOTO_BYTES }, 413);
+  if (!b64.startsWith('/9j/')) return json({ ok: false, error: 'bad_image' }, 400); // JPEG magic FF D8 FF
+  const lookup = await getOrCreateRecord(cfg, code, clean(raw.studentName || '', 120));
+  if (lookup.error || !lookup.record) return json({ ok: false, error: 'upstream' }, 502);
+  const rec = lookup.record;
+  const existing = Array.isArray(rec.fields && rec.fields[PHOTO_FIELD]) ? rec.fields[PHOTO_FIELD] : [];
+  if (existing.length >= MAX_PHOTOS) {
+    return json({ ok: false, error: 'photo_limit', max: MAX_PHOTOS, count: existing.length }, 409);
+  }
+  const slug = clean(raw.hmong || 'word', 40).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'word';
+  const filename = `${code}-${slug}-${Date.now()}.jpg`;
+  const up = await fetch(`https://content.airtable.com/v0/${cfg.base}/${rec.id}/${encodeURIComponent(PHOTO_FIELD)}/uploadAttachment`, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${cfg.token}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ contentType: 'image/jpeg', file: b64, filename }),
+  });
+  if (!up.ok) {
+    console.error('Airtable uploadAttachment error', up.status, (await up.text()).slice(0, 300));
+    return json({ ok: false, error: 'upstream' }, 502);
+  }
+  const d = await up.json();
+  const oldIds = new Set(existing.map((a) => a.id));
+  const fieldVals = Object.values(d.fields || {}).find((v) => Array.isArray(v)) || [];
+  const att = fieldVals.find((a) => a && a.filename === filename) || fieldVals.find((a) => a && !oldIds.has(a.id));
+  if (!att) return json({ ok: false, error: 'upstream' }, 502);
+  return json({ ok: true, code, id: att.id, url: photoProxyUrl(code, att.id), count: existing.length + 1, max: MAX_PHOTOS });
+}
+
+async function handleDeletePhoto(cfg, raw, code) {
+  const id = clean(raw.id || '', 40);
+  if (!/^att[A-Za-z0-9]+$/.test(id)) return json({ ok: false, error: 'bad_request' }, 400);
+  const lookup = await findRecordByCode(cfg, code);
+  if (lookup.error || !lookup.record) return json({ ok: false, error: lookup.error || 'not_found' }, 404);
+  const existing = Array.isArray(lookup.record.fields[PHOTO_FIELD]) ? lookup.record.fields[PHOTO_FIELD] : [];
+  const keep = existing.filter((a) => a.id !== id).map((a) => ({ id: a.id }));
+  if (keep.length === existing.length) return json({ ok: true, code, deleted: 0, count: keep.length });
+  const pr = await fetch(`https://api.airtable.com/v0/${cfg.base}/${encodeURIComponent(cfg.table)}/${lookup.record.id}`, {
+    method: 'PATCH',
+    headers: { Authorization: `Bearer ${cfg.token}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ fields: { [PHOTO_FIELD]: keep } }),
+  });
+  if (!pr.ok) return json({ ok: false, error: 'upstream' }, 502);
+  return json({ ok: true, code, deleted: 1, count: keep.length });
+}
+
 export async function onRequestGet(context) {
   const { request, env } = context;
   const url = new URL(request.url);
@@ -114,6 +190,22 @@ export async function onRequestGet(context) {
   if (!code) return json({ ok: false, error: 'invalid_code' }, 400);
 
   const cfg = getConfig(env);
+
+  // Photo proxy: Airtable attachment URLs expire, so cards store this stable URL instead.
+  const photoId = url.searchParams.get('photo');
+  if (photoId !== null) {
+    if (!/^att[A-Za-z0-9]+$/.test(photoId) || !cfg.token) return json({ ok: false, error: 'not_found' }, 404);
+    try {
+      const lookup = await findRecordByCode(cfg, code);
+      const list = lookup.record && Array.isArray(lookup.record.fields[PHOTO_FIELD]) ? lookup.record.fields[PHOTO_FIELD] : [];
+      const att = list.find((a) => a.id === photoId);
+      if (!att) return json({ ok: false, error: 'not_found' }, 404);
+      const thumb = att.thumbnails && att.thumbnails.large && att.thumbnails.large.url;
+      return new Response(null, { status: 302, headers: { Location: att.url || thumb, 'Cache-Control': 'private, max-age=600' } });
+    } catch (e) {
+      return json({ ok: false, error: 'upstream' }, 502);
+    }
+  }
   if (!cfg.token) {
     if (ROSTER[code]) {
       return json({
@@ -183,17 +275,31 @@ export async function onRequestGet(context) {
 export async function onRequestPost(context) {
   const { request, env } = context;
   const len = Number(request.headers.get('Content-Length') || 0);
-  if (len > MAX_BODY) return json({ ok: false, error: 'too_large' }, 413);
+  if (len > MAX_UPLOAD_BODY) return json({ ok: false, error: 'too_large' }, 413);
 
   let raw;
   try {
     const text = await request.text();
-    if (text.length > MAX_BODY) return json({ ok: false, error: 'too_large' }, 413);
+    if (text.length > MAX_UPLOAD_BODY) return json({ ok: false, error: 'too_large' }, 413);
     raw = JSON.parse(text);
+    if (raw && raw.action !== 'upload_photo' && text.length > MAX_BODY) return json({ ok: false, error: 'too_large' }, 413);
   } catch {
     return json({ ok: false, error: 'bad_request' }, 400);
   }
   if (!raw || typeof raw !== 'object') return json({ ok: false, error: 'bad_request' }, 400);
+
+  if (raw.action === 'upload_photo' || raw.action === 'delete_photo') {
+    const pcode = normalizeCode(raw.code || '');
+    if (!pcode) return json({ ok: false, error: 'invalid_code' }, 400);
+    const pcfg = getConfig(env);
+    if (!pcfg.token) return json({ ok: false, error: 'not_configured' }, 503);
+    try {
+      return raw.action === 'upload_photo' ? await handleUploadPhoto(pcfg, raw, pcode) : await handleDeletePhoto(pcfg, raw, pcode);
+    } catch (e) {
+      console.error('photo action failed', String(e));
+      return json({ ok: false, error: 'upstream' }, 502);
+    }
+  }
 
   // Optional seed action to initialize all 14 student rows if missing
   if (raw.action === 'seed_roster') {

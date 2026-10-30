@@ -216,6 +216,8 @@
   .mark-row { display:grid; grid-template-columns:1fr 1fr; gap:10px; max-width:560px; margin:12px auto 0; }
   .mark-row .btn { padding:15px 10px; font-size:1.02rem; border-radius:12px; }
   .add-toggle { width:100%; padding:12px; font-size:1rem; border-radius:12px; }
+  .photo-row { display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-top:10px; }
+  .photo-row label.btn { display:inline-block; }
   details.more { margin-top:10px; }
   details.more summary { cursor:pointer; font-weight:700; color:var(--accent); font-size:0.9rem; }
   details.more .more-body { display:flex; flex-direction:column; gap:8px; margin-top:8px; }
@@ -384,6 +386,11 @@
           <div style="font-size:0.82rem; color:var(--muted);" id="newWordPreviewStatus"></div>
         </div>
         <button class="btn" onclick="addNewCustomCard()" id="addCardBtn">+ Add</button>
+      </div>
+      <div class="photo-row">
+        <label class="btn btn-outline" id="photoPickLbl" for="newPhotoFile">📷 Use my own photo</label>
+        <input type="file" id="newPhotoFile" accept="image/*" class="hidden" onchange="handlePhotoFile(this.files && this.files[0])">
+        <button class="link-btn hidden" id="photoRemoveBtn" onclick="clearPendingPhoto(true)">Remove photo</button>
       </div>
       <details class="more">
         <summary id="moreOptsLbl">More options</summary>
@@ -654,7 +661,6 @@ const THEOCRATIC_TERMS_51 = [
   { hm: "Rov Mus Xyuas", en: "Return visit", vi: "Thăm lại", ko: "재방문", ja: "再訪問", pos: "verb", note: "" },
   { hm: "Phau Tsom Faj", en: "Watchtower", vi: "Tháp Canh", ko: "파수대", ja: "ものみの塔", pos: "obj", note: "" },
   { hm: "Niaj Hnub Tshawb Nrhiav", en: "Daily Bible Reading", vi: "Đọc Kinh Thánh hằng ngày", ko: "성경을 매일 검토함", ja: "聖書を毎日調べる", pos: "obj", note: "" },
-  { hm: "Lub Koom Txoos", en: "Congregation", vi: "Hội thánh", ko: "회중", ja: "会衆", pos: "obj", note: "" },
   { hm: "Kev Txiav Txim", en: "Judgment", vi: "Sự phán xét", ko: "심판", ja: "裁き", pos: "obj", note: "" },
   { hm: "Lub Neej Nyob Mus Ib Txhis", en: "Everlasting life", vi: "Sự sống đời đời", ko: "영원한 생명", ja: "永遠の命", pos: "obj", note: "" },
   { hm: "Tej Lus Samhwm", en: "Commandments", vi: "Các điều răn", ko: "계명", ja: "おきて（戒め）", pos: "obj", note: "" },
@@ -662,7 +668,7 @@ const THEOCRATIC_TERMS_51 = [
   { hm: "Cov Laus", en: "Older ones", vi: "Người cao tuổi", ko: "연로한 분들", ja: "高齢の方々", pos: "subj", note: "" },
   { hm: "Cov Poj Ntsuam", en: "Widows", vi: "Những người góa phụ", ko: "과부들", ja: "やもめ（寡婦）", pos: "subj", note: "" }
 ];
-const THEO_51_WOL_URLS = {"Yehauvas": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/121", "Vajtswv": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/118", "Phau Vajlugkub": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/13", "Txoj xov zoo": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/48", "Lub Nceeg Vaj": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/1034", "Khixatias": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/599", "Txwj laus": "https://wol.jw.org/en/wol/mp/r1/lp-e/jl/2014/166", "Tub leg num": "https://wol.jw.org/en/wol/mp/r1/lp-e/jl/2014/177", "Koom txoos": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/663", "Teev tiam": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/465", "Kev ntseeg": "https://wol.jw.org/en/wol/mp/r1/lp-e/jl/2014/25", "Cov kwv tij nkauj muam": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/626", "Tus Tswv Pluas Hmo": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/925", "Npe-ee": "https://wol.jw.org/en/wol/mp/r1/lp-e/jl/2014/237", "Pab Uas Ntaus Thawj": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/1884", "Tho kev": "https://wol.jw.org/en/wol/mp/r1/lp-e/jl/2014/146", "Tshaj tawm": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/698", "Sib txoos": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/663", "Lub koom haum": "https://wol.jw.org/en/wol/mp/r1/lp-e/jl/2014/235", "Yehauvas Cov Tim Khawv": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/24", "Yexus": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/587", "Xatas": "https://wol.jw.org/en/wol/mp/r1/lp-e/lfb/2017/164", "Tub txib": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/1608", "Kawm Vajlugkub": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/367", "Teev tiam Yehauvas": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/291", "Lub Tsev Nceeg Vaj": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/330", "Kev Pab Cuam": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/1646", "Ntsuj Plig Dawb Huv": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/225", "Kev Sawv Rov Los": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/996", "Lub Ntiaj Teb Tshiab": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/871", "Rooj Sib Txoos": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/59", "Hu Nkauj": "https://wol.jw.org/en/wol/mp/r1/lp-e/jl/2014/294", "Qhia Vajlugkub": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/367", "Cov Xaiv Tseg": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/1034", "Amankedoos": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/397", "Lub Vaj Kaj Siab": "https://wol.jw.org/en/wol/mp/r1/lp-e/lfb/2017/996", "Kev Sib Haum Xeeb": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/1959", "Zam Txim": "https://wol.jw.org/en/wol/mp/r1/lp-e/lfb/2017/436", "Nqe Txhiv": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/1598", "Thwj Tim": "https://wol.jw.org/en/wol/mp/r1/lp-e/lfb/2017/897", "Cov Tshaj Tawm": "https://wol.jw.org/en/wol/mp/r1/lp-e/jl/2014/133", "Mus Tsev Rau Tsev": "https://wol.jw.org/en/wol/mp/r1/lp-e/jl/2014/133", "Rov Mus Xyuas": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/1646", "Phau Tsom Faj": "https://wol.jw.org/en/wol/mp/r1/lp-e/jl/2014/38", "Niaj Hnub Tshawb Nrhiav": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/360", "Lub Koom Txoos": "https://wol.jw.org/en/wol/mp/r1/lp-e/jl/2014/78", "Kev Txiav Txim": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/1031", "Lub Neej Nyob Mus Ib Txhis": "https://wol.jw.org/en/wol/mp/r1/lp-e/lfb/2017/996", "Tej Lus Samhwm": "https://wol.jw.org/en/wol/mp/r1/lp-e/lfb/2017/246", "Thov": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/291", "Cov Laus": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/1934", "Cov Poj Ntsuam": "https://wol.jw.org/en/wol/mp/r1/lp-e/lfb/2017/485"};
+const THEO_51_WOL_URLS = {"Yehauvas": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/121", "Vajtswv": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/118", "Phau Vajlugkub": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/13", "Txoj xov zoo": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/48", "Lub Nceeg Vaj": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/1034", "Khixatias": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/599", "Txwj laus": "https://wol.jw.org/en/wol/mp/r1/lp-e/jl/2014/166", "Tub leg num": "https://wol.jw.org/en/wol/mp/r1/lp-e/jl/2014/177", "Koom txoos": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/663", "Teev tiam": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/465", "Kev ntseeg": "https://wol.jw.org/en/wol/mp/r1/lp-e/jl/2014/25", "Cov kwv tij nkauj muam": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/626", "Tus Tswv Pluas Hmo": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/925", "Npe-ee": "https://wol.jw.org/en/wol/mp/r1/lp-e/jl/2014/237", "Pab Uas Ntaus Thawj": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/1884", "Tho kev": "https://wol.jw.org/en/wol/mp/r1/lp-e/jl/2014/146", "Tshaj tawm": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/698", "Sib txoos": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/663", "Lub koom haum": "https://wol.jw.org/en/wol/mp/r1/lp-e/jl/2014/235", "Yehauvas Cov Tim Khawv": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/24", "Yexus": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/587", "Xatas": "https://wol.jw.org/en/wol/mp/r1/lp-e/lfb/2017/164", "Tub txib": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/1608", "Kawm Vajlugkub": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/367", "Teev tiam Yehauvas": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/291", "Lub Tsev Nceeg Vaj": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/330", "Kev Pab Cuam": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/1646", "Ntsuj Plig Dawb Huv": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/225", "Kev Sawv Rov Los": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/996", "Lub Ntiaj Teb Tshiab": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/871", "Rooj Sib Txoos": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/59", "Hu Nkauj": "https://wol.jw.org/en/wol/mp/r1/lp-e/jl/2014/294", "Qhia Vajlugkub": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/367", "Cov Xaiv Tseg": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/1034", "Amankedoos": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/397", "Lub Vaj Kaj Siab": "https://wol.jw.org/en/wol/mp/r1/lp-e/lfb/2017/996", "Kev Sib Haum Xeeb": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/1959", "Zam Txim": "https://wol.jw.org/en/wol/mp/r1/lp-e/lfb/2017/436", "Nqe Txhiv": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/1598", "Thwj Tim": "https://wol.jw.org/en/wol/mp/r1/lp-e/lfb/2017/897", "Cov Tshaj Tawm": "https://wol.jw.org/en/wol/mp/r1/lp-e/jl/2014/133", "Mus Tsev Rau Tsev": "https://wol.jw.org/en/wol/mp/r1/lp-e/jl/2014/133", "Rov Mus Xyuas": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/1646", "Phau Tsom Faj": "https://wol.jw.org/en/wol/mp/r1/lp-e/jl/2014/38", "Niaj Hnub Tshawb Nrhiav": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/360", "Kev Txiav Txim": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/1031", "Lub Neej Nyob Mus Ib Txhis": "https://wol.jw.org/en/wol/mp/r1/lp-e/lfb/2017/996", "Tej Lus Samhwm": "https://wol.jw.org/en/wol/mp/r1/lp-e/lfb/2017/246", "Thov": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/291", "Cov Laus": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/1934", "Cov Poj Ntsuam": "https://wol.jw.org/en/wol/mp/r1/lp-e/lfb/2017/485"};
 const STUDENT_ROSTER = {
   "HMOOB-01": { name: "Stephen Trumble (Bền)", short: "Stephen / Bền" },
   "HMOOB-02": { name: "Quỳnh Trumble", short: "Quỳnh" },
@@ -798,7 +804,7 @@ function buildMasterDeck() {
 }
 
 const T = {
-  en: { title:"🃏 Hmong Flashcards", sub:"49 core words, 51 theocratic terms, and your own synced words. White Hmong.",
+  en: { photoBtn:"📷 Use my own photo", photoRemove:"Remove photo", photoReady:"Your photo is ready", photoNeedCode:"Connect your student code first so your photo can sync.", photoTooBig:"This photo is still too large after shrinking (over 200 KB). Try another photo.", photoLimit:"You have reached the limit of 50 photos.", photoUploading:"Uploading photo...", photoFail:"Photo upload failed. Please try again.", photoBad:"Could not read this image.", title:"🃏 Hmong Flashcards", sub:"49 core words, 51 theocratic terms, and your own synced words. White Hmong.",
     all:"All", core:"Core", theo:"📖 Theocratic", custom:"⭐ My Words", learning:"🔄 Still Learning", mastered:"✅ Mastered",
     search:"🔍 Search", mode:"Mode", flip:"🃏 Flip", quiz:"⚡ Quiz", prompt:"Prompt", hmQ:"Hmong → ?", qHm:"? → Hmong", shuffle:"🔀 Shuffle",
     hintFront:"Tap card or press Space to flip", hintRev:"Guess the Hmong word — tap to flip", swipe:"Swipe ← → for next",
@@ -809,7 +815,7 @@ const T = {
     phHm:"Hmong (e.g. Noog)", phEn:"English (e.g. bird)", previewHint:"Type an English meaning to auto-load an image.",
     need:"Please enter both the Hmong word and the English meaning.", added:"Added", connect:"Connect", syncing:"Syncing",
     synced:"synced", change:"change", codeHint:"Enter HMOOB-01..19 to sync your words.", local:"Saved locally for", failed:"Could not sync" },
-  vi: { title:"🃏 Thẻ Từ Vựng H'Mông", sub:"49 từ cơ bản, 51 thuật ngữ thần quyền và từ của bạn (đồng bộ). H'Mông Trắng.",
+  vi: { photoBtn:"📷 Dùng ảnh của tôi", photoRemove:"Bỏ ảnh", photoReady:"Ảnh của bạn đã sẵn sàng", photoNeedCode:"Hãy kết nối mã học viên trước để ảnh được đồng bộ.", photoTooBig:"Ảnh vẫn quá lớn sau khi thu nhỏ (trên 200 KB). Hãy thử ảnh khác.", photoLimit:"Bạn đã đạt giới hạn 50 ảnh.", photoUploading:"Đang tải ảnh lên...", photoFail:"Tải ảnh lên thất bại. Vui lòng thử lại.", photoBad:"Không đọc được ảnh này.", title:"🃏 Thẻ Từ Vựng H'Mông", sub:"49 từ cơ bản, 51 thuật ngữ thần quyền và từ của bạn (đồng bộ). H'Mông Trắng.",
     all:"Tất cả", core:"Cơ bản", theo:"📖 Thần quyền", custom:"⭐ Từ của tôi", learning:"🔄 Đang học", mastered:"✅ Đã thuộc",
     search:"🔍 Tìm", mode:"Chế độ", flip:"🃏 Lật thẻ", quiz:"⚡ Trắc nghiệm", prompt:"Hiển thị", hmQ:"H'Mông → ?", qHm:"? → H'Mông", shuffle:"🔀 Xáo trộn",
     hintFront:"Chạm vào thẻ hoặc nhấn Space để lật", hintRev:"Đoán từ H'Mông — chạm để lật", swipe:"Vuốt ← → để chuyển",
@@ -820,7 +826,7 @@ const T = {
     phHm:"H'Mông (vd: Noog)", phEn:"Tiếng Anh (vd: bird)", previewHint:"Nhập nghĩa tiếng Anh để tự tải hình.",
     need:"Vui lòng nhập cả từ H'Mông và nghĩa tiếng Anh.", added:"Đã thêm", connect:"Kết nối", syncing:"Đang đồng bộ",
     synced:"đã đồng bộ", change:"đổi", codeHint:"Nhập HMOOB-01..19 để đồng bộ từ của bạn.", local:"Đã lưu trên máy cho", failed:"Không thể đồng bộ" },
-  ko: { title:"🃏 몽족어 플래시카드", sub:"핵심 어휘 49개, 신권 용어 51개, 동기화된 나만의 단어. 백몽어.",
+  ko: { photoBtn:"📷 내 사진 사용", photoRemove:"사진 삭제", photoReady:"사진이 준비되었습니다", photoNeedCode:"사진을 동기화하려면 먼저 학생 코드를 연결하세요.", photoTooBig:"축소 후에도 사진이 너무 큽니다(200KB 초과). 다른 사진을 사용해 보세요.", photoLimit:"사진 50장 한도에 도달했습니다.", photoUploading:"사진 업로드 중...", photoFail:"사진 업로드에 실패했습니다. 다시 시도하세요.", photoBad:"이 이미지를 읽을 수 없습니다.", title:"🃏 몽족어 플래시카드", sub:"핵심 어휘 49개, 신권 용어 51개, 동기화된 나만의 단어. 백몽어.",
     all:"전체", core:"핵심", theo:"📖 신권 용어", custom:"⭐ 내 단어", learning:"🔄 학습 중", mastered:"✅ 암기 완료",
     search:"🔍 검색", mode:"모드", flip:"🃏 카드", quiz:"⚡ 퀴즈", prompt:"제시어", hmQ:"몽족어 → ?", qHm:"? → 몽족어", shuffle:"🔀 섞기",
     hintFront:"카드를 탭하거나 Space를 눌러 뒤집기", hintRev:"몽족어 단어를 맞혀 보세요 — 탭하여 뒤집기", swipe:"← → 스와이프로 이동",
@@ -831,7 +837,7 @@ const T = {
     phHm:"몽족어 (예: Noog)", phEn:"영어 (예: bird)", previewHint:"영어 뜻을 입력하면 이미지가 자동으로 표시됩니다.",
     need:"몽족어 단어와 영어 뜻을 모두 입력하세요.", added:"추가됨", connect:"연결", syncing:"동기화 중",
     synced:"동기화됨", change:"변경", codeHint:"HMOOB-01..19를 입력해 단어를 동기화하세요.", local:"이 기기에 저장됨:", failed:"동기화 실패" },
-  ja: { title:"🃏 白モン語 単語カード", sub:"基本49語、神権用語51語、同期されたマイ単語。白モン語。",
+  ja: { photoBtn:"📷 自分の写真を使う", photoRemove:"写真を削除", photoReady:"写真の準備ができました", photoNeedCode:"写真を同期するには、先に受講生コードを接続してください。", photoTooBig:"縮小後も写真が大きすぎます（200KB超）。別の写真をお試しください。", photoLimit:"写真は50枚までです。上限に達しました。", photoUploading:"写真をアップロード中...", photoFail:"写真のアップロードに失敗しました。もう一度お試しください。", photoBad:"この画像を読み込めません。", title:"🃏 白モン語 単語カード", sub:"基本49語、神権用語51語、同期されたマイ単語。白モン語。",
     all:"すべて", core:"基本", theo:"📖 神権用語", custom:"⭐ マイ単語", learning:"🔄 学習中", mastered:"✅ 習得済み",
     search:"🔍 検索", mode:"モード", flip:"🃏 カード", quiz:"⚡ クイズ", prompt:"出題", hmQ:"モン語 → ?", qHm:"? → モン語", shuffle:"🔀 シャッフル",
     hintFront:"カードをタップ、またはSpaceで裏返す", hintRev:"モン語を当てよう — タップで裏返す", swipe:"← → スワイプで移動",
@@ -1005,13 +1011,69 @@ function syncLangBoxes() {
   $("newJa").classList.toggle("hidden", uiLang !== "ja");
 }
 
+let pendingPhoto = null; // { data: base64 JPEG, kb }
+
+function clearPendingPhoto(refresh) {
+  pendingPhoto = null;
+  $("newPhotoFile").value = "";
+  $("photoRemoveBtn").classList.add("hidden");
+  if (refresh) { currentPendingImg = ""; $("newWordPreviewThumb").textContent = currentPendingEmoji || "🐦"; $("newWordPreviewStatus").textContent = t("previewHint"); scheduleImagePreview(); }
+}
+
+function handlePhotoFile(file) {
+  if (!file) return;
+  const status = $("newWordPreviewStatus");
+  const img = new Image();
+  const objUrl = URL.createObjectURL(file);
+  img.onload = () => {
+    URL.revokeObjectURL(objUrl);
+    const scale = Math.min(1, 800 / Math.max(img.naturalWidth, img.naturalHeight));
+    const cv = document.createElement("canvas");
+    cv.width = Math.max(1, Math.round(img.naturalWidth * scale));
+    cv.height = Math.max(1, Math.round(img.naturalHeight * scale));
+    const ctx = cv.getContext("2d");
+    ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, cv.width, cv.height);
+    ctx.drawImage(img, 0, 0, cv.width, cv.height);
+    const bytesOf = u => Math.floor((u.length - u.indexOf(",") - 1) * 3 / 4);
+    let q = 0.7, url = cv.toDataURL("image/jpeg", q);
+    while (bytesOf(url) > 110 * 1024 && q > 0.35) { q -= 0.1; url = cv.toDataURL("image/jpeg", q); }
+    if (bytesOf(url) > 200 * 1024) { clearPendingPhoto(false); alert(t("photoTooBig")); return; }
+    pendingPhoto = { data: url.split(",")[1], kb: Math.round(bytesOf(url) / 1024) };
+    currentPendingImg = "";
+    $("newWordPreviewThumb").innerHTML = `<img src="${url}" alt="photo">`;
+    status.textContent = `${t("photoReady")} (${pendingPhoto.kb} KB)`;
+    $("photoRemoveBtn").classList.remove("hidden");
+  };
+  img.onerror = () => { URL.revokeObjectURL(objUrl); clearPendingPhoto(false); alert(t("photoBad")); };
+  img.src = objUrl;
+}
+
+function photoIdFromImg(u) { const m = /[?&]photo=(att[A-Za-z0-9]+)/.exec(u || ""); return m ? m[1] : ""; }
+
 async function addNewCustomCard() {
   const hmong = ($("newHmong").value || "").trim();
   const en = ($("newEn").value || "").trim();
   if (!hmong || !en) { alert(t("need")); return; }
   const prev = customWords.find(w => (w.hmong || w.w || "").toLowerCase() === hmong.toLowerCase()) || {};
   const pick = k => ($(k === "vi" ? "newVi" : k === "ko" ? "newKo" : "newJa").value || "").trim() || prev[k] || en;
-  if (!currentPendingImg && $("newImgSource").value !== "custom") await triggerImageLookup(true);
+  let photoUrl = "";
+  if (pendingPhoto) {
+    if (!activeStudentCode) { alert(t("photoNeedCode")); showCodeForm(); return; }
+    $("newWordPreviewStatus").textContent = t("photoUploading");
+    $("addCardBtn").disabled = true;
+    try {
+      const r = await fetch("/api/student-words", { method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "upload_photo", code: activeStudentCode, hmong, data: pendingPhoto.data }) });
+      const d = await r.json().catch(() => ({}));
+      if (r.ok && d.ok && d.url) photoUrl = d.url;
+      else { $("newWordPreviewStatus").textContent = d.error === "photo_limit" ? t("photoLimit") : d.error === "photo_too_large" ? t("photoTooBig") : t("photoFail"); return; }
+    } catch { $("newWordPreviewStatus").textContent = t("photoFail"); return; }
+    finally { $("addCardBtn").disabled = false; }
+    const oldId = photoIdFromImg(prev.img);
+    if (oldId) fetch("/api/student-words", { method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "delete_photo", code: activeStudentCode, id: oldId }) }).catch(() => {});
+    currentPendingImg = photoUrl;
+  } else if (!currentPendingImg && $("newImgSource").value !== "custom") await triggerImageLookup(true);
   const newObj = { hmong, en, vi: pick("vi"), ko: pick("ko"), ja: pick("ja"), pos: "obj",
     img: currentPendingImg || "", emoji: currentPendingEmoji || pickEmoji(hmong, en) };
   const idx = customWords.findIndex(w => (w.hmong || w.w || "").toLowerCase() === hmong.toLowerCase());
@@ -1021,6 +1083,7 @@ async function addNewCustomCard() {
   setDeckFilter("custom");
   ["newHmong", "newEn", "newVi", "newKo", "newJa"].forEach(id => { $(id).value = ""; });
   currentPendingImg = "";
+  clearPendingPhoto(false);
   $("newWordPreviewStatus").textContent = `${t("added")}: "${hmong}" (${en})`;
   if (activeStudentCode) {
     try {
@@ -1085,7 +1148,7 @@ function setUILang(lang) {
   set("pageTitle", "title"); set("pageSub", "sub"); set("lblMode", "mode"); set("modeStudyBtn", "flip"); set("modeQuizBtn", "quiz");
   set("lblPrompt", "prompt"); set("promptHmBtn", "hmQ"); set("promptMeBtn", "qHm"); set("btnShuffle", "shuffle");
   set("btnMarkLearn", "markLearn"); set("btnMarkKnown", "markKnow"); set("quizNextBtn", "next"); set("addCardBtn", "add");
-  set("moreOptsLbl", "more"); set("refreshImgBtn", "refresh"); set("connectCodeBtn", "connect"); set("changeCodeBtn", "change");
+  set("moreOptsLbl", "more"); set("refreshImgBtn", "refresh"); set("connectCodeBtn", "connect"); set("changeCodeBtn", "change"); set("photoPickLbl", "photoBtn"); set("photoRemoveBtn", "photoRemove");
   $("addToggleBtn").textContent = $("addForm").classList.contains("hidden") ? t("addWord") : t("closeAdd");
   $("searchInput").placeholder = t("search");
   $("newHmong").placeholder = t("phHm");
@@ -1164,6 +1227,7 @@ function renderVisualInto(container, card) {
 }
 // Auto-Image Lookup for New Student Words (e.g. "Noog" -> "bird")
 function scheduleImagePreview() {
+  if (pendingPhoto) return;
   const srcMode = document.getElementById("newImgSource").value;
   document.getElementById("customUrlRow").classList.toggle("hidden", srcMode !== "custom");
   if (srcMode === "custom") {
