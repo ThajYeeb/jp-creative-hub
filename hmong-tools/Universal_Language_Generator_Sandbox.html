@@ -411,11 +411,11 @@ const BANK = {
          W("Peb","we",{poss:"our",src:"L"}), W("Nej","you (plural)",{poss:"your",src:"L"}), W("Lawv","they",{poss:"their",src:"L"}),
          W("dev","dog",{clf:"tus",p3:1,noun:1,src:"S"}), W("Kuv tus miv","my cat",{p3:1,src:"S"})],
   num: [W("ib","one / one of",{src:"H,L"}), W("ob","two",{src:"L"}), W("peb","three",{src:"L"})],
-  noun2: [W("phoojywg","friend",{clf:"tug",src:"H"}), W("tsheb","car",{clf:"lub",src:"H"})],
+  noun2: [W("phooj ywg","friend",{clf:"tug",src:"H"}), W("tsheb","car",{clf:"lub",src:"H"})],
   adj: [W("dub","black",{src:"S"}), W("dawb","white",{src:"S,H"}), W("ntse","wise",{src:"H"}), W("zoo","good",{src:"L"})],
   adv: [W("mab mam","slowly",{src:"S,H"})],
   verb: [W("khiav","run",{s:"runs",past:"ran",src:"S,H"}), W("ntxuav","wash",{objs:["dev","aub","tsheb"],s:"washes",past:"washed",tr:1,src:"S"}),
-         W("nrhia","jump",{s:"jumps",past:"jumped",src:"S"}), W("haus","drink",{objs:["dej"],s:"drinks",past:"drank",tr:1,src:"H,L"}),
+         W("dhia","jump",{s:"jumps",past:"jumped",src:"S"}), W("haus","drink",{objs:["dej"],s:"drinks",past:"drank",tr:1,src:"H,L"}),
          W("nrhiav","search for",{objs:["dev","aub","npas"],s:"searches for",past:"searched for",tr:1,src:"H"}),
          W("yuav tsum","need",{s:"needs",past:"needed",modal:1,src:"S"}), W("xav","want",{s:"wants",past:"wanted",modal:1,src:"L"}),
          W("nyiam","like",{s:"likes",past:"liked",modal:1,src:"L"}), W("noj","eat",{objs:["mov"],s:"eats",past:"ate",tr:1,src:"L"}),
@@ -426,7 +426,7 @@ const BANK = {
   inf: [W("taug kev","to walk",{src:"S"}), W("mus","to go",{src:"S"}), W("pab","to help",{src:"L"})],
   advadv: [W("kawg li","most",{src:"H"})],
   prep: [W("nrog","with",{src:"H"}), W("nrhau","over",{src:"S"}), W("pem","to (up to)",{src:"S"})],
-  poss: [W("kuv","my",{src:"H"})],
+  poss: [W("Kuv","my",{src:"H"})],
   obj: [W("dev","dog",{clf:"tus",src:"S"}), W("aub","dog",{clf:"tug",src:"H"}), W("tsev","house",{clf:"lub",src:"S"}),
         W("npas","ball",{clf:"lub",src:"S"}), W("dej","water",{src:"H,L"}), W("tsheb","car",{clf:"lub",src:"H"}),
         W("mov","rice / food",{src:"L"}), W("ntawv","book / paper / letter",{src:"L"}), W("lus Hmoob","Hmong language",{src:"L"})],
@@ -452,10 +452,10 @@ const MODES = {
 const TWISTERS = ["Tus twm tuj tiaj teb","Tab tom tuaj tom tov tuaj","Tuaj tom tej teb tiaj tiaj tuaj, tuaj tuag",
   "Liab loj loj, liab los los","Liab liab laj laj los","Liab liab laug lawv lub laub loj loj los",
   "Liab liab lam laug lawv lub laub li liab liab laus laus lawm","Liab liab lov lawv lub laub lawm lauj",
-  "Peb pom peb phoojywg Pheej","Pheej pheej pov pobzeb, pov puag pem pobzeb pobtsuas","Pheej pheej pov pov, Pheej pom Paj",
+  "Peb pom peb phooj ywg Pheej","Pheej pheej pov pobzeb, pov puag pem pobzeb pobtsuas","Pheej pheej pov pov, Pheej pom Paj",
   "Paj pom Pheej, Paj pawb paws puag Pheej"];
 const QUESTIONS = [
- ["What is that?","Qhov ntawv yog dabtsi?"],["How do you throw the ball?","Koj cuam lub npas li cas?"],["Where do you live?","Koj nyob qhov twg?"],
+ ["What is that?","Qhov ntawd yog dabtsi?"],["How do you throw the ball?","Koj cuam lub npas li cas?"],["Where do you live?","Koj nyob qhov twg?"],
  ["Which book is yours?","Phau ntawv twg yog koj phau ntawv? (twg is after classifier and/or noun)"],["When can you come visit me?","Koj tuaj saib tau kuv thaum twg?"],
  ["Who are you?","Koj yog leej twg?"],["Who washed (action verb) the car (already)?","Leej twg (twb) ntxuav lub tsheb lawm?"],
  ["Why did you cry?","Vim li cas koj quaj? ('did' does not apply)"],
@@ -549,7 +549,7 @@ const TIPS = {
   ko:"대명사, 소유 명사, 무생물 포함. 몽어에는 소유격 아포스트로피('s)가 없습니다.\n소유: 소유물 앞에 알맞은 분류사를 붙입니다 (Kuv tus miv = 내 고양이).",
   ja:"代名詞、所有名詞、無生物を含みます。モン語に所有のアポストロフィ（'s）はありません。\n所有: 所有物の前に適切な類別詞を付けます（Kuv tus miv = 私の猫）。"},
  num:{en:"Numbers or words (many) apply.",vi:"Dùng số hoặc từ chỉ lượng (nhiều).",ko:"숫자나 수량 단어(많은)를 씁니다.",ja:"数字や数量の言葉（たくさん）を使います。"},
- noun2:{en:"Can be used as the possession of the 1st noun (Kuv ib tug phoojywg = one of my friends).",vi:"Có thể dùng làm vật sở hữu của danh từ thứ nhất.",ko:"첫 번째 명사의 소유물로 쓸 수 있습니다.",ja:"最初の名詞の所有物として使えます。"},
+ noun2:{en:"Can be used as the possession of the 1st noun (Kuv ib tug phooj ywg = one of my friends).",vi:"Có thể dùng làm vật sở hữu của danh từ thứ nhất.",ko:"첫 번째 명사의 소유물로 쓸 수 있습니다.",ja:"最初の名詞の所有物として使えます。"},
  adj:{en:"Adjective comes after the noun. 'is' is not used in Hmong with a subject + adjective (He is mean → Nws siab phem).\nWhen an adjective is repeated, the second one is like 'very'.",
   vi:"Tính từ đứng sau danh từ. Tiếng H'Mông không dùng 'là' giữa chủ ngữ và tính từ (Nws siab phem).\nLặp lại tính từ nghĩa là 'rất'.",
   ko:"형용사는 명사 뒤에 옵니다. 주어+형용사 사이에 'is'를 쓰지 않습니다 (Nws siab phem).\n형용사를 반복하면 '매우'라는 뜻입니다.",
@@ -577,8 +577,8 @@ const TIPS = {
  place:{en:"Treat as a noun: use articles and adjectives with the same rules.",vi:"Xem như danh từ: dùng mạo từ và tính từ theo cùng quy tắc.",ko:"명사처럼 다룹니다: 같은 규칙으로 관사와 형용사를 씁니다.",ja:"名詞として扱い、同じルールで冠詞と形容詞を使います。"}
 };
 const NOTES_EN = ["'is' is not used in Hmong with agreement of Subject and Adjective. Eng: He is mean → Hmb: Nws siab phem",
- "Sheet example (Hmong): Yog Kuv ib tug phoojywg ntse twb mab mam nrhiav kawg li nrog kuv ib tug aub dawb dawb tom tsev nag hmo lawm.",
- "Sheet examples (Simple): Nag hmo Kuv twb khiav ceev ceev lawm. · Tag kis Nws mam li ntxuav tus dev. · Hnub no tus Dev yuav tsum taug kev (mus) pem lub tsev. · Kuv tus miv dub mab mam nrhia nrhau lub npas dawb.",
+ "Sheet example (Hmong): Yog Kuv ib tug phooj ywg ntse twb mab mam nrhiav kawg li nrog kuv ib tug aub dawb dawb tom tsev nag hmo lawm.",
+ "Sheet examples (Simple): Nag hmo Kuv twb khiav ceev ceev lawm. · Tag kis Nws mam li ntxuav tus dev. · Hnub no tus Dev yuav tsum taug kev (mus) pem lub tsev. · Kuv tus miv dub mab mam dhia nrhau lub npas dawb.",
  "Sheet example: Lub qho rooj tsheb = the door of the car (classifier before 1st noun only)."];
 
 let uiLang = "en", tab = "simple", tense = "present", timePos = "start";
@@ -608,7 +608,7 @@ function ensureDefaults() {
 
 function assemble() {
   const parts = []; // {hm, en, t}
-  const push = (hm, en, t) => parts.push({ hm: /^Hmoob/.test(hm) ? hm : hm.charAt(0).toLowerCase() + hm.slice(1), en, t });
+  const push = (hm, en, t) => parts.push({ hm: (/^Hmoob/.test(hm) || t === "subj" || t === "poss") ? hm : hm.charAt(0).toLowerCase() + hm.slice(1), en, t });
   const time = sel("time");
   if (time && timePos === "start") push(time.hm, time.en, "time");
   let lastAdj = null;
@@ -729,7 +729,7 @@ function randomize() {
   if (tab === "full") {
     if (maybe(0.3)) st.interj = pick("interj");
     if (subj.poss && maybe(0.6)) {  // possessor + "one of my friend" pattern
-      st.noun2 = 0; /* phoojywg (friend), as in the sheet example */ const n2 = optionsFor("noun2")[st.noun2];
+      st.noun2 = 0; /* phooj ywg (friend), as in the sheet example */ const n2 = optionsFor("noun2")[st.noun2];
       if (maybe()) { st.num1 = idxOf("num", "ib"); st.clf2 = idxOf("clf", n2.clf === "tus" ? "tug" : n2.clf); }
       if (maybe()) st.adj1 = idxOf("adj", ["ntse","zoo"][rnd(2)]);
     }
