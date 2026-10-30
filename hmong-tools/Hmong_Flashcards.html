@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="robots" content="noindex, nofollow">
-<title>Hmong Visual Flashcard Trainer – 10-Day Course</title>
+
+<title>Hmong Flashcards</title>
 <style>
   :root {
     --bg: #f4f6f9; --card: #ffffff; --accent: #1F4E79; --accent2: #2E75B6;
@@ -188,6 +188,47 @@
     border-color: #475569 !important;
   }
 
+  /* ===== Sandbox redesign ===== */
+  .sb-tag { display:inline-block; font-size:0.7rem; font-weight:800; background:#fef3c7; color:#92400e; border-radius:6px; padding:2px 7px; vertical-align:middle; margin-left:6px; }
+  .head-row { display:flex; justify-content:space-between; align-items:flex-start; gap:10px; }
+  .code-badge { display:inline-flex; align-items:center; gap:8px; background:var(--ok-bg); border:1px solid var(--ok-border); color:#065f46; border-radius:999px; padding:4px 12px; font-size:0.85rem; font-weight:700; }
+  html[data-theme="dark"] .code-badge { color:#a7f3d0; }
+  .link-btn { background:none; border:none; color:var(--accent2); font-weight:600; cursor:pointer; padding:0; font-size:0.82rem; text-decoration:underline; }
+  .toolbar { display:flex; gap:8px; align-items:center; position:relative; }
+  .toolbar select { flex:0 0 auto; max-width:48%; }
+  .toolbar input[type="text"] { flex:1 1 auto; min-width:0; }
+  .icon-btn { background:#f1f5f9; border:1px solid var(--border); color:var(--text); border-radius:10px; width:42px; height:40px; font-size:1.15rem; cursor:pointer; flex-shrink:0; display:inline-flex; align-items:center; justify-content:center; }
+  html[data-theme="dark"] .icon-btn { background:#334155; border-color:#475569; color:#f1f5f9; }
+  .settings-pop { position:absolute; right:0; top:46px; z-index:20; width:min(300px, 92vw); background:var(--card); border:1px solid var(--border); border-radius:12px; box-shadow:0 12px 30px rgba(0,0,0,.18); padding:12px; display:flex; flex-direction:column; gap:10px; }
+  .settings-pop label { font-size:0.78rem; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.4px; }
+  .seg { display:flex; gap:4px; background:#e2e8f0; border-radius:10px; padding:3px; }
+  html[data-theme="dark"] .seg { background:#0f172a; }
+  .seg button { flex:1; border:none; background:transparent; padding:7px 6px; border-radius:8px; font-weight:700; font-size:0.84rem; cursor:pointer; color:var(--text); }
+  .seg button.active { background:var(--accent); color:#fff; }
+  .card-area { display:flex; align-items:center; gap:8px; margin:14px auto 6px; max-width:640px; }
+  .card-area .stage-wrap { flex:1; margin:0; max-width:none; }
+  .nav-arrow { width:40px; height:40px; border-radius:50%; border:1px solid var(--border); background:var(--card); color:var(--text); font-size:1.1rem; cursor:pointer; flex-shrink:0; }
+  .flashcard { min-height:min(62vh, 460px); touch-action:pan-y; user-select:none; }
+  .flashcard .visual-box { width:min(100%, 320px); height:200px; }
+  .flashcard .hmong-word { font-size:2.6rem; }
+  .flip-hint { font-size:0.82rem; color:var(--muted); }
+  .mobile-nav { display:none; justify-content:center; gap:16px; margin-top:8px; }
+  .mark-row { display:grid; grid-template-columns:1fr 1fr; gap:10px; max-width:560px; margin:12px auto 0; }
+  .mark-row .btn { padding:15px 10px; font-size:1.02rem; border-radius:12px; }
+  .add-toggle { width:100%; padding:12px; font-size:1rem; border-radius:12px; }
+  .photo-row { display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-top:10px; }
+  .photo-row label.btn { display:inline-block; }
+  details.more { margin-top:10px; }
+  details.more summary { cursor:pointer; font-weight:700; color:var(--accent); font-size:0.9rem; }
+  details.more .more-body { display:flex; flex-direction:column; gap:8px; margin-top:8px; }
+  @media (max-width: 600px) {
+    body { padding:12px 10px 40px; }
+    .card-area > .nav-arrow { display:none; }
+    .mobile-nav { display:flex; }
+    .flashcard .hmong-word { font-size:2.1rem; }
+    .flashcard .visual-box { height:170px; }
+    .nav-links a { font-size:0.8rem; padding:5px 9px; }
+  }
 </style>
 
 <script>
@@ -223,73 +264,90 @@
       <a id="navHub" href="./index.html">← Practice Hub</a>
       <a id="navSound" href="./Hmong_Sound_Trainer.html">1. Sound Trainer</a>
       <a id="navUlg" href="./Universal_Language_Generator_Tool.html">2. Sentence &amp; Grammar</a>
-      <a id="navFc" class="active" href="./Hmong_Flashcards.html">3. 🃏 Visual Flashcards</a>
+      <a id="navFc" class="active" href="./Hmong_Flashcards.html">3. 🃏 Flashcards</a>
     </div>
     <div style="display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap;"><button type="button" class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleHmongTheme()">🌙 Dark</button><div class="lang-switch">
-      <button class="lang-btn active" id="btnEn" onclick="setUILang('en')">English</button>
-      <button class="lang-btn" id="btnVi" onclick="setUILang('vi')">Tiếng Việt</button>
-      <button class="lang-btn" id="btnKo" onclick="setUILang('ko')">한국어</button>
-      <button class="lang-btn" id="btnJa" onclick="setUILang('ja')">日本語</button>
+      <button class="lang-btn active" id="btnEn" onclick="setUILang('en')">EN</button>
+      <button class="lang-btn" id="btnVi" onclick="setUILang('vi')">VI</button>
+      <button class="lang-btn" id="btnKo" onclick="setUILang('ko')">한</button>
+      <button class="lang-btn" id="btnJa" onclick="setUILang('ja')">日</button>
     </div></div>
   </div>
 
   <div class="panel">
-    <h1 id="pageTitle">🃏 Hmong Visual Flashcard Trainer</h1>
-    <p class="sub" id="pageSub">Study all 49 Core Course Words, 51 Theocratic Terms (with wol.jw.org illustrations), and your synced personal vocabulary.</p>
-    <div class="sync-row">
-      <strong id="codeLabel" style="font-size:0.9rem;">Student Code:</strong>
-      <input type="text" id="studentCodeInput" placeholder="e.g. HMOOB-01" style="width:150px; text-transform:uppercase;">
-      <button class="btn" id="connectCodeBtn">Connect &amp; Sync</button>
-      <span id="syncStatus" style="font-size:0.85rem; color:var(--muted);">Enter HMOOB-01..HMOOB-19 to sync custom cards across devices.</span>
+    <div class="head-row">
+      <div>
+        <h1><span id="pageTitle">🃏 Hmong Flashcards</span></h1>
+        <p class="sub" id="pageSub"></p>
+      </div>
+    </div>
+    <div class="sync-row" id="codeFormRow">
+      <input type="text" id="studentCodeInput" placeholder="HMOOB-01" style="width:130px; text-transform:uppercase;">
+      <button class="btn" id="connectCodeBtn">Connect</button>
+      <span id="syncStatus" style="font-size:0.82rem; color:var(--muted);"></span>
+    </div>
+    <div class="sync-row hidden" id="codeBadgeRow">
+      <span class="code-badge" id="codeBadge">✓ HMOOB-01 synced</span>
+      <button class="link-btn" id="changeCodeBtn" onclick="showCodeForm()">change</button>
     </div>
   </div>
 
   <div class="panel">
-    <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:10px;">
-      <div class="pills" id="deckPills">
-        <button class="pill active" data-filter="all" onclick="setDeckFilter('all')" id="pillAll">All Cards (100)</button>
-        <button class="pill" data-filter="core" onclick="setDeckFilter('core')" id="pillCore">Core Course (49)</button>
-        <button class="pill" data-filter="theo" onclick="setDeckFilter('theo')" id="pillTheo">📖 Theocratic (51)</button>
-        <button class="pill" data-filter="custom" onclick="setDeckFilter('custom')" id="pillCustom">⭐ My Words (0)</button>
-        <button class="pill" data-filter="learning" onclick="setDeckFilter('learning')" id="pillLearning">🔄 Still Learning</button>
-        <button class="pill" data-filter="mastered" onclick="setDeckFilter('mastered')" id="pillMastered">✅ Mastered</button>
-      </div>
-      <div style="display:flex; gap:6px; align-items:center;">
-        <input type="text" id="searchInput" placeholder="🔍 Search word or meaning..." oninput="applyFilters()" style="width:190px;">
-        <button class="btn btn-outline active" id="modeStudyBtn" onclick="setStudyMode('study')">🃏 Flip Cards</button>
-        <button class="btn btn-outline" id="modeQuizBtn" onclick="setStudyMode('quiz')">⚡ 4-Choice Quiz</button>
+    <div class="toolbar">
+      <select id="deckSelect" onchange="setDeckFilter(this.value)" aria-label="Deck">
+        <option value="all">All (100)</option>
+        <option value="core">Core (49)</option>
+        <option value="theo">📖 Theocratic (51)</option>
+        <option value="custom">⭐ My Words (0)</option>
+        <option value="learning">🔄 Still Learning (0)</option>
+        <option value="mastered">✅ Mastered (0)</option>
+      </select>
+      <input type="text" id="searchInput" placeholder="🔍 Search" oninput="applyFilters()">
+      <button class="icon-btn" id="settingsBtn" onclick="toggleSettings(event)" aria-label="Settings">⚙️</button>
+      <div class="settings-pop hidden" id="settingsPop" onclick="event.stopPropagation()">
+        <label id="lblMode">Mode</label>
+        <div class="seg">
+          <button class="active" id="modeStudyBtn" onclick="setStudyMode('study')">🃏 Flip</button>
+          <button id="modeQuizBtn" onclick="setStudyMode('quiz')">⚡ Quiz</button>
+        </div>
+        <label id="lblPrompt">Prompt</label>
+        <div class="seg">
+          <button class="active" id="promptHmBtn" onclick="setReverse(false)">Hmong → ?</button>
+          <button id="promptMeBtn" onclick="setReverse(true)">? → Hmong</button>
+        </div>
+        <button class="btn btn-outline" id="btnShuffle" onclick="shuffleDeck(); closeSettings();">🔀 Shuffle</button>
       </div>
     </div>
 
     <div id="studyView">
-      <div class="stage-wrap">
-        <div class="flashcard" id="flashcardBox" onclick="flipCard()">
-          <div class="card-badges">
-            <span id="cardCounter">1 / 100</span>
-            <span class="badge" id="cardCategoryBadge">Core</span>
-            <span id="cardMasteryBadge"></span>
-          </div>
-          <div class="visual-box" id="cardVisualBox"></div>
-          <div id="cardFrontArea">
-            <div class="hmong-word" id="cardFrontText">Kuv</div>
-            <div style="font-size:0.86rem; color:var(--muted);" id="cardFrontSub">Tap or press Space to flip</div>
-          </div>
-          <div id="cardBackArea" class="hidden" style="width:100%;">
-            <div class="hmong-word" id="cardBackHmong" style="font-size:1.5rem;">Kuv</div>
-            <div class="meaning-main" id="cardBackMeaning">I / me</div>
-            <div class="gloss-grid" id="cardGlossGrid"></div>
+      <div class="card-area">
+        <button class="nav-arrow" onclick="prevCard()" aria-label="Previous">‹</button>
+        <div class="stage-wrap">
+          <div class="flashcard" id="flashcardBox" tabindex="0">
+            <div class="card-badges">
+              <span id="cardCounter">1 / 100</span>
+              <span class="badge" id="cardCategoryBadge">Core</span>
+              <span id="cardMasteryBadge"></span>
+            </div>
+            <div class="visual-box" id="cardVisualBox"></div>
+            <div id="cardFrontArea">
+              <div class="hmong-word" id="cardFrontText">Kuv</div>
+              <div class="flip-hint" id="cardFrontSub"></div>
+            </div>
+            <div id="cardBackArea" class="hidden" style="width:100%;">
+              <div class="hmong-word" id="cardBackHmong" style="font-size:1.6rem;">Kuv</div>
+              <div class="meaning-main" id="cardBackMeaning">I / me</div>
+              <div class="gloss-grid" id="cardGlossGrid"></div>
+            </div>
           </div>
         </div>
+        <button class="nav-arrow" onclick="nextCard()" aria-label="Next">›</button>
       </div>
-
-      <div class="controls-row">
-        <button class="btn btn-outline" onclick="prevCard()" id="btnPrev">← Prev</button>
-        <button class="btn" onclick="flipCard()" id="btnFlip">🔄 Flip Card (Space)</button>
-        <button class="btn btn-outline" onclick="nextCard()" id="btnNext">Next →</button>
-        <button class="btn btn-outline" onclick="shuffleDeck()" id="btnShuffle">🔀 Shuffle</button>
-        <button class="btn btn-outline" onclick="toggleReverse()" id="btnReverse">🔁 Prompt: Hmong → Meaning</button>
+      <div class="mobile-nav">
+        <button class="nav-arrow" onclick="prevCard()" aria-label="Previous">‹</button>
+        <button class="nav-arrow" onclick="nextCard()" aria-label="Next">›</button>
       </div>
-      <div class="controls-row" style="margin-top:8px;">
+      <div class="mark-row hidden" id="markRow">
         <button class="btn btn-warn" onclick="markCard('learning')" id="btnMarkLearn">🔄 Still Learning</button>
         <button class="btn btn-ok" onclick="markCard('mastered')" id="btnMarkKnown">✅ I Know This</button>
       </div>
@@ -306,39 +364,49 @@
           <div class="hmong-word" id="quizPromptText">Noog</div>
           <div class="quiz-choices" id="quizChoicesBox"></div>
           <div id="quizFeedback" style="margin-top:10px; font-weight:700; min-height:24px;"></div>
-          <button class="btn" onclick="nextQuizQuestion()" style="margin-top:6px;">Next Question →</button>
+          <button class="btn" id="quizNextBtn" onclick="nextQuizQuestion()" style="margin-top:6px;">Next →</button>
         </div>
       </div>
     </div>
   </div>
 
   <div class="panel">
-    <h2 style="margin:0 0 6px; color:var(--accent); font-size:1.18rem;" id="addWordTitle">➕ Add New Flashcard (Auto-Image Lookup)</h2>
-    <p class="sub" id="addWordSub">Type a Hmong word and English meaning (e.g. "Noog" + "bird")—a matching photo or JW.org/WOL illustration appears automatically!</p>
-    <div class="add-grid">
-      <input type="text" id="newHmong" placeholder="Hmong RPA (e.g. Noog)" oninput="scheduleImagePreview()">
-      <input type="text" id="newEn" placeholder="English (e.g. bird)" oninput="scheduleImagePreview()">
-      <input type="text" id="newVi" placeholder="Tiếng Việt (optional, e.g. con chim)">
-      <input type="text" id="newKo" placeholder="한국어 (optional, e.g. 새)">
-      <input type="text" id="newJa" placeholder="日本語 (optional, e.g. 鳥)">
-      <select id="newImgSource" onchange="scheduleImagePreview()">
-        <option value="auto">🖼️ Auto Image (Photo + WOL)</option>
-        <option value="wol">📖 JW.org / WOL Artwork First</option>
-        <option value="wiki">🌍 Wikipedia Photo First</option>
-        <option value="custom">🔗 Custom Image URL</option>
-      </select>
-    </div>
-    <div id="customUrlRow" class="hidden" style="margin-top:8px;">
-      <input type="text" id="newCustomImgUrl" placeholder="https://example.com/image.jpg" style="width:100%;" oninput="updatePreviewFromCustomUrl()">
-    </div>
-    <div class="preview-strip">
-      <div class="preview-thumb" id="newWordPreviewThumb">🐦</div>
-      <div style="flex:1;">
-        <div style="font-weight:700; font-size:0.92rem;" id="newWordPreviewTitle">Live Card Image Preview</div>
-        <div style="font-size:0.82rem; color:var(--muted);" id="newWordPreviewStatus">Type an English meaning like "bird", "house", "water", or a Bible term to auto-load an image.</div>
+    <button class="btn btn-outline add-toggle" id="addToggleBtn" onclick="toggleAddForm()">➕ Add a word</button>
+    <div id="addForm" class="hidden" style="margin-top:12px;">
+      <div class="add-grid">
+        <input type="text" id="newHmong" placeholder="Hmong (e.g. Noog)" oninput="scheduleImagePreview()">
+        <input type="text" id="newEn" placeholder="English (e.g. bird)" oninput="scheduleImagePreview()">
+        <input type="text" id="newVi" class="hidden" placeholder="Tiếng Việt (tùy chọn)">
+        <input type="text" id="newKo" class="hidden" placeholder="한국어 (선택)">
+        <input type="text" id="newJa" class="hidden" placeholder="日本語（任意）">
       </div>
-      <button class="btn btn-outline" onclick="triggerImageLookup(true)">🔄 Refresh Image</button>
-      <button class="btn" onclick="addNewCustomCard()" id="addCardBtn">+ Add to Flashcards</button>
+      <div class="preview-strip">
+        <div class="preview-thumb" id="newWordPreviewThumb">🐦</div>
+        <div style="flex:1; min-width:0;">
+          <div style="font-size:0.82rem; color:var(--muted);" id="newWordPreviewStatus"></div>
+        </div>
+        <button class="btn" onclick="addNewCustomCard()" id="addCardBtn">+ Add</button>
+      </div>
+      <div class="photo-row">
+        <label class="btn btn-outline" id="photoPickLbl" for="newPhotoFile">📷 Use my own photo</label>
+        <input type="file" id="newPhotoFile" accept="image/*" class="hidden" onchange="handlePhotoFile(this.files && this.files[0])">
+        <button class="link-btn hidden" id="photoRemoveBtn" onclick="clearPendingPhoto(true)">Remove photo</button>
+      </div>
+      <details class="more">
+        <summary id="moreOptsLbl">More options</summary>
+        <div class="more-body">
+          <select id="newImgSource" onchange="scheduleImagePreview()">
+            <option value="auto">🖼️ Auto (Photo + WOL)</option>
+            <option value="wol">📖 JW.org / WOL first</option>
+            <option value="wiki">🌍 Wikipedia first</option>
+            <option value="custom">🔗 Custom URL</option>
+          </select>
+          <div id="customUrlRow" class="hidden">
+            <input type="text" id="newCustomImgUrl" placeholder="https://example.com/image.jpg" style="width:100%;" oninput="updatePreviewFromCustomUrl()">
+          </div>
+          <button class="btn btn-outline" id="refreshImgBtn" onclick="triggerImageLookup(true)">🔄 Refresh image</button>
+        </div>
+      </details>
     </div>
   </div>
 
@@ -553,7 +621,7 @@ const THEOCRATIC_TERMS_51 = [
   { hm: "Phau Vajlugkub", en: "Bible", vi: "Kinh Thánh", ko: "성경", ja: "聖書", pos: "obj", note: "Also: Vajlugkub" },
   { hm: "Txoj xov zoo", en: "Good news", vi: "Tin mừng", ko: "좋은 소식", ja: "良い知らせ", pos: "obj", note: "Preaching (Xov zoo)" },
   { hm: "Lub Nceeg Vaj", en: "Kingdom", vi: "Nước Trời / Nước Đức Chúa Trời", ko: "왕국 (하느님의 왕국)", ja: "王国（神の王国）", pos: "obj", note: "Also: Nceeg Vaj" },
-  { hm: "Khixatias", en: "Christians", vi: "Người theo đạo Đấng Christ / Cơ Đốc nhân", ko: "그리스도인", ja: "クリスチャン", pos: "subj", note: "" },
+  { hm: "Khixatias", en: "Christians", vi: "Tín đồ đạo Đấng Ki-tô / tín đồ Đấng Ki-tô", ko: "그리스도인", ja: "クリスチャン", pos: "subj", note: "" },
   { hm: "Txwj laus", en: "Elders", vi: "Trưởng lão", ko: "장로", ja: "長老", pos: "subj", note: "Congregation leadership" },
   { hm: "Tub leg num", en: "Ministerial servant", vi: "Phụ tá hội thánh", ko: "봉사의 종", ja: "奉仕の僕", pos: "subj", note: "" },
   { hm: "Koom txoos", en: "Congregation", vi: "Hội thánh", ko: "회중", ja: "会衆", pos: "obj", note: "" },
@@ -731,32 +799,79 @@ function buildMasterDeck() {
   });
 
   allCards = deck;
-  updatePillCounts();
+  updateDeckCounts();
   applyFilters();
 }
 
-function updatePillCounts() {
-  const cCore = allCards.filter(c => c.source === "core").length;
-  const cTheo = allCards.filter(c => c.source === "theo").length;
-  const cCust = allCards.filter(c => c.source === "custom").length;
-  document.getElementById("pillAll").textContent = (uiLang === "vi" ? "Tất cả" : uiLang === "ko" ? "전체 카드" : uiLang === "ja" ? "すべて" : "All Cards") + ` (${allCards.length})`;
-  document.getElementById("pillCore").textContent = (uiLang === "vi" ? "Từ cơ bản" : uiLang === "ko" ? "핵심 어휘" : uiLang === "ja" ? "基本単語" : "Core Course") + ` (${cCore})`;
-  document.getElementById("pillTheo").textContent = `📖 ` + (uiLang === "vi" ? "Thần quyền" : uiLang === "ko" ? "신권 용어" : uiLang === "ja" ? "神権用語" : "Theocratic") + ` (${cTheo})`;
-  document.getElementById("pillCustom").textContent = `⭐ ` + (uiLang === "vi" ? "Từ của tôi" : uiLang === "ko" ? "내 단어" : uiLang === "ja" ? "マイ単語" : "My Words") + ` (${cCust})`;
+const T = {
+  en: { photoBtn:"📷 Use my own photo", photoRemove:"Remove photo", photoReady:"Your photo is ready", photoNeedCode:"Connect your student code first so your photo can sync.", photoTooBig:"This photo is still too large after shrinking (over 200 KB). Try another photo.", photoLimit:"You have reached the limit of 50 photos.", photoUploading:"Uploading photo...", photoFail:"Photo upload failed. Please try again.", photoBad:"Could not read this image.", title:"🃏 Hmong Flashcards", sub:"49 core words, 51 theocratic terms, and your own synced words. White Hmong.",
+    all:"All", core:"Core", theo:"📖 Theocratic", custom:"⭐ My Words", learning:"🔄 Still Learning", mastered:"✅ Mastered",
+    search:"🔍 Search", mode:"Mode", flip:"🃏 Flip", quiz:"⚡ Quiz", prompt:"Prompt", hmQ:"Hmong → ?", qHm:"? → Hmong", shuffle:"🔀 Shuffle",
+    hintFront:"Tap card or press Space to flip", hintRev:"Guess the Hmong word — tap to flip", swipe:"Swipe ← → for next",
+    markLearn:"🔄 Still Learning", markKnow:"✅ I Know This", badgeM:"✅ Mastered", badgeL:"🔄 Learning",
+    catTheo:"📖 JW.org / WOL", catCustom:"⭐ My Word", catCore:"Core", empty:"No cards here", emptySub:"Pick 'All' or clear the search.",
+    score:"Score", next:"Next →", correct:"✅ Zoo heev!", wrong:"❌ Answer:", qCat:"Quiz",
+    addWord:"➕ Add a word", closeAdd:"✕ Close", add:"+ Add", more:"More options", refresh:"🔄 Refresh image",
+    phHm:"Hmong (e.g. Noog)", phEn:"English (e.g. bird)", previewHint:"Type an English meaning to auto-load an image.",
+    need:"Please enter both the Hmong word and the English meaning.", added:"Added", connect:"Connect", syncing:"Syncing",
+    synced:"synced", change:"change", codeHint:"Enter HMOOB-01..19 to sync your words.", local:"Saved locally for", failed:"Could not sync" },
+  vi: { photoBtn:"📷 Dùng ảnh của tôi", photoRemove:"Bỏ ảnh", photoReady:"Ảnh của bạn đã sẵn sàng", photoNeedCode:"Hãy kết nối mã học viên trước để ảnh được đồng bộ.", photoTooBig:"Ảnh vẫn quá lớn sau khi thu nhỏ (trên 200 KB). Hãy thử ảnh khác.", photoLimit:"Bạn đã đạt giới hạn 50 ảnh.", photoUploading:"Đang tải ảnh lên...", photoFail:"Tải ảnh lên thất bại. Vui lòng thử lại.", photoBad:"Không đọc được ảnh này.", title:"🃏 Thẻ Từ Vựng H'Mông", sub:"49 từ cơ bản, 51 thuật ngữ thần quyền và từ của bạn (đồng bộ). H'Mông Trắng.",
+    all:"Tất cả", core:"Cơ bản", theo:"📖 Thần quyền", custom:"⭐ Từ của tôi", learning:"🔄 Đang học", mastered:"✅ Đã thuộc",
+    search:"🔍 Tìm", mode:"Chế độ", flip:"🃏 Lật thẻ", quiz:"⚡ Trắc nghiệm", prompt:"Hiển thị", hmQ:"H'Mông → ?", qHm:"? → H'Mông", shuffle:"🔀 Xáo trộn",
+    hintFront:"Chạm vào thẻ hoặc nhấn Space để lật", hintRev:"Đoán từ H'Mông — chạm để lật", swipe:"Vuốt ← → để chuyển",
+    markLearn:"🔄 Đang học", markKnow:"✅ Tôi biết từ này", badgeM:"✅ Đã thuộc", badgeL:"🔄 Đang học",
+    catTheo:"📖 JW.org / WOL", catCustom:"⭐ Từ của tôi", catCore:"Cơ bản", empty:"Không có thẻ", emptySub:"Chọn 'Tất cả' hoặc xóa ô tìm kiếm.",
+    score:"Điểm", next:"Tiếp →", correct:"✅ Zoo heev!", wrong:"❌ Đáp án:", qCat:"Trắc nghiệm",
+    addWord:"➕ Thêm từ", closeAdd:"✕ Đóng", add:"+ Thêm", more:"Tùy chọn khác", refresh:"🔄 Tải lại hình",
+    phHm:"H'Mông (vd: Noog)", phEn:"Tiếng Anh (vd: bird)", previewHint:"Nhập nghĩa tiếng Anh để tự tải hình.",
+    need:"Vui lòng nhập cả từ H'Mông và nghĩa tiếng Anh.", added:"Đã thêm", connect:"Kết nối", syncing:"Đang đồng bộ",
+    synced:"đã đồng bộ", change:"đổi", codeHint:"Nhập HMOOB-01..19 để đồng bộ từ của bạn.", local:"Đã lưu trên máy cho", failed:"Không thể đồng bộ" },
+  ko: { photoBtn:"📷 내 사진 사용", photoRemove:"사진 삭제", photoReady:"사진이 준비되었습니다", photoNeedCode:"사진을 동기화하려면 먼저 학생 코드를 연결하세요.", photoTooBig:"축소 후에도 사진이 너무 큽니다(200KB 초과). 다른 사진을 사용해 보세요.", photoLimit:"사진 50장 한도에 도달했습니다.", photoUploading:"사진 업로드 중...", photoFail:"사진 업로드에 실패했습니다. 다시 시도하세요.", photoBad:"이 이미지를 읽을 수 없습니다.", title:"🃏 몽족어 플래시카드", sub:"핵심 어휘 49개, 신권 용어 51개, 동기화된 나만의 단어. 백몽어.",
+    all:"전체", core:"핵심", theo:"📖 신권 용어", custom:"⭐ 내 단어", learning:"🔄 학습 중", mastered:"✅ 암기 완료",
+    search:"🔍 검색", mode:"모드", flip:"🃏 카드", quiz:"⚡ 퀴즈", prompt:"제시어", hmQ:"몽족어 → ?", qHm:"? → 몽족어", shuffle:"🔀 섞기",
+    hintFront:"카드를 탭하거나 Space를 눌러 뒤집기", hintRev:"몽족어 단어를 맞혀 보세요 — 탭하여 뒤집기", swipe:"← → 스와이프로 이동",
+    markLearn:"🔄 아직 학습 중", markKnow:"✅ 알아요", badgeM:"✅ 암기 완료", badgeL:"🔄 학습 중",
+    catTheo:"📖 JW.org / WOL", catCustom:"⭐ 내 단어", catCore:"핵심", empty:"카드가 없습니다", emptySub:"'전체'를 선택하거나 검색어를 지우세요.",
+    score:"점수", next:"다음 →", correct:"✅ Zoo heev!", wrong:"❌ 정답:", qCat:"퀴즈",
+    addWord:"➕ 단어 추가", closeAdd:"✕ 닫기", add:"+ 추가", more:"추가 옵션", refresh:"🔄 이미지 새로고침",
+    phHm:"몽족어 (예: Noog)", phEn:"영어 (예: bird)", previewHint:"영어 뜻을 입력하면 이미지가 자동으로 표시됩니다.",
+    need:"몽족어 단어와 영어 뜻을 모두 입력하세요.", added:"추가됨", connect:"연결", syncing:"동기화 중",
+    synced:"동기화됨", change:"변경", codeHint:"HMOOB-01..19를 입력해 단어를 동기화하세요.", local:"이 기기에 저장됨:", failed:"동기화 실패" },
+  ja: { photoBtn:"📷 自分の写真を使う", photoRemove:"写真を削除", photoReady:"写真の準備ができました", photoNeedCode:"写真を同期するには、先に受講生コードを接続してください。", photoTooBig:"縮小後も写真が大きすぎます（200KB超）。別の写真をお試しください。", photoLimit:"写真は50枚までです。上限に達しました。", photoUploading:"写真をアップロード中...", photoFail:"写真のアップロードに失敗しました。もう一度お試しください。", photoBad:"この画像を読み込めません。", title:"🃏 白モン語 単語カード", sub:"基本49語、神権用語51語、同期されたマイ単語。白モン語。",
+    all:"すべて", core:"基本", theo:"📖 神権用語", custom:"⭐ マイ単語", learning:"🔄 学習中", mastered:"✅ 習得済み",
+    search:"🔍 検索", mode:"モード", flip:"🃏 カード", quiz:"⚡ クイズ", prompt:"出題", hmQ:"モン語 → ?", qHm:"? → モン語", shuffle:"🔀 シャッフル",
+    hintFront:"カードをタップ、またはSpaceで裏返す", hintRev:"モン語を当てよう — タップで裏返す", swipe:"← → スワイプで移動",
+    markLearn:"🔄 まだ学習中", markKnow:"✅ 覚えた", badgeM:"✅ 習得済み", badgeL:"🔄 学習中",
+    catTheo:"📖 JW.org / WOL", catCustom:"⭐ マイ単語", catCore:"基本", empty:"カードがありません", emptySub:"「すべて」を選ぶか検索を消してください。",
+    score:"スコア", next:"次へ →", correct:"✅ Zoo heev!", wrong:"❌ 正解:", qCat:"クイズ",
+    addWord:"➕ 単語を追加", closeAdd:"✕ 閉じる", add:"+ 追加", more:"その他のオプション", refresh:"🔄 画像を更新",
+    phHm:"モン語（例: Noog）", phEn:"英語（例: bird）", previewHint:"英語の意味を入力すると画像が自動表示されます。",
+    need:"モン語の単語と英語の意味を両方入力してください。", added:"追加しました", connect:"接続", syncing:"同期中",
+    synced:"同期済み", change:"変更", codeHint:"HMOOB-01〜19を入力して単語を同期します。", local:"端末に保存:", failed:"同期できませんでした" }
+};
+function t(k) { return (T[uiLang] && T[uiLang][k]) || T.en[k] || k; }
+const $ = id => document.getElementById(id);
+
+function updateDeckCounts() {
+  const n = {
+    all: allCards.length,
+    core: allCards.filter(c => c.source === "core").length,
+    theo: allCards.filter(c => c.source === "theo").length,
+    custom: allCards.filter(c => c.source === "custom").length,
+    learning: allCards.filter(c => masteryMap[c.id] === "learning").length,
+    mastered: allCards.filter(c => masteryMap[c.id] === "mastered").length
+  };
+  Array.from($("deckSelect").options).forEach(o => { o.textContent = `${t(o.value)} (${n[o.value]})`; });
+  $("deckSelect").value = currentFilter;
 }
 
 function applyFilters() {
-  const q = (document.getElementById("searchInput").value || "").trim().toLowerCase();
+  const q = ($("searchInput").value || "").trim().toLowerCase();
   filteredCards = allCards.filter(c => {
-    if (currentFilter === "core" && c.source !== "core") return false;
-    if (currentFilter === "theo" && c.source !== "theo") return false;
-    if (currentFilter === "custom" && c.source !== "custom") return false;
+    if (["core", "theo", "custom"].includes(currentFilter) && c.source !== currentFilter) return false;
     if (currentFilter === "learning" && masteryMap[c.id] !== "learning") return false;
     if (currentFilter === "mastered" && masteryMap[c.id] !== "mastered") return false;
-    if (q) {
-      const hay = `${c.hmong} ${c.en} ${c.vi} ${c.ko} ${c.ja}`.toLowerCase();
-      if (!hay.includes(q)) return false;
-    }
+    if (q && !`${c.hmong} ${c.en} ${c.vi} ${c.ko} ${c.ja}`.toLowerCase().includes(q)) return false;
     return true;
   });
   if (currentIndex >= filteredCards.length) currentIndex = 0;
@@ -767,12 +882,312 @@ function applyFilters() {
 
 function setDeckFilter(f) {
   currentFilter = f;
-  document.querySelectorAll("#deckPills .pill").forEach(btn => {
-    btn.classList.toggle("active", btn.getAttribute("data-filter") === f);
-  });
+  $("deckSelect").value = f;
   currentIndex = 0;
   applyFilters();
 }
+
+function esc(s) { return String(s == null ? "" : s).replace(/[&<>"]/g, ch => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;" }[ch])); }
+
+function renderCurrentCard() {
+  const frontArea = $("cardFrontArea"), backArea = $("cardBackArea"), visualBox = $("cardVisualBox");
+  $("markRow").classList.toggle("hidden", !(isFlipped && filteredCards.length));
+  if (!filteredCards.length) {
+    $("cardCounter").textContent = "0 / 0";
+    $("cardCategoryBadge").textContent = "—";
+    $("cardMasteryBadge").textContent = "";
+    visualBox.innerHTML = `<span class="visual-emoji">📭</span>`;
+    frontArea.classList.remove("hidden");
+    backArea.classList.add("hidden");
+    $("cardFrontText").textContent = t("empty");
+    $("cardFrontSub").textContent = t("emptySub");
+    return;
+  }
+  const card = filteredCards[currentIndex];
+  $("cardCounter").textContent = `${currentIndex + 1} / ${filteredCards.length}`;
+  $("cardCategoryBadge").textContent = card.source === "theo" ? t("catTheo") : (card.source === "custom" ? t("catCustom") : t("catCore"));
+  const m = masteryMap[card.id];
+  $("cardMasteryBadge").textContent = m === "mastered" ? t("badgeM") : (m === "learning" ? t("badgeL") : "");
+  renderVisualInto(visualBox, card);
+  const meaning = getMeaningByLang(card);
+  if (!isFlipped) {
+    frontArea.classList.remove("hidden");
+    backArea.classList.add("hidden");
+    $("cardFrontText").textContent = reverseMode ? meaning : card.hmong;
+    const tone = (!reverseMode && card.tone) ? card.tone + " • " : "";
+    $("cardFrontSub").textContent = tone + (reverseMode ? t("hintRev") : t("hintFront"));
+  } else {
+    frontArea.classList.add("hidden");
+    backArea.classList.remove("hidden");
+    $("cardBackHmong").textContent = card.hmong;
+    $("cardBackMeaning").textContent = meaning;
+    $("cardGlossGrid").innerHTML = `<div><strong>EN:</strong> ${esc(card.en)}</div><div><strong>VI:</strong> ${esc(card.vi)}</div><div><strong>KO:</strong> ${esc(card.ko)}</div><div><strong>JA:</strong> ${esc(card.ja)}</div>`;
+  }
+}
+
+function flipCard() { if (!filteredCards.length) return; isFlipped = !isFlipped; renderCurrentCard(); }
+function nextCard() { if (!filteredCards.length) return; currentIndex = (currentIndex + 1) % filteredCards.length; isFlipped = false; renderCurrentCard(); }
+function prevCard() { if (!filteredCards.length) return; currentIndex = (currentIndex - 1 + filteredCards.length) % filteredCards.length; isFlipped = false; renderCurrentCard(); }
+function shuffleDeck() {
+  for (let i = filteredCards.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [filteredCards[i], filteredCards[j]] = [filteredCards[j], filteredCards[i]];
+  }
+  currentIndex = 0; isFlipped = false; renderCurrentCard();
+}
+function setReverse(on) {
+  reverseMode = !!on; isFlipped = false;
+  $("promptHmBtn").classList.toggle("active", !reverseMode);
+  $("promptMeBtn").classList.toggle("active", reverseMode);
+  renderCurrentCard();
+}
+function toggleReverse() { setReverse(!reverseMode); }
+function markCard(state) {
+  if (!filteredCards.length) return;
+  masteryMap[filteredCards[currentIndex].id] = state;
+  localStorage.setItem("hmong_fc_mastery", JSON.stringify(masteryMap));
+  updateDeckCounts();
+  nextCard();
+}
+
+function setStudyMode(m) {
+  studyMode = m;
+  $("modeStudyBtn").classList.toggle("active", m === "study");
+  $("modeQuizBtn").classList.toggle("active", m === "quiz");
+  $("studyView").classList.toggle("hidden", m !== "study");
+  $("quizView").classList.toggle("hidden", m !== "quiz");
+  if (m === "quiz") nextQuizQuestion();
+}
+
+function toggleSettings(e) { if (e) e.stopPropagation(); $("settingsPop").classList.toggle("hidden"); }
+function closeSettings() { $("settingsPop").classList.add("hidden"); }
+document.addEventListener("click", closeSettings);
+
+function nextQuizQuestion() {
+  const pool = filteredCards.length >= 4 ? filteredCards : allCards;
+  if (!pool.length) return;
+  const target = pool[Math.floor(Math.random() * pool.length)];
+  const distractors = allCards.filter(c => c.id !== target.id).sort(() => Math.random() - 0.5).slice(0, 3);
+  const choices = [target, ...distractors].sort(() => Math.random() - 0.5);
+  const scoreTxt = () => `${t("score")}: ${quizScore} / ${quizTotal}`;
+  $("quizScoreText").textContent = scoreTxt();
+  $("quizCatBadge").textContent = target.source === "theo" ? t("theo") : t("qCat");
+  renderVisualInto($("quizVisualBox"), target);
+  $("quizPromptText").textContent = target.hmong;
+  const fb = $("quizFeedback");
+  fb.textContent = "";
+  const box = $("quizChoicesBox");
+  box.innerHTML = "";
+  let answered = false;
+  choices.forEach(ch => {
+    const b = document.createElement("button");
+    b.className = "quiz-btn";
+    b.textContent = getMeaningByLang(ch);
+    b.onclick = () => {
+      if (answered) return;
+      answered = true; quizTotal++;
+      const ok = ch.id === target.id;
+      if (ok) quizScore++;
+      b.classList.add(ok ? "correct" : "wrong");
+      fb.style.color = ok ? "#059669" : "#dc2626";
+      fb.textContent = `${ok ? t("correct") : t("wrong")} ${target.hmong} = ${getMeaningByLang(target)}`;
+      $("quizScoreText").textContent = scoreTxt();
+    };
+    box.appendChild(b);
+  });
+}
+
+function toggleAddForm(force) {
+  const f = $("addForm");
+  const open = typeof force === "boolean" ? force : f.classList.contains("hidden");
+  f.classList.toggle("hidden", !open);
+  $("addToggleBtn").textContent = open ? t("closeAdd") : t("addWord");
+  if (open) $("newHmong").focus();
+}
+
+function syncLangBoxes() {
+  $("newVi").classList.toggle("hidden", uiLang !== "vi");
+  $("newKo").classList.toggle("hidden", uiLang !== "ko");
+  $("newJa").classList.toggle("hidden", uiLang !== "ja");
+}
+
+let pendingPhoto = null; // { data: base64 JPEG, kb }
+
+function clearPendingPhoto(refresh) {
+  pendingPhoto = null;
+  $("newPhotoFile").value = "";
+  $("photoRemoveBtn").classList.add("hidden");
+  if (refresh) { currentPendingImg = ""; $("newWordPreviewThumb").textContent = currentPendingEmoji || "🐦"; $("newWordPreviewStatus").textContent = t("previewHint"); scheduleImagePreview(); }
+}
+
+function handlePhotoFile(file) {
+  if (!file) return;
+  const status = $("newWordPreviewStatus");
+  const img = new Image();
+  const objUrl = URL.createObjectURL(file);
+  img.onload = () => {
+    URL.revokeObjectURL(objUrl);
+    const scale = Math.min(1, 800 / Math.max(img.naturalWidth, img.naturalHeight));
+    const cv = document.createElement("canvas");
+    cv.width = Math.max(1, Math.round(img.naturalWidth * scale));
+    cv.height = Math.max(1, Math.round(img.naturalHeight * scale));
+    const ctx = cv.getContext("2d");
+    ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, cv.width, cv.height);
+    ctx.drawImage(img, 0, 0, cv.width, cv.height);
+    const bytesOf = u => Math.floor((u.length - u.indexOf(",") - 1) * 3 / 4);
+    let q = 0.7, url = cv.toDataURL("image/jpeg", q);
+    while (bytesOf(url) > 110 * 1024 && q > 0.35) { q -= 0.1; url = cv.toDataURL("image/jpeg", q); }
+    if (bytesOf(url) > 200 * 1024) { clearPendingPhoto(false); alert(t("photoTooBig")); return; }
+    pendingPhoto = { data: url.split(",")[1], kb: Math.round(bytesOf(url) / 1024) };
+    currentPendingImg = "";
+    $("newWordPreviewThumb").innerHTML = `<img src="${url}" alt="photo">`;
+    status.textContent = `${t("photoReady")} (${pendingPhoto.kb} KB)`;
+    $("photoRemoveBtn").classList.remove("hidden");
+  };
+  img.onerror = () => { URL.revokeObjectURL(objUrl); clearPendingPhoto(false); alert(t("photoBad")); };
+  img.src = objUrl;
+}
+
+function photoIdFromImg(u) { const m = /[?&]photo=(att[A-Za-z0-9]+)/.exec(u || ""); return m ? m[1] : ""; }
+
+async function addNewCustomCard() {
+  const hmong = ($("newHmong").value || "").trim();
+  const en = ($("newEn").value || "").trim();
+  if (!hmong || !en) { alert(t("need")); return; }
+  const prev = customWords.find(w => (w.hmong || w.w || "").toLowerCase() === hmong.toLowerCase()) || {};
+  const pick = k => ($(k === "vi" ? "newVi" : k === "ko" ? "newKo" : "newJa").value || "").trim() || prev[k] || en;
+  let photoUrl = "";
+  if (pendingPhoto) {
+    if (!activeStudentCode) { alert(t("photoNeedCode")); showCodeForm(); return; }
+    $("newWordPreviewStatus").textContent = t("photoUploading");
+    $("addCardBtn").disabled = true;
+    try {
+      const r = await fetch("/api/student-words", { method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "upload_photo", code: activeStudentCode, hmong, data: pendingPhoto.data }) });
+      const d = await r.json().catch(() => ({}));
+      if (r.ok && d.ok && d.url) photoUrl = d.url;
+      else { $("newWordPreviewStatus").textContent = d.error === "photo_limit" ? t("photoLimit") : d.error === "photo_too_large" ? t("photoTooBig") : t("photoFail"); return; }
+    } catch { $("newWordPreviewStatus").textContent = t("photoFail"); return; }
+    finally { $("addCardBtn").disabled = false; }
+    const oldId = photoIdFromImg(prev.img);
+    if (oldId) fetch("/api/student-words", { method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "delete_photo", code: activeStudentCode, id: oldId }) }).catch(() => {});
+    currentPendingImg = photoUrl;
+  } else if (!currentPendingImg && $("newImgSource").value !== "custom") await triggerImageLookup(true);
+  const newObj = { hmong, en, vi: pick("vi"), ko: pick("ko"), ja: pick("ja"), pos: "obj",
+    img: currentPendingImg || "", emoji: currentPendingEmoji || pickEmoji(hmong, en) };
+  const idx = customWords.findIndex(w => (w.hmong || w.w || "").toLowerCase() === hmong.toLowerCase());
+  if (idx >= 0) customWords[idx] = newObj; else customWords.unshift(newObj);
+  saveLocalCustomWords();
+  buildMasterDeck();
+  setDeckFilter("custom");
+  ["newHmong", "newEn", "newVi", "newKo", "newJa"].forEach(id => { $(id).value = ""; });
+  currentPendingImg = "";
+  clearPendingPhoto(false);
+  $("newWordPreviewStatus").textContent = `${t("added")}: "${hmong}" (${en})`;
+  if (activeStudentCode) {
+    try {
+      await fetch("/api/student-words", { method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code: activeStudentCode, words: customWords }) });
+    } catch {}
+  }
+}
+
+function showCodeBadge(code) {
+  $("codeBadge").textContent = `✓ ${code} ${t("synced")}`;
+  $("codeFormRow").classList.add("hidden");
+  $("codeBadgeRow").classList.remove("hidden");
+}
+function showCodeForm() {
+  $("codeBadgeRow").classList.add("hidden");
+  $("codeFormRow").classList.remove("hidden");
+  $("syncStatus").textContent = t("codeHint");
+  $("studentCodeInput").focus();
+}
+
+async function connectStudentCode(rawCode, silent) {
+  const code = String(rawCode || "").trim().toUpperCase().replace(/^HMONG-/, "HMOOB-");
+  if (!code) return;
+  activeStudentCode = code;
+  localStorage.setItem("hmong_student_code", code);
+  $("studentCodeInput").value = code;
+  loadLocalCustomWords(code);
+  const statusEl = $("syncStatus");
+  statusEl.textContent = `${t("syncing")} ${code}...`;
+  let ok = false;
+  try {
+    const r = await fetch(`/api/student-words?code=${encodeURIComponent(code)}`);
+    if (r.ok) {
+      const d = await r.json();
+      if (d && d.ok && Array.isArray(d.words)) {
+        const merged = [...d.words];
+        customWords.forEach(lw => {
+          const lh = (lw.hmong || lw.w || "").toLowerCase();
+          if (lh && !merged.some(mw => (mw.hmong || mw.w || "").toLowerCase() === lh)) merged.push(lw);
+        });
+        customWords = merged;
+        saveLocalCustomWords();
+        ok = true;
+        $("codeBadge").title = (d.studentName ? d.studentName + " — " : "") + customWords.length + " words";
+      }
+    }
+    if (!ok) statusEl.textContent = `${t("failed")} ${code} — ${t("local")} ${code} (${customWords.length})`;
+  } catch {
+    statusEl.textContent = `${t("local")} ${code} (${customWords.length})`;
+  }
+  if (ok) showCodeBadge(code);
+  buildMasterDeck();
+}
+
+function setUILang(lang) {
+  uiLang = (lang === "vi" || lang === "ko" || lang === "ja") ? lang : "en";
+  localStorage.setItem("hmong_ui_lang", uiLang);
+  document.documentElement.lang = uiLang;
+  ["En", "Vi", "Ko", "Ja"].forEach(L => $("btn" + L).classList.toggle("active", uiLang === L.toLowerCase()));
+  const set = (id, k) => { $(id).textContent = t(k); };
+  set("pageTitle", "title"); set("pageSub", "sub"); set("lblMode", "mode"); set("modeStudyBtn", "flip"); set("modeQuizBtn", "quiz");
+  set("lblPrompt", "prompt"); set("promptHmBtn", "hmQ"); set("promptMeBtn", "qHm"); set("btnShuffle", "shuffle");
+  set("btnMarkLearn", "markLearn"); set("btnMarkKnown", "markKnow"); set("quizNextBtn", "next"); set("addCardBtn", "add");
+  set("moreOptsLbl", "more"); set("refreshImgBtn", "refresh"); set("connectCodeBtn", "connect"); set("changeCodeBtn", "change"); set("photoPickLbl", "photoBtn"); set("photoRemoveBtn", "photoRemove");
+  $("addToggleBtn").textContent = $("addForm").classList.contains("hidden") ? t("addWord") : t("closeAdd");
+  $("searchInput").placeholder = t("search");
+  $("newHmong").placeholder = t("phHm");
+  $("newEn").placeholder = t("phEn");
+  if (!$("newWordPreviewStatus").textContent || Object.values(T).some(x => x.previewHint === $("newWordPreviewStatus").textContent)) set("newWordPreviewStatus", "previewHint");
+  if (!$("codeFormRow").classList.contains("hidden")) $("syncStatus").textContent = t("codeHint");
+  else showCodeBadge(activeStudentCode);
+  syncLangBoxes();
+  $("navHub").href = `./index.html?lang=${uiLang}`;
+  $("navSound").href = `./Hmong_Sound_Trainer.html?lang=${uiLang}`;
+  $("navUlg").href = `./Universal_Language_Generator_Tool.html?lang=${uiLang}`;
+  if (allCards.length) updateDeckCounts();
+  renderCurrentCard();
+  if (studyMode === "quiz" && quizTotal === 0) nextQuizQuestion();
+}
+
+$("connectCodeBtn").onclick = () => connectStudentCode($("studentCodeInput").value, false);
+$("studentCodeInput").addEventListener("keydown", e => { if (e.key === "Enter") connectStudentCode(e.target.value, false); });
+
+// Card interactions: tap to flip, swipe to navigate
+(function () {
+  const el = $("flashcardBox");
+  let sx = 0, sy = 0, swiped = false;
+  el.addEventListener("touchstart", e => { const p = e.touches[0]; sx = p.clientX; sy = p.clientY; swiped = false; }, { passive: true });
+  el.addEventListener("touchend", e => {
+    const p = e.changedTouches[0], dx = p.clientX - sx, dy = p.clientY - sy;
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.3) { swiped = true; dx < 0 ? nextCard() : prevCard(); }
+  });
+  el.addEventListener("click", () => { if (swiped) { swiped = false; return; } flipCard(); });
+})();
+
+document.addEventListener("keydown", e => {
+  if (["INPUT", "SELECT", "TEXTAREA"].includes(document.activeElement.tagName)) return;
+  if (e.key === "Escape") closeSettings();
+  if (studyMode !== "study") return;
+  if (e.code === "Space" || e.code === "Enter") { e.preventDefault(); flipCard(); }
+  else if (e.code === "ArrowRight") { e.preventDefault(); nextCard(); }
+  else if (e.code === "ArrowLeft") { e.preventDefault(); prevCard(); }
+});
 
 function getMeaningByLang(card) {
   if (uiLang === "vi") return card.vi || card.en;
@@ -810,146 +1225,9 @@ function renderVisualInto(container, card) {
     }
   }
 }
-
-function renderCurrentCard() {
-  const frontArea = document.getElementById("cardFrontArea");
-  const backArea = document.getElementById("cardBackArea");
-  const visualBox = document.getElementById("cardVisualBox");
-  if (!filteredCards.length) {
-    document.getElementById("cardCounter").textContent = "0 / 0";
-    document.getElementById("cardCategoryBadge").textContent = "Empty";
-    document.getElementById("cardMasteryBadge").textContent = "";
-    visualBox.innerHTML = `<span class="visual-emoji">📭</span>`;
-    frontArea.classList.remove("hidden");
-    backArea.classList.add("hidden");
-    document.getElementById("cardFrontText").textContent = "No cards in this filter";
-    document.getElementById("cardFrontSub").textContent = "Try selecting 'All Cards' or clearing the search box.";
-    return;
-  }
-
-  const card = filteredCards[currentIndex];
-  document.getElementById("cardCounter").textContent = `${currentIndex + 1} / ${filteredCards.length}`;
-  document.getElementById("cardCategoryBadge").textContent = card.source === "theo" ? "📖 JW.org / WOL" : (card.source === "custom" ? "⭐ My Word" : "Core Course");
-  const mState = masteryMap[card.id];
-  document.getElementById("cardMasteryBadge").textContent = mState === "mastered" ? "✅ Mastered" : (mState === "learning" ? "🔄 Learning" : "");
-
-  renderVisualInto(visualBox, card);
-
-  const primaryMeaning = getMeaningByLang(card);
-  if (!isFlipped) {
-    frontArea.classList.remove("hidden");
-    backArea.classList.add("hidden");
-    document.getElementById("cardFrontText").textContent = reverseMode ? primaryMeaning : card.hmong;
-    document.getElementById("cardFrontSub").textContent = reverseMode
-      ? "Guess the White Hmong word — click or press Space to flip"
-      : `${card.tone ? "Tone/Note: " + card.tone + " • " : ""}Click or press Space to see meaning`;
-  } else {
-    frontArea.classList.add("hidden");
-    backArea.classList.remove("hidden");
-    document.getElementById("cardBackHmong").textContent = card.hmong;
-    document.getElementById("cardBackMeaning").textContent = primaryMeaning;
-    document.getElementById("cardGlossGrid").innerHTML = `
-      <div><strong>EN:</strong> ${card.en}</div>
-      <div><strong>VI:</strong> ${card.vi}</div>
-      <div><strong>KO:</strong> ${card.ko}</div>
-      <div><strong>JA:</strong> ${card.ja}</div>
-    `;
-  }
-}
-
-function flipCard() {
-  if (!filteredCards.length) return;
-  isFlipped = !isFlipped;
-  renderCurrentCard();
-}
-function nextCard() {
-  if (!filteredCards.length) return;
-  currentIndex = (currentIndex + 1) % filteredCards.length;
-  isFlipped = false;
-  renderCurrentCard();
-}
-function prevCard() {
-  if (!filteredCards.length) return;
-  currentIndex = (currentIndex - 1 + filteredCards.length) % filteredCards.length;
-  isFlipped = false;
-  renderCurrentCard();
-}
-function shuffleDeck() {
-  for (let i = filteredCards.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [filteredCards[i], filteredCards[j]] = [filteredCards[j], filteredCards[i]];
-  }
-  currentIndex = 0;
-  isFlipped = false;
-  renderCurrentCard();
-}
-function toggleReverse() {
-  reverseMode = !reverseMode;
-  isFlipped = false;
-  document.getElementById("btnReverse").textContent = reverseMode
-    ? "🔁 Prompt: Meaning → Hmong"
-    : "🔁 Prompt: Hmong → Meaning";
-  renderCurrentCard();
-}
-function markCard(state) {
-  if (!filteredCards.length) return;
-  const card = filteredCards[currentIndex];
-  masteryMap[card.id] = state;
-  localStorage.setItem("hmong_fc_mastery", JSON.stringify(masteryMap));
-  nextCard();
-}
-
-function setStudyMode(m) {
-  studyMode = m;
-  document.getElementById("modeStudyBtn").classList.toggle("active", m === "study");
-  document.getElementById("modeQuizBtn").classList.toggle("active", m === "quiz");
-  document.getElementById("studyView").classList.toggle("hidden", m !== "study");
-  document.getElementById("quizView").classList.toggle("hidden", m !== "quiz");
-  if (m === "quiz") nextQuizQuestion();
-}
-
-function nextQuizQuestion() {
-  const pool = filteredCards.length >= 4 ? filteredCards : allCards;
-  if (!pool.length) return;
-  const target = pool[Math.floor(Math.random() * pool.length)];
-  const distractors = allCards.filter(c => c.id !== target.id).sort(() => Math.random() - 0.5).slice(0, 3);
-  const choices = [target, ...distractors].sort(() => Math.random() - 0.5);
-
-  document.getElementById("quizScoreText").textContent = `Score: ${quizScore} / ${quizTotal}`;
-  document.getElementById("quizCatBadge").textContent = target.source === "theo" ? "📖 Theocratic" : "Vocab Quiz";
-  renderVisualInto(document.getElementById("quizVisualBox"), target);
-  document.getElementById("quizPromptText").textContent = target.hmong;
-  document.getElementById("quizFeedback").textContent = "";
-
-  const box = document.getElementById("quizChoicesBox");
-  box.innerHTML = "";
-  let answered = false;
-  choices.forEach(ch => {
-    const b = document.createElement("button");
-    b.className = "quiz-btn";
-    b.textContent = getMeaningByLang(ch);
-    b.onclick = () => {
-      if (answered) return;
-      answered = true;
-      quizTotal++;
-      if (ch.id === target.id) {
-        quizScore++;
-        b.classList.add("correct");
-        document.getElementById("quizFeedback").style.color = "#059669";
-        document.getElementById("quizFeedback").textContent = `✅ Zoo heev! ${target.hmong} = ${getMeaningByLang(target)}`;
-      } else {
-        b.classList.add("wrong");
-        document.getElementById("quizFeedback").style.color = "#dc2626";
-        document.getElementById("quizFeedback").textContent = `❌ Correct answer: ${target.hmong} = ${getMeaningByLang(target)}`;
-      }
-      document.getElementById("quizScoreText").textContent = `Score: ${quizScore} / ${quizTotal}`;
-    };
-    box.appendChild(b);
-  });
-}
-
 // Auto-Image Lookup for New Student Words (e.g. "Noog" -> "bird")
 function scheduleImagePreview() {
+  if (pendingPhoto) return;
   const srcMode = document.getElementById("newImgSource").value;
   document.getElementById("customUrlRow").classList.toggle("hidden", srcMode !== "custom");
   if (srcMode === "custom") {
@@ -1069,121 +1347,6 @@ function saveLocalCustomWords() {
   localStorage.setItem(getStorageKey(activeStudentCode), JSON.stringify(customWords));
   localStorage.setItem("ulgt_custom_words", JSON.stringify(customWords));
 }
-
-async function addNewCustomCard() {
-  const hmong = (document.getElementById("newHmong").value || "").trim();
-  const _sel = (document.getElementById({en:"newEn",vi:"newVi",ko:"newKo",ja:"newJa"}[uiLang]).value || "").trim();
-  const en = (document.getElementById("newEn").value || "").trim() || _sel;
-  const vi = (document.getElementById("newVi").value || "").trim() || en;
-  const ko = (document.getElementById("newKo").value || "").trim() || en;
-  const ja = (document.getElementById("newJa").value || "").trim() || en;
-  if (!hmong || !en) {
-    alert("Please enter both the Hmong word (e.g. Noog) and its meaning (e.g. bird).");
-    return;
-  }
-  if (!currentPendingImg && document.getElementById("newImgSource").value !== "custom") {
-    await triggerImageLookup(true);
-  }
-  const newObj = {
-    hmong, en, vi, ko, ja, pos: "obj",
-    img: currentPendingImg || "",
-    emoji: currentPendingEmoji || pickEmoji(hmong, en)
-  };
-  const existingIdx = customWords.findIndex(w => (w.hmong || w.w || "").toLowerCase() === hmong.toLowerCase());
-  if (existingIdx >= 0) customWords[existingIdx] = newObj;
-  else customWords.unshift(newObj);
-
-  saveLocalCustomWords();
-  buildMasterDeck();
-  setDeckFilter("custom");
-
-  document.getElementById("newHmong").value = "";
-  document.getElementById("newEn").value = "";
-  document.getElementById("newVi").value = "";
-  document.getElementById("newKo").value = "";
-  document.getElementById("newJa").value = "";
-  currentPendingImg = "";
-  document.getElementById("newWordPreviewStatus").textContent = `Added "${hmong}" (${en}) to your Flashcards!`;
-
-  if (activeStudentCode) {
-    try {
-      await fetch("/api/student-words", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ code: activeStudentCode, words: customWords })
-      });
-    } catch {}
-  }
-}
-
-async function connectStudentCode(rawCode, silent) {
-  const code = String(rawCode || "").trim().toUpperCase().replace(/^HMONG-/, "HMOOB-");
-  if (!code) return;
-  activeStudentCode = code;
-  localStorage.setItem("hmong_student_code", code);
-  document.getElementById("studentCodeInput").value = code;
-  loadLocalCustomWords(code);
-  const statusEl = document.getElementById("syncStatus");
-  statusEl.textContent = `Syncing ${code}...`;
-  try {
-    const r = await fetch(`/api/student-words?code=${encodeURIComponent(code)}`);
-    if (r.ok) {
-      const d = await r.json();
-      if (d && d.ok && Array.isArray(d.words)) {
-        const merged = [...d.words];
-        customWords.forEach(localW => {
-          const lh = (localW.hmong || localW.w || "").toLowerCase();
-          if (lh && !merged.some(mw => (mw.hmong || mw.w || "").toLowerCase() === lh)) {
-            merged.push(localW);
-          }
-        });
-        customWords = merged;
-        saveLocalCustomWords();
-        statusEl.textContent = `☁️ Connected ${code}${d.studentName ? " (" + d.studentName + ")" : ""} — ${customWords.length} custom words synced.`;
-      }
-    }
-  } catch {
-    statusEl.textContent = `Saved locally for ${code} (${customWords.length} custom words).`;
-  }
-  buildMasterDeck();
-}
-
-function setUILang(lang) {
-  uiLang = (lang === "vi" || lang === "ko" || lang === "ja") ? lang : "en";
-  localStorage.setItem("hmong_ui_lang", uiLang);
-  ["En","Vi","Ko","Ja"].forEach(k => { const el = document.getElementById("new"+k); if (el) el.style.display = (k.toLowerCase() === uiLang) ? "" : "none"; });
-  document.getElementById("btnEn").classList.toggle("active", uiLang === "en");
-  document.getElementById("btnVi").classList.toggle("active", uiLang === "vi");
-  document.getElementById("btnKo").classList.toggle("active", uiLang === "ko");
-  document.getElementById("btnJa").classList.toggle("active", uiLang === "ja");
-
-  const titles = {
-    en: ["🃏 Hmong Visual Flashcard Trainer", "Study all 49 Core Course Words, 51 Theocratic Terms (with wol.jw.org illustrations), and your synced personal vocabulary."],
-    vi: ["🃏 Thẻ Học Từ Vựng Hình Ảnh Tiếng H'Mông", "Ôn tập 49 từ cơ bản, 51 thuật ngữ thần quyền (có hình minh họa từ wol.jw.org) và từ vựng cá nhân của bạn."],
-    ko: ["🃏 몽족어 비주얼 플래시카드 트레이너", "49개 핵심 어휘, 51개 신권 용어(wol.jw.org 삽화 포함) 및 학생 코드로 동기화된 나만의 단어장을 그림과 함께 학습하세요."],
-    ja: ["🃏 白モン語 ビジュアル単語カード・トレーナー", "基本49語、神権用語51語（wol.jw.orgの挿絵付き）、および受講生コードで同期されたマイ単語をイラスト・写真付きで学習できます。"]
-  };
-  document.getElementById("pageTitle").textContent = titles[uiLang][0];
-  document.getElementById("pageSub").textContent = titles[uiLang][1];
-  document.getElementById("navHub").href = `./index.html?lang=${uiLang}`;
-  document.getElementById("navSound").href = `./Hmong_Sound_Trainer.html?lang=${uiLang}`;
-  document.getElementById("navUlg").href = `./Universal_Language_Generator_Tool.html?lang=${uiLang}`;
-  updatePillCounts();
-  renderCurrentCard();
-}
-
-document.getElementById("connectCodeBtn").onclick = () => {
-  connectStudentCode(document.getElementById("studentCodeInput").value, false);
-};
-
-document.addEventListener("keydown", e => {
-  if (["INPUT", "SELECT", "TEXTAREA"].includes(document.activeElement.tagName)) return;
-  if (studyMode !== "study") return;
-  if (e.code === "Space") { e.preventDefault(); flipCard(); }
-  else if (e.code === "ArrowRight") { e.preventDefault(); nextCard(); }
-  else if (e.code === "ArrowLeft") { e.preventDefault(); prevCard(); }
-});
-
 function focusWordIfRequested() {
   const params = new URLSearchParams(window.location.search);
   const targetWord = (params.get("word") || "").trim().toLowerCase();
@@ -1213,9 +1376,9 @@ setUILang(uiLang);
 buildMasterDeck();
 focusWordIfRequested();
 if (activeStudentCode) {
+  $("studentCodeInput").value = activeStudentCode;
   connectStudentCode(activeStudentCode, true).then(() => focusWordIfRequested());
 }
-
 </script>
 </body>
 </html>
