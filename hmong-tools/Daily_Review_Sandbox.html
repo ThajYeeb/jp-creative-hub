@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>📅 Daily Review (Sandbox)</title>
+<style>
+  :root {
+    --bg: #f4f6f9; --card: #ffffff; --accent: #1F4E79; --accent2: #2E75B6;
+    --text: #1e293b; --muted: #64748b; --border: #cbd5e1;
+    --ok-bg: #ecfdf5; --ok-border: #10b981; --warn-bg: #fffbeb; --warn-border: #f59e0b;
+  }
+  * { box-sizing: border-box; }
+  body { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 18px 14px 48px; line-height: 1.5; max-width: 960px; margin-left: auto; margin-right: auto; }
+  .top-bar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 14px; }
+  .nav-links { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .nav-links a { text-decoration: none; color: var(--accent); font-weight: 600; font-size: 0.9rem; background: #e2e8f0; padding: 6px 12px; border-radius: 8px; }
+  .nav-links a.active { background: var(--accent); color: #fff; }
+  .lang-switch { display: inline-flex; flex-wrap: wrap; background: #e2e8f0; border-radius: 999px; padding: 3px; gap: 2px; }
+  .lang-btn { background: transparent; color: #334155; border: none; padding: 6px 12px; border-radius: 999px; font-size: 0.85rem; font-weight: 700; cursor: pointer; }
+  .lang-btn.active { background: var(--accent); color: #fff; }
+  .panel { background: var(--card); border-radius: 12px; padding: 16px 18px; margin-bottom: 14px; box-shadow: 0 2px 8px rgba(0,0,0,.06); border: 1px solid #e2e8f0; }
+  h1 { color: var(--accent); font-size: 1.45rem; margin: 0 0 4px; }
+  .sub { color: var(--muted); font-size: 0.92rem; margin: 0; }
+  .sync-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 8px; }
+  input[type="text"], select { padding: 8px 11px; border: 1px solid var(--border); border-radius: 8px; font-size: 0.92rem; }
+  .btn { background: var(--accent); color: #fff; border: none; padding: 8px 14px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 0.9rem; }
+  .btn:hover { background: var(--accent2); }
+  .btn-outline { background: #f1f5f9; color: var(--text); border: 1px solid var(--border); }
+  .btn-outline.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .btn-ok { background: #059669; color: #fff; }
+  .btn-warn { background: #d97706; color: #fff; }
+  .pills { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0; }
+  .pill { background: #f1f5f9; border: 1px solid var(--border); border-radius: 999px; padding: 5px 12px; font-size: 0.84rem; font-weight: 600; cursor: pointer; color: #334155; }
+  .pill.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .stage-wrap { perspective: 1100px; max-width: 560px; margin: 14px auto; }
+  .flashcard { width: 100%; min-height: 350px; background: #fff; border-radius: 16px; border: 2px solid var(--accent2); box-shadow: 0 8px 24px rgba(31,78,121,0.12); padding: 22px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; text-align: center; cursor: pointer; transition: transform 0.18s ease, box-shadow 0.18s ease; position: relative; }
+  .flashcard:hover { box-shadow: 0 12px 28px rgba(31,78,121,0.18); }
+  .card-badges { width: 100%; display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; color: var(--muted); font-weight: 600; }
+  .badge { background: #e0f2fe; color: #0369a1; padding: 3px 9px; border-radius: 999px; }
+  .visual-box { width: 220px; height: 155px; border-radius: 12px; background: #f8fafc; border: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: center; overflow: hidden; margin: 10px 0; position: relative; }
+  .visual-box img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .visual-emoji { font-size: 4rem; line-height: 1; }
+  .hmong-word { font-size: 2.2rem; font-weight: 800; color: var(--accent); margin: 4px 0; letter-spacing: 0.3px; }
+  .meaning-main { font-size: 1.45rem; font-weight: 700; color: #0f172a; margin: 4px 0; }
+  .gloss-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; width: 100%; margin-top: 8px; text-align: left; font-size: 0.84rem; background: #f8fafc; padding: 8px 10px; border-radius: 8px; border: 1px solid #e2e8f0; }
+  .controls-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 12px; }
+  .add-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; margin-top: 10px; }
+  .preview-strip { display: flex; align-items: center; gap: 12px; margin-top: 10px; padding: 10px; background: #f8fafc; border-radius: 10px; border: 1px dashed var(--border); }
+  .preview-thumb { width: 72px; height: 72px; border-radius: 8px; background: #fff; border: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: center; overflow: hidden; font-size: 2.2rem; flex-shrink: 0; }
+  .preview-thumb img { width: 100%; height: 100%; object-fit: cover; }
+  .quiz-choices { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; width: 100%; margin-top: 12px; }
+  .quiz-btn { padding: 12px; border-radius: 10px; border: 2px solid var(--border); background: #fff; font-weight: 600; font-size: 0.96rem; cursor: pointer; text-align: left; }
+  .quiz-btn.correct { border-color: #10b981; background: #ecfdf5; color: #065f46; }
+  .quiz-btn.wrong { border-color: #ef4444; background: #fef2f2; color: #991b1b; }
+  .hidden { display: none !important; }
+
+  /* Shared Light / Dark Mode Theme Overrides */
+  html[data-theme="dark"] {
+    --bg: #0f172a;
+    --card: #1e293b;
+    --accent: #60a5fa;
+    --accent2: #3b82f6;
+    --accent-soft: #1e3a5f;
+    --text: #f1f5f9;
+    --muted: #94a3b8;
+    --border: #334155;
+    --male-bg: #1e3a8a;
+    --male-border: #3b82f6;
+    --male-text: #bfdbfe;
+    --fem-bg: #831843;
+    --fem-border: #ec4899;
+    --fem-text: #fbcfe8;
+    --ok-bg: #064e3b;
+    --ok-border: #10b981;
+    --warn-bg: #451a03;
+    --warn-border: #f59e0b;
+    --err-bg: #450a0a;
+    --err-border: #ef4444;
+    color-scheme: dark;
+  }
+  html[data-theme="dark"] body { background: var(--bg); color: var(--text); }
+  html[data-theme="dark"] .card,
+  html[data-theme="dark"] .panel,
+  html[data-theme="dark"] .sound-card,
+  html[data-theme="dark"] .flashcard {
+    background: var(--card) !important;
+    color: var(--text) !important;
+    border-color: var(--border) !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.35) !important;
+  }
+  html[data-theme="dark"] .lang-switch { background: #334155 !important; }
+  html[data-theme="dark"] .lang-btn { color: #cbd5e1 !important; }
+  html[data-theme="dark"] .lang-btn.active { background: #2563eb !important; color: #fff !important; }
+  html[data-theme="dark"] .tone,
+  html[data-theme="dark"] .sc-example,
+  html[data-theme="dark"] .gloss-grid,
+  html[data-theme="dark"] .preview-strip,
+  html[data-theme="dark"] .visual-box,
+  html[data-theme="dark"] .speed-box,
+  html[data-theme="dark"] .sentence-box,
+  html[data-theme="dark"] .slot-col,
+  html[data-theme="dark"] .pair span,
+  html[data-theme="dark"] .sc-glyph {
+    background: #0f172a !important;
+    color: var(--text) !important;
+    border-color: var(--border) !important;
+  }
+  html[data-theme="dark"] .sc-ipa,
+  html[data-theme="dark"] .pill,
+  html[data-theme="dark"] .tab-btn:not(.active),
+  html[data-theme="dark"] button.secondary,
+  html[data-theme="dark"] .btn-outline:not(.active),
+  html[data-theme="dark"] .nav-links a:not(.active),
+  html[data-theme="dark"] .quiz-btn:not(.correct):not(.wrong) {
+    background: #334155 !important;
+    color: #f1f5f9 !important;
+    border-color: #475569 !important;
+  }
+  html[data-theme="dark"] .formula-banner {
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%) !important;
+    border-color: #3b82f6 !important;
+    color: #e2e8f0 !important;
+  }
+  html[data-theme="dark"] .formula-banner div { color: #cbd5e1 !important; }
+  html[data-theme="dark"] .f-chip {
+    background: #0f172a !important;
+    color: #93c5fd !important;
+    border-color: #3b82f6 !important;
+  }
+  html[data-theme="dark"] .note,
+  html[data-theme="dark"] .studio-panel,
+  html[data-theme="dark"] .studio-card-controls {
+    background: #2e2310 !important;
+    color: #fde68a !important;
+    border-color: #b45309 !important;
+  }
+  html[data-theme="dark"] .studio-panel strong,
+  html[data-theme="dark"] .studio-panel div,
+  html[data-theme="dark"] .studio-card-controls span {
+    color: #fde68a !important;
+  }
+  html[data-theme="dark"] input,
+  html[data-theme="dark"] select,
+  html[data-theme="dark"] textarea {
+    background: #0f172a !important;
+    color: #f1f5f9 !important;
+    border-color: #475569 !important;
+  }
+  html[data-theme="dark"] table,
+  html[data-theme="dark"] th,
+  html[data-theme="dark"] td {
+    border-color: #334155 !important;
+    color: #e2e8f0 !important;
+  }
+  html[data-theme="dark"] th { background: #0f172a !important; }
+  html[data-theme="dark"] tr:nth-child(even) { background: rgba(255,255,255,0.03) !important; }
+  html[data-theme="dark"] .meaning-main,
+  html[data-theme="dark"] .sc-tip,
+  html[data-theme="dark"] .research,
+  html[data-theme="dark"] p {
+    color: #cbd5e1 !important;
+  }
+  html[data-theme="dark"] .play-btn.both-btn {
+    background: #064e3b !important;
+    color: #a7f3d0 !important;
+    border-color: #059669 !important;
+  }
+  .theme-toggle-btn {
+    background: #e2e8f0;
+    color: #1e293b;
+    border: 1px solid #cbd5e1;
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin: 0;
+  }
+  .theme-toggle-btn:hover { background: #cbd5e1; }
+  html[data-theme="dark"] .theme-toggle-btn {
+    background: #334155 !important;
+    color: #f8fafc !important;
+    border-color: #475569 !important;
+  }
+
+  /* ===== Sandbox redesign ===== */
+  .sb-tag { display:inline-block; font-size:0.7rem; font-weight:800; background:#fef3c7; color:#92400e; border-radius:6px; padding:2px 7px; vertical-align:middle; margin-left:6px; }
+  .head-row { display:flex; justify-content:space-between; align-items:flex-start; gap:10px; }
+  .code-badge { display:inline-flex; align-items:center; gap:8px; background:var(--ok-bg); border:1px solid var(--ok-border); color:#065f46; border-radius:999px; padding:4px 12px; font-size:0.85rem; font-weight:700; }
+  html[data-theme="dark"] .code-badge { color:#a7f3d0; }
+  .link-btn { background:none; border:none; color:var(--accent2); font-weight:600; cursor:pointer; padding:0; font-size:0.82rem; text-decoration:underline; }
+  .toolbar { display:flex; gap:8px; align-items:center; position:relative; }
+  .toolbar select { flex:0 0 auto; max-width:48%; }
+  .toolbar input[type="text"] { flex:1 1 auto; min-width:0; }
+  .icon-btn { background:#f1f5f9; border:1px solid var(--border); color:var(--text); border-radius:10px; width:42px; height:40px; font-size:1.15rem; cursor:pointer; flex-shrink:0; display:inline-flex; align-items:center; justify-content:center; }
+  html[data-theme="dark"] .icon-btn { background:#334155; border-color:#475569; color:#f1f5f9; }
+  .settings-pop { position:absolute; right:0; top:46px; z-index:20; width:min(300px, 92vw); background:var(--card); border:1px solid var(--border); border-radius:12px; box-shadow:0 12px 30px rgba(0,0,0,.18); padding:12px; display:flex; flex-direction:column; gap:10px; }
+  .settings-pop label { font-size:0.78rem; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.4px; }
+  .seg { display:flex; gap:4px; background:#e2e8f0; border-radius:10px; padding:3px; }
+  html[data-theme="dark"] .seg { background:#0f172a; }
+  .seg button { flex:1; border:none; background:transparent; padding:7px 6px; border-radius:8px; font-weight:700; font-size:0.84rem; cursor:pointer; color:var(--text); }
+  .seg button.active { background:var(--accent); color:#fff; }
+  .card-area { display:flex; align-items:center; gap:8px; margin:14px auto 6px; max-width:640px; }
+  .card-area .stage-wrap { flex:1; margin:0; max-width:none; }
+  .nav-arrow { width:40px; height:40px; border-radius:50%; border:1px solid var(--border); background:var(--card); color:var(--text); font-size:1.1rem; cursor:pointer; flex-shrink:0; }
+  .flashcard { min-height:min(62vh, 460px); touch-action:pan-y; user-select:none; }
+  .flashcard .visual-box { width:min(100%, 320px); height:200px; }
+  .flashcard .hmong-word { font-size:2.6rem; }
+  .flip-hint { font-size:0.82rem; color:var(--muted); }
+  .mobile-nav { display:none; justify-content:center; gap:16px; margin-top:8px; }
+  .mark-row { display:grid; grid-template-columns:1fr 1fr; gap:10px; max-width:560px; margin:12px auto 0; }
+  .mark-row .btn { padding:15px 10px; font-size:1.02rem; border-radius:12px; }
+  .add-toggle { width:100%; padding:12px; font-size:1rem; border-radius:12px; }
+  .photo-row { display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-top:10px; }
+  .photo-row label.btn { display:inline-block; }
+  details.more { margin-top:10px; }
+  details.more summary { cursor:pointer; font-weight:700; color:var(--accent); font-size:0.9rem; }
+  details.more .more-body { display:flex; flex-direction:column; gap:8px; margin-top:8px; }
+  @media (max-width: 600px) {
+    body { padding:12px 10px 40px; }
+    .card-area > .nav-arrow { display:none; }
+    .mobile-nav { display:flex; }
+    .flashcard .hmong-word { font-size:2.1rem; }
+    .flashcard .visual-box { height:170px; }
+    .nav-links a { font-size:0.8rem; padding:5px 9px; }
+  }
+</style>
+
+<script>
+(function(){
+  function applyTheme(t) {
+    document.documentElement.setAttribute('data-theme', t);
+    var btn = document.getElementById('themeToggleBtn');
+    if (btn) {
+      btn.innerHTML = t === 'dark' ? '☀️ Light' : '🌙 Dark';
+      btn.title = t === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode';
+    }
+  }
+  window.toggleHmongTheme = function() {
+    var cur = document.documentElement.getAttribute('data-theme') || 'light';
+    var next = cur === 'dark' ? 'light' : 'dark';
+    try { localStorage.setItem('hmong_theme', next); } catch(e) {}
+    applyTheme(next);
+  };
+  var saved = 'light';
+  try {
+    saved = localStorage.getItem('hmong_theme') ||
+      (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  } catch(e) {}
+  applyTheme(saved);
+  document.addEventListener('DOMContentLoaded', function() { applyTheme(saved); });
+})();
+</script>
+
+<style>
+.grid-choices{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-top:12px}
+.big-play{font-size:1.25rem;padding:16px 22px;border-radius:14px}
+.score-row{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+.score-row .badge{font-size:.85rem}
+.center{text-align:center}
+.feedback{margin-top:12px;padding:10px 12px;border-radius:10px;font-weight:600}
+.feedback.ok{background:var(--ok-bg);border:1px solid var(--ok-border)}
+.feedback.bad{background:#fef2f2;border:1px solid #ef4444}
+html[data-theme="dark"] .feedback.bad{background:#450a0a}
+.review-flag{display:inline-block;font-size:.72rem;font-weight:800;background:#fef3c7;color:#92400e;border-radius:6px;padding:1px 6px;margin-left:6px;vertical-align:middle}
+.line-card{border:1px solid var(--border);border-radius:12px;padding:12px;margin:10px 0;background:var(--card)}
+.line-hm{font-size:1.25rem;font-weight:800;color:var(--accent)}
+.line-tr{color:var(--muted);font-size:.92rem}
+.mini{font-size:.8rem;padding:6px 10px}
+.btn-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;align-items:center}
+.studio-bar{background:#fffbeb;border:1px dashed #f59e0b;border-radius:10px;padding:10px;margin-top:10px;font-size:.88rem}
+.diff span{padding:1px 3px;border-radius:4px;margin:0 1px}
+.d-ok{background:#d1fae5;color:#065f46}.d-tone{background:#fde68a;color:#92400e}.d-bad{background:#fecaca;color:#991b1b}.d-miss{background:#e5e7eb;color:#374151;text-decoration:underline dotted}
+html[data-theme="dark"] .d-ok{background:#064e3b;color:#a7f3d0}html[data-theme="dark"] .d-tone{background:#78350f;color:#fde68a}html[data-theme="dark"] .d-bad{background:#7f1d1d;color:#fecaca}html[data-theme="dark"] .d-miss{background:#334155;color:#e2e8f0}
+.big-emoji{font-size:4.2rem;line-height:1.1}
+textarea,input.wide{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:10px;font-size:1.05rem}
+rec-dot{color:#dc2626}
+@media (max-width:600px){.grid-choices{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<div class="top-bar">
+  <div class="nav-links">
+    <a href="./index.html" data-i="hub">← Practice Hub</a>
+    <a href="./Hmong_Sound_Trainer.html" data-i="navSound">Sound Trainer</a>
+    <a href="./Hmong_Flashcards.html" data-i="navFc">Flashcards</a>
+  </div>
+  <div style="display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap;"><button type="button" class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleHmongTheme()">🌙 Dark</button><div class="lang-switch">
+    <button class="lang-btn" id="btnEn" onclick="setUILang('en')">EN</button>
+    <button class="lang-btn" id="btnVi" onclick="setUILang('vi')">VI</button>
+    <button class="lang-btn" id="btnKo" onclick="setUILang('ko')">한</button>
+    <button class="lang-btn" id="btnJa" onclick="setUILang('ja')">日</button>
+  </div></div>
+</div>
+<div class="panel"><h1><span data-i="title"></span> <span class="sb-tag">SANDBOX</span></h1><p class="sub" data-i="sub"></p></div>
+
+<div class="panel"><div class="sync-row"><b class="mini" data-i="code"></b><input type="text" id="codeIn" placeholder="HMOOB-01" style="width:130px;text-transform:uppercase"><button class="btn mini" onclick="saveCode()" data-i="connect"></button><span class="code-badge" id="codeBadge"></span></div>
+ <div class="score-row"><span class="badge">🔥 <span data-i="streak"></span>: <b id="sk">0</b> <span data-i="days"></span></span><span class="badge"><span data-i="best"></span>: <b id="bs">0</b></span><span class="badge"><span data-i="due"></span>: <b id="du">0</b></span><span class="badge"><span data-i="newT"></span>: <b id="nw">0</b></span><span class="badge"><span data-i="done"></span>: <b id="dn">0</b></span></div>
+ <div class="seg" style="max-width:360px"><button id="d0" onclick="setDir(0)" data-i="hmFirst"></button><button id="d1" onclick="setDir(1)" data-i="meFirst"></button></div></div>
+<div class="panel center"><div id="stage"></div></div>
+<div class="panel"><button class="btn btn-outline mini" onclick="resetAll()" data-i="reset"></button></div>
+<script>
+const STR={"en": {"hub": "← Practice Hub", "navSound": "Sound Trainer", "navFc": "Flashcards", "male": "Male", "female": "Female", "recMale": "● Rec Male", "recFemale": "● Rec Female", "stop": "■ Stop", "studio": "🎙️ Instructor studio", "studioOn": "Instructor studio is ON: record a Male or Female clip for each line; it uploads to the cloud for all students.", "noClip": "No instructor recording yet", "uploading": "Uploading…", "uploaded": "Saved to cloud ✅", "upFail": "Saved on this device only (cloud unavailable)", "tooBig": "Clip too long — keep it under ~4 seconds.", "micErr": "Microphone not available. Allow mic access and try again.", "yourTurn": "🎤 Your turn", "playMine": "▶ My recording", "needsReview": "needs review", "score": "Score", "streak": "Streak", "next": "Next →", "check": "Check", "reveal": "Reveal", "correct": "Correct!", "wrong": "Not quite.", "title": "📅 Daily Review", "sub": "Spaced repetition of the Flashcards deck. Cards you know come back less often; missed cards come back soon. Progress is saved on this device under your student code.", "code": "Student code", "connect": "Save", "guest": "Guest (no code)", "due": "Due today", "newT": "New today", "done": "Reviewed today", "best": "Best streak", "days": "days", "show": "Show answer", "knew": "✅ I knew it", "again": "🔄 Again", "allDone": "🎉 All done for today! Come back tomorrow to keep your streak.", "more": "+ 10 more new cards", "dir": "Direction", "hmFirst": "Hmong → meaning", "meFirst": "Meaning → Hmong", "box": "Level", "reset": "Reset my review data", "confirmReset": "Reset all review progress for this code on this device?"}, "vi": {"hub": "← Trang luyện tập", "navSound": "Luyện âm", "navFc": "Thẻ từ", "male": "Nam", "female": "Nữ", "recMale": "● Ghi Nam", "recFemale": "● Ghi Nữ", "stop": "■ Dừng", "studio": "🎙️ Phòng thu giảng viên", "studioOn": "Phòng thu giảng viên đang BẬT: ghi giọng Nam hoặc Nữ cho từng dòng; tệp sẽ tải lên đám mây cho mọi học viên.", "noClip": "Chưa có bản ghi của giảng viên", "uploading": "Đang tải lên…", "uploaded": "Đã lưu lên đám mây ✅", "upFail": "Chỉ lưu trên thiết bị này (không kết nối được đám mây)", "tooBig": "Đoạn ghi quá dài — giữ dưới khoảng 4 giây.", "micErr": "Không dùng được micro. Hãy cho phép micro rồi thử lại.", "yourTurn": "🎤 Đến lượt bạn", "playMine": "▶ Bản ghi của tôi", "needsReview": "cần duyệt", "score": "Điểm", "streak": "Chuỗi", "next": "Tiếp →", "check": "Kiểm tra", "reveal": "Hiện đáp án", "correct": "Đúng rồi!", "wrong": "Chưa đúng.", "title": "📅 Ôn Tập Hằng Ngày", "sub": "Ôn lặp lại ngắt quãng bộ thẻ từ. Thẻ đã thuộc sẽ quay lại thưa hơn; thẻ sai sẽ quay lại sớm. Tiến độ lưu trên thiết bị này theo mã học viên.", "code": "Mã học viên", "connect": "Lưu", "guest": "Khách (không mã)", "due": "Đến hạn hôm nay", "newT": "Thẻ mới hôm nay", "done": "Đã ôn hôm nay", "best": "Chuỗi tốt nhất", "days": "ngày", "show": "Xem đáp án", "knew": "✅ Tôi đã biết", "again": "🔄 Ôn lại", "allDone": "🎉 Xong bài hôm nay! Ngày mai quay lại để giữ chuỗi.", "more": "+ 10 thẻ mới nữa", "dir": "Chiều", "hmFirst": "Hmông → nghĩa", "meFirst": "Nghĩa → Hmông", "box": "Cấp", "reset": "Xóa dữ liệu ôn tập", "confirmReset": "Xóa toàn bộ tiến độ ôn tập của mã này trên thiết bị?"}, "ko": {"hub": "← 연습 허브", "navSound": "발음 트레이너", "navFc": "플래시카드", "male": "남성", "female": "여성", "recMale": "● 남성 녹음", "recFemale": "● 여성 녹음", "stop": "■ 정지", "studio": "🎙️ 강사 스튜디오", "studioOn": "강사 스튜디오 켜짐: 각 줄에 남성 또는 여성 음성을 녹음하면 모든 학생을 위해 클라우드에 업로드됩니다.", "noClip": "아직 강사 녹음이 없습니다", "uploading": "업로드 중…", "uploaded": "클라우드에 저장됨 ✅", "upFail": "이 기기에만 저장됨 (클라우드 사용 불가)", "tooBig": "녹음이 너무 깁니다 — 약 4초 이내로 해 주세요.", "micErr": "마이크를 사용할 수 없습니다. 권한을 허용하고 다시 시도하세요.", "yourTurn": "🎤 내 차례", "playMine": "▶ 내 녹음", "needsReview": "검토 필요", "score": "점수", "streak": "연속", "next": "다음 →", "check": "확인", "reveal": "정답 보기", "correct": "정답!", "wrong": "아쉬워요.", "title": "📅 매일 복습", "sub": "플래시카드 덱 간격 반복 복습. 아는 카드는 덜 자주, 틀린 카드는 곧 다시 나옵니다. 진행 상황은 학생 코드별로 이 기기에 저장됩니다.", "code": "학생 코드", "connect": "저장", "guest": "게스트 (코드 없음)", "due": "오늘 복습", "newT": "오늘 새 카드", "done": "오늘 완료", "best": "최고 연속", "days": "일", "show": "정답 보기", "knew": "✅ 알았어요", "again": "🔄 다시", "allDone": "🎉 오늘 복습 완료! 내일 다시 와서 연속 기록을 이어가세요.", "more": "+ 새 카드 10장 더", "dir": "방향", "hmFirst": "몽족어 → 뜻", "meFirst": "뜻 → 몽족어", "box": "레벨", "reset": "복습 데이터 초기화", "confirmReset": "이 기기에서 이 코드의 복습 진행을 모두 지울까요?"}, "ja": {"hub": "← 練習ハブ", "navSound": "発音トレーナー", "navFc": "単語カード", "male": "男性", "female": "女性", "recMale": "● 男性を録音", "recFemale": "● 女性を録音", "stop": "■ 停止", "studio": "🎙️ 講師スタジオ", "studioOn": "講師スタジオON：各行に男性または女性の音声を録音すると、全受講生向けにクラウドへ保存されます。", "noClip": "講師の録音はまだありません", "uploading": "アップロード中…", "uploaded": "クラウドに保存しました ✅", "upFail": "この端末にのみ保存（クラウド未接続）", "tooBig": "録音が長すぎます — 約4秒以内にしてください。", "micErr": "マイクを使用できません。許可してから再試行してください。", "yourTurn": "🎤 あなたの番", "playMine": "▶ 自分の録音", "needsReview": "要確認", "score": "スコア", "streak": "連続", "next": "次へ →", "check": "確認", "reveal": "答えを見る", "correct": "正解！", "wrong": "惜しい！", "title": "📅 毎日の復習", "sub": "単語カードの間隔反復。覚えたカードは間隔をあけて、間違えたカードはすぐに再出題されます。進捗は受講コードごとにこの端末に保存されます。", "code": "受講コード", "connect": "保存", "guest": "ゲスト（コードなし）", "due": "今日の復習", "newT": "今日の新規", "done": "今日の完了", "best": "最高連続", "days": "日", "show": "答えを見る", "knew": "✅ わかった", "again": "🔄 もう一度", "allDone": "🎉 今日の復習は完了！明日も来て連続記録を伸ばしましょう。", "more": "+ 新しいカードを10枚", "dir": "方向", "hmFirst": "モン語 → 意味", "meFirst": "意味 → モン語", "box": "レベル", "reset": "復習データをリセット", "confirmReset": "この端末のこのコードの復習データをすべて消去しますか？"}};
+
+const LANGS=['en','vi','ko','ja'];
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let uiLang=(function(){const q=new URLSearchParams(location.search).get('lang');if(LANGS.includes(q)){try{localStorage.setItem('hmong_ui_lang',q)}catch(e){}return q;}let s='en';try{s=localStorage.getItem('hmong_ui_lang')||'en'}catch(e){}return LANGS.includes(s)?s:'en';})();
+function t(k){return (STR[uiLang]&&STR[uiLang][k]!=null)?STR[uiLang][k]:(STR.en[k]!=null?STR.en[k]:k);}
+function L(o){if(!o)return '';if(typeof o==='string')return o;return o[uiLang]||o.en||'';}
+function setUILang(l){if(!LANGS.includes(l))l='en';uiLang=l;try{localStorage.setItem('hmong_ui_lang',l)}catch(e){}document.documentElement.lang=l;
+ LANGS.forEach(x=>{const b=$('btn'+x[0].toUpperCase()+x[1]);if(b)b.classList.toggle('active',x===l)});
+ document.querySelectorAll('[data-i]').forEach(e=>{e.textContent=t(e.dataset.i)});
+ document.querySelectorAll('[data-ip]').forEach(e=>{e.placeholder=t(e.dataset.ip)});
+ document.title=t('title').replace(/^[^A-Za-z\u00C0-\uFFFF]+/,'')+' (Sandbox)';
+ if(typeof onLang==='function')onLang();}
+function studentCode(){let c='';const q=new URLSearchParams(location.search).get('code');try{c=(q||localStorage.getItem('hmong_student_code')||'')}catch(e){c=q||''}c=c.trim().toUpperCase().replace(/^HMONG-/,'HMOOB-');return /^HMOOB-\d{2}$/.test(c)?c:'';}
+/* audio */
+let curAudio=null;
+function playUrl(u){try{if(curAudio)curAudio.pause();curAudio=new Audio(u);const p=curAudio.play();if(p&&p.catch)p.catch(()=>{});}catch(e){}}
+/* recorder: audio/mp4 first for iPhone */
+const REC_TYPES=['audio/mp4','audio/webm;codecs=opus','audio/webm','audio/ogg'];
+let activeRec=null;
+async function startRec(onDone,maxMs){
+ if(activeRec){stopRec();return null;}
+ const stream=await navigator.mediaDevices.getUserMedia({audio:true});
+ const mt=(window.MediaRecorder&&MediaRecorder.isTypeSupported)?REC_TYPES.find(x=>MediaRecorder.isTypeSupported(x)):null;
+ const mr=mt?new MediaRecorder(stream,{mimeType:mt}):new MediaRecorder(stream);
+ const chunks=[];mr.ondataavailable=e=>{if(e.data&&e.data.size)chunks.push(e.data)};
+ mr.onstop=()=>{stream.getTracks().forEach(tr=>tr.stop());const type=mr.mimeType||mt||(chunks[0]&&chunks[0].type)||'audio/mp4';activeRec=null;onDone(new Blob(chunks,{type}));};
+ mr.start(250);activeRec={mr,timer:maxMs?setTimeout(stopRec,maxMs):null};return activeRec;}
+function stopRec(){if(activeRec){clearTimeout(activeRec.timer);if(activeRec.mr.state!=='inactive')activeRec.mr.stop();}}
+function blobToDataUrl(b){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result);r.onerror=rej;r.readAsDataURL(b);});}
+/* instructor clips (shared /api/phonetics-audio store) */
+let CLIPS={};const CLIP_CACHE='hmong_sandbox_clips_cache';
+try{CLIPS=JSON.parse(localStorage.getItem(CLIP_CACHE)||'{}')||{}}catch(e){CLIPS={}}
+const STUDIO=new URLSearchParams(location.search).get('studio')==='1';
+async function loadCloudClips(ids){try{const r=await fetch('/api/phonetics-audio',{cache:'no-store'});if(!r.ok)return;const d=await r.json();if(d&&d.ok&&d.clips){const keep={};for(const [id,v] of Object.entries(d.clips)){if(!ids||ids.includes(id))keep[id]={male:v.male||'',female:v.female||''};}CLIPS=Object.assign(CLIPS,keep);try{localStorage.setItem(CLIP_CACHE,JSON.stringify(CLIPS))}catch(e){}if(typeof onClips==='function')onClips();}}catch(e){}}
+function hasClip(id,v){return !!(CLIPS[id]&&CLIPS[id][v]);}
+function playClip(id,v){if(!v){v=hasClip(id,'female')?'female':'male';}if(hasClip(id,v))playUrl(CLIPS[id][v]);}
+async function uploadClip(id,voice,label,blob,statusEl){
+ const url=await blobToDataUrl(blob);if(url.length>95000){if(statusEl)statusEl.textContent=t('tooBig');return false;}
+ if(!CLIPS[id])CLIPS[id]={male:'',female:''};CLIPS[id][voice]=url;try{localStorage.setItem(CLIP_CACHE,JSON.stringify(CLIPS))}catch(e){}
+ if(statusEl)statusEl.textContent=t('uploading');
+ try{const r=await fetch('/api/phonetics-audio',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id,voice,label,audioDataUrl:url})});const d=await r.json();if(statusEl)statusEl.textContent=(d&&d.ok)?t('uploaded'):t('upFail');}catch(e){if(statusEl)statusEl.textContent=t('upFail');}
+ if(typeof onClips==='function')onClips();return true;}
+function clipButtons(id,label){
+ let h='';['male','female'].forEach(v=>{h+=`<button class="btn btn-outline mini" ${hasClip(id,v)?'':'disabled style="opacity:.45"'} onclick="playClip('${id}','${v}')">▶ ${t(v)}</button>`;});
+ if(STUDIO){h+=`<button class="btn btn-warn mini" onclick="studioRec(this,'${id}','male',${esc(JSON.stringify(label||id))})">${t('recMale')}</button><button class="btn btn-warn mini" onclick="studioRec(this,'${id}','female',${esc(JSON.stringify(label||id))})">${t('recFemale')}</button><span class="mini" id="st_${id}"></span>`;}
+ return h;}
+async function studioRec(btn,id,voice,label){const st=$('st_'+id);if(activeRec){stopRec();return;}
+ try{btn.textContent=t('stop');await startRec(async b=>{btn.textContent=t(voice==='male'?'recMale':'recFemale');await uploadClip(id,voice,label,b,st);},4500);}catch(e){btn.textContent=t(voice==='male'?'recMale':'recFemale');if(st)st.textContent=t('micErr');}}
+/* student "your turn" recorder (local only) */
+const MY={};
+async function myTurn(btn,key,playBtnId){if(activeRec){stopRec();return;}
+ try{btn.textContent=t('stop');await startRec(b=>{btn.textContent=t('yourTurn');if(MY[key])URL.revokeObjectURL(MY[key]);MY[key]=URL.createObjectURL(b);const p=$(playBtnId);if(p){p.disabled=false;p.style.opacity=1;}},15000);}catch(e){btn.textContent=t('yourTurn');alert(t('micErr'));}}
+function playMine(key){if(MY[key])playUrl(MY[key]);}
+
+const CORE_LEXICON = [
+      { w: "kuv", role: "subj", en: "I / me", tone: "v (mid-rising)" },
+      { w: "koj", role: "subj", en: "you (sg.)", tone: "j (high-falling)" },
+      { w: "nws", role: "subj", en: "he / she / it", tone: "s (low)" },
+      { w: "peb", role: "subj", en: "we / us", tone: "b (high)" },
+      { w: "nej", role: "subj", en: "you (plural)", tone: "j (high-falling)" },
+      { w: "lawv", role: "subj", en: "they / them", tone: "v (mid-rising)" },
+      { w: "yuav", role: "tense", en: "will (future)", tone: "v (mid-rising)" },
+      { w: "tau", role: "tense", en: "did / achieved (past)", tone: "unmarked (mid)" },
+      { w: "tab tom", role: "tense", en: "is currently (-ing)", tone: "b + m" },
+      { w: "puas", role: "qpart", en: "yes/no question marker", tone: "s (low)" },
+      { w: "tsis", role: "neg", en: "not", tone: "s (low)" },
+      { w: "xav", role: "modal", en: "want to", tone: "v (mid-rising)" },
+      { w: "nyiam", role: "modal", en: "like to", tone: "m (low creaky)" },
+      { w: "nyob", role: "verb", en: "live / stay / be at", tone: "b (high)" },
+      { w: "mus", role: "verb", en: "go", tone: "s (low)" },
+      { w: "kawm", role: "verb", en: "learn / study", tone: "m (low creaky)" },
+      { w: "hais", role: "verb", en: "speak / say", tone: "s (low)" },
+      { w: "paub", role: "verb", en: "know", tone: "b (high)" },
+      { w: "pom", role: "verb", en: "see", tone: "m (low creaky)" },
+      { w: "pab", role: "verb", en: "help", tone: "b (high)" },
+      { w: "nyeem", role: "verb", en: "read", tone: "m (low creaky)" },
+      { w: "noj", role: "verb", en: "eat", tone: "j (high-falling)" },
+      { w: "haus", role: "verb", en: "drink", tone: "s (low)" },
+      { w: "ua", role: "verb", en: "do / make", tone: "unmarked (mid)" },
+      { w: "hu", role: "verb", en: "call / be named", tone: "unmarked (mid)" },
+      { w: "thov", role: "polite", en: "please / request", tone: "v (mid-rising)" },
+      { w: "zoo", role: "adj", en: "good / well", tone: "unmarked (mid)" },
+      { w: "lus hmoob", role: "obj", en: "Hmong language", tone: "s + b" },
+      { w: "lus", role: "obj", en: "language / word", tone: "s (low)" },
+      { w: "hmoob", role: "obj", en: "Hmong", tone: "b (high)" },
+      { w: "ntawv", role: "obj", en: "book / paper / letter", tone: "v (mid-rising)" },
+      { w: "phau ntawv", role: "obj", en: "the book", tone: "mid + v" },
+      { w: "tsev", role: "place", en: "house / home", tone: "v (mid-rising)" },
+      { w: "mov", role: "obj", en: "rice / food", tone: "v (mid-rising)" },
+      { w: "dej", role: "obj", en: "water", tone: "j (high-falling)" },
+      { w: "dev", role: "obj", en: "dog", tone: "v (mid-rising)" },
+      { w: "phooj ywg", role: "obj", en: "friend", tone: "j + g" },
+      { w: "vajtswv", role: "subj", en: "God", tone: "v (mid-rising)" },
+      { w: "yehauvas", role: "obj", en: "Jehovah", tone: "s (low)" },
+      { w: "ib", role: "num", en: "one (1)", tone: "b (high)" },
+      { w: "ob", role: "num", en: "two (2)", tone: "b (high)" },
+      { w: "peb", role: "num", en: "three (3)", tone: "b (high)" },
+      { w: "tus", role: "clf", en: "classifier (animate / long things)", tone: "s (low)" },
+      { w: "tug", role: "clf", en: "classifier (sandhi form of tus after ib/ob/peb)", tone: "g (breathy)" },
+      { w: "lub", role: "clf", en: "classifier (round / bulky / house)", tone: "b (high)" },
+      { w: "phau", role: "clf", en: "classifier (books)", tone: "unmarked (mid)" },
+      { w: "dab tsi", role: "wh", en: "what?", tone: "b + unmarked" },
+      { w: "qhov twg", role: "wh", en: "where?", tone: "v + g" },
+      { w: "leej twg", role: "wh", en: "who?", tone: "j + g" }
+    ];
+const VI_LEX = {
+  "kuv": { vi: "tôi / mình", toneVi: "v (trung thăng)" },
+  "koj": { vi: "bạn", toneVi: "j (cao giáng)" },
+  "nws": { vi: "anh ấy / cô ấy / nó", toneVi: "s (thấp)" },
+  "peb": { vi: "chúng tôi / chúng ta", toneVi: "b (cao)" },
+  "nej": { vi: "các bạn", toneVi: "j (cao giáng)" },
+  "lawv": { vi: "họ", toneVi: "v (trung thăng)" },
+  "yuav": { vi: "sẽ (tương lai)", toneVi: "v (trung thăng)" },
+  "tau": { vi: "đã / được (quá khứ)", toneVi: "không chữ cuối (trung)" },
+  "tab tom": { vi: "đang", toneVi: "b + m" },
+  "puas": { vi: "có… không? (từ để hỏi)", toneVi: "s (thấp)" },
+  "tsis": { vi: "không (phủ định)", toneVi: "s (thấp)" },
+  "xav": { vi: "muốn", toneVi: "v (trung thăng)" },
+  "nyiam": { vi: "thích", toneVi: "m (thấp nghẹn)" },
+  "nyob": { vi: "sống / ở / khỏe", toneVi: "b (cao)" },
+  "mus": { vi: "đi", toneVi: "s (thấp)" },
+  "kawm": { vi: "học", toneVi: "m (thấp nghẹn)" },
+  "hais": { vi: "nói", toneVi: "s (thấp)" },
+  "paub": { vi: "biết", toneVi: "b (cao)" },
+  "pom": { vi: "nhìn thấy", toneVi: "m (thấp nghẹn)" },
+  "pab": { vi: "giúp đỡ", toneVi: "b (cao)" },
+  "nyeem": { vi: "đọc", toneVi: "m (thấp nghẹn)" },
+  "noj": { vi: "ăn", toneVi: "j (cao giáng)" },
+  "haus": { vi: "uống", toneVi: "s (thấp)" },
+  "ua": { vi: "làm", toneVi: "không chữ cuối (trung)" },
+  "hu": { vi: "gọi / tên là", toneVi: "không chữ cuối (trung)" },
+  "thov": { vi: "xin / vui lòng", toneVi: "v (trung thăng)" },
+  "zoo": { vi: "tốt / khỏe", toneVi: "không chữ cuối (trung)" },
+  "lus hmoob": { vi: "tiếng H'Mông", toneVi: "s + b" },
+  "lus": { vi: "tiếng / lời nói", toneVi: "s (thấp)" },
+  "hmoob": { vi: "H'Mông", toneVi: "b (cao)" },
+  "ntawv": { vi: "sách / chữ / giấy", toneVi: "v (trung thăng)" },
+  "phau ntawv": { vi: "quyển sách", toneVi: "trung + v" },
+  "tsev": { vi: "nhà", toneVi: "v (trung thăng)" },
+  "mov": { vi: "cơm", toneVi: "v (trung thăng)" },
+  "dej": { vi: "nước", toneVi: "j (cao giáng)" },
+  "dev": { vi: "con chó", toneVi: "v (trung thăng)" },
+  "phooj ywg": { vi: "bạn bè", toneVi: "j + g" },
+  "vajtswv": { vi: "Đức Chúa Trời", toneVi: "v (trung thăng)" },
+  "yehauvas": { vi: "Giê-hô-va", toneVi: "s (thấp)" },
+  "ib": { vi: "một (1)", toneVi: "b (cao)" },
+  "ob": { vi: "hai (2)", toneVi: "b (cao)" },
+  "tus": { vi: "loại từ (người / con vật)", toneVi: "s (thấp)" },
+  "tug": { vi: "loại từ (biến âm của tus sau ib/ob/peb)", toneVi: "g (hơi thở)" },
+  "lub": { vi: "loại từ (vật tròn / ngôi nhà)", toneVi: "b (cao)" },
+  "phau": { vi: "loại từ (quyển sách)", toneVi: "không chữ cuối (trung)" },
+  "dab tsi": { vi: "cái gì?", toneVi: "b + trung" },
+  "qhov twg": { vi: "ở đâu?", toneVi: "v + g" },
+  "leej twg": { vi: "ai?", toneVi: "j + g" },
+  "muaj": { vi: "có", toneVi: "j (cao giáng)" }
+};
+const KO_LEX = {
+  "kuv": { ko: "나 / 저", toneKo: "v (중상승조)" },
+  "koj": { ko: "당신 / 너", toneKo: "j (고하강조)" },
+  "nws": { ko: "그 / 그녀", toneKo: "s (저평조)" },
+  "peb": { ko: "우리", toneKo: "b (고평조)" },
+  "nej": { ko: "여러분 / 너희", toneKo: "j (고하강조)" },
+  "lawv": { ko: "그들", toneKo: "v (중상승조)" },
+  "yuav": { ko: "~할 것이다 (미래)", toneKo: "v (중상승조)" },
+  "tau": { ko: "~했다 (과거/완료)", toneKo: "무표기 (중평조)" },
+  "tab tom": { ko: "지금 ~하는 중이다", toneKo: "b + m" },
+  "puas": { ko: "~입니까? (의문사)", toneKo: "s (저평조)" },
+  "tsis": { ko: "안 / ~하지 않다 (부정)", toneKo: "s (저평조)" },
+  "xav": { ko: "~하고 싶다 (원하다)", toneKo: "v (중상승조)" },
+  "nyiam": { ko: "좋아하다", toneKo: "m (저하강 성문폐쇄조)" },
+  "nyob": { ko: "살다 / 지내다 / 있다", toneKo: "b (고평조)" },
+  "mus": { ko: "가다", toneKo: "s (저평조)" },
+  "kawm": { ko: "배우다 / 공부하다", toneKo: "m (저하강 성문폐쇄조)" },
+  "hais": { ko: "말하다", toneKo: "s (저평조)" },
+  "paub": { ko: "알다", toneKo: "b (고평조)" },
+  "pom": { ko: "보다", toneKo: "m (저하강 성문폐쇄조)" },
+  "pab": { ko: "돕다", toneKo: "b (고평조)" },
+  "nyeem": { ko: "읽다", toneKo: "m (저하강 성문폐쇄조)" },
+  "noj": { ko: "먹다", toneKo: "j (고하강조)" },
+  "haus": { ko: "마시다", toneKo: "s (저평조)" },
+  "ua": { ko: "하다 / 만들다", toneKo: "무표기 (중평조)" },
+  "hu": { ko: "부르다 / 이름하다", toneKo: "무표기 (중평조)" },
+  "thov": { ko: "부탁합니다 / 제발", toneKo: "v (중상승조)" },
+  "zoo": { ko: "좋다 / 잘", toneKo: "무표기 (중평조)" },
+  "lus hmoob": { ko: "몽족어", toneKo: "s + b" },
+  "lus": { ko: "언어 / 말", toneKo: "s (저평조)" },
+  "hmoob": { ko: "몽족(Hmong)", toneKo: "b (고평조)" },
+  "ntawv": { ko: "책 / 글자 / 종이", toneKo: "v (중상승조)" },
+  "phau ntawv": { ko: "책 (한 권)", toneKo: "중평조 + v" },
+  "tsev": { ko: "집", toneKo: "v (중상승조)" },
+  "mov": { ko: "밥 / 음식", toneKo: "v (중상승조)" },
+  "dej": { ko: "물", toneKo: "j (고하강조)" },
+  "dev": { ko: "개 (강아지)", toneKo: "v (중상승조)" },
+  "phooj ywg": { ko: "친구", toneKo: "j + g" },
+  "vajtswv": { ko: "하느님", toneKo: "v (중상승조)" },
+  "yehauvas": { ko: "여호와", toneKo: "s (저평조)" },
+  "ib": { ko: "하나 (1)", toneKo: "b (고평조)" },
+  "ob": { ko: "둘 (2)", toneKo: "b (고평조)" },
+  "tus": { ko: "분류사 (사람/동물/긴 것)", toneKo: "s (저평조)" },
+  "tug": { ko: "분류사 (ib/ob/peb 뒤 tus의 연음형)", toneKo: "g (기식조)" },
+  "lub": { ko: "분류사 (둥근 것/사물/집)", toneKo: "b (고평조)" },
+  "phau": { ko: "분류사 (책 ‘권’)", toneKo: "무표기 (중평조)" },
+  "dab tsi": { ko: "무엇?", toneKo: "b + 무표기" },
+  "qhov twg": { ko: "어디?", toneKo: "v + g" },
+  "leej twg": { ko: "누구?", toneKo: "j + g" },
+  "muaj": { ko: "가지고 있다 / 있다", toneKo: "j (고하강조)" }
+};
+const JA_LEX = {
+  "kuv": { ja: "私（わたし）", toneJa: "v（中昇調）" },
+  "koj": { ja: "あなた", toneJa: "j（高降調）" },
+  "nws": { ja: "彼 / 彼女", toneJa: "s（低平調）" },
+  "peb": { ja: "私たち", toneJa: "b（高平調）" },
+  "nej": { ja: "あなたたち（複数）", toneJa: "j（高降調）" },
+  "lawv": { ja: "彼ら", toneJa: "v（中昇調）" },
+  "yuav": { ja: "〜でしょう / 〜するつもり（未来）", toneJa: "v（中昇調）" },
+  "tau": { ja: "〜した / できた（過去・完了）", toneJa: "無表記（中平調）" },
+  "tab tom": { ja: "今〜している（進行）", toneJa: "b + m" },
+  "puas": { ja: "〜ですか？（疑問助詞）", toneJa: "s（低平調）" },
+  "tsis": { ja: "〜ない（否定）", toneJa: "s（低平調）" },
+  "xav": { ja: "〜したい / 思う", toneJa: "v（中昇調）" },
+  "nyiam": { ja: "好きである", toneJa: "m（低降声門閉鎖調）" },
+  "nyob": { ja: "住む / いる / 元気である", toneJa: "b（高平調）" },
+  "mus": { ja: "行く", toneJa: "s（低平調）" },
+  "kawm": { ja: "学ぶ / 勉強する", toneJa: "m（低降声門閉鎖調）" },
+  "hais": { ja: "話す / 言う", toneJa: "s（低平調）" },
+  "paub": { ja: "知る / 分かる", toneJa: "b（高平調）" },
+  "pom": { ja: "見る / 見かける", toneJa: "m（低降声門閉鎖調）" },
+  "pab": { ja: "助ける / 手伝う", toneJa: "b（高平調）" },
+  "nyeem": { ja: "読む", toneJa: "m（低降声門閉鎖調）" },
+  "noj": { ja: "食べる", toneJa: "j（高降調）" },
+  "haus": { ja: "飲む", toneJa: "s（低平調）" },
+  "ua": { ja: "する / 行う", toneJa: "無表記（中平調）" },
+  "hu": { ja: "呼ぶ / 歌う", toneJa: "無表記（中平調）" },
+  "thov": { ja: "どうか〜してください / 祈る", toneJa: "v（中昇調）" },
+  "zoo": { ja: "良い / 元気な", toneJa: "無表記（中平調）" },
+  "lus hmoob": { ja: "モン語（白モン語）", toneJa: "s + b" },
+  "lus": { ja: "言葉 / 言語", toneJa: "s（低平調）" },
+  "hmoob": { ja: "モン族（Hmong）", toneJa: "b（高平調）" },
+  "ntawv": { ja: "本 / 文字 / 紙", toneJa: "v（中昇調）" },
+  "phau ntawv": { ja: "本（一冊）", toneJa: "中平調 + v" },
+  "tsev": { ja: "家", toneJa: "v（中昇調）" },
+  "mov": { ja: "ご飯 / 食事", toneJa: "v（中昇調）" },
+  "dej": { ja: "水", toneJa: "j（高降調）" },
+  "dev": { ja: "犬", toneJa: "v（中昇調）" },
+  "phooj ywg": { ja: "友達", toneJa: "j + g" },
+  "vajtswv": { ja: "神（神様）", toneJa: "v（中昇調）" },
+  "yehauvas": { ja: "エホバ", toneJa: "s（低平調）" },
+  "ib": { ja: "1（一）", toneJa: "b（高平調）" },
+  "ob": { ja: "2（二）", toneJa: "b（高平調）" },
+  "tus": { ja: "類別詞（人・動物・細長い物）", toneJa: "s（低平調）" },
+  "tug": { ja: "類別詞（ib/ob/peb の後の tus の連濁形）", toneJa: "g（息漏れ調）" },
+  "lub": { ja: "類別詞（丸い物・建物・一般的な物）", toneJa: "b（高平調）" },
+  "phau": { ja: "類別詞（本「冊」）", toneJa: "無表記（中平調）" },
+  "dab tsi": { ja: "何（なに）？", toneJa: "b + 無表記" },
+  "qhov twg": { ja: "どこ？", toneJa: "v + g" },
+  "leej twg": { ja: "誰（だれ）？", toneJa: "j + g" },
+  "muaj": { ja: "持っている / ある", toneJa: "j（高降調）" }
+};
+const THEOCRATIC_TERMS_51 = [
+  { hm: "Yehauvas", en: "Jehovah", vi: "Giê-hô-va", ko: "여호와", ja: "エホバ", pos: "subj", note: "God’s name" },
+  { hm: "Vajtswv", en: "God", vi: "Đức Chúa Trời / Đức Giê-hô-va", ko: "하느님", ja: "神", pos: "subj", note: "General term" },
+  { hm: "Phau Vajlugkub", en: "Bible", vi: "Kinh Thánh", ko: "성경", ja: "聖書", pos: "obj", note: "Also: Vajlugkub" },
+  { hm: "Txoj xov zoo", en: "Good news", vi: "Tin mừng", ko: "좋은 소식", ja: "良い知らせ", pos: "obj", note: "Preaching (Xov zoo)" },
+  { hm: "Lub Nceeg Vaj", en: "Kingdom", vi: "Nước Trời / Nước Đức Chúa Trời", ko: "왕국 (하느님의 왕국)", ja: "王国（神の王国）", pos: "obj", note: "Also: Nceeg Vaj" },
+  { hm: "Khixatias", en: "Christians", vi: "Tín đồ đạo Đấng Ki-tô / tín đồ Đấng Ki-tô", ko: "그리스도인", ja: "クリスチャン", pos: "subj", note: "" },
+  { hm: "Txwj laus", en: "Elders", vi: "Trưởng lão", ko: "장로", ja: "長老", pos: "subj", note: "Congregation leadership" },
+  { hm: "Tub leg num", en: "Ministerial servant", vi: "Phụ tá hội thánh", ko: "봉사의 종", ja: "奉仕の僕", pos: "subj", note: "" },
+  { hm: "Koom txoos", en: "Congregation", vi: "Hội thánh", ko: "회중", ja: "会衆", pos: "obj", note: "" },
+  { hm: "Teev tiam", en: "Worship / Serve", vi: "Thờ phượng / Phụng sự", ko: "숭배하다 / 섬기다", ja: "崇拝する / 奉仕する", pos: "verb", note: "" },
+  { hm: "Kev ntseeg", en: "Faith", vi: "Đức tin", ko: "믿음", ja: "信仰", pos: "obj", note: "" },
+  { hm: "Cov kwv tij nkauj muam", en: "Brothers and sisters", vi: "Anh chị em", ko: "형제 자매들", ja: "兄弟姉妹", pos: "subj", note: "" },
+  { hm: "Tus Tswv Pluas Hmo", en: "The Lord’s Evening Meal", vi: "Bữa Tiệc Thánh của Chúa", ko: "주의 만찬", ja: "主の晩餐", pos: "obj", note: "Also called the Memorial" },
+  { hm: "Kevcai Nco Txog Yexus", en: "Memorial (of Jesus’ death)", vi: "Lễ Tưởng Niệm", ko: "기념식", ja: "記念式", pos: "obj", note: "Used in connection with the Memorial" },
+  { hm: "Npe-ee", en: "Branch office", vi: "Chi nhánh", ko: "지부 사무실 (베델)", ja: "支部事務所（ベテル）", pos: "place", note: "Organization structure" },
+  { hm: "Pab Uas Ntaus Thawj", en: "Governing Body", vi: "Hội đồng Lãnh đạo Trung ương", ko: "통치체", ja: "統治体", pos: "subj", note: "" },
+  { hm: "Tho kev", en: "Pioneer", vi: "Người tiên phong", ko: "파이오니아", ja: "開拓者（パイオニア）", pos: "subj", note: "" },
+  { hm: "Tshaj tawm", en: "Preach / Preach the good news", vi: "Rao giảng / Rao truyền tin mừng", ko: "전파하다 / 봉사하다", ja: "伝道する / 宣べ伝える", pos: "verb", note: "" },
+  { hm: "Sib txoos", en: "Meet / Congregation meeting", vi: "Nhóm họp / Buổi họp", ko: "집회 / 모이다", ja: "集会 / 集まり合う", pos: "verb", note: "" },
+  { hm: "Lub koom haum", en: "Organization", vi: "Tổ chức", ko: "조직", ja: "組織", pos: "obj", note: "" },
+  { hm: "Yehauvas Cov Tim Khawv", en: "Jehovah’s Witnesses", vi: "Nhân Chứng Giê-hô-va", ko: "여호와의 증인", ja: "エホバの証人", pos: "subj", note: "" },
+  { hm: "Yexus", en: "Jesus", vi: "Giê-su / Chúa Giê-su", ko: "예수", ja: "イエス", pos: "subj", note: "" },
+  { hm: "Xatas", en: "Satan", vi: "Sa-tan", ko: "사탄", ja: "サタン", pos: "subj", note: "" },
+  { hm: "Tub txib", en: "Apostles", vi: "Các sứ đồ", ko: "사도들", ja: "使徒たち", pos: "subj", note: "" },
+  { hm: "Kawm Vajlugkub", en: "Study the Bible", vi: "Học hỏi Kinh Thánh", ko: "성경을 연구하다", ja: "聖書を学ぶ", pos: "verb", note: "" },
+  { hm: "Teev tiam Yehauvas", en: "Worship Jehovah", vi: "Thờ phượng Đức Giê-hô-va", ko: "여호와를 숭배하다", ja: "エホバを崇拝する", pos: "verb", note: "" },
+  { hm: "Lub Tsev Nceeg Vaj", en: "Kingdom Hall", vi: "Phòng Nước Trời", ko: "왕국회관", ja: "王国会館", pos: "place", note: "Also: Tsev Nceeg Vaj" },
+  { hm: "Kev Pab Cuam", en: "Ministry / Sacred service", vi: "Thánh chức / Sự phụng sự", ko: "봉사의 직무 / 신성한 봉사", ja: "宣教 / 神聖な奉仕", pos: "obj", note: "" },
+  { hm: "Lub Hwj Huam Dawb Huv", en: "Holy spirit", vi: "Thần khí thánh", ko: "성령", ja: "聖霊", pos: "obj", note: "" },
+  { hm: "Kev Sawv Rov Los", en: "Resurrection", vi: "Sự sống lại", ko: "부활", ja: "復活", pos: "obj", note: "" },
+  { hm: "Lub Ntiaj Teb Tshiab", en: "New world", vi: "Thế giới mới", ko: "신세계", ja: "新しい世", pos: "place", note: "" },
+  { hm: "Rooj Sib Txoos", en: "Convention / Assembly", vi: "Đại hội", ko: "대회", ja: "大会", pos: "obj", note: "" },
+  { hm: "Hu Nkauj", en: "Sing songs / Kingdom songs", vi: "Hát thánh ca", ko: "노래 부르다 (왕국 노래)", ja: "賛美の歌を歌う", pos: "verb", note: "" },
+  { hm: "Qhia Vajlugkub", en: "Teach the Bible / Conduct Bible study", vi: "Dạy Kinh Thánh / Học Kinh Thánh", ko: "성경을 가르치다 / 성서 연구 사회", ja: "聖書を教える / 聖書レッスン", pos: "verb", note: "" },
+  { hm: "Cov Xaiv Tseg", en: "Anointed ones", vi: "Những người được xức dầu", ko: "기름부음받은 자들", ja: "油そそがれた者たち", pos: "subj", note: "" },
+  { hm: "Amankedoos", en: "Armageddon", vi: "Ha-ma-ghê-đôn", ko: "아마겟돈", ja: "ハルマゲドン", pos: "obj", note: "" },
+  { hm: "Lub Vaj Kaj Siab", en: "Paradise", vi: "Địa đàng / Vườn Ê-đen", ko: "낙원 (파라다이스)", ja: "楽園（パラダイス）", pos: "place", note: "" },
+  { hm: "Kev Sib Haum Xeeb", en: "Peace / Unity", vi: "Sự hòa hợp", ko: "평화 / 연합", ja: "平和 / 一致", pos: "obj", note: "" },
+  { hm: "Zam Txim", en: "Forgive", vi: "Tha thứ", ko: "용서하다", ja: "許す（赦す）", pos: "verb", note: "" },
+  { hm: "Nqe Txhiv", en: "Ransom", vi: "Giá chuộc", ko: "대속물", ja: "贖い（あがない）", pos: "obj", note: "" },
+  { hm: "Thwj Tim", en: "Disciple", vi: "Môn đồ", ko: "제자", ja: "弟子", pos: "subj", note: "" },
+  { hm: "Cov Tshaj Tawm", en: "Publishers", vi: "Người công bố", ko: "전도인", ja: "伝道者", pos: "subj", note: "" },
+  { hm: "Mus Tsev Rau Tsev", en: "House to house", vi: "Từ nhà này sang nhà khác", ko: "집집으로 (호별 봉사)", ja: "家から家へ", pos: "verb", note: "" },
+  { hm: "Rov Mus Xyuas", en: "Return visit", vi: "Thăm lại", ko: "재방문", ja: "再訪問", pos: "verb", note: "" },
+  { hm: "Phau Tsom Faj", en: "Watchtower", vi: "Tháp Canh", ko: "파수대", ja: "ものみの塔", pos: "obj", note: "" },
+  { hm: "Niaj Hnub Tshawb Nrhiav", en: "Daily Bible Reading", vi: "Đọc Kinh Thánh hằng ngày", ko: "성경을 매일 검토함", ja: "聖書を毎日調べる", pos: "obj", note: "" },
+  { hm: "Kev Txiav Txim", en: "Judgment", vi: "Sự phán xét", ko: "심판", ja: "裁き", pos: "obj", note: "" },
+  { hm: "Lub Neej Nyob Mus Ib Txhis", en: "Everlasting life", vi: "Sự sống đời đời", ko: "영원한 생명", ja: "永遠の命", pos: "obj", note: "" },
+  { hm: "Tej Lus Samhwm", en: "Commandments", vi: "Các điều răn", ko: "계명", ja: "おきて（戒め）", pos: "obj", note: "" },
+  { hm: "Thov", en: "Pray", vi: "Cầu nguyện", ko: "기도하다", ja: "祈る", pos: "verb", note: "" },
+  { hm: "Cov Laus", en: "Older ones", vi: "Người cao tuổi", ko: "연로한 분들", ja: "高齢の方々", pos: "subj", note: "" },
+  { hm: "Cov Poj Ntsuam", en: "Widows", vi: "Những người góa phụ", ko: "과부들", ja: "やもめ（寡婦）", pos: "subj", note: "" }
+];
+
+const EMOJI_MAP = {
+  "bird": "🐦", "noog": "🐦", "dog": "🐕", "dev": "🐕", "cat": "🐈", "miv": "🐈",
+  "fish": "🐟", "ntses": "🐟", "chicken": "🐓", "qaib": "🐓", "pig": "🐖", "npua": "🐖",
+  "cow": "🐄", "nyuj": "🐄", "horse": "🐎", "nees": "🐎", "house": "🏠", "tsev": "🏠",
+  "home": "🏠", "book": "📖", "ntawv": "📖", "phau ntawv": "📘", "water": "💧", "dej": "💧",
+  "rice": "🍚", "mov": "🍚", "food": "🍲", "zaub": "🥬", "eat": "🍽️", "noj": "🍽️",
+  "drink": "🥤", "haus": "🥤", "friend": "🤝", "phooj ywg": "🤝", "love": "❤️", "hlub": "❤️",
+  "help": "🤲", "pab": "🤲", "read": "📖", "nyeem": "📖", "speak": "🗣️", "hais": "🗣️",
+  "study": "🎓", "kawm": "🎓", "go": "🚶", "mus": "🚶", "see": "👀", "pom": "👀",
+  "know": "💡", "paub": "💡", "good": "👍", "zoo": "👍", "bible": "📖", "prayer": "🙏",
+  "pray": "🙏", "thov": "🙏", "god": "✨", "jehovah": "🌌", "kingdom": "👑", "peace": "🕊️"
+};
+function pickEmoji(h,e){h=(h||'').toLowerCase().trim();e=(e||'').toLowerCase().trim();if(EMOJI_MAP[h])return EMOJI_MAP[h];if(EMOJI_MAP[e])return EMOJI_MAP[e];for(const [k,v] of Object.entries(EMOJI_MAP)){if(e.includes(k))return v;}return '🃏';}
+const DECK=[];
+CORE_LEXICON.forEach(i=>{const k=i.w.toLowerCase();DECK.push({id:'core:'+k,hm:i.w,en:i.en,vi:(VI_LEX[k]||{}).vi||i.en,ko:(KO_LEX[k]||{}).ko||i.en,ja:(JA_LEX[k]||{}).ja||i.en,tone:i.tone||'',emo:pickEmoji(i.w,i.en)});});
+THEOCRATIC_TERMS_51.forEach(i=>{const h=String(i.hm||'').trim();if(!h)return;DECK.push({id:'theo:'+h.toLowerCase(),hm:h,en:i.en,vi:i.vi||i.en,ko:i.ko||i.en,ja:i.ja||i.en,tone:'',emo:pickEmoji(h,i.en)});});
+const INTERVALS=[0,1,2,4,7,15,30];const NEW_PER_DAY=10;
+const dayStr=(d=new Date())=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const addDays=(s,n)=>{const [y,m,d]=s.split('-').map(Number);return dayStr(new Date(y,m-1,d+n));};
+let code=studentCode();let S0;
+function key(){return 'hmong_daily_review_'+(code||'GUEST');}
+function load(){let o={};try{o=JSON.parse(localStorage.getItem(key())||'{}')||{}}catch(e){}S0=Object.assign({cards:{},streak:0,best:0,last:'',day:'',newToday:0,doneToday:0,extra:0,dir:0},o);
+ const td=dayStr();if(S0.day!==td){S0.day=td;S0.newToday=0;S0.doneToday=0;S0.extra=0;}if(S0.last&&S0.last<addDays(td,-1))S0.streak=0;}
+function save(){try{localStorage.setItem(key(),JSON.stringify(S0))}catch(e){}}
+let queue=[],cur=null,shown=false;
+function buildQueue(){const td=dayStr();const due=DECK.filter(c=>S0.cards[c.id]&&S0.cards[c.id].due<=td);
+ const fresh=DECK.filter(c=>!S0.cards[c.id]).slice(0,Math.max(0,NEW_PER_DAY+S0.extra-S0.newToday));
+ queue=due.sort(()=>Math.random()-.5).concat(fresh);next();}
+function next(){cur=queue.shift()||null;shown=false;render();}
+function grade(ok){const td=dayStr();const c=S0.cards[cur.id];const isNew=!c;let box=c?c.box:0;box=ok?Math.min(box+1,INTERVALS.length-1):0;
+ S0.cards[cur.id]={box,due:addDays(td,ok?INTERVALS[box]:0)};if(isNew)S0.newToday++;S0.doneToday++;
+ if(S0.last!==td){S0.streak=(S0.last===addDays(td,-1))?S0.streak+1:1;S0.last=td;}S0.best=Math.max(S0.best,S0.streak);
+ if(!ok)queue.splice(Math.min(3,queue.length),0,cur);save();next();}
+function render(){const td=dayStr();$('sk').textContent=S0.streak;$('bs').textContent=S0.best;$('du').textContent=DECK.filter(c=>S0.cards[c.id]&&S0.cards[c.id].due<=td).length;$('nw').textContent=S0.newToday;$('dn').textContent=S0.doneToday;
+ $('codeBadge').textContent=code?('✓ '+code):t('guest');$('codeIn').value=code;$('d0').classList.toggle('active',!S0.dir);$('d1').classList.toggle('active',!!S0.dir);
+ if(!cur){$('stage').innerHTML=`<p class="meaning-main">${t('allDone')}</p><button class="btn btn-outline" onclick="S0.extra+=10;save();buildQueue()">${t('more')}</button>`;return;}
+ const c=S0.cards[cur.id];const mean=esc(cur[uiLang]||cur.en);const hm=`<div class="hmong-word">${esc(cur.hm)}</div>`;const me=`<div class="meaning-main">${mean}</div>`;
+ $('stage').innerHTML=`<div class="card-badges"><span>${queue.length+1} ⏳</span><span class="badge">${t('box')} ${c?c.box:0}${c?'':' · NEW'}</span></div><div class="big-emoji">${cur.emo}</div>${S0.dir?me:hm}
+ ${shown?`<hr style="border:none;border-top:1px solid var(--border)">${S0.dir?hm:me}${cur.tone?`<div class="mini line-tr">${esc(cur.tone)}</div>`:''}<div class="mark-row"><button class="btn btn-warn" onclick="grade(false)">${t('again')}</button><button class="btn btn-ok" onclick="grade(true)">${t('knew')}</button></div>`:`<div class="controls-row"><button class="btn big-play" onclick="shown=true;render()">${t('show')}</button></div>`}`;}
+function setDir(d){S0.dir=d;save();render();}
+function saveCode(){const v=$('codeIn').value.trim().toUpperCase().replace(/^HMONG-/,'HMOOB-');if(v&&!/^HMOOB-\d{2}$/.test(v)){$('codeIn').value='';return;}code=v;try{localStorage.setItem('hmong_student_code',code)}catch(e){}load();buildQueue();}
+function resetAll(){if(confirm(t('confirmReset'))){try{localStorage.removeItem(key())}catch(e){}load();buildQueue();}}
+function onLang(){if(S0)render();}
+load();buildQueue();
+
+setUILang(uiLang);
+</script>
+</body>
+</html>
