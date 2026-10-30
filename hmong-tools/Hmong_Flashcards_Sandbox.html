@@ -1,0 +1,1320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Hmong Flashcards – Sandbox</title>
+<style>
+  :root {
+    --bg: #f4f6f9; --card: #ffffff; --accent: #1F4E79; --accent2: #2E75B6;
+    --text: #1e293b; --muted: #64748b; --border: #cbd5e1;
+    --ok-bg: #ecfdf5; --ok-border: #10b981; --warn-bg: #fffbeb; --warn-border: #f59e0b;
+  }
+  * { box-sizing: border-box; }
+  body { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 18px 14px 48px; line-height: 1.5; max-width: 960px; margin-left: auto; margin-right: auto; }
+  .top-bar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 14px; }
+  .nav-links { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .nav-links a { text-decoration: none; color: var(--accent); font-weight: 600; font-size: 0.9rem; background: #e2e8f0; padding: 6px 12px; border-radius: 8px; }
+  .nav-links a.active { background: var(--accent); color: #fff; }
+  .lang-switch { display: inline-flex; flex-wrap: wrap; background: #e2e8f0; border-radius: 999px; padding: 3px; gap: 2px; }
+  .lang-btn { background: transparent; color: #334155; border: none; padding: 6px 12px; border-radius: 999px; font-size: 0.85rem; font-weight: 700; cursor: pointer; }
+  .lang-btn.active { background: var(--accent); color: #fff; }
+  .panel { background: var(--card); border-radius: 12px; padding: 16px 18px; margin-bottom: 14px; box-shadow: 0 2px 8px rgba(0,0,0,.06); border: 1px solid #e2e8f0; }
+  h1 { color: var(--accent); font-size: 1.45rem; margin: 0 0 4px; }
+  .sub { color: var(--muted); font-size: 0.92rem; margin: 0; }
+  .sync-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 8px; }
+  input[type="text"], select { padding: 8px 11px; border: 1px solid var(--border); border-radius: 8px; font-size: 0.92rem; }
+  .btn { background: var(--accent); color: #fff; border: none; padding: 8px 14px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 0.9rem; }
+  .btn:hover { background: var(--accent2); }
+  .btn-outline { background: #f1f5f9; color: var(--text); border: 1px solid var(--border); }
+  .btn-outline.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .btn-ok { background: #059669; color: #fff; }
+  .btn-warn { background: #d97706; color: #fff; }
+  .pills { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0; }
+  .pill { background: #f1f5f9; border: 1px solid var(--border); border-radius: 999px; padding: 5px 12px; font-size: 0.84rem; font-weight: 600; cursor: pointer; color: #334155; }
+  .pill.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .stage-wrap { perspective: 1100px; max-width: 560px; margin: 14px auto; }
+  .flashcard { width: 100%; min-height: 350px; background: #fff; border-radius: 16px; border: 2px solid var(--accent2); box-shadow: 0 8px 24px rgba(31,78,121,0.12); padding: 22px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; text-align: center; cursor: pointer; transition: transform 0.18s ease, box-shadow 0.18s ease; position: relative; }
+  .flashcard:hover { box-shadow: 0 12px 28px rgba(31,78,121,0.18); }
+  .card-badges { width: 100%; display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; color: var(--muted); font-weight: 600; }
+  .badge { background: #e0f2fe; color: #0369a1; padding: 3px 9px; border-radius: 999px; }
+  .visual-box { width: 220px; height: 155px; border-radius: 12px; background: #f8fafc; border: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: center; overflow: hidden; margin: 10px 0; position: relative; }
+  .visual-box img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .visual-emoji { font-size: 4rem; line-height: 1; }
+  .hmong-word { font-size: 2.2rem; font-weight: 800; color: var(--accent); margin: 4px 0; letter-spacing: 0.3px; }
+  .meaning-main { font-size: 1.45rem; font-weight: 700; color: #0f172a; margin: 4px 0; }
+  .gloss-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; width: 100%; margin-top: 8px; text-align: left; font-size: 0.84rem; background: #f8fafc; padding: 8px 10px; border-radius: 8px; border: 1px solid #e2e8f0; }
+  .controls-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 12px; }
+  .add-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; margin-top: 10px; }
+  .preview-strip { display: flex; align-items: center; gap: 12px; margin-top: 10px; padding: 10px; background: #f8fafc; border-radius: 10px; border: 1px dashed var(--border); }
+  .preview-thumb { width: 72px; height: 72px; border-radius: 8px; background: #fff; border: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: center; overflow: hidden; font-size: 2.2rem; flex-shrink: 0; }
+  .preview-thumb img { width: 100%; height: 100%; object-fit: cover; }
+  .quiz-choices { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; width: 100%; margin-top: 12px; }
+  .quiz-btn { padding: 12px; border-radius: 10px; border: 2px solid var(--border); background: #fff; font-weight: 600; font-size: 0.96rem; cursor: pointer; text-align: left; }
+  .quiz-btn.correct { border-color: #10b981; background: #ecfdf5; color: #065f46; }
+  .quiz-btn.wrong { border-color: #ef4444; background: #fef2f2; color: #991b1b; }
+  .hidden { display: none !important; }
+
+  /* Shared Light / Dark Mode Theme Overrides */
+  html[data-theme="dark"] {
+    --bg: #0f172a;
+    --card: #1e293b;
+    --accent: #60a5fa;
+    --accent2: #3b82f6;
+    --accent-soft: #1e3a5f;
+    --text: #f1f5f9;
+    --muted: #94a3b8;
+    --border: #334155;
+    --male-bg: #1e3a8a;
+    --male-border: #3b82f6;
+    --male-text: #bfdbfe;
+    --fem-bg: #831843;
+    --fem-border: #ec4899;
+    --fem-text: #fbcfe8;
+    --ok-bg: #064e3b;
+    --ok-border: #10b981;
+    --warn-bg: #451a03;
+    --warn-border: #f59e0b;
+    --err-bg: #450a0a;
+    --err-border: #ef4444;
+    color-scheme: dark;
+  }
+  html[data-theme="dark"] body { background: var(--bg); color: var(--text); }
+  html[data-theme="dark"] .card,
+  html[data-theme="dark"] .panel,
+  html[data-theme="dark"] .sound-card,
+  html[data-theme="dark"] .flashcard {
+    background: var(--card) !important;
+    color: var(--text) !important;
+    border-color: var(--border) !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.35) !important;
+  }
+  html[data-theme="dark"] .lang-switch { background: #334155 !important; }
+  html[data-theme="dark"] .lang-btn { color: #cbd5e1 !important; }
+  html[data-theme="dark"] .lang-btn.active { background: #2563eb !important; color: #fff !important; }
+  html[data-theme="dark"] .tone,
+  html[data-theme="dark"] .sc-example,
+  html[data-theme="dark"] .gloss-grid,
+  html[data-theme="dark"] .preview-strip,
+  html[data-theme="dark"] .visual-box,
+  html[data-theme="dark"] .speed-box,
+  html[data-theme="dark"] .sentence-box,
+  html[data-theme="dark"] .slot-col,
+  html[data-theme="dark"] .pair span,
+  html[data-theme="dark"] .sc-glyph {
+    background: #0f172a !important;
+    color: var(--text) !important;
+    border-color: var(--border) !important;
+  }
+  html[data-theme="dark"] .sc-ipa,
+  html[data-theme="dark"] .pill,
+  html[data-theme="dark"] .tab-btn:not(.active),
+  html[data-theme="dark"] button.secondary,
+  html[data-theme="dark"] .btn-outline:not(.active),
+  html[data-theme="dark"] .nav-links a:not(.active),
+  html[data-theme="dark"] .quiz-btn:not(.correct):not(.wrong) {
+    background: #334155 !important;
+    color: #f1f5f9 !important;
+    border-color: #475569 !important;
+  }
+  html[data-theme="dark"] .formula-banner {
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%) !important;
+    border-color: #3b82f6 !important;
+    color: #e2e8f0 !important;
+  }
+  html[data-theme="dark"] .formula-banner div { color: #cbd5e1 !important; }
+  html[data-theme="dark"] .f-chip {
+    background: #0f172a !important;
+    color: #93c5fd !important;
+    border-color: #3b82f6 !important;
+  }
+  html[data-theme="dark"] .note,
+  html[data-theme="dark"] .studio-panel,
+  html[data-theme="dark"] .studio-card-controls {
+    background: #2e2310 !important;
+    color: #fde68a !important;
+    border-color: #b45309 !important;
+  }
+  html[data-theme="dark"] .studio-panel strong,
+  html[data-theme="dark"] .studio-panel div,
+  html[data-theme="dark"] .studio-card-controls span {
+    color: #fde68a !important;
+  }
+  html[data-theme="dark"] input,
+  html[data-theme="dark"] select,
+  html[data-theme="dark"] textarea {
+    background: #0f172a !important;
+    color: #f1f5f9 !important;
+    border-color: #475569 !important;
+  }
+  html[data-theme="dark"] table,
+  html[data-theme="dark"] th,
+  html[data-theme="dark"] td {
+    border-color: #334155 !important;
+    color: #e2e8f0 !important;
+  }
+  html[data-theme="dark"] th { background: #0f172a !important; }
+  html[data-theme="dark"] tr:nth-child(even) { background: rgba(255,255,255,0.03) !important; }
+  html[data-theme="dark"] .meaning-main,
+  html[data-theme="dark"] .sc-tip,
+  html[data-theme="dark"] .research,
+  html[data-theme="dark"] p {
+    color: #cbd5e1 !important;
+  }
+  html[data-theme="dark"] .play-btn.both-btn {
+    background: #064e3b !important;
+    color: #a7f3d0 !important;
+    border-color: #059669 !important;
+  }
+  .theme-toggle-btn {
+    background: #e2e8f0;
+    color: #1e293b;
+    border: 1px solid #cbd5e1;
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin: 0;
+  }
+  .theme-toggle-btn:hover { background: #cbd5e1; }
+  html[data-theme="dark"] .theme-toggle-btn {
+    background: #334155 !important;
+    color: #f8fafc !important;
+    border-color: #475569 !important;
+  }
+
+  /* ===== Sandbox redesign ===== */
+  .sb-tag { display:inline-block; font-size:0.7rem; font-weight:800; background:#fef3c7; color:#92400e; border-radius:6px; padding:2px 7px; vertical-align:middle; margin-left:6px; }
+  .head-row { display:flex; justify-content:space-between; align-items:flex-start; gap:10px; }
+  .code-badge { display:inline-flex; align-items:center; gap:8px; background:var(--ok-bg); border:1px solid var(--ok-border); color:#065f46; border-radius:999px; padding:4px 12px; font-size:0.85rem; font-weight:700; }
+  html[data-theme="dark"] .code-badge { color:#a7f3d0; }
+  .link-btn { background:none; border:none; color:var(--accent2); font-weight:600; cursor:pointer; padding:0; font-size:0.82rem; text-decoration:underline; }
+  .toolbar { display:flex; gap:8px; align-items:center; position:relative; }
+  .toolbar select { flex:0 0 auto; max-width:48%; }
+  .toolbar input[type="text"] { flex:1 1 auto; min-width:0; }
+  .icon-btn { background:#f1f5f9; border:1px solid var(--border); color:var(--text); border-radius:10px; width:42px; height:40px; font-size:1.15rem; cursor:pointer; flex-shrink:0; display:inline-flex; align-items:center; justify-content:center; }
+  html[data-theme="dark"] .icon-btn { background:#334155; border-color:#475569; color:#f1f5f9; }
+  .settings-pop { position:absolute; right:0; top:46px; z-index:20; width:min(300px, 92vw); background:var(--card); border:1px solid var(--border); border-radius:12px; box-shadow:0 12px 30px rgba(0,0,0,.18); padding:12px; display:flex; flex-direction:column; gap:10px; }
+  .settings-pop label { font-size:0.78rem; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.4px; }
+  .seg { display:flex; gap:4px; background:#e2e8f0; border-radius:10px; padding:3px; }
+  html[data-theme="dark"] .seg { background:#0f172a; }
+  .seg button { flex:1; border:none; background:transparent; padding:7px 6px; border-radius:8px; font-weight:700; font-size:0.84rem; cursor:pointer; color:var(--text); }
+  .seg button.active { background:var(--accent); color:#fff; }
+  .card-area { display:flex; align-items:center; gap:8px; margin:14px auto 6px; max-width:640px; }
+  .card-area .stage-wrap { flex:1; margin:0; max-width:none; }
+  .nav-arrow { width:40px; height:40px; border-radius:50%; border:1px solid var(--border); background:var(--card); color:var(--text); font-size:1.1rem; cursor:pointer; flex-shrink:0; }
+  .flashcard { min-height:min(62vh, 460px); touch-action:pan-y; user-select:none; }
+  .flashcard .visual-box { width:min(100%, 320px); height:200px; }
+  .flashcard .hmong-word { font-size:2.6rem; }
+  .flip-hint { font-size:0.82rem; color:var(--muted); }
+  .mobile-nav { display:none; justify-content:center; gap:16px; margin-top:8px; }
+  .mark-row { display:grid; grid-template-columns:1fr 1fr; gap:10px; max-width:560px; margin:12px auto 0; }
+  .mark-row .btn { padding:15px 10px; font-size:1.02rem; border-radius:12px; }
+  .add-toggle { width:100%; padding:12px; font-size:1rem; border-radius:12px; }
+  details.more { margin-top:10px; }
+  details.more summary { cursor:pointer; font-weight:700; color:var(--accent); font-size:0.9rem; }
+  details.more .more-body { display:flex; flex-direction:column; gap:8px; margin-top:8px; }
+  @media (max-width: 600px) {
+    body { padding:12px 10px 40px; }
+    .card-area > .nav-arrow { display:none; }
+    .mobile-nav { display:flex; }
+    .flashcard .hmong-word { font-size:2.1rem; }
+    .flashcard .visual-box { height:170px; }
+    .nav-links a { font-size:0.8rem; padding:5px 9px; }
+  }
+</style>
+
+<script>
+(function(){
+  function applyTheme(t) {
+    document.documentElement.setAttribute('data-theme', t);
+    var btn = document.getElementById('themeToggleBtn');
+    if (btn) {
+      btn.innerHTML = t === 'dark' ? '☀️ Light' : '🌙 Dark';
+      btn.title = t === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode';
+    }
+  }
+  window.toggleHmongTheme = function() {
+    var cur = document.documentElement.getAttribute('data-theme') || 'light';
+    var next = cur === 'dark' ? 'light' : 'dark';
+    try { localStorage.setItem('hmong_theme', next); } catch(e) {}
+    applyTheme(next);
+  };
+  var saved = 'light';
+  try {
+    saved = localStorage.getItem('hmong_theme') ||
+      (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  } catch(e) {}
+  applyTheme(saved);
+  document.addEventListener('DOMContentLoaded', function() { applyTheme(saved); });
+})();
+</script>
+
+</head>
+<body>
+  <div class="top-bar">
+    <div class="nav-links">
+      <a id="navHub" href="./index.html">← Practice Hub</a>
+      <a id="navSound" href="./Hmong_Sound_Trainer.html">1. Sound Trainer</a>
+      <a id="navUlg" href="./Universal_Language_Generator_Tool.html">2. Sentence &amp; Grammar</a>
+      <a id="navFc" class="active" href="./Hmong_Flashcards_Sandbox.html">3. 🃏 Flashcards</a>
+    </div>
+    <div style="display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap;"><button type="button" class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleHmongTheme()">🌙 Dark</button><div class="lang-switch">
+      <button class="lang-btn active" id="btnEn" onclick="setUILang('en')">EN</button>
+      <button class="lang-btn" id="btnVi" onclick="setUILang('vi')">VI</button>
+      <button class="lang-btn" id="btnKo" onclick="setUILang('ko')">한</button>
+      <button class="lang-btn" id="btnJa" onclick="setUILang('ja')">日</button>
+    </div></div>
+  </div>
+
+  <div class="panel">
+    <div class="head-row">
+      <div>
+        <h1><span id="pageTitle">🃏 Hmong Flashcards</span><span class="sb-tag">SANDBOX</span></h1>
+        <p class="sub" id="pageSub"></p>
+      </div>
+    </div>
+    <div class="sync-row" id="codeFormRow">
+      <input type="text" id="studentCodeInput" placeholder="HMOOB-01" style="width:130px; text-transform:uppercase;">
+      <button class="btn" id="connectCodeBtn">Connect</button>
+      <span id="syncStatus" style="font-size:0.82rem; color:var(--muted);"></span>
+    </div>
+    <div class="sync-row hidden" id="codeBadgeRow">
+      <span class="code-badge" id="codeBadge">✓ HMOOB-01 synced</span>
+      <button class="link-btn" id="changeCodeBtn" onclick="showCodeForm()">change</button>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="toolbar">
+      <select id="deckSelect" onchange="setDeckFilter(this.value)" aria-label="Deck">
+        <option value="all">All (100)</option>
+        <option value="core">Core (49)</option>
+        <option value="theo">📖 Theocratic (51)</option>
+        <option value="custom">⭐ My Words (0)</option>
+        <option value="learning">🔄 Still Learning (0)</option>
+        <option value="mastered">✅ Mastered (0)</option>
+      </select>
+      <input type="text" id="searchInput" placeholder="🔍 Search" oninput="applyFilters()">
+      <button class="icon-btn" id="settingsBtn" onclick="toggleSettings(event)" aria-label="Settings">⚙️</button>
+      <div class="settings-pop hidden" id="settingsPop" onclick="event.stopPropagation()">
+        <label id="lblMode">Mode</label>
+        <div class="seg">
+          <button class="active" id="modeStudyBtn" onclick="setStudyMode('study')">🃏 Flip</button>
+          <button id="modeQuizBtn" onclick="setStudyMode('quiz')">⚡ Quiz</button>
+        </div>
+        <label id="lblPrompt">Prompt</label>
+        <div class="seg">
+          <button class="active" id="promptHmBtn" onclick="setReverse(false)">Hmong → ?</button>
+          <button id="promptMeBtn" onclick="setReverse(true)">? → Hmong</button>
+        </div>
+        <button class="btn btn-outline" id="btnShuffle" onclick="shuffleDeck(); closeSettings();">🔀 Shuffle</button>
+      </div>
+    </div>
+
+    <div id="studyView">
+      <div class="card-area">
+        <button class="nav-arrow" onclick="prevCard()" aria-label="Previous">‹</button>
+        <div class="stage-wrap">
+          <div class="flashcard" id="flashcardBox" tabindex="0">
+            <div class="card-badges">
+              <span id="cardCounter">1 / 100</span>
+              <span class="badge" id="cardCategoryBadge">Core</span>
+              <span id="cardMasteryBadge"></span>
+            </div>
+            <div class="visual-box" id="cardVisualBox"></div>
+            <div id="cardFrontArea">
+              <div class="hmong-word" id="cardFrontText">Kuv</div>
+              <div class="flip-hint" id="cardFrontSub"></div>
+            </div>
+            <div id="cardBackArea" class="hidden" style="width:100%;">
+              <div class="hmong-word" id="cardBackHmong" style="font-size:1.6rem;">Kuv</div>
+              <div class="meaning-main" id="cardBackMeaning">I / me</div>
+              <div class="gloss-grid" id="cardGlossGrid"></div>
+            </div>
+          </div>
+        </div>
+        <button class="nav-arrow" onclick="nextCard()" aria-label="Next">›</button>
+      </div>
+      <div class="mobile-nav">
+        <button class="nav-arrow" onclick="prevCard()" aria-label="Previous">‹</button>
+        <button class="nav-arrow" onclick="nextCard()" aria-label="Next">›</button>
+      </div>
+      <div class="mark-row hidden" id="markRow">
+        <button class="btn btn-warn" onclick="markCard('learning')" id="btnMarkLearn">🔄 Still Learning</button>
+        <button class="btn btn-ok" onclick="markCard('mastered')" id="btnMarkKnown">✅ I Know This</button>
+      </div>
+    </div>
+
+    <div id="quizView" class="hidden">
+      <div class="stage-wrap" style="max-width:640px;">
+        <div class="flashcard" style="cursor:default; min-height:280px;">
+          <div class="card-badges">
+            <span id="quizScoreText">Score: 0 / 0</span>
+            <span class="badge" id="quizCatBadge">Quiz</span>
+          </div>
+          <div class="visual-box" id="quizVisualBox"></div>
+          <div class="hmong-word" id="quizPromptText">Noog</div>
+          <div class="quiz-choices" id="quizChoicesBox"></div>
+          <div id="quizFeedback" style="margin-top:10px; font-weight:700; min-height:24px;"></div>
+          <button class="btn" id="quizNextBtn" onclick="nextQuizQuestion()" style="margin-top:6px;">Next →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <button class="btn btn-outline add-toggle" id="addToggleBtn" onclick="toggleAddForm()">➕ Add a word</button>
+    <div id="addForm" class="hidden" style="margin-top:12px;">
+      <div class="add-grid">
+        <input type="text" id="newHmong" placeholder="Hmong (e.g. Noog)" oninput="scheduleImagePreview()">
+        <input type="text" id="newEn" placeholder="English (e.g. bird)" oninput="scheduleImagePreview()">
+        <input type="text" id="newVi" class="hidden" placeholder="Tiếng Việt (tùy chọn)">
+        <input type="text" id="newKo" class="hidden" placeholder="한국어 (선택)">
+        <input type="text" id="newJa" class="hidden" placeholder="日本語（任意）">
+      </div>
+      <div class="preview-strip">
+        <div class="preview-thumb" id="newWordPreviewThumb">🐦</div>
+        <div style="flex:1; min-width:0;">
+          <div style="font-size:0.82rem; color:var(--muted);" id="newWordPreviewStatus"></div>
+        </div>
+        <button class="btn" onclick="addNewCustomCard()" id="addCardBtn">+ Add</button>
+      </div>
+      <details class="more">
+        <summary id="moreOptsLbl">More options</summary>
+        <div class="more-body">
+          <select id="newImgSource" onchange="scheduleImagePreview()">
+            <option value="auto">🖼️ Auto (Photo + WOL)</option>
+            <option value="wol">📖 JW.org / WOL first</option>
+            <option value="wiki">🌍 Wikipedia first</option>
+            <option value="custom">🔗 Custom URL</option>
+          </select>
+          <div id="customUrlRow" class="hidden">
+            <input type="text" id="newCustomImgUrl" placeholder="https://example.com/image.jpg" style="width:100%;" oninput="updatePreviewFromCustomUrl()">
+          </div>
+          <button class="btn btn-outline" id="refreshImgBtn" onclick="triggerImageLookup(true)">🔄 Refresh image</button>
+        </div>
+      </details>
+    </div>
+  </div>
+
+<script>
+const CORE_LEXICON = [
+      { w: "kuv", role: "subj", en: "I / me", tone: "v (mid-rising)" },
+      { w: "koj", role: "subj", en: "you (sg.)", tone: "j (high-falling)" },
+      { w: "nws", role: "subj", en: "he / she / it", tone: "s (low)" },
+      { w: "peb", role: "subj", en: "we / us", tone: "b (high)" },
+      { w: "nej", role: "subj", en: "you (plural)", tone: "j (high-falling)" },
+      { w: "lawv", role: "subj", en: "they / them", tone: "v (mid-rising)" },
+      { w: "yuav", role: "tense", en: "will (future)", tone: "v (mid-rising)" },
+      { w: "tau", role: "tense", en: "did / achieved (past)", tone: "unmarked (mid)" },
+      { w: "tab tom", role: "tense", en: "is currently (-ing)", tone: "b + m" },
+      { w: "puas", role: "qpart", en: "yes/no question marker", tone: "s (low)" },
+      { w: "tsis", role: "neg", en: "not", tone: "s (low)" },
+      { w: "xav", role: "modal", en: "want to", tone: "v (mid-rising)" },
+      { w: "nyiam", role: "modal", en: "like to", tone: "m (low creaky)" },
+      { w: "nyob", role: "verb", en: "live / stay / be at", tone: "b (high)" },
+      { w: "mus", role: "verb", en: "go", tone: "s (low)" },
+      { w: "kawm", role: "verb", en: "learn / study", tone: "m (low creaky)" },
+      { w: "hais", role: "verb", en: "speak / say", tone: "s (low)" },
+      { w: "paub", role: "verb", en: "know", tone: "b (high)" },
+      { w: "pom", role: "verb", en: "see", tone: "m (low creaky)" },
+      { w: "pab", role: "verb", en: "help", tone: "b (high)" },
+      { w: "nyeem", role: "verb", en: "read", tone: "m (low creaky)" },
+      { w: "noj", role: "verb", en: "eat", tone: "j (high-falling)" },
+      { w: "haus", role: "verb", en: "drink", tone: "s (low)" },
+      { w: "ua", role: "verb", en: "do / make", tone: "unmarked (mid)" },
+      { w: "hu", role: "verb", en: "call / be named", tone: "unmarked (mid)" },
+      { w: "thov", role: "polite", en: "please / request", tone: "v (mid-rising)" },
+      { w: "zoo", role: "adj", en: "good / well", tone: "unmarked (mid)" },
+      { w: "lus hmoob", role: "obj", en: "Hmong language", tone: "s + b" },
+      { w: "lus", role: "obj", en: "language / word", tone: "s (low)" },
+      { w: "hmoob", role: "obj", en: "Hmong", tone: "b (high)" },
+      { w: "ntawv", role: "obj", en: "book / paper / letter", tone: "v (mid-rising)" },
+      { w: "phau ntawv", role: "obj", en: "the book", tone: "mid + v" },
+      { w: "tsev", role: "place", en: "house / home", tone: "v (mid-rising)" },
+      { w: "mov", role: "obj", en: "rice / food", tone: "v (mid-rising)" },
+      { w: "dej", role: "obj", en: "water", tone: "j (high-falling)" },
+      { w: "dev", role: "obj", en: "dog", tone: "v (mid-rising)" },
+      { w: "phooj ywg", role: "obj", en: "friend", tone: "j + g" },
+      { w: "vajtswv", role: "subj", en: "God", tone: "v (mid-rising)" },
+      { w: "yehauvas", role: "obj", en: "Jehovah", tone: "s (low)" },
+      { w: "ib", role: "num", en: "one (1)", tone: "b (high)" },
+      { w: "ob", role: "num", en: "two (2)", tone: "b (high)" },
+      { w: "peb", role: "num", en: "three (3)", tone: "b (high)" },
+      { w: "tus", role: "clf", en: "classifier (animate / long things)", tone: "s (low)" },
+      { w: "tug", role: "clf", en: "classifier (sandhi form of tus after ib/ob/peb)", tone: "g (breathy)" },
+      { w: "lub", role: "clf", en: "classifier (round / bulky / house)", tone: "b (high)" },
+      { w: "phau", role: "clf", en: "classifier (books)", tone: "unmarked (mid)" },
+      { w: "dab tsi", role: "wh", en: "what?", tone: "b + unmarked" },
+      { w: "qhov twg", role: "wh", en: "where?", tone: "v + g" },
+      { w: "leej twg", role: "wh", en: "who?", tone: "j + g" }
+    ];
+const VI_LEX = {
+  "kuv": { vi: "tôi / mình", toneVi: "v (trung thăng)" },
+  "koj": { vi: "bạn", toneVi: "j (cao giáng)" },
+  "nws": { vi: "anh ấy / cô ấy / nó", toneVi: "s (thấp)" },
+  "peb": { vi: "chúng tôi / chúng ta", toneVi: "b (cao)" },
+  "nej": { vi: "các bạn", toneVi: "j (cao giáng)" },
+  "lawv": { vi: "họ", toneVi: "v (trung thăng)" },
+  "yuav": { vi: "sẽ (tương lai)", toneVi: "v (trung thăng)" },
+  "tau": { vi: "đã / được (quá khứ)", toneVi: "không chữ cuối (trung)" },
+  "tab tom": { vi: "đang", toneVi: "b + m" },
+  "puas": { vi: "có… không? (từ để hỏi)", toneVi: "s (thấp)" },
+  "tsis": { vi: "không (phủ định)", toneVi: "s (thấp)" },
+  "xav": { vi: "muốn", toneVi: "v (trung thăng)" },
+  "nyiam": { vi: "thích", toneVi: "m (thấp nghẹn)" },
+  "nyob": { vi: "sống / ở / khỏe", toneVi: "b (cao)" },
+  "mus": { vi: "đi", toneVi: "s (thấp)" },
+  "kawm": { vi: "học", toneVi: "m (thấp nghẹn)" },
+  "hais": { vi: "nói", toneVi: "s (thấp)" },
+  "paub": { vi: "biết", toneVi: "b (cao)" },
+  "pom": { vi: "nhìn thấy", toneVi: "m (thấp nghẹn)" },
+  "pab": { vi: "giúp đỡ", toneVi: "b (cao)" },
+  "nyeem": { vi: "đọc", toneVi: "m (thấp nghẹn)" },
+  "noj": { vi: "ăn", toneVi: "j (cao giáng)" },
+  "haus": { vi: "uống", toneVi: "s (thấp)" },
+  "ua": { vi: "làm", toneVi: "không chữ cuối (trung)" },
+  "hu": { vi: "gọi / tên là", toneVi: "không chữ cuối (trung)" },
+  "thov": { vi: "xin / vui lòng", toneVi: "v (trung thăng)" },
+  "zoo": { vi: "tốt / khỏe", toneVi: "không chữ cuối (trung)" },
+  "lus hmoob": { vi: "tiếng H'Mông", toneVi: "s + b" },
+  "lus": { vi: "tiếng / lời nói", toneVi: "s (thấp)" },
+  "hmoob": { vi: "H'Mông", toneVi: "b (cao)" },
+  "ntawv": { vi: "sách / chữ / giấy", toneVi: "v (trung thăng)" },
+  "phau ntawv": { vi: "quyển sách", toneVi: "trung + v" },
+  "tsev": { vi: "nhà", toneVi: "v (trung thăng)" },
+  "mov": { vi: "cơm", toneVi: "v (trung thăng)" },
+  "dej": { vi: "nước", toneVi: "j (cao giáng)" },
+  "dev": { vi: "con chó", toneVi: "v (trung thăng)" },
+  "phooj ywg": { vi: "bạn bè", toneVi: "j + g" },
+  "vajtswv": { vi: "Đức Chúa Trời", toneVi: "v (trung thăng)" },
+  "yehauvas": { vi: "Giê-hô-va", toneVi: "s (thấp)" },
+  "ib": { vi: "một (1)", toneVi: "b (cao)" },
+  "ob": { vi: "hai (2)", toneVi: "b (cao)" },
+  "tus": { vi: "loại từ (người / con vật)", toneVi: "s (thấp)" },
+  "tug": { vi: "loại từ (biến âm của tus sau ib/ob/peb)", toneVi: "g (hơi thở)" },
+  "lub": { vi: "loại từ (vật tròn / ngôi nhà)", toneVi: "b (cao)" },
+  "phau": { vi: "loại từ (quyển sách)", toneVi: "không chữ cuối (trung)" },
+  "dab tsi": { vi: "cái gì?", toneVi: "b + trung" },
+  "qhov twg": { vi: "ở đâu?", toneVi: "v + g" },
+  "leej twg": { vi: "ai?", toneVi: "j + g" },
+  "muaj": { vi: "có", toneVi: "j (cao giáng)" }
+};
+const KO_LEX = {
+  "kuv": { ko: "나 / 저", toneKo: "v (중상승조)" },
+  "koj": { ko: "당신 / 너", toneKo: "j (고하강조)" },
+  "nws": { ko: "그 / 그녀", toneKo: "s (저평조)" },
+  "peb": { ko: "우리", toneKo: "b (고평조)" },
+  "nej": { ko: "여러분 / 너희", toneKo: "j (고하강조)" },
+  "lawv": { ko: "그들", toneKo: "v (중상승조)" },
+  "yuav": { ko: "~할 것이다 (미래)", toneKo: "v (중상승조)" },
+  "tau": { ko: "~했다 (과거/완료)", toneKo: "무표기 (중평조)" },
+  "tab tom": { ko: "지금 ~하는 중이다", toneKo: "b + m" },
+  "puas": { ko: "~입니까? (의문사)", toneKo: "s (저평조)" },
+  "tsis": { ko: "안 / ~하지 않다 (부정)", toneKo: "s (저평조)" },
+  "xav": { ko: "~하고 싶다 (원하다)", toneKo: "v (중상승조)" },
+  "nyiam": { ko: "좋아하다", toneKo: "m (저하강 성문폐쇄조)" },
+  "nyob": { ko: "살다 / 지내다 / 있다", toneKo: "b (고평조)" },
+  "mus": { ko: "가다", toneKo: "s (저평조)" },
+  "kawm": { ko: "배우다 / 공부하다", toneKo: "m (저하강 성문폐쇄조)" },
+  "hais": { ko: "말하다", toneKo: "s (저평조)" },
+  "paub": { ko: "알다", toneKo: "b (고평조)" },
+  "pom": { ko: "보다", toneKo: "m (저하강 성문폐쇄조)" },
+  "pab": { ko: "돕다", toneKo: "b (고평조)" },
+  "nyeem": { ko: "읽다", toneKo: "m (저하강 성문폐쇄조)" },
+  "noj": { ko: "먹다", toneKo: "j (고하강조)" },
+  "haus": { ko: "마시다", toneKo: "s (저평조)" },
+  "ua": { ko: "하다 / 만들다", toneKo: "무표기 (중평조)" },
+  "hu": { ko: "부르다 / 이름하다", toneKo: "무표기 (중평조)" },
+  "thov": { ko: "부탁합니다 / 제발", toneKo: "v (중상승조)" },
+  "zoo": { ko: "좋다 / 잘", toneKo: "무표기 (중평조)" },
+  "lus hmoob": { ko: "몽족어", toneKo: "s + b" },
+  "lus": { ko: "언어 / 말", toneKo: "s (저평조)" },
+  "hmoob": { ko: "몽족(Hmong)", toneKo: "b (고평조)" },
+  "ntawv": { ko: "책 / 글자 / 종이", toneKo: "v (중상승조)" },
+  "phau ntawv": { ko: "책 (한 권)", toneKo: "중평조 + v" },
+  "tsev": { ko: "집", toneKo: "v (중상승조)" },
+  "mov": { ko: "밥 / 음식", toneKo: "v (중상승조)" },
+  "dej": { ko: "물", toneKo: "j (고하강조)" },
+  "dev": { ko: "개 (강아지)", toneKo: "v (중상승조)" },
+  "phooj ywg": { ko: "친구", toneKo: "j + g" },
+  "vajtswv": { ko: "하느님", toneKo: "v (중상승조)" },
+  "yehauvas": { ko: "여호와", toneKo: "s (저평조)" },
+  "ib": { ko: "하나 (1)", toneKo: "b (고평조)" },
+  "ob": { ko: "둘 (2)", toneKo: "b (고평조)" },
+  "tus": { ko: "분류사 (사람/동물/긴 것)", toneKo: "s (저평조)" },
+  "tug": { ko: "분류사 (ib/ob/peb 뒤 tus의 연음형)", toneKo: "g (기식조)" },
+  "lub": { ko: "분류사 (둥근 것/사물/집)", toneKo: "b (고평조)" },
+  "phau": { ko: "분류사 (책 ‘권’)", toneKo: "무표기 (중평조)" },
+  "dab tsi": { ko: "무엇?", toneKo: "b + 무표기" },
+  "qhov twg": { ko: "어디?", toneKo: "v + g" },
+  "leej twg": { ko: "누구?", toneKo: "j + g" },
+  "muaj": { ko: "가지고 있다 / 있다", toneKo: "j (고하강조)" }
+};
+const JA_LEX = {
+  "kuv": { ja: "私（わたし）", toneJa: "v（中昇調）" },
+  "koj": { ja: "あなた", toneJa: "j（高降調）" },
+  "nws": { ja: "彼 / 彼女", toneJa: "s（低平調）" },
+  "peb": { ja: "私たち", toneJa: "b（高平調）" },
+  "nej": { ja: "あなたたち（複数）", toneJa: "j（高降調）" },
+  "lawv": { ja: "彼ら", toneJa: "v（中昇調）" },
+  "yuav": { ja: "〜でしょう / 〜するつもり（未来）", toneJa: "v（中昇調）" },
+  "tau": { ja: "〜した / できた（過去・完了）", toneJa: "無表記（中平調）" },
+  "tab tom": { ja: "今〜している（進行）", toneJa: "b + m" },
+  "puas": { ja: "〜ですか？（疑問助詞）", toneJa: "s（低平調）" },
+  "tsis": { ja: "〜ない（否定）", toneJa: "s（低平調）" },
+  "xav": { ja: "〜したい / 思う", toneJa: "v（中昇調）" },
+  "nyiam": { ja: "好きである", toneJa: "m（低降声門閉鎖調）" },
+  "nyob": { ja: "住む / いる / 元気である", toneJa: "b（高平調）" },
+  "mus": { ja: "行く", toneJa: "s（低平調）" },
+  "kawm": { ja: "学ぶ / 勉強する", toneJa: "m（低降声門閉鎖調）" },
+  "hais": { ja: "話す / 言う", toneJa: "s（低平調）" },
+  "paub": { ja: "知る / 分かる", toneJa: "b（高平調）" },
+  "pom": { ja: "見る / 見かける", toneJa: "m（低降声門閉鎖調）" },
+  "pab": { ja: "助ける / 手伝う", toneJa: "b（高平調）" },
+  "nyeem": { ja: "読む", toneJa: "m（低降声門閉鎖調）" },
+  "noj": { ja: "食べる", toneJa: "j（高降調）" },
+  "haus": { ja: "飲む", toneJa: "s（低平調）" },
+  "ua": { ja: "する / 行う", toneJa: "無表記（中平調）" },
+  "hu": { ja: "呼ぶ / 歌う", toneJa: "無表記（中平調）" },
+  "thov": { ja: "どうか〜してください / 祈る", toneJa: "v（中昇調）" },
+  "zoo": { ja: "良い / 元気な", toneJa: "無表記（中平調）" },
+  "lus hmoob": { ja: "モン語（白モン語）", toneJa: "s + b" },
+  "lus": { ja: "言葉 / 言語", toneJa: "s（低平調）" },
+  "hmoob": { ja: "モン族（Hmong）", toneJa: "b（高平調）" },
+  "ntawv": { ja: "本 / 文字 / 紙", toneJa: "v（中昇調）" },
+  "phau ntawv": { ja: "本（一冊）", toneJa: "中平調 + v" },
+  "tsev": { ja: "家", toneJa: "v（中昇調）" },
+  "mov": { ja: "ご飯 / 食事", toneJa: "v（中昇調）" },
+  "dej": { ja: "水", toneJa: "j（高降調）" },
+  "dev": { ja: "犬", toneJa: "v（中昇調）" },
+  "phooj ywg": { ja: "友達", toneJa: "j + g" },
+  "vajtswv": { ja: "神（神様）", toneJa: "v（中昇調）" },
+  "yehauvas": { ja: "エホバ", toneJa: "s（低平調）" },
+  "ib": { ja: "1（一）", toneJa: "b（高平調）" },
+  "ob": { ja: "2（二）", toneJa: "b（高平調）" },
+  "tus": { ja: "類別詞（人・動物・細長い物）", toneJa: "s（低平調）" },
+  "tug": { ja: "類別詞（ib/ob/peb の後の tus の連濁形）", toneJa: "g（息漏れ調）" },
+  "lub": { ja: "類別詞（丸い物・建物・一般的な物）", toneJa: "b（高平調）" },
+  "phau": { ja: "類別詞（本「冊」）", toneJa: "無表記（中平調）" },
+  "dab tsi": { ja: "何（なに）？", toneJa: "b + 無表記" },
+  "qhov twg": { ja: "どこ？", toneJa: "v + g" },
+  "leej twg": { ja: "誰（だれ）？", toneJa: "j + g" },
+  "muaj": { ja: "持っている / ある", toneJa: "j（高降調）" }
+};
+const THEOCRATIC_TERMS_51 = [
+  { hm: "Yehauvas", en: "Jehovah", vi: "Giê-hô-va", ko: "여호와", ja: "エホバ", pos: "subj", note: "God’s name" },
+  { hm: "Vajtswv", en: "God", vi: "Đức Chúa Trời / Đức Giê-hô-va", ko: "하느님", ja: "神", pos: "subj", note: "General term" },
+  { hm: "Phau Vajlugkub", en: "Bible", vi: "Kinh Thánh", ko: "성경", ja: "聖書", pos: "obj", note: "Also: Vajlugkub" },
+  { hm: "Txoj xov zoo", en: "Good news", vi: "Tin mừng", ko: "좋은 소식", ja: "良い知らせ", pos: "obj", note: "Preaching (Xov zoo)" },
+  { hm: "Lub Nceeg Vaj", en: "Kingdom", vi: "Nước Trời / Nước Đức Chúa Trời", ko: "왕국 (하느님의 왕국)", ja: "王国（神の王国）", pos: "obj", note: "Also: Nceeg Vaj" },
+  { hm: "Khixatias", en: "Christians", vi: "Người theo đạo Đấng Christ / Cơ Đốc nhân", ko: "그리스도인", ja: "クリスチャン", pos: "subj", note: "" },
+  { hm: "Txwj laus", en: "Elders", vi: "Trưởng lão", ko: "장로", ja: "長老", pos: "subj", note: "Congregation leadership" },
+  { hm: "Tub leg num", en: "Ministerial servant", vi: "Phụ tá hội thánh", ko: "봉사의 종", ja: "奉仕の僕", pos: "subj", note: "" },
+  { hm: "Koom txoos", en: "Congregation", vi: "Hội thánh", ko: "회중", ja: "会衆", pos: "obj", note: "" },
+  { hm: "Teev tiam", en: "Worship / Serve", vi: "Thờ phượng / Phụng sự", ko: "숭배하다 / 섬기다", ja: "崇拝する / 奉仕する", pos: "verb", note: "" },
+  { hm: "Kev ntseeg", en: "Faith", vi: "Đức tin", ko: "믿음", ja: "信仰", pos: "obj", note: "" },
+  { hm: "Cov kwv tij nkauj muam", en: "Brothers and sisters", vi: "Anh chị em", ko: "형제 자매들", ja: "兄弟姉妹", pos: "subj", note: "" },
+  { hm: "Tus Tswv Pluas Hmo", en: "Memorial", vi: "Lễ Tưởng Niệm", ko: "기념식 (주의 만찬)", ja: "記念式（主の晩餐）", pos: "obj", note: "Lord’s Evening Meal" },
+  { hm: "Npe-ee", en: "Branch office", vi: "Chi nhánh", ko: "지부 사무실 (베델)", ja: "支部事務所（ベテル）", pos: "place", note: "Organization structure" },
+  { hm: "Pab Uas Ntaus Thawj", en: "Governing Body", vi: "Hội đồng Lãnh đạo Trung ương", ko: "통치체", ja: "統治体", pos: "subj", note: "" },
+  { hm: "Tho kev", en: "Pioneer", vi: "Người tiên phong", ko: "파이오니아", ja: "開拓者（パイオニア）", pos: "subj", note: "" },
+  { hm: "Tshaj tawm", en: "Preach / Preach the good news", vi: "Rao giảng / Rao truyền tin mừng", ko: "전파하다 / 봉사하다", ja: "伝道する / 宣べ伝える", pos: "verb", note: "" },
+  { hm: "Sib txoos", en: "Meet / Congregation meeting", vi: "Nhóm họp / Buổi họp", ko: "집회 / 모이다", ja: "集会 / 集まり合う", pos: "verb", note: "" },
+  { hm: "Lub koom haum", en: "Organization", vi: "Tổ chức", ko: "조직", ja: "組織", pos: "obj", note: "" },
+  { hm: "Yehauvas Cov Tim Khawv", en: "Jehovah’s Witnesses", vi: "Nhân Chứng Giê-hô-va", ko: "여호와의 증인", ja: "エホバの証人", pos: "subj", note: "" },
+  { hm: "Yexus", en: "Jesus", vi: "Giê-su / Chúa Giê-su", ko: "예수", ja: "イエス", pos: "subj", note: "" },
+  { hm: "Xatas", en: "Satan", vi: "Sa-tan", ko: "사탄", ja: "サタン", pos: "subj", note: "" },
+  { hm: "Tub txib", en: "Apostles", vi: "Các sứ đồ", ko: "사도들", ja: "使徒たち", pos: "subj", note: "" },
+  { hm: "Kawm Vajlugkub", en: "Study the Bible", vi: "Học hỏi Kinh Thánh", ko: "성경을 연구하다", ja: "聖書を学ぶ", pos: "verb", note: "" },
+  { hm: "Teev tiam Yehauvas", en: "Worship Jehovah", vi: "Thờ phượng Đức Giê-hô-va", ko: "여호와를 숭배하다", ja: "エホバを崇拝する", pos: "verb", note: "" },
+  { hm: "Lub Tsev Nceeg Vaj", en: "Kingdom Hall", vi: "Phòng Nước Trời", ko: "왕국회관", ja: "王国会館", pos: "place", note: "Also: Tsev Nceeg Vaj" },
+  { hm: "Kev Pab Cuam", en: "Ministry / Sacred service", vi: "Thánh chức / Sự phụng sự", ko: "봉사의 직무 / 신성한 봉사", ja: "宣教 / 神聖な奉仕", pos: "obj", note: "" },
+  { hm: " Ntsuj Plig Dawb Huv", en: "Holy spirit", vi: "Thần khí thánh", ko: "성령", ja: "聖霊", pos: "obj", note: "" },
+  { hm: "Kev Sawv Rov Los", en: "Resurrection", vi: "Sự sống lại", ko: "부활", ja: "復活", pos: "obj", note: "" },
+  { hm: "Lub Ntiaj Teb Tshiab", en: "New world", vi: "Thế giới mới", ko: "신세계", ja: "新しい世", pos: "place", note: "" },
+  { hm: "Rooj Sib Txoos", en: "Convention / Assembly", vi: "Đại hội", ko: "대회", ja: "大会", pos: "obj", note: "" },
+  { hm: "Hu Nkauj", en: "Sing songs / Kingdom songs", vi: "Hát thánh ca", ko: "노래 부르다 (왕국 노래)", ja: "賛美の歌を歌う", pos: "verb", note: "" },
+  { hm: "Qhia Vajlugkub", en: "Teach the Bible / Conduct Bible study", vi: "Dạy Kinh Thánh / Học Kinh Thánh", ko: "성경을 가르치다 / 성서 연구 사회", ja: "聖書を教える / 聖書レッスン", pos: "verb", note: "" },
+  { hm: "Cov Xaiv Tseg", en: "Anointed ones", vi: "Những người được xức dầu", ko: "기름부음받은 자들", ja: "油そそがれた者たち", pos: "subj", note: "" },
+  { hm: "Amankedoos", en: "Armageddon", vi: "Ha-ma-ghê-đôn", ko: "아마겟돈", ja: "ハルマゲドン", pos: "obj", note: "" },
+  { hm: "Lub Vaj Kaj Siab", en: "Paradise", vi: "Địa đàng / Vườn Ê-đen", ko: "낙원 (파라다이스)", ja: "楽園（パラダイス）", pos: "place", note: "" },
+  { hm: "Kev Sib Haum Xeeb", en: "Peace / Unity", vi: "Sự hòa hợp", ko: "평화 / 연합", ja: "平和 / 一致", pos: "obj", note: "" },
+  { hm: "Zam Txim", en: "Forgive", vi: "Tha thứ", ko: "용서하다", ja: "許す（赦す）", pos: "verb", note: "" },
+  { hm: "Nqe Txhiv", en: "Ransom", vi: "Giá chuộc", ko: "대속물", ja: "贖い（あがない）", pos: "obj", note: "" },
+  { hm: "Thwj Tim", en: "Disciple", vi: "Môn đồ", ko: "제자", ja: "弟子", pos: "subj", note: "" },
+  { hm: "Cov Tshaj Tawm", en: "Publishers", vi: "Người công bố", ko: "전도인", ja: "伝道者", pos: "subj", note: "" },
+  { hm: "Mus Tsev Rau Tsev", en: "House to house", vi: "Từ nhà này sang nhà khác", ko: "집집으로 (호별 봉사)", ja: "家から家へ", pos: "verb", note: "" },
+  { hm: "Rov Mus Xyuas", en: "Return visit", vi: "Thăm lại", ko: "재방문", ja: "再訪問", pos: "verb", note: "" },
+  { hm: "Phau Tsom Faj", en: "Watchtower", vi: "Tháp Canh", ko: "파수대", ja: "ものみの塔", pos: "obj", note: "" },
+  { hm: "Niaj Hnub Tshawb Nrhiav", en: "Daily Bible Reading", vi: "Đọc Kinh Thánh hằng ngày", ko: "성경을 매일 검토함", ja: "聖書を毎日調べる", pos: "obj", note: "" },
+  { hm: "Lub Koom Txoos", en: "Congregation", vi: "Hội thánh", ko: "회중", ja: "会衆", pos: "obj", note: "" },
+  { hm: "Kev Txiav Txim", en: "Judgment", vi: "Sự phán xét", ko: "심판", ja: "裁き", pos: "obj", note: "" },
+  { hm: "Lub Neej Nyob Mus Ib Txhis", en: "Everlasting life", vi: "Sự sống đời đời", ko: "영원한 생명", ja: "永遠の命", pos: "obj", note: "" },
+  { hm: "Tej Lus Samhwm", en: "Commandments", vi: "Các điều răn", ko: "계명", ja: "おきて（戒め）", pos: "obj", note: "" },
+  { hm: "Thov", en: "Pray", vi: "Cầu nguyện", ko: "기도하다", ja: "祈る", pos: "verb", note: "" },
+  { hm: "Cov Laus", en: "Older ones", vi: "Người cao tuổi", ko: "연로한 분들", ja: "高齢の方々", pos: "subj", note: "" },
+  { hm: "Cov Poj Ntsuam", en: "Widows", vi: "Những người góa phụ", ko: "과부들", ja: "やもめ（寡婦）", pos: "subj", note: "" }
+];
+const THEO_51_WOL_URLS = {"Yehauvas": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/121", "Vajtswv": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/118", "Phau Vajlugkub": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/13", "Txoj xov zoo": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/48", "Lub Nceeg Vaj": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/1034", "Khixatias": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/599", "Txwj laus": "https://wol.jw.org/en/wol/mp/r1/lp-e/jl/2014/166", "Tub leg num": "https://wol.jw.org/en/wol/mp/r1/lp-e/jl/2014/177", "Koom txoos": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/663", "Teev tiam": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/465", "Kev ntseeg": "https://wol.jw.org/en/wol/mp/r1/lp-e/jl/2014/25", "Cov kwv tij nkauj muam": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/626", "Tus Tswv Pluas Hmo": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/925", "Npe-ee": "https://wol.jw.org/en/wol/mp/r1/lp-e/jl/2014/237", "Pab Uas Ntaus Thawj": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/1884", "Tho kev": "https://wol.jw.org/en/wol/mp/r1/lp-e/jl/2014/146", "Tshaj tawm": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/698", "Sib txoos": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/663", "Lub koom haum": "https://wol.jw.org/en/wol/mp/r1/lp-e/jl/2014/235", "Yehauvas Cov Tim Khawv": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/24", "Yexus": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/587", "Xatas": "https://wol.jw.org/en/wol/mp/r1/lp-e/lfb/2017/164", "Tub txib": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/1608", "Kawm Vajlugkub": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/367", "Teev tiam Yehauvas": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/291", "Lub Tsev Nceeg Vaj": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/330", "Kev Pab Cuam": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/1646", "Ntsuj Plig Dawb Huv": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/225", "Kev Sawv Rov Los": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/996", "Lub Ntiaj Teb Tshiab": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/871", "Rooj Sib Txoos": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/59", "Hu Nkauj": "https://wol.jw.org/en/wol/mp/r1/lp-e/jl/2014/294", "Qhia Vajlugkub": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/367", "Cov Xaiv Tseg": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/1034", "Amankedoos": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/397", "Lub Vaj Kaj Siab": "https://wol.jw.org/en/wol/mp/r1/lp-e/lfb/2017/996", "Kev Sib Haum Xeeb": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/1959", "Zam Txim": "https://wol.jw.org/en/wol/mp/r1/lp-e/lfb/2017/436", "Nqe Txhiv": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/1598", "Thwj Tim": "https://wol.jw.org/en/wol/mp/r1/lp-e/lfb/2017/897", "Cov Tshaj Tawm": "https://wol.jw.org/en/wol/mp/r1/lp-e/jl/2014/133", "Mus Tsev Rau Tsev": "https://wol.jw.org/en/wol/mp/r1/lp-e/jl/2014/133", "Rov Mus Xyuas": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/1646", "Phau Tsom Faj": "https://wol.jw.org/en/wol/mp/r1/lp-e/jl/2014/38", "Niaj Hnub Tshawb Nrhiav": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/360", "Lub Koom Txoos": "https://wol.jw.org/en/wol/mp/r1/lp-e/jl/2014/78", "Kev Txiav Txim": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/1031", "Lub Neej Nyob Mus Ib Txhis": "https://wol.jw.org/en/wol/mp/r1/lp-e/lfb/2017/996", "Tej Lus Samhwm": "https://wol.jw.org/en/wol/mp/r1/lp-e/lfb/2017/246", "Thov": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/291", "Cov Laus": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/1934", "Cov Poj Ntsuam": "https://wol.jw.org/en/wol/mp/r1/lp-e/lfb/2017/485"};
+const STUDENT_ROSTER = {
+  "HMOOB-01": { name: "Stephen Trumble (Bền)", short: "Stephen / Bền" },
+  "HMOOB-02": { name: "Quỳnh Trumble", short: "Quỳnh" },
+  "HMOOB-03": { name: "Quân Nguyễn (Nguyễn Bá Anh Quân)", short: "Quân" },
+  "HMOOB-04": { name: "Jade Trần (Trần Hoàng Kim Jade)", short: "Jade" },
+  "HMOOB-05": { name: "Thái Lý (Lý Vĩnh Thái)", short: "Thái" },
+  "HMOOB-06": { name: "Sa-ra Nguyễn (Nguyễn Mỹ Sa-ra)", short: "Sa-ra" },
+  "HMOOB-07": { name: "Minh Lê (Lê Thị Minh)", short: "Minh" },
+  "HMOOB-08": { name: "Phương Nguyễn (Nguyễn Minh Phương)", short: "Phương" },
+  "HMOOB-09": { name: "Hùng Nguyễn (Nguyễn Lý Hùng)", short: "Hùng" },
+  "HMOOB-10": { name: "Tuyết Nguyễn (Nguyễn Thị Ánh Tuyết)", short: "Tuyết" },
+  "HMOOB-11": { name: "David Rorke", short: "David" },
+  "HMOOB-12": { name: "Hoa Phạm (Phạm Thị Hoa)", short: "Hoa" },
+  "HMOOB-13": { name: "Kim Kwang Tae", short: "Kwang Tae" },
+  "HMOOB-14": { name: "Lee Jong Hee", short: "Jong Hee" },
+  "HMOOB-15": { name: "Tsim Meej", short: "Tsim Meej" },
+  "HMOOB-16": { name: "Paj Nyiag", short: "Paj Nyiag" },
+  "HMOOB-17": { name: "Txawj Thaiv", short: "Txawj Thaiv" },
+  "HMOOB-18": { name: "Nkauj Huab", short: "Nkauj Huab" },
+  "HMOOB-19": { name: "Kim Kim", short: "Kim Kim" }
+};
+
+const EMOJI_MAP = {
+  "bird": "🐦", "noog": "🐦", "dog": "🐕", "dev": "🐕", "cat": "🐈", "miv": "🐈",
+  "fish": "🐟", "ntses": "🐟", "chicken": "🐓", "qaib": "🐓", "pig": "🐖", "npua": "🐖",
+  "cow": "🐄", "nyuj": "🐄", "horse": "🐎", "nees": "🐎", "house": "🏠", "tsev": "🏠",
+  "home": "🏠", "book": "📖", "ntawv": "📖", "phau ntawv": "📘", "water": "💧", "dej": "💧",
+  "rice": "🍚", "mov": "🍚", "food": "🍲", "zaub": "🥬", "eat": "🍽️", "noj": "🍽️",
+  "drink": "🥤", "haus": "🥤", "friend": "🤝", "phooj ywg": "🤝", "love": "❤️", "hlub": "❤️",
+  "help": "🤲", "pab": "🤲", "read": "📖", "nyeem": "📖", "speak": "🗣️", "hais": "🗣️",
+  "study": "🎓", "kawm": "🎓", "go": "🚶", "mus": "🚶", "see": "👀", "pom": "👀",
+  "know": "💡", "paub": "💡", "good": "👍", "zoo": "👍", "bible": "📖", "prayer": "🙏",
+  "pray": "🙏", "thov": "🙏", "god": "✨", "jehovah": "🌌", "kingdom": "👑", "peace": "🕊️"
+};
+
+let uiLang = localStorage.getItem("hmong_ui_lang") || "en";
+let activeStudentCode = (localStorage.getItem("hmong_student_code") || "").trim().toUpperCase().replace(/^HMONG-/, "HMOOB-");
+let customWords = [];
+let masteryMap = {};
+try { masteryMap = JSON.parse(localStorage.getItem("hmong_fc_mastery") || "{}"); } catch(e) { masteryMap = {}; }
+
+let allCards = [];
+let filteredCards = [];
+let currentIndex = 0;
+let isFlipped = false;
+let reverseMode = false;
+let currentFilter = "all";
+let studyMode = "study";
+let quizScore = 0;
+let quizTotal = 0;
+let currentPendingImg = "";
+let currentPendingEmoji = "🐦";
+let previewTimer = null;
+
+function pickEmoji(hmong, en) {
+  const h = (hmong || "").toLowerCase().trim();
+  const e = (en || "").toLowerCase().trim();
+  if (EMOJI_MAP[h]) return EMOJI_MAP[h];
+  if (EMOJI_MAP[e]) return EMOJI_MAP[e];
+  for (const [k, v] of Object.entries(EMOJI_MAP)) {
+    if (e.includes(k) || h === k) return v;
+  }
+  return "🃏";
+}
+
+function buildMasterDeck() {
+  const deck = [];
+  // 1. Core 49 words
+  CORE_LEXICON.forEach(item => {
+    const key = item.w.toLowerCase();
+    const viObj = VI_LEX[key] || {};
+    const koObj = KO_LEX[key] || {};
+    const jaObj = (typeof JA_LEX !== "undefined" && JA_LEX[key]) ? JA_LEX[key] : {};
+    deck.push({
+      id: "core:" + key,
+      hmong: item.w,
+      en: item.enOrig || item.en,
+      vi: viObj.vi || item.vi || item.en,
+      ko: koObj.ko || item.ko || item.en,
+      ja: jaObj.ja || item.ja || item.en,
+      tone: item.toneOrig || item.tone || "",
+      pos: item.role || "word",
+      source: "core",
+      img: item.img || "",
+      emoji: pickEmoji(item.w, item.enOrig || item.en)
+    });
+  });
+
+  // 2. 51 Theocratic terms with verified wol.jw.org artwork
+  if (typeof THEOCRATIC_TERMS_51 !== "undefined") {
+    THEOCRATIC_TERMS_51.forEach(t => {
+      const rawHm = String(t.hm || t.hmong || "").trim();
+      if (!rawHm) return;
+      const wolUrl = THEO_51_WOL_URLS[rawHm] || THEO_51_WOL_URLS[t.hm] || "";
+      deck.push({
+        id: "theo:" + rawHm.toLowerCase(),
+        hmong: rawHm,
+        en: t.en || "",
+        vi: t.vi || t.en || "",
+        ko: t.ko || t.en || "",
+        ja: t.ja || t.en || "",
+        tone: t.note || t.cat || "Theocratic",
+        pos: t.pos || "obj",
+        source: "theo",
+        img: wolUrl,
+        emoji: pickEmoji(rawHm, t.en || "")
+      });
+    });
+  }
+
+  // 3. Student custom words
+  customWords.forEach(cw => {
+    const h = (cw.hmong || cw.w || "").trim();
+    if (!h) return;
+    deck.push({
+      id: "custom:" + h.toLowerCase(),
+      hmong: h,
+      en: cw.en || "",
+      vi: cw.vi || cw.en || "",
+      ko: cw.ko || cw.en || "",
+      ja: cw.ja || cw.en || "",
+      tone: "Custom Word",
+      pos: cw.pos || "obj",
+      source: "custom",
+      img: cw.img || "",
+      emoji: cw.emoji || pickEmoji(h, cw.en || "")
+    });
+  });
+
+  allCards = deck;
+  updateDeckCounts();
+  applyFilters();
+}
+
+const T = {
+  en: { title:"🃏 Hmong Flashcards", sub:"49 core words, 51 theocratic terms, and your own synced words. White Hmong.",
+    all:"All", core:"Core", theo:"📖 Theocratic", custom:"⭐ My Words", learning:"🔄 Still Learning", mastered:"✅ Mastered",
+    search:"🔍 Search", mode:"Mode", flip:"🃏 Flip", quiz:"⚡ Quiz", prompt:"Prompt", hmQ:"Hmong → ?", qHm:"? → Hmong", shuffle:"🔀 Shuffle",
+    hintFront:"Tap card or press Space to flip", hintRev:"Guess the Hmong word — tap to flip", swipe:"Swipe ← → for next",
+    markLearn:"🔄 Still Learning", markKnow:"✅ I Know This", badgeM:"✅ Mastered", badgeL:"🔄 Learning",
+    catTheo:"📖 JW.org / WOL", catCustom:"⭐ My Word", catCore:"Core", empty:"No cards here", emptySub:"Pick 'All' or clear the search.",
+    score:"Score", next:"Next →", correct:"✅ Zoo heev!", wrong:"❌ Answer:", qCat:"Quiz",
+    addWord:"➕ Add a word", closeAdd:"✕ Close", add:"+ Add", more:"More options", refresh:"🔄 Refresh image",
+    phHm:"Hmong (e.g. Noog)", phEn:"English (e.g. bird)", previewHint:"Type an English meaning to auto-load an image.",
+    need:"Please enter both the Hmong word and the English meaning.", added:"Added", connect:"Connect", syncing:"Syncing",
+    synced:"synced", change:"change", codeHint:"Enter HMOOB-01..19 to sync your words.", local:"Saved locally for", failed:"Could not sync" },
+  vi: { title:"🃏 Thẻ Từ Vựng H'Mông", sub:"49 từ cơ bản, 51 thuật ngữ thần quyền và từ của bạn (đồng bộ). H'Mông Trắng.",
+    all:"Tất cả", core:"Cơ bản", theo:"📖 Thần quyền", custom:"⭐ Từ của tôi", learning:"🔄 Đang học", mastered:"✅ Đã thuộc",
+    search:"🔍 Tìm", mode:"Chế độ", flip:"🃏 Lật thẻ", quiz:"⚡ Trắc nghiệm", prompt:"Hiển thị", hmQ:"H'Mông → ?", qHm:"? → H'Mông", shuffle:"🔀 Xáo trộn",
+    hintFront:"Chạm vào thẻ hoặc nhấn Space để lật", hintRev:"Đoán từ H'Mông — chạm để lật", swipe:"Vuốt ← → để chuyển",
+    markLearn:"🔄 Đang học", markKnow:"✅ Tôi biết từ này", badgeM:"✅ Đã thuộc", badgeL:"🔄 Đang học",
+    catTheo:"📖 JW.org / WOL", catCustom:"⭐ Từ của tôi", catCore:"Cơ bản", empty:"Không có thẻ", emptySub:"Chọn 'Tất cả' hoặc xóa ô tìm kiếm.",
+    score:"Điểm", next:"Tiếp →", correct:"✅ Zoo heev!", wrong:"❌ Đáp án:", qCat:"Trắc nghiệm",
+    addWord:"➕ Thêm từ", closeAdd:"✕ Đóng", add:"+ Thêm", more:"Tùy chọn khác", refresh:"🔄 Tải lại hình",
+    phHm:"H'Mông (vd: Noog)", phEn:"Tiếng Anh (vd: bird)", previewHint:"Nhập nghĩa tiếng Anh để tự tải hình.",
+    need:"Vui lòng nhập cả từ H'Mông và nghĩa tiếng Anh.", added:"Đã thêm", connect:"Kết nối", syncing:"Đang đồng bộ",
+    synced:"đã đồng bộ", change:"đổi", codeHint:"Nhập HMOOB-01..19 để đồng bộ từ của bạn.", local:"Đã lưu trên máy cho", failed:"Không thể đồng bộ" },
+  ko: { title:"🃏 몽족어 플래시카드", sub:"핵심 어휘 49개, 신권 용어 51개, 동기화된 나만의 단어. 백몽어.",
+    all:"전체", core:"핵심", theo:"📖 신권 용어", custom:"⭐ 내 단어", learning:"🔄 학습 중", mastered:"✅ 암기 완료",
+    search:"🔍 검색", mode:"모드", flip:"🃏 카드", quiz:"⚡ 퀴즈", prompt:"제시어", hmQ:"몽족어 → ?", qHm:"? → 몽족어", shuffle:"🔀 섞기",
+    hintFront:"카드를 탭하거나 Space를 눌러 뒤집기", hintRev:"몽족어 단어를 맞혀 보세요 — 탭하여 뒤집기", swipe:"← → 스와이프로 이동",
+    markLearn:"🔄 아직 학습 중", markKnow:"✅ 알아요", badgeM:"✅ 암기 완료", badgeL:"🔄 학습 중",
+    catTheo:"📖 JW.org / WOL", catCustom:"⭐ 내 단어", catCore:"핵심", empty:"카드가 없습니다", emptySub:"'전체'를 선택하거나 검색어를 지우세요.",
+    score:"점수", next:"다음 →", correct:"✅ Zoo heev!", wrong:"❌ 정답:", qCat:"퀴즈",
+    addWord:"➕ 단어 추가", closeAdd:"✕ 닫기", add:"+ 추가", more:"추가 옵션", refresh:"🔄 이미지 새로고침",
+    phHm:"몽족어 (예: Noog)", phEn:"영어 (예: bird)", previewHint:"영어 뜻을 입력하면 이미지가 자동으로 표시됩니다.",
+    need:"몽족어 단어와 영어 뜻을 모두 입력하세요.", added:"추가됨", connect:"연결", syncing:"동기화 중",
+    synced:"동기화됨", change:"변경", codeHint:"HMOOB-01..19를 입력해 단어를 동기화하세요.", local:"이 기기에 저장됨:", failed:"동기화 실패" },
+  ja: { title:"🃏 白モン語 単語カード", sub:"基本49語、神権用語51語、同期されたマイ単語。白モン語。",
+    all:"すべて", core:"基本", theo:"📖 神権用語", custom:"⭐ マイ単語", learning:"🔄 学習中", mastered:"✅ 習得済み",
+    search:"🔍 検索", mode:"モード", flip:"🃏 カード", quiz:"⚡ クイズ", prompt:"出題", hmQ:"モン語 → ?", qHm:"? → モン語", shuffle:"🔀 シャッフル",
+    hintFront:"カードをタップ、またはSpaceで裏返す", hintRev:"モン語を当てよう — タップで裏返す", swipe:"← → スワイプで移動",
+    markLearn:"🔄 まだ学習中", markKnow:"✅ 覚えた", badgeM:"✅ 習得済み", badgeL:"🔄 学習中",
+    catTheo:"📖 JW.org / WOL", catCustom:"⭐ マイ単語", catCore:"基本", empty:"カードがありません", emptySub:"「すべて」を選ぶか検索を消してください。",
+    score:"スコア", next:"次へ →", correct:"✅ Zoo heev!", wrong:"❌ 正解:", qCat:"クイズ",
+    addWord:"➕ 単語を追加", closeAdd:"✕ 閉じる", add:"+ 追加", more:"その他のオプション", refresh:"🔄 画像を更新",
+    phHm:"モン語（例: Noog）", phEn:"英語（例: bird）", previewHint:"英語の意味を入力すると画像が自動表示されます。",
+    need:"モン語の単語と英語の意味を両方入力してください。", added:"追加しました", connect:"接続", syncing:"同期中",
+    synced:"同期済み", change:"変更", codeHint:"HMOOB-01〜19を入力して単語を同期します。", local:"端末に保存:", failed:"同期できませんでした" }
+};
+function t(k) { return (T[uiLang] && T[uiLang][k]) || T.en[k] || k; }
+const $ = id => document.getElementById(id);
+
+function updateDeckCounts() {
+  const n = {
+    all: allCards.length,
+    core: allCards.filter(c => c.source === "core").length,
+    theo: allCards.filter(c => c.source === "theo").length,
+    custom: allCards.filter(c => c.source === "custom").length,
+    learning: allCards.filter(c => masteryMap[c.id] === "learning").length,
+    mastered: allCards.filter(c => masteryMap[c.id] === "mastered").length
+  };
+  Array.from($("deckSelect").options).forEach(o => { o.textContent = `${t(o.value)} (${n[o.value]})`; });
+  $("deckSelect").value = currentFilter;
+}
+
+function applyFilters() {
+  const q = ($("searchInput").value || "").trim().toLowerCase();
+  filteredCards = allCards.filter(c => {
+    if (["core", "theo", "custom"].includes(currentFilter) && c.source !== currentFilter) return false;
+    if (currentFilter === "learning" && masteryMap[c.id] !== "learning") return false;
+    if (currentFilter === "mastered" && masteryMap[c.id] !== "mastered") return false;
+    if (q && !`${c.hmong} ${c.en} ${c.vi} ${c.ko} ${c.ja}`.toLowerCase().includes(q)) return false;
+    return true;
+  });
+  if (currentIndex >= filteredCards.length) currentIndex = 0;
+  isFlipped = false;
+  renderCurrentCard();
+  if (studyMode === "quiz") nextQuizQuestion();
+}
+
+function setDeckFilter(f) {
+  currentFilter = f;
+  $("deckSelect").value = f;
+  currentIndex = 0;
+  applyFilters();
+}
+
+function esc(s) { return String(s == null ? "" : s).replace(/[&<>"]/g, ch => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;" }[ch])); }
+
+function renderCurrentCard() {
+  const frontArea = $("cardFrontArea"), backArea = $("cardBackArea"), visualBox = $("cardVisualBox");
+  $("markRow").classList.toggle("hidden", !(isFlipped && filteredCards.length));
+  if (!filteredCards.length) {
+    $("cardCounter").textContent = "0 / 0";
+    $("cardCategoryBadge").textContent = "—";
+    $("cardMasteryBadge").textContent = "";
+    visualBox.innerHTML = `<span class="visual-emoji">📭</span>`;
+    frontArea.classList.remove("hidden");
+    backArea.classList.add("hidden");
+    $("cardFrontText").textContent = t("empty");
+    $("cardFrontSub").textContent = t("emptySub");
+    return;
+  }
+  const card = filteredCards[currentIndex];
+  $("cardCounter").textContent = `${currentIndex + 1} / ${filteredCards.length}`;
+  $("cardCategoryBadge").textContent = card.source === "theo" ? t("catTheo") : (card.source === "custom" ? t("catCustom") : t("catCore"));
+  const m = masteryMap[card.id];
+  $("cardMasteryBadge").textContent = m === "mastered" ? t("badgeM") : (m === "learning" ? t("badgeL") : "");
+  renderVisualInto(visualBox, card);
+  const meaning = getMeaningByLang(card);
+  if (!isFlipped) {
+    frontArea.classList.remove("hidden");
+    backArea.classList.add("hidden");
+    $("cardFrontText").textContent = reverseMode ? meaning : card.hmong;
+    const tone = (!reverseMode && card.tone) ? card.tone + " • " : "";
+    $("cardFrontSub").textContent = tone + (reverseMode ? t("hintRev") : t("hintFront"));
+  } else {
+    frontArea.classList.add("hidden");
+    backArea.classList.remove("hidden");
+    $("cardBackHmong").textContent = card.hmong;
+    $("cardBackMeaning").textContent = meaning;
+    $("cardGlossGrid").innerHTML = `<div><strong>EN:</strong> ${esc(card.en)}</div><div><strong>VI:</strong> ${esc(card.vi)}</div><div><strong>KO:</strong> ${esc(card.ko)}</div><div><strong>JA:</strong> ${esc(card.ja)}</div>`;
+  }
+}
+
+function flipCard() { if (!filteredCards.length) return; isFlipped = !isFlipped; renderCurrentCard(); }
+function nextCard() { if (!filteredCards.length) return; currentIndex = (currentIndex + 1) % filteredCards.length; isFlipped = false; renderCurrentCard(); }
+function prevCard() { if (!filteredCards.length) return; currentIndex = (currentIndex - 1 + filteredCards.length) % filteredCards.length; isFlipped = false; renderCurrentCard(); }
+function shuffleDeck() {
+  for (let i = filteredCards.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [filteredCards[i], filteredCards[j]] = [filteredCards[j], filteredCards[i]];
+  }
+  currentIndex = 0; isFlipped = false; renderCurrentCard();
+}
+function setReverse(on) {
+  reverseMode = !!on; isFlipped = false;
+  $("promptHmBtn").classList.toggle("active", !reverseMode);
+  $("promptMeBtn").classList.toggle("active", reverseMode);
+  renderCurrentCard();
+}
+function toggleReverse() { setReverse(!reverseMode); }
+function markCard(state) {
+  if (!filteredCards.length) return;
+  masteryMap[filteredCards[currentIndex].id] = state;
+  localStorage.setItem("hmong_fc_mastery", JSON.stringify(masteryMap));
+  updateDeckCounts();
+  nextCard();
+}
+
+function setStudyMode(m) {
+  studyMode = m;
+  $("modeStudyBtn").classList.toggle("active", m === "study");
+  $("modeQuizBtn").classList.toggle("active", m === "quiz");
+  $("studyView").classList.toggle("hidden", m !== "study");
+  $("quizView").classList.toggle("hidden", m !== "quiz");
+  if (m === "quiz") nextQuizQuestion();
+}
+
+function toggleSettings(e) { if (e) e.stopPropagation(); $("settingsPop").classList.toggle("hidden"); }
+function closeSettings() { $("settingsPop").classList.add("hidden"); }
+document.addEventListener("click", closeSettings);
+
+function nextQuizQuestion() {
+  const pool = filteredCards.length >= 4 ? filteredCards : allCards;
+  if (!pool.length) return;
+  const target = pool[Math.floor(Math.random() * pool.length)];
+  const distractors = allCards.filter(c => c.id !== target.id).sort(() => Math.random() - 0.5).slice(0, 3);
+  const choices = [target, ...distractors].sort(() => Math.random() - 0.5);
+  const scoreTxt = () => `${t("score")}: ${quizScore} / ${quizTotal}`;
+  $("quizScoreText").textContent = scoreTxt();
+  $("quizCatBadge").textContent = target.source === "theo" ? t("theo") : t("qCat");
+  renderVisualInto($("quizVisualBox"), target);
+  $("quizPromptText").textContent = target.hmong;
+  const fb = $("quizFeedback");
+  fb.textContent = "";
+  const box = $("quizChoicesBox");
+  box.innerHTML = "";
+  let answered = false;
+  choices.forEach(ch => {
+    const b = document.createElement("button");
+    b.className = "quiz-btn";
+    b.textContent = getMeaningByLang(ch);
+    b.onclick = () => {
+      if (answered) return;
+      answered = true; quizTotal++;
+      const ok = ch.id === target.id;
+      if (ok) quizScore++;
+      b.classList.add(ok ? "correct" : "wrong");
+      fb.style.color = ok ? "#059669" : "#dc2626";
+      fb.textContent = `${ok ? t("correct") : t("wrong")} ${target.hmong} = ${getMeaningByLang(target)}`;
+      $("quizScoreText").textContent = scoreTxt();
+    };
+    box.appendChild(b);
+  });
+}
+
+function toggleAddForm(force) {
+  const f = $("addForm");
+  const open = typeof force === "boolean" ? force : f.classList.contains("hidden");
+  f.classList.toggle("hidden", !open);
+  $("addToggleBtn").textContent = open ? t("closeAdd") : t("addWord");
+  if (open) $("newHmong").focus();
+}
+
+function syncLangBoxes() {
+  $("newVi").classList.toggle("hidden", uiLang !== "vi");
+  $("newKo").classList.toggle("hidden", uiLang !== "ko");
+  $("newJa").classList.toggle("hidden", uiLang !== "ja");
+}
+
+async function addNewCustomCard() {
+  const hmong = ($("newHmong").value || "").trim();
+  const en = ($("newEn").value || "").trim();
+  if (!hmong || !en) { alert(t("need")); return; }
+  const prev = customWords.find(w => (w.hmong || w.w || "").toLowerCase() === hmong.toLowerCase()) || {};
+  const pick = k => ($(k === "vi" ? "newVi" : k === "ko" ? "newKo" : "newJa").value || "").trim() || prev[k] || en;
+  if (!currentPendingImg && $("newImgSource").value !== "custom") await triggerImageLookup(true);
+  const newObj = { hmong, en, vi: pick("vi"), ko: pick("ko"), ja: pick("ja"), pos: "obj",
+    img: currentPendingImg || "", emoji: currentPendingEmoji || pickEmoji(hmong, en) };
+  const idx = customWords.findIndex(w => (w.hmong || w.w || "").toLowerCase() === hmong.toLowerCase());
+  if (idx >= 0) customWords[idx] = newObj; else customWords.unshift(newObj);
+  saveLocalCustomWords();
+  buildMasterDeck();
+  setDeckFilter("custom");
+  ["newHmong", "newEn", "newVi", "newKo", "newJa"].forEach(id => { $(id).value = ""; });
+  currentPendingImg = "";
+  $("newWordPreviewStatus").textContent = `${t("added")}: "${hmong}" (${en})`;
+  if (activeStudentCode) {
+    try {
+      await fetch("/api/student-words", { method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code: activeStudentCode, words: customWords }) });
+    } catch {}
+  }
+}
+
+function showCodeBadge(code) {
+  $("codeBadge").textContent = `✓ ${code} ${t("synced")}`;
+  $("codeFormRow").classList.add("hidden");
+  $("codeBadgeRow").classList.remove("hidden");
+}
+function showCodeForm() {
+  $("codeBadgeRow").classList.add("hidden");
+  $("codeFormRow").classList.remove("hidden");
+  $("syncStatus").textContent = t("codeHint");
+  $("studentCodeInput").focus();
+}
+
+async function connectStudentCode(rawCode, silent) {
+  const code = String(rawCode || "").trim().toUpperCase().replace(/^HMONG-/, "HMOOB-");
+  if (!code) return;
+  activeStudentCode = code;
+  localStorage.setItem("hmong_student_code", code);
+  $("studentCodeInput").value = code;
+  loadLocalCustomWords(code);
+  const statusEl = $("syncStatus");
+  statusEl.textContent = `${t("syncing")} ${code}...`;
+  let ok = false;
+  try {
+    const r = await fetch(`/api/student-words?code=${encodeURIComponent(code)}`);
+    if (r.ok) {
+      const d = await r.json();
+      if (d && d.ok && Array.isArray(d.words)) {
+        const merged = [...d.words];
+        customWords.forEach(lw => {
+          const lh = (lw.hmong || lw.w || "").toLowerCase();
+          if (lh && !merged.some(mw => (mw.hmong || mw.w || "").toLowerCase() === lh)) merged.push(lw);
+        });
+        customWords = merged;
+        saveLocalCustomWords();
+        ok = true;
+        $("codeBadge").title = (d.studentName ? d.studentName + " — " : "") + customWords.length + " words";
+      }
+    }
+    if (!ok) statusEl.textContent = `${t("failed")} ${code} — ${t("local")} ${code} (${customWords.length})`;
+  } catch {
+    statusEl.textContent = `${t("local")} ${code} (${customWords.length})`;
+  }
+  if (ok) showCodeBadge(code);
+  buildMasterDeck();
+}
+
+function setUILang(lang) {
+  uiLang = (lang === "vi" || lang === "ko" || lang === "ja") ? lang : "en";
+  localStorage.setItem("hmong_ui_lang", uiLang);
+  document.documentElement.lang = uiLang;
+  ["En", "Vi", "Ko", "Ja"].forEach(L => $("btn" + L).classList.toggle("active", uiLang === L.toLowerCase()));
+  const set = (id, k) => { $(id).textContent = t(k); };
+  set("pageTitle", "title"); set("pageSub", "sub"); set("lblMode", "mode"); set("modeStudyBtn", "flip"); set("modeQuizBtn", "quiz");
+  set("lblPrompt", "prompt"); set("promptHmBtn", "hmQ"); set("promptMeBtn", "qHm"); set("btnShuffle", "shuffle");
+  set("btnMarkLearn", "markLearn"); set("btnMarkKnown", "markKnow"); set("quizNextBtn", "next"); set("addCardBtn", "add");
+  set("moreOptsLbl", "more"); set("refreshImgBtn", "refresh"); set("connectCodeBtn", "connect"); set("changeCodeBtn", "change");
+  $("addToggleBtn").textContent = $("addForm").classList.contains("hidden") ? t("addWord") : t("closeAdd");
+  $("searchInput").placeholder = t("search");
+  $("newHmong").placeholder = t("phHm");
+  $("newEn").placeholder = t("phEn");
+  if (!$("newWordPreviewStatus").textContent || Object.values(T).some(x => x.previewHint === $("newWordPreviewStatus").textContent)) set("newWordPreviewStatus", "previewHint");
+  if (!$("codeFormRow").classList.contains("hidden")) $("syncStatus").textContent = t("codeHint");
+  else showCodeBadge(activeStudentCode);
+  syncLangBoxes();
+  $("navHub").href = `./index.html?lang=${uiLang}`;
+  $("navSound").href = `./Hmong_Sound_Trainer.html?lang=${uiLang}`;
+  $("navUlg").href = `./Universal_Language_Generator_Tool.html?lang=${uiLang}`;
+  if (allCards.length) updateDeckCounts();
+  renderCurrentCard();
+  if (studyMode === "quiz" && quizTotal === 0) nextQuizQuestion();
+}
+
+$("connectCodeBtn").onclick = () => connectStudentCode($("studentCodeInput").value, false);
+$("studentCodeInput").addEventListener("keydown", e => { if (e.key === "Enter") connectStudentCode(e.target.value, false); });
+
+// Card interactions: tap to flip, swipe to navigate
+(function () {
+  const el = $("flashcardBox");
+  let sx = 0, sy = 0, swiped = false;
+  el.addEventListener("touchstart", e => { const p = e.touches[0]; sx = p.clientX; sy = p.clientY; swiped = false; }, { passive: true });
+  el.addEventListener("touchend", e => {
+    const p = e.changedTouches[0], dx = p.clientX - sx, dy = p.clientY - sy;
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.3) { swiped = true; dx < 0 ? nextCard() : prevCard(); }
+  });
+  el.addEventListener("click", () => { if (swiped) { swiped = false; return; } flipCard(); });
+})();
+
+document.addEventListener("keydown", e => {
+  if (["INPUT", "SELECT", "TEXTAREA"].includes(document.activeElement.tagName)) return;
+  if (e.key === "Escape") closeSettings();
+  if (studyMode !== "study") return;
+  if (e.code === "Space" || e.code === "Enter") { e.preventDefault(); flipCard(); }
+  else if (e.code === "ArrowRight") { e.preventDefault(); nextCard(); }
+  else if (e.code === "ArrowLeft") { e.preventDefault(); prevCard(); }
+});
+
+function getMeaningByLang(card) {
+  if (uiLang === "vi") return card.vi || card.en;
+  if (uiLang === "ko") return card.ko || card.en;
+  if (uiLang === "ja") return card.ja || card.en;
+  return card.en;
+}
+
+function renderVisualInto(container, card) {
+  container.innerHTML = "";
+  if (card.img) {
+    const img = document.createElement("img");
+    img.src = card.img;
+    img.alt = card.en || card.hmong;
+    img.onerror = () => {
+      container.innerHTML = `<span class="visual-emoji">${card.emoji || "🃏"}</span>`;
+    };
+    container.appendChild(img);
+  } else {
+    container.innerHTML = `<span class="visual-emoji">${card.emoji || "🃏"}</span>`;
+    // Lazy fetch Wikipedia thumbnail for core/custom nouns & verbs if online
+    const cleanEn = (card.en || "").split("/")[0].split("(")[0].trim().toLowerCase();
+    if (cleanEn && cleanEn.length > 2 && !card._wikiChecked) {
+      card._wikiChecked = true;
+      fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(cleanEn)}`)
+        .then(r => r.ok ? r.json() : null)
+        .then(d => {
+          if (d && d.thumbnail && d.thumbnail.source) {
+            card.img = d.thumbnail.source;
+            if (filteredCards[currentIndex] && filteredCards[currentIndex].id === card.id) {
+              renderVisualInto(container, card);
+            }
+          }
+        }).catch(() => {});
+    }
+  }
+}
+// Auto-Image Lookup for New Student Words (e.g. "Noog" -> "bird")
+function scheduleImagePreview() {
+  const srcMode = document.getElementById("newImgSource").value;
+  document.getElementById("customUrlRow").classList.toggle("hidden", srcMode !== "custom");
+  if (srcMode === "custom") {
+    updatePreviewFromCustomUrl();
+    return;
+  }
+  clearTimeout(previewTimer);
+  previewTimer = setTimeout(() => triggerImageLookup(false), 380);
+}
+
+function updatePreviewFromCustomUrl() {
+  const u = (document.getElementById("newCustomImgUrl").value || "").trim();
+  const h = (document.getElementById("newHmong").value || "").trim();
+  const e = (document.getElementById("newEn").value || "").trim();
+  currentPendingEmoji = pickEmoji(h, e);
+  currentPendingImg = u;
+  const thumb = document.getElementById("newWordPreviewThumb");
+  if (u) {
+    thumb.innerHTML = `<img src="${u}" alt="preview">`;
+    document.getElementById("newWordPreviewStatus").textContent = "Using custom image URL.";
+  } else {
+    thumb.textContent = currentPendingEmoji;
+  }
+}
+
+async function triggerImageLookup(force) {
+  const h = (document.getElementById("newHmong").value || "").trim();
+  const e = (document.getElementById("newEn").value || "").trim();
+  const srcMode = document.getElementById("newImgSource").value;
+  currentPendingEmoji = pickEmoji(h, e);
+  const thumb = document.getElementById("newWordPreviewThumb");
+  const statusEl = document.getElementById("newWordPreviewStatus");
+
+  const queryTerm = (e || h).split("/")[0].split("(")[0].trim();
+  if (!queryTerm) {
+    currentPendingImg = "";
+    thumb.textContent = "🐦";
+    statusEl.textContent = "Type an English meaning like 'bird' (for Noog) to auto-fetch an image.";
+    return;
+  }
+
+  statusEl.textContent = `Searching illustration for "${queryTerm}"...`;
+  thumb.textContent = currentPendingEmoji;
+
+  // 1. Check exact theocratic match first
+  if (THEO_51_WOL_URLS[h]) {
+    currentPendingImg = THEO_51_WOL_URLS[h];
+    thumb.innerHTML = `<img src="${currentPendingImg}" alt="${queryTerm}">`;
+    statusEl.textContent = `Matched JW.org / WOL publication artwork for "${h}".`;
+    return;
+  }
+
+  // 2. Try WOL or Wikipedia based on selector
+  const tryWol = async () => {
+    try {
+      const r = await fetch(`/api/wol-image?q=${encodeURIComponent(queryTerm)}`);
+      if (r.ok) {
+        const d = await r.json();
+        if (d && d.ok && d.img) return { img: d.img, label: `JW.org / WOL: ${d.caption || queryTerm}` };
+      }
+    } catch {}
+    return null;
+  };
+
+  const tryWiki = async () => {
+    try {
+      const r = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(queryTerm.toLowerCase())}`);
+      if (r.ok) {
+        const d = await r.json();
+        if (d && d.thumbnail && d.thumbnail.source) {
+          return { img: d.thumbnail.source, label: `Photo found for "${queryTerm}"` };
+        }
+      }
+    } catch {}
+    return null;
+  };
+
+  let found = null;
+  if (srcMode === "wol") {
+    found = (await tryWol()) || (await tryWiki());
+  } else {
+    found = (await tryWiki()) || (await tryWol());
+  }
+
+  if (found && found.img) {
+    currentPendingImg = found.img;
+    thumb.innerHTML = `<img src="${found.img}" alt="${queryTerm}">`;
+    statusEl.textContent = found.label;
+  } else {
+    currentPendingImg = "";
+    thumb.textContent = currentPendingEmoji;
+    statusEl.textContent = `Using clean icon (${currentPendingEmoji}) for "${queryTerm}".`;
+  }
+}
+
+function getStorageKey(code) {
+  return code ? `hmong_custom_words_${code}` : "ulgt_custom_words";
+}
+
+function loadLocalCustomWords(code) {
+  let baseList = [];
+  let codeList = [];
+  try { baseList = JSON.parse(localStorage.getItem("ulgt_custom_words") || "[]") || []; } catch { baseList = []; }
+  if (code) {
+    try { codeList = JSON.parse(localStorage.getItem(getStorageKey(code)) || "[]") || []; } catch { codeList = []; }
+  }
+  const map = new Map();
+  [...baseList, ...codeList].forEach(w => {
+    if (!w || typeof w !== "object") return;
+    const h = String(w.hmong || w.w || "").trim();
+    if (h) map.set(h.toLowerCase(), { ...w, hmong: h });
+  });
+  customWords = Array.from(map.values());
+}
+
+function saveLocalCustomWords() {
+  localStorage.setItem(getStorageKey(activeStudentCode), JSON.stringify(customWords));
+  localStorage.setItem("ulgt_custom_words", JSON.stringify(customWords));
+}
+function focusWordIfRequested() {
+  const params = new URLSearchParams(window.location.search);
+  const targetWord = (params.get("word") || "").trim().toLowerCase();
+  const targetFilter = (params.get("deck") || "").trim().toLowerCase();
+  if (targetFilter && ["all", "core", "theo", "custom"].includes(targetFilter)) {
+    setDeckFilter(targetFilter);
+  }
+  if (!targetWord) return;
+  let idx = filteredCards.findIndex(c => c.hmong.toLowerCase() === targetWord);
+  if (idx < 0) {
+    setDeckFilter("all");
+    idx = filteredCards.findIndex(c => c.hmong.toLowerCase() === targetWord || c.hmong.toLowerCase().includes(targetWord));
+  }
+  if (idx >= 0) {
+    currentIndex = idx;
+    isFlipped = false;
+    renderCurrentCard();
+  }
+}
+
+// Initialize
+const params = new URLSearchParams(window.location.search);
+if (params.get("lang")) uiLang = params.get("lang");
+if (params.get("code")) activeStudentCode = params.get("code").toUpperCase().replace(/^HMONG-/, "HMOOB-");
+loadLocalCustomWords(activeStudentCode);
+setUILang(uiLang);
+buildMasterDeck();
+focusWordIfRequested();
+if (activeStudentCode) {
+  $("studentCodeInput").value = activeStudentCode;
+  connectStudentCode(activeStudentCode, true).then(() => focusWordIfRequested());
+}
+</script>
+</body>
+</html>
