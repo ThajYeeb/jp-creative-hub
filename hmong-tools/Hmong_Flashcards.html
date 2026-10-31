@@ -295,9 +295,9 @@
   <div class="panel">
     <div class="toolbar">
       <select id="deckSelect" onchange="setDeckFilter(this.value)" aria-label="Deck">
-        <option value="all">All (99)</option>
+        <option value="all">All (100)</option>
         <option value="core">Core (47)</option>
-        <option value="theo">📖 Theocratic (52)</option>
+        <option value="theo">📖 Theocratic (53)</option>
         <option value="custom">⭐ My Words (0)</option>
         <option value="learning">🔄 Still Learning (0)</option>
         <option value="mastered">✅ Mastered (0)</option>
@@ -325,7 +325,7 @@
         <div class="stage-wrap">
           <div class="flashcard" id="flashcardBox" tabindex="0">
             <div class="card-badges">
-              <span id="cardCounter">1 / 99</span>
+              <span id="cardCounter">1 / 100</span>
               <span class="badge" id="cardCategoryBadge">Core</span>
               <span id="cardMasteryBadge"></span>
             </div>
@@ -433,7 +433,7 @@ const CORE_LEXICON = [
       { w: "pom", role: "verb", en: "see", tone: "m (low creaky)" },
       { w: "pab", role: "verb", en: "help", tone: "b (high)" },
       { w: "nyeem", role: "verb", en: "read", tone: "m (low creaky)" },
-      { w: "noj", role: "verb", en: "eat", tone: "j (high-falling)" },
+      { w: "noj", role: "verb", en: "eat", tone: "j (high-falling)", img: "./img/noj_eat.jpg" },
       { w: "haus", role: "verb", en: "drink", tone: "s (low)" },
       { w: "ua", role: "verb", en: "do / make", tone: "unmarked (mid)" },
       { w: "hu", role: "verb", en: "call / be named", tone: "unmarked (mid)" },
@@ -654,6 +654,7 @@ const THEOCRATIC_TERMS_51 = [
   { hm: "Cov Xaiv Tseg", en: "Anointed ones", vi: "Những người được xức dầu", ko: "기름부음받은 자들", ja: "油そそがれた者たち", pos: "subj", note: "" },
   { hm: "Amankedoos", en: "Armageddon", vi: "Ha-ma-ghê-đôn", ko: "아마겟돈", ja: "ハルマゲドン", pos: "obj", note: "" },
   { hm: "Lub Vaj Kaj Siab", en: "Paradise", vi: "Địa đàng / Vườn Ê-đen", ko: "낙원 (파라다이스)", ja: "楽園（パラダイス）", pos: "place", note: "" },
+  { hm: "Thaj Yeeb", en: "Peace", vi: "Bình an", ko: "평화", ja: "平和", pos: "obj", note: "" },
   { hm: "Kev Sib Haum Xeeb", en: "Unity", vi: "Hợp nhất", ko: "연합", ja: "一致", pos: "obj", note: "" },
   { hm: "Zam Txim", en: "Forgive", vi: "Tha thứ", ko: "용서하다", ja: "許す（赦す）", pos: "verb", note: "" },
   { hm: "Nqe Txhiv", en: "Ransom", vi: "Giá chuộc", ko: "대속물", ja: "贖い（あがない）", pos: "obj", note: "" },
@@ -670,7 +671,7 @@ const THEOCRATIC_TERMS_51 = [
   { hm: "Cov Laus", en: "Older ones", vi: "Người cao tuổi", ko: "연로한 분들", ja: "高齢の方々", pos: "subj", note: "" },
   { hm: "Cov Poj Ntsuam", en: "Widows", vi: "Những người góa phụ", ko: "과부들", ja: "やもめ（寡婦）", pos: "subj", note: "" }
 ];
-const THEO_51_WOL_URLS = {"Yehauvas": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/121", "Vajtswv": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/118", "Phau Vajlugkub": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/13", "Txoj xov zoo": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/48", "Lub Nceeg Vaj": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/1034", "Khixatias": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/599", "Txwj laus": "https://wol.jw.org/en/wol/mp/r1/lp-e/jl/2014/166", "Tub leg num": "https://wol.jw.org/en/wol/mp/r1/lp-e/jl/2014/177", "Koom txoos": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/663", "Teev tiam": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/465", "Kev ntseeg": "https://wol.jw.org/en/wol/mp/r1/lp-e/jl/2014/25", "Cov kwv tij nkauj muam": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/626", "Tus Tswv Pluas Hmo": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/925", "Kevcai Nco Txog Yexus": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/925", "Npe-ee": "https://wol.jw.org/en/wol/mp/r1/lp-e/jl/2014/237", "Pab Uas Ntaus Thawj": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/1884", "Tho kev": "https://wol.jw.org/en/wol/mp/r1/lp-e/jl/2014/146", "Tshaj tawm": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/698", "Sib txoos": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/663", "Lub koom haum": "https://wol.jw.org/en/wol/mp/r1/lp-e/jl/2014/235", "Yehauvas Cov Tim Khawv": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/24", "Yexus": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/587", "Xatas": "https://wol.jw.org/en/wol/mp/r1/lp-e/lfb/2017/164", "Tub txib": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/1608", "Kawm Vajlugkub": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/367", "Teev tiam Yehauvas": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/291", "Lub Tsev Nceeg Vaj": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/330", "Kev Pab Cuam": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/1646", "Lub Hwj Huam Dawb Huv": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/225", "Kev Sawv Rov Los": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/996", "Lub Ntiaj Teb Tshiab": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/871", "Rooj Sib Txoos": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/59", "Hu Nkauj": "https://wol.jw.org/en/wol/mp/r1/lp-e/jl/2014/294", "Qhia Vajlugkub": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/367", "Cov Xaiv Tseg": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/1034", "Amankedoos": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/397", "Lub Vaj Kaj Siab": "https://wol.jw.org/en/wol/mp/r1/lp-e/lfb/2017/996", "Kev Sib Haum Xeeb": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/1959", "Zam Txim": "https://wol.jw.org/en/wol/mp/r1/lp-e/lfb/2017/436", "Nqe Txhiv": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/1598", "Thwj Tim": "https://wol.jw.org/en/wol/mp/r1/lp-e/lfb/2017/897", "Cov Tshaj Tawm": "https://wol.jw.org/en/wol/mp/r1/lp-e/jl/2014/133", "Mus Tsev Rau Tsev": "https://wol.jw.org/en/wol/mp/r1/lp-e/jl/2014/133", "Rov Mus Xyuas": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/1646", "Phau Tsom Faj": "https://wol.jw.org/en/wol/mp/r1/lp-e/jl/2014/38", "Niaj Hnub Tshawb Nrhiav": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/360", "Kev Txiav Txim": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/1031", "Lub Neej Nyob Mus Ib Txhis": "https://wol.jw.org/en/wol/mp/r1/lp-e/lfb/2017/996", "Tej Lus Samhwm": "https://wol.jw.org/en/wol/mp/r1/lp-e/lfb/2017/246", "Thov": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/291", "Cov Laus": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/1934", "Cov Poj Ntsuam": "https://wol.jw.org/en/wol/mp/r1/lp-e/lfb/2017/485"};
+const THEO_51_WOL_URLS = {"Yehauvas": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/121", "Vajtswv": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/118", "Phau Vajlugkub": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/13", "Txoj xov zoo": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/48", "Lub Nceeg Vaj": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/1034", "Khixatias": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/599", "Txwj laus": "https://wol.jw.org/en/wol/mp/r1/lp-e/jl/2014/166", "Tub leg num": "https://wol.jw.org/en/wol/mp/r1/lp-e/jl/2014/177", "Koom txoos": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/663", "Teev tiam": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/465", "Kev ntseeg": "https://wol.jw.org/en/wol/mp/r1/lp-e/jl/2014/25", "Cov kwv tij nkauj muam": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/626", "Tus Tswv Pluas Hmo": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/925", "Kevcai Nco Txog Yexus": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/925", "Npe-ee": "https://wol.jw.org/en/wol/mp/r1/lp-e/jl/2014/237", "Pab Uas Ntaus Thawj": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/1884", "Tho kev": "https://wol.jw.org/en/wol/mp/r1/lp-e/jl/2014/146", "Tshaj tawm": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/698", "Sib txoos": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/663", "Lub koom haum": "https://wol.jw.org/en/wol/mp/r1/lp-e/jl/2014/235", "Yehauvas Cov Tim Khawv": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/24", "Yexus": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/587", "Xatas": "https://wol.jw.org/en/wol/mp/r1/lp-e/lfb/2017/164", "Tub txib": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/1608", "Kawm Vajlugkub": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/367", "Teev tiam Yehauvas": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/291", "Lub Tsev Nceeg Vaj": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/330", "Kev Pab Cuam": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/1646", "Lub Hwj Huam Dawb Huv": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/225", "Kev Sawv Rov Los": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/996", "Lub Ntiaj Teb Tshiab": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/871", "Rooj Sib Txoos": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/59", "Hu Nkauj": "https://wol.jw.org/en/wol/mp/r1/lp-e/jl/2014/294", "Qhia Vajlugkub": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/367", "Cov Xaiv Tseg": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/1034", "Amankedoos": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/397", "Lub Vaj Kaj Siab": "https://wol.jw.org/en/wol/mp/r1/lp-e/lfb/2017/996", "Thaj Yeeb": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/1959", "Kev Sib Haum Xeeb": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/1959", "Zam Txim": "https://wol.jw.org/en/wol/mp/r1/lp-e/lfb/2017/436", "Nqe Txhiv": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/1598", "Thwj Tim": "https://wol.jw.org/en/wol/mp/r1/lp-e/lfb/2017/897", "Cov Tshaj Tawm": "https://wol.jw.org/en/wol/mp/r1/lp-e/jl/2014/133", "Mus Tsev Rau Tsev": "https://wol.jw.org/en/wol/mp/r1/lp-e/jl/2014/133", "Rov Mus Xyuas": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/1646", "Phau Tsom Faj": "https://wol.jw.org/en/wol/mp/r1/lp-e/jl/2014/38", "Niaj Hnub Tshawb Nrhiav": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/360", "Kev Txiav Txim": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/1031", "Lub Neej Nyob Mus Ib Txhis": "https://wol.jw.org/en/wol/mp/r1/lp-e/lfb/2017/996", "Tej Lus Samhwm": "https://wol.jw.org/en/wol/mp/r1/lp-e/lfb/2017/246", "Thov": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/291", "Cov Laus": "https://wol.jw.org/en/wol/mp/r1/lp-e/lff/2021/1934", "Cov Poj Ntsuam": "https://wol.jw.org/en/wol/mp/r1/lp-e/lfb/2017/485"};
 const STUDENT_ROSTER = {
   "HMOOB-01": { name: "Stephen Trumble (Bền)", short: "Stephen / Bền" },
   "HMOOB-02": { name: "Quỳnh Trumble", short: "Quỳnh" },
@@ -759,7 +760,7 @@ function buildMasterDeck() {
     });
   });
 
-  // 2. 52 Theocratic terms with verified wol.jw.org artwork
+  // 2. 53 Theocratic terms with verified wol.jw.org artwork
   if (typeof THEOCRATIC_TERMS_51 !== "undefined") {
     THEOCRATIC_TERMS_51.forEach(t => {
       const rawHm = String(t.hm || t.hmong || "").trim();
@@ -806,7 +807,7 @@ function buildMasterDeck() {
 }
 
 const T = {
-  en: { photoBtn:"📷 Use my own photo", photoRemove:"Remove photo", photoReady:"Your photo is ready", photoNeedCode:"Connect your student code first so your photo can sync.", photoTooBig:"This photo is still too large after shrinking (over 200 KB). Try another photo.", photoLimit:"You have reached the limit of 50 photos.", photoUploading:"Uploading photo...", photoFail:"Photo upload failed. Please try again.", photoBad:"Could not read this image.", title:"🃏 Hmong Flashcards", sub:"47 core words, 52 theocratic terms, and your own synced words. White Hmong.",
+  en: { photoBtn:"📷 Use my own photo", photoRemove:"Remove photo", photoReady:"Your photo is ready", photoNeedCode:"Connect your student code first so your photo can sync.", photoTooBig:"This photo is still too large after shrinking (over 200 KB). Try another photo.", photoLimit:"You have reached the limit of 50 photos.", photoUploading:"Uploading photo...", photoFail:"Photo upload failed. Please try again.", photoBad:"Could not read this image.", title:"🃏 Hmong Flashcards", sub:"47 core words, 53 theocratic terms, and your own synced words. White Hmong.",
     all:"All", core:"Core", theo:"📖 Theocratic", custom:"⭐ My Words", learning:"🔄 Still Learning", mastered:"✅ Mastered",
     search:"🔍 Search", mode:"Mode", flip:"🃏 Flip", quiz:"⚡ Quiz", prompt:"Prompt", hmQ:"Hmong → ?", qHm:"? → Hmong", shuffle:"🔀 Shuffle",
     hintFront:"Tap card or press Space to flip", hintRev:"Guess the Hmong word — tap to flip", swipe:"Swipe ← → for next",
@@ -817,7 +818,7 @@ const T = {
     phHm:"Hmong (e.g. Noog)", phEn:"English (e.g. bird)", previewHint:"Type an English meaning to auto-load an image.",
     need:"Please enter both the Hmong word and the English meaning.", added:"Added", connect:"Connect", syncing:"Syncing",
     synced:"synced", change:"change", codeHint:"Enter HMOOB-01..19 to sync your words.", local:"Saved locally for", failed:"Could not sync" },
-  vi: { photoBtn:"📷 Dùng ảnh của tôi", photoRemove:"Bỏ ảnh", photoReady:"Ảnh của bạn đã sẵn sàng", photoNeedCode:"Hãy kết nối mã học viên trước để ảnh được đồng bộ.", photoTooBig:"Ảnh vẫn quá lớn sau khi thu nhỏ (trên 200 KB). Hãy thử ảnh khác.", photoLimit:"Bạn đã đạt giới hạn 50 ảnh.", photoUploading:"Đang tải ảnh lên...", photoFail:"Tải ảnh lên thất bại. Vui lòng thử lại.", photoBad:"Không đọc được ảnh này.", title:"🃏 Thẻ Từ Vựng H'Mông", sub:"47 từ cơ bản, 52 thuật ngữ thần quyền và từ của bạn (đồng bộ). H'Mông Trắng.",
+  vi: { photoBtn:"📷 Dùng ảnh của tôi", photoRemove:"Bỏ ảnh", photoReady:"Ảnh của bạn đã sẵn sàng", photoNeedCode:"Hãy kết nối mã học viên trước để ảnh được đồng bộ.", photoTooBig:"Ảnh vẫn quá lớn sau khi thu nhỏ (trên 200 KB). Hãy thử ảnh khác.", photoLimit:"Bạn đã đạt giới hạn 50 ảnh.", photoUploading:"Đang tải ảnh lên...", photoFail:"Tải ảnh lên thất bại. Vui lòng thử lại.", photoBad:"Không đọc được ảnh này.", title:"🃏 Thẻ Từ Vựng H'Mông", sub:"47 từ cơ bản, 53 thuật ngữ thần quyền và từ của bạn (đồng bộ). H'Mông Trắng.",
     all:"Tất cả", core:"Cơ bản", theo:"📖 Thần quyền", custom:"⭐ Từ của tôi", learning:"🔄 Đang học", mastered:"✅ Đã thuộc",
     search:"🔍 Tìm", mode:"Chế độ", flip:"🃏 Lật thẻ", quiz:"⚡ Trắc nghiệm", prompt:"Hiển thị", hmQ:"H'Mông → ?", qHm:"? → H'Mông", shuffle:"🔀 Xáo trộn",
     hintFront:"Chạm vào thẻ hoặc nhấn Space để lật", hintRev:"Đoán từ H'Mông — chạm để lật", swipe:"Vuốt ← → để chuyển",
@@ -839,7 +840,7 @@ const T = {
     phHm:"몽족어 (예: Noog)", phEn:"영어 (예: bird)", previewHint:"영어 뜻을 입력하면 이미지가 자동으로 표시됩니다.",
     need:"몽족어 단어와 영어 뜻을 모두 입력하세요.", added:"추가됨", connect:"연결", syncing:"동기화 중",
     synced:"동기화됨", change:"변경", codeHint:"HMOOB-01..19를 입력해 단어를 동기화하세요.", local:"이 기기에 저장됨:", failed:"동기화 실패" },
-  ja: { photoBtn:"📷 自分の写真を使う", photoRemove:"写真を削除", photoReady:"写真の準備ができました", photoNeedCode:"写真を同期するには、先に受講生コードを接続してください。", photoTooBig:"縮小後も写真が大きすぎます（200KB超）。別の写真をお試しください。", photoLimit:"写真は50枚までです。上限に達しました。", photoUploading:"写真をアップロード中...", photoFail:"写真のアップロードに失敗しました。もう一度お試しください。", photoBad:"この画像を読み込めません。", title:"🃏 白モン語 単語カード", sub:"基本47語、神権用語52語、同期されたマイ単語。白モン語。",
+  ja: { photoBtn:"📷 自分の写真を使う", photoRemove:"写真を削除", photoReady:"写真の準備ができました", photoNeedCode:"写真を同期するには、先に受講生コードを接続してください。", photoTooBig:"縮小後も写真が大きすぎます（200KB超）。別の写真をお試しください。", photoLimit:"写真は50枚までです。上限に達しました。", photoUploading:"写真をアップロード中...", photoFail:"写真のアップロードに失敗しました。もう一度お試しください。", photoBad:"この画像を読み込めません。", title:"🃏 白モン語 単語カード", sub:"基本47語、神権用語53語、同期されたマイ単語。白モン語。",
     all:"すべて", core:"基本", theo:"📖 神権用語", custom:"⭐ マイ単語", learning:"🔄 学習中", mastered:"✅ 習得済み",
     search:"🔍 検索", mode:"モード", flip:"🃏 カード", quiz:"⚡ クイズ", prompt:"出題", hmQ:"モン語 → ?", qHm:"? → モン語", shuffle:"🔀 シャッフル",
     hintFront:"カードをタップ、またはSpaceで裏返す", hintRev:"モン語を当てよう — タップで裏返す", swipe:"← → スワイプで移動",
