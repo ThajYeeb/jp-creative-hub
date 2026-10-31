@@ -477,7 +477,7 @@ const RAW_PHONETICS = [
   ["c2_hl","c2","Voiceless Sonorant","hl","/ɬ/","hlub","love / care for","yêu thương","사랑하다","愛する","Voiceless 'l': put tongue in 'l' position, blow air silently around the sides of the tongue first, then voice the vowel.","Đặt lưỡi ở vị trí chữ 'l', thổi hơi qua hai bên lưỡi trước rồi mới phát âm nguyên âm.","혀를 'l' 위치에 두고 양옆으로 바람을 먼저 뺀 뒤 모음을 발음.","舌を「l」の位置に置き、舌の両脇から息を吹いてから母音を出す無声の「l」。"],
   ["c2_hm","c2","Voiceless Sonorant","hm","/m̥/","Hmoob","Hmong","người H'Mông","몽족 (Hmong)","モン族","Voiceless 'm': close lips for 'm', puff air quietly through your nose first, then voice 'm' into the vowel.","Ngậm môi chữ 'm', thở nhẹ một luồng hơi qua mũi trước rồi mới ngân âm 'm'.","입술을 닫고 코로 바람을 먼저 살짝 뿜은 뒤 'ㅁ(m)'을 발음!","唇を閉じて鼻からフッと息を抜いてから「m」を発音する無声鼻音。"],
   ["c2_hn","c2","Voiceless Sonorant","hn","/n̥/","hnub","sun / day (niaj hnub)","mặt trời / ngày (hằng ngày)","해 / 날 (매일)","太陽 / 日（毎日）","Voiceless 'n': tongue at 'n' ridge, puff air through the nose first, then voice 'n'.","Đặt lưỡi chữ 'n', thổi nhẹ hơi qua mũi trước rồi mới phát âm 'n'.","혀를 'n' 위치에 두고 코로 바람을 먼저 뺀 뒤 'ㄴ(n)' 발음.","舌を「n」の位置に当て、鼻から息を抜いてから「n」を発音する音。"],
-  ["c2_kh","c2","Aspirated Stop","kh","/kʰ/","Khixatias","Christians","Cơ Đốc nhân","그리스도인","クリスチャン","Aspirated 'k' with a strong puff of air (like English 'k' in 'key').","Âm 'kh' bật hơi mạnh (như 'k' trong tiếng Anh 'key').","강하게 바람이 터져 나오는 거센소리 'ㅋ(kh)'.","強い息を伴う有気音の「kh」（英語 key の k）。"],
+  ["c2_kh","c2","Aspirated Stop","kh","/kʰ/","Khixatias","Christians","Tín đồ đạo Đấng Ki-tô / tín đồ Đấng Ki-tô","그리스도인","クリスチャン","Aspirated 'k' with a strong puff of air (like English 'k' in 'key').","Âm 'kh' bật hơi mạnh (như 'k' trong tiếng Anh 'key').","강하게 바람이 터져 나오는 거센소리 'ㅋ(kh)'.","強い息を伴う有気音の「kh」（英語 key の k）。"],
   ["c2_ml","c2","Labial-Lateral","ml","/mˡ/","mloog","listen / obey","lắng nghe / vâng lời","듣다 / 순종하다","聴く / 従う","Close lips for 'm' while tongue is already set for 'l', releasing both together ('m-l' as one syllable).","Ngậm môi 'm' đồng thời đầu lưỡi chạm sẵn vị trí 'l' rồi bật ra cùng lúc (mloog = lắng nghe).","입술은 'm', 혀는 미리 'l'에 두고 한 음절로 빠르게 '믈(ml)'을 발음.","唇の「m」と舌の「l」を同時に構えて一気に放つ「ml」音。"],
   ["c2_nc","c2","Prenasalized","nc","/ɲc/","nceeg","kingdom (Lub Nceeg Vaj)","Nước Trời (Nceeg Vaj)","왕국 (Nceeg Vaj)","王国 (Nceeg Vaj)","Hum a brief 'n' through the nose right into unaspirated 'c' (n + c).","Ngân nhẹ âm mũi 'n-' rồi nối liền vào âm 'c' không bật hơi.","코로 짧은 'ㄴ'을 울린 뒤 곧바로 무기음 'c'로 연결 (n+c).","鼻音の短い「n」から無気音「c」へ滑らかに繋げる音。"],
   ["c2_nk","c2","Prenasalized","nk","/ŋk/","nkauj","song / sister (hu nkauj)","bài hát / chị em (hát)","노래 / 자매 (hu nkauj)","歌 / 姉妹 (hu nkauj)","Hum 'ng' (as in 'think') right into unaspirated 'k' (like 'nk' in 'bank' at the start of a word).","Ngân âm mũi 'ng-' rồi bật ngay sang âm 'k' không bật hơi.","코로 'ㅇ(ng)'을 살짝 울린 뒤 곧바로 무기음 'k' 발음.","短い鼻音「ng」から無気音「k」へ繋げる音。"],
@@ -732,6 +732,7 @@ function playDataUrl(dataUrl) {
 }
 
 // Static Male clips shipped with the page (relative to /hmong-tools/)
+const SUBCAT_VI = {"Single Vowel":"Nguyên âm đơn","Diphthong":"Nguyên âm đôi","Nasal Vowel":"Nguyên âm mũi","Single Consonant":"Phụ âm đơn","Aspirated Stop":"Âm tắc bật hơi","Prenasalized":"Âm tiền mũi hóa","Voiceless Sonorant":"Âm vang vô thanh","Labial-Lateral":"Âm môi – bên","Palatal Fricative":"Âm xát vòm","Palatal Nasal":"Âm mũi vòm","Alveolar Affricate":"Âm tắc xát lợi","Retroflex Affricate":"Âm tắc xát uốn lưỡi","Triple Consonant":"Phụ âm ba chữ","Quadruple Consonant":"Phụ âm bốn chữ"};
 const STATIC_MALE_IDS = new Set(["c1_c", "c1_d", "c1_f", "c1_h", "c1_k", "c1_l", "c1_m", "c1_n", "c1_p", "c1_q", "c1_r", "c1_s", "c1_t", "c1_v", "c1_x", "c1_y", "c1_z", "c2_ch", "c2_dh", "c2_hl", "c2_hm", "c2_hn", "c2_kh", "c2_ml", "c2_nc", "c2_nk", "c2_np", "c2_nq", "c2_nr", "c2_nt", "c2_ny", "c2_ph", "c2_pl", "c2_qh", "c2_rh", "c2_th", "c2_ts", "c2_tx", "c2_xy", "c3_hml", "c3_hny", "c3_nch", "c3_nkh", "c3_nph", "c3_npl", "c3_nqh", "c3_nrh", "c3_nth", "c3_nts", "c3_ntx", "c3_plh", "c3_tsh", "c3_txh", "c4_nplh", "c4_ntsh", "c4_ntxh", "v_a", "v_ai", "v_au", "v_aw", "v_e", "v_ee", "v_i", "v_ia", "v_o", "v_oo", "v_u", "v_ua", "v_w"]);
 function hasStaticMale(id) { return STATIC_MALE_IDS.has(id); }
 function hasMaleClip(id) { return !!(clips[id] && clips[id].male) || hasStaticMale(id); }
@@ -840,8 +841,8 @@ function renderGrid() {
         <div class="sc-top">
           <div class="sc-glyph">${it.glyph}</div>
           <div class="sc-badges">
-            <span class="sc-ipa">${it.ipa}</span>
-            <span class="sc-group">${it.subcat}</span>
+            ${currentLang === 'vi' ? '' : `<span class="sc-ipa">${it.ipa}</span>`}
+            <span class="sc-group">${currentLang === 'vi' ? (SUBCAT_VI[it.subcat] || it.subcat) : it.subcat}</span>
           </div>
         </div>
         <div class="sc-example">
