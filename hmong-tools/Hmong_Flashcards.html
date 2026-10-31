@@ -453,7 +453,7 @@ const CORE_LEXICON = [
       { w: "yehauvas", role: "obj", en: "Jehovah", tone: "s (low)" },
       { w: "ib", role: "num", en: "one (1)", tone: "b (high)" },
       { w: "ob", role: "num", en: "two (2)", tone: "b (high)" },
-      { w: "peb", role: "num", en: "three (3)", tone: "b (high)" },
+      { w: "peb", key: "peb#3", role: "num", en: "three (3)", tone: "b (high)" },
       { w: "tus", role: "clf", en: "classifier (animate / long things)", tone: "s (low)" },
       { w: "tug", role: "clf", en: "classifier (sandhi form of tus after ib/ob/peb)", tone: "g (breathy)" },
       { w: "lub", role: "clf", en: "classifier (round / bulky / house)", tone: "b (high)" },
@@ -467,6 +467,7 @@ const VI_LEX = {
   "koj": { vi: "bạn", toneVi: "j (cao giáng)" },
   "nws": { vi: "anh ấy / cô ấy / nó", toneVi: "s (thấp)" },
   "peb": { vi: "chúng tôi / chúng ta", toneVi: "b (cao)" },
+  "peb#3": { vi: "ba (3)", toneVi: "b (cao)" },
   "nej": { vi: "các bạn", toneVi: "j (cao giáng)" },
   "lawv": { vi: "họ", toneVi: "v (trung thăng)" },
   "yuav": { vi: "sẽ (tương lai)", toneVi: "v (trung thăng)" },
@@ -504,9 +505,9 @@ const VI_LEX = {
   "yehauvas": { vi: "Giê-hô-va", toneVi: "s (thấp)" },
   "ib": { vi: "một (1)", toneVi: "b (cao)" },
   "ob": { vi: "hai (2)", toneVi: "b (cao)" },
-  "tus": { vi: "loại từ (người / con vật)", toneVi: "s (thấp)" },
+  "tus": { vi: "loại từ (người / con vật / vật dài)", toneVi: "s (thấp)" },
   "tug": { vi: "loại từ (biến âm của tus sau ib/ob/peb)", toneVi: "g (hơi thở)" },
-  "lub": { vi: "loại từ (vật tròn / ngôi nhà)", toneVi: "b (cao)" },
+  "lub": { vi: "loại từ (vật tròn / vật cồng kềnh / ngôi nhà)", toneVi: "b (cao)" },
   "phau": { vi: "loại từ (quyển sách)", toneVi: "không chữ cuối (trung)" },
   "dab tsi": { vi: "cái gì?", toneVi: "b + trung" },
   "qhov twg": { vi: "ở đâu?", toneVi: "v + g" },
@@ -518,6 +519,7 @@ const KO_LEX = {
   "koj": { ko: "당신 / 너", toneKo: "j (고하강조)" },
   "nws": { ko: "그 / 그녀", toneKo: "s (저평조)" },
   "peb": { ko: "우리", toneKo: "b (고평조)" },
+  "peb#3": { ko: "셋 (3)", toneKo: "b (고평조)" },
   "nej": { ko: "여러분 / 너희", toneKo: "j (고하강조)" },
   "lawv": { ko: "그들", toneKo: "v (중상승조)" },
   "yuav": { ko: "~할 것이다 (미래)", toneKo: "v (중상승조)" },
@@ -569,6 +571,7 @@ const JA_LEX = {
   "koj": { ja: "あなた", toneJa: "j（高降調）" },
   "nws": { ja: "彼 / 彼女", toneJa: "s（低平調）" },
   "peb": { ja: "私たち", toneJa: "b（高平調）" },
+  "peb#3": { ja: "3（三）", toneJa: "b（高平調）" },
   "nej": { ja: "あなたたち（複数）", toneJa: "j（高降調）" },
   "lawv": { ja: "彼ら", toneJa: "v（中昇調）" },
   "yuav": { ja: "〜でしょう / 〜するつもり（未来）", toneJa: "v（中昇調）" },
@@ -631,7 +634,7 @@ const THEOCRATIC_TERMS_51 = [
   { hm: "Tus Tswv Pluas Hmo", en: "The Lord’s Evening Meal", vi: "Bữa Tiệc Thánh của Chúa", ko: "주의 만찬", ja: "主の晩餐", pos: "obj", note: "Also called the Memorial" },
   { hm: "Kevcai Nco Txog Yexus", en: "Memorial (of Jesus’ death)", vi: "Lễ Tưởng Niệm", ko: "기념식", ja: "記念式", pos: "obj", note: "Used in connection with the Memorial" },
   { hm: "Npe-ee", en: "Branch office", vi: "Chi nhánh", ko: "지부 사무실 (베델)", ja: "支部事務所（ベテル）", pos: "place", note: "Organization structure" },
-  { hm: "Pab Uas Ntaus Thawj", en: "Governing Body", vi: "Hội đồng Lãnh đạo Trung ương", ko: "통치체", ja: "統治体", pos: "subj", note: "" },
+  { hm: "Pab Uas Ntaus Thawj", en: "Governing Body", vi: "Hội đồng Lãnh đạo", ko: "통치체", ja: "統治体", pos: "subj", note: "" },
   { hm: "Tho kev", en: "Pioneer", vi: "Người tiên phong", ko: "파이오니아", ja: "開拓者（パイオニア）", pos: "subj", note: "" },
   { hm: "Tshaj tawm", en: "Preach / Preach the good news", vi: "Rao giảng / Rao truyền tin mừng", ko: "전파하다 / 봉사하다", ja: "伝道する / 宣べ伝える", pos: "verb", note: "" },
   { hm: "Sib txoos", en: "Meet / Congregation meeting", vi: "Nhóm họp / Buổi họp", ko: "집회 / 모이다", ja: "集会 / 集まり合う", pos: "verb", note: "" },
@@ -640,7 +643,7 @@ const THEOCRATIC_TERMS_51 = [
   { hm: "Yexus", en: "Jesus", vi: "Giê-su / Chúa Giê-su", ko: "예수", ja: "イエス", pos: "subj", note: "" },
   { hm: "Xatas", en: "Satan", vi: "Sa-tan", ko: "사탄", ja: "サタン", pos: "subj", note: "" },
   { hm: "Tub txib", en: "Apostles", vi: "Các sứ đồ", ko: "사도들", ja: "使徒たち", pos: "subj", note: "" },
-  { hm: "Kawm Vajlugkub", en: "Study the Bible", vi: "Học hỏi Kinh Thánh", ko: "성경을 연구하다", ja: "聖書を学ぶ", pos: "verb", note: "" },
+  { hm: "Kawm Vajlugkub", en: "Study the Bible", vi: "Học Kinh Thánh", ko: "성경을 연구하다", ja: "聖書を学ぶ", pos: "verb", note: "" },
   { hm: "Teev tiam Yehauvas", en: "Worship Jehovah", vi: "Thờ phượng Đức Giê-hô-va", ko: "여호와를 숭배하다", ja: "エホバを崇拝する", pos: "verb", note: "" },
   { hm: "Lub Tsev Nceeg Vaj", en: "Kingdom Hall", vi: "Phòng Nước Trời", ko: "왕국회관", ja: "王国会館", pos: "place", note: "Also: Tsev Nceeg Vaj" },
   { hm: "Kev Pab Cuam", en: "Ministry / Sacred service", vi: "Thánh chức / Sự phụng sự", ko: "봉사의 직무 / 신성한 봉사", ja: "宣教 / 神聖な奉仕", pos: "obj", note: "" },
@@ -649,11 +652,11 @@ const THEOCRATIC_TERMS_51 = [
   { hm: "Lub Ntiaj Teb Tshiab", en: "New world", vi: "Thế giới mới", ko: "신세계", ja: "新しい世", pos: "place", note: "" },
   { hm: "Rooj Sib Txoos", en: "Convention / Assembly", vi: "Đại hội", ko: "대회", ja: "大会", pos: "obj", note: "" },
   { hm: "Hu Nkauj", en: "Sing songs / Kingdom songs", vi: "Hát thánh ca", ko: "노래 부르다 (왕국 노래)", ja: "賛美の歌を歌う", pos: "verb", note: "" },
-  { hm: "Qhia Vajlugkub", en: "Teach the Bible / Conduct Bible study", vi: "Dạy Kinh Thánh / Học Kinh Thánh", ko: "성경을 가르치다 / 성서 연구 사회", ja: "聖書を教える / 聖書レッスン", pos: "verb", note: "" },
+  { hm: "Qhia Vajlugkub", en: "Teach the Bible / Conduct Bible study", vi: "Dạy Kinh Thánh / Điều khiển học hỏi Kinh Thánh", ko: "성경을 가르치다 / 성서 연구 사회", ja: "聖書を教える / 聖書レッスン", pos: "verb", note: "" },
   { hm: "Cov Xaiv Tseg", en: "Anointed ones", vi: "Những người được xức dầu", ko: "기름부음받은 자들", ja: "油そそがれた者たち", pos: "subj", note: "" },
   { hm: "Amankedoos", en: "Armageddon", vi: "Ha-ma-ghê-đôn", ko: "아마겟돈", ja: "ハルマゲドン", pos: "obj", note: "" },
   { hm: "Lub Vaj Kaj Siab", en: "Paradise", vi: "Địa đàng / Vườn Ê-đen", ko: "낙원 (파라다이스)", ja: "楽園（パラダイス）", pos: "place", note: "" },
-  { hm: "Kev Sib Haum Xeeb", en: "Peace / Unity", vi: "Sự hòa hợp", ko: "평화 / 연합", ja: "平和 / 一致", pos: "obj", note: "" },
+  { hm: "Kev Sib Haum Xeeb", en: "Peace / Unity", vi: "Bình an / Hợp nhất", ko: "평화 / 연합", ja: "平和 / 一致", pos: "obj", note: "" },
   { hm: "Zam Txim", en: "Forgive", vi: "Tha thứ", ko: "용서하다", ja: "許す（赦す）", pos: "verb", note: "" },
   { hm: "Nqe Txhiv", en: "Ransom", vi: "Giá chuộc", ko: "대속물", ja: "贖い（あがない）", pos: "obj", note: "" },
   { hm: "Thwj Tim", en: "Disciple", vi: "Môn đồ", ko: "제자", ja: "弟子", pos: "subj", note: "" },
@@ -739,7 +742,7 @@ function buildMasterDeck() {
   const deck = [];
   // 1. Core 49 words
   CORE_LEXICON.forEach(item => {
-    const key = item.w.toLowerCase();
+    const key = (item.key || item.w).toLowerCase();
     const viObj = VI_LEX[key] || {};
     const koObj = KO_LEX[key] || {};
     const jaObj = (typeof JA_LEX !== "undefined" && JA_LEX[key]) ? JA_LEX[key] : {};
