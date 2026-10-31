@@ -295,8 +295,8 @@
   <div class="panel">
     <div class="toolbar">
       <select id="deckSelect" onchange="setDeckFilter(this.value)" aria-label="Deck">
-        <option value="all">All (101)</option>
-        <option value="core">Core (49)</option>
+        <option value="all">All (99)</option>
+        <option value="core">Core (47)</option>
         <option value="theo">📖 Theocratic (52)</option>
         <option value="custom">⭐ My Words (0)</option>
         <option value="learning">🔄 Still Learning (0)</option>
@@ -325,7 +325,7 @@
         <div class="stage-wrap">
           <div class="flashcard" id="flashcardBox" tabindex="0">
             <div class="card-badges">
-              <span id="cardCounter">1 / 101</span>
+              <span id="cardCounter">1 / 99</span>
               <span class="badge" id="cardCategoryBadge">Core</span>
               <span id="cardMasteryBadge"></span>
             </div>
@@ -449,8 +449,6 @@ const CORE_LEXICON = [
       { w: "dej", role: "obj", en: "water", tone: "j (high-falling)" },
       { w: "dev", role: "obj", en: "dog", tone: "v (mid-rising)" },
       { w: "phooj ywg", role: "obj", en: "friend", tone: "j + g" },
-      { w: "vajtswv", role: "subj", en: "God", tone: "v (mid-rising)" },
-      { w: "yehauvas", role: "obj", en: "Jehovah", tone: "s (low)" },
       { w: "ib", role: "num", en: "one (1)", tone: "b (high)" },
       { w: "ob", role: "num", en: "two (2)", tone: "b (high)" },
       { w: "peb", key: "peb#3", role: "num", en: "three (3)", tone: "b (high)" },
@@ -740,7 +738,7 @@ function pickEmoji(hmong, en) {
 
 function buildMasterDeck() {
   const deck = [];
-  // 1. Core 49 words
+  // 1. Core 47 words
   CORE_LEXICON.forEach(item => {
     const key = (item.key || item.w).toLowerCase();
     const viObj = VI_LEX[key] || {};
@@ -808,7 +806,7 @@ function buildMasterDeck() {
 }
 
 const T = {
-  en: { photoBtn:"📷 Use my own photo", photoRemove:"Remove photo", photoReady:"Your photo is ready", photoNeedCode:"Connect your student code first so your photo can sync.", photoTooBig:"This photo is still too large after shrinking (over 200 KB). Try another photo.", photoLimit:"You have reached the limit of 50 photos.", photoUploading:"Uploading photo...", photoFail:"Photo upload failed. Please try again.", photoBad:"Could not read this image.", title:"🃏 Hmong Flashcards", sub:"49 core words, 52 theocratic terms, and your own synced words. White Hmong.",
+  en: { photoBtn:"📷 Use my own photo", photoRemove:"Remove photo", photoReady:"Your photo is ready", photoNeedCode:"Connect your student code first so your photo can sync.", photoTooBig:"This photo is still too large after shrinking (over 200 KB). Try another photo.", photoLimit:"You have reached the limit of 50 photos.", photoUploading:"Uploading photo...", photoFail:"Photo upload failed. Please try again.", photoBad:"Could not read this image.", title:"🃏 Hmong Flashcards", sub:"47 core words, 52 theocratic terms, and your own synced words. White Hmong.",
     all:"All", core:"Core", theo:"📖 Theocratic", custom:"⭐ My Words", learning:"🔄 Still Learning", mastered:"✅ Mastered",
     search:"🔍 Search", mode:"Mode", flip:"🃏 Flip", quiz:"⚡ Quiz", prompt:"Prompt", hmQ:"Hmong → ?", qHm:"? → Hmong", shuffle:"🔀 Shuffle",
     hintFront:"Tap card or press Space to flip", hintRev:"Guess the Hmong word — tap to flip", swipe:"Swipe ← → for next",
@@ -819,7 +817,7 @@ const T = {
     phHm:"Hmong (e.g. Noog)", phEn:"English (e.g. bird)", previewHint:"Type an English meaning to auto-load an image.",
     need:"Please enter both the Hmong word and the English meaning.", added:"Added", connect:"Connect", syncing:"Syncing",
     synced:"synced", change:"change", codeHint:"Enter HMOOB-01..19 to sync your words.", local:"Saved locally for", failed:"Could not sync" },
-  vi: { photoBtn:"📷 Dùng ảnh của tôi", photoRemove:"Bỏ ảnh", photoReady:"Ảnh của bạn đã sẵn sàng", photoNeedCode:"Hãy kết nối mã học viên trước để ảnh được đồng bộ.", photoTooBig:"Ảnh vẫn quá lớn sau khi thu nhỏ (trên 200 KB). Hãy thử ảnh khác.", photoLimit:"Bạn đã đạt giới hạn 50 ảnh.", photoUploading:"Đang tải ảnh lên...", photoFail:"Tải ảnh lên thất bại. Vui lòng thử lại.", photoBad:"Không đọc được ảnh này.", title:"🃏 Thẻ Từ Vựng H'Mông", sub:"49 từ cơ bản, 52 thuật ngữ thần quyền và từ của bạn (đồng bộ). H'Mông Trắng.",
+  vi: { photoBtn:"📷 Dùng ảnh của tôi", photoRemove:"Bỏ ảnh", photoReady:"Ảnh của bạn đã sẵn sàng", photoNeedCode:"Hãy kết nối mã học viên trước để ảnh được đồng bộ.", photoTooBig:"Ảnh vẫn quá lớn sau khi thu nhỏ (trên 200 KB). Hãy thử ảnh khác.", photoLimit:"Bạn đã đạt giới hạn 50 ảnh.", photoUploading:"Đang tải ảnh lên...", photoFail:"Tải ảnh lên thất bại. Vui lòng thử lại.", photoBad:"Không đọc được ảnh này.", title:"🃏 Thẻ Từ Vựng H'Mông", sub:"47 từ cơ bản, 52 thuật ngữ thần quyền và từ của bạn (đồng bộ). H'Mông Trắng.",
     all:"Tất cả", core:"Cơ bản", theo:"📖 Thần quyền", custom:"⭐ Từ của tôi", learning:"🔄 Đang học", mastered:"✅ Đã thuộc",
     search:"🔍 Tìm", mode:"Chế độ", flip:"🃏 Lật thẻ", quiz:"⚡ Trắc nghiệm", prompt:"Hiển thị", hmQ:"H'Mông → ?", qHm:"? → H'Mông", shuffle:"🔀 Xáo trộn",
     hintFront:"Chạm vào thẻ hoặc nhấn Space để lật", hintRev:"Đoán từ H'Mông — chạm để lật", swipe:"Vuốt ← → để chuyển",
@@ -830,7 +828,7 @@ const T = {
     phHm:"H'Mông (vd: Noog)", phEn:"Tiếng Anh (vd: bird)", previewHint:"Nhập nghĩa tiếng Anh để tự tải hình.",
     need:"Vui lòng nhập cả từ H'Mông và nghĩa tiếng Anh.", added:"Đã thêm", connect:"Kết nối", syncing:"Đang đồng bộ",
     synced:"đã đồng bộ", change:"đổi", codeHint:"Nhập HMOOB-01..19 để đồng bộ từ của bạn.", local:"Đã lưu trên máy cho", failed:"Không thể đồng bộ" },
-  ko: { photoBtn:"📷 내 사진 사용", photoRemove:"사진 삭제", photoReady:"사진이 준비되었습니다", photoNeedCode:"사진을 동기화하려면 먼저 학생 코드를 연결하세요.", photoTooBig:"축소 후에도 사진이 너무 큽니다(200KB 초과). 다른 사진을 사용해 보세요.", photoLimit:"사진 50장 한도에 도달했습니다.", photoUploading:"사진 업로드 중...", photoFail:"사진 업로드에 실패했습니다. 다시 시도하세요.", photoBad:"이 이미지를 읽을 수 없습니다.", title:"🃏 몽족어 플래시카드", sub:"핵심 어휘 49개, 신권 용어 51개, 동기화된 나만의 단어. 백몽어.",
+  ko: { photoBtn:"📷 내 사진 사용", photoRemove:"사진 삭제", photoReady:"사진이 준비되었습니다", photoNeedCode:"사진을 동기화하려면 먼저 학생 코드를 연결하세요.", photoTooBig:"축소 후에도 사진이 너무 큽니다(200KB 초과). 다른 사진을 사용해 보세요.", photoLimit:"사진 50장 한도에 도달했습니다.", photoUploading:"사진 업로드 중...", photoFail:"사진 업로드에 실패했습니다. 다시 시도하세요.", photoBad:"이 이미지를 읽을 수 없습니다.", title:"🃏 몽족어 플래시카드", sub:"핵심 어휘 47개, 신권 용어 51개, 동기화된 나만의 단어. 백몽어.",
     all:"전체", core:"핵심", theo:"📖 신권 용어", custom:"⭐ 내 단어", learning:"🔄 학습 중", mastered:"✅ 암기 완료",
     search:"🔍 검색", mode:"모드", flip:"🃏 카드", quiz:"⚡ 퀴즈", prompt:"제시어", hmQ:"몽족어 → ?", qHm:"? → 몽족어", shuffle:"🔀 섞기",
     hintFront:"카드를 탭하거나 Space를 눌러 뒤집기", hintRev:"몽족어 단어를 맞혀 보세요 — 탭하여 뒤집기", swipe:"← → 스와이프로 이동",
@@ -841,7 +839,7 @@ const T = {
     phHm:"몽족어 (예: Noog)", phEn:"영어 (예: bird)", previewHint:"영어 뜻을 입력하면 이미지가 자동으로 표시됩니다.",
     need:"몽족어 단어와 영어 뜻을 모두 입력하세요.", added:"추가됨", connect:"연결", syncing:"동기화 중",
     synced:"동기화됨", change:"변경", codeHint:"HMOOB-01..19를 입력해 단어를 동기화하세요.", local:"이 기기에 저장됨:", failed:"동기화 실패" },
-  ja: { photoBtn:"📷 自分の写真を使う", photoRemove:"写真を削除", photoReady:"写真の準備ができました", photoNeedCode:"写真を同期するには、先に受講生コードを接続してください。", photoTooBig:"縮小後も写真が大きすぎます（200KB超）。別の写真をお試しください。", photoLimit:"写真は50枚までです。上限に達しました。", photoUploading:"写真をアップロード中...", photoFail:"写真のアップロードに失敗しました。もう一度お試しください。", photoBad:"この画像を読み込めません。", title:"🃏 白モン語 単語カード", sub:"基本49語、神権用語52語、同期されたマイ単語。白モン語。",
+  ja: { photoBtn:"📷 自分の写真を使う", photoRemove:"写真を削除", photoReady:"写真の準備ができました", photoNeedCode:"写真を同期するには、先に受講生コードを接続してください。", photoTooBig:"縮小後も写真が大きすぎます（200KB超）。別の写真をお試しください。", photoLimit:"写真は50枚までです。上限に達しました。", photoUploading:"写真をアップロード中...", photoFail:"写真のアップロードに失敗しました。もう一度お試しください。", photoBad:"この画像を読み込めません。", title:"🃏 白モン語 単語カード", sub:"基本47語、神権用語52語、同期されたマイ単語。白モン語。",
     all:"すべて", core:"基本", theo:"📖 神権用語", custom:"⭐ マイ単語", learning:"🔄 学習中", mastered:"✅ 習得済み",
     search:"🔍 検索", mode:"モード", flip:"🃏 カード", quiz:"⚡ クイズ", prompt:"出題", hmQ:"モン語 → ?", qHm:"? → モン語", shuffle:"🔀 シャッフル",
     hintFront:"カードをタップ、またはSpaceで裏返す", hintRev:"モン語を当てよう — タップで裏返す", swipe:"← → スワイプで移動",
