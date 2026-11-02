@@ -194,6 +194,37 @@
 })();
 </script>
 
+<style>
+#tone-ear-trainer .tet-sub{color:#64748b;font-size:.92rem;margin:0}
+#tone-ear-trainer .tet-center{text-align:center}
+#tone-ear-trainer .tet-panel{margin-bottom:12px}
+#tone-ear-trainer .tet-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-top:12px}
+#tone-ear-trainer .tet-score-row{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0;justify-content:center}
+#tone-ear-trainer .tet-badge{background:#e0f2fe;color:#0369a1;padding:3px 9px;border-radius:999px;font-size:.85rem}
+#tone-ear-trainer .tet-btn{background:#1F4E79;color:#fff;border:none;padding:8px 14px;border-radius:8px;font-weight:600;cursor:pointer;font-size:.9rem}
+#tone-ear-trainer .tet-btn:hover{background:#2E75B6}
+#tone-ear-trainer .tet-outline{background:#f1f5f9;color:#1e293b;border:1px solid #cbd5e1}
+#tone-ear-trainer .tet-mini{font-size:.78rem;padding:4px 9px}
+#tone-ear-trainer span.tet-mini{padding:0;font-weight:400}
+#tone-ear-trainer .tet-big-play{font-size:1.25rem;padding:16px 22px;border-radius:14px}
+#tone-ear-trainer .tet-seg{display:flex;gap:4px;background:#e2e8f0;border-radius:10px;padding:3px;max-width:320px;margin:8px auto}
+#tone-ear-trainer .tet-seg button{flex:1;border:none;background:transparent;padding:7px 6px;border-radius:8px;font-weight:700;font-size:.84rem;cursor:pointer;color:#1e293b}
+#tone-ear-trainer .tet-seg button.active{background:#1F4E79;color:#fff}
+#tone-ear-trainer .tet-quiz{padding:12px;border-radius:10px;border:2px solid #cbd5e1;background:#fff;font-weight:600;font-size:.96rem;cursor:pointer;text-align:center;color:#1e293b}
+#tone-ear-trainer .tet-quiz.correct{border-color:#10b981;background:#ecfdf5;color:#065f46}
+#tone-ear-trainer .tet-quiz.wrong{border-color:#ef4444;background:#fef2f2;color:#991b1b}
+#tone-ear-trainer .tet-feedback{margin-top:12px;padding:10px 12px;border-radius:10px;font-weight:600}
+#tone-ear-trainer .tet-feedback.ok{background:#ecfdf5;border:1px solid #10b981}
+#tone-ear-trainer .tet-feedback.bad{background:#fef2f2;border:1px solid #ef4444}
+html[data-theme="dark"] #tone-ear-trainer .tet-sub{color:#94a3b8}
+html[data-theme="dark"] #tone-ear-trainer .tet-badge{background:#0c4a6e;color:#bae6fd}
+html[data-theme="dark"] #tone-ear-trainer .tet-outline,html[data-theme="dark"] #tone-ear-trainer .tet-quiz:not(.correct):not(.wrong){background:#334155;color:#f8fafc;border-color:#475569}
+html[data-theme="dark"] #tone-ear-trainer .tet-seg{background:#0f172a}
+html[data-theme="dark"] #tone-ear-trainer .tet-seg button{color:#e2e8f0}
+html[data-theme="dark"] #tone-ear-trainer .tet-seg button.active{background:#2563eb;color:#fff}
+html[data-theme="dark"] #tone-ear-trainer .tet-quiz.correct,html[data-theme="dark"] #tone-ear-trainer .tet-feedback.ok{background:#064e3b;color:#a7f3d0}
+html[data-theme="dark"] #tone-ear-trainer .tet-quiz.wrong,html[data-theme="dark"] #tone-ear-trainer .tet-feedback.bad{background:#450a0a;color:#fecaca}
+</style>
 </head>
 <body>
 
@@ -216,7 +247,7 @@
     <h2>How to Use This Trainer</h2>
     <ol>
       <li>Read the tone description.</li>
-      <li>Listen to a native speaker (recommended: Study Hmong YouTube tone drills) or use the examples below.</li>
+      <li>Listen to a native speaker or use the examples below.</li>
       <li>Record yourself saying the syllable and play it back.</li>
       <li>Practice distinguishing minimal pairs (same sound, different tone = different meaning).</li>
       <li>Spend 5–10 minutes daily on pure sound discrimination before adding meaning.</li>
@@ -295,7 +326,7 @@
     <h2>Cách Sử Dụng Công Cụ Này</h2>
     <ol>
       <li>Đọc kỹ mô tả từng thanh điệu và ký hiệu chữ cái cuối (RPA).</li>
-      <li>Nghe người bản xứ phát âm (gợi ý: kênh YouTube Study Hmong) hoặc các ví dụ bên dưới.</li>
+      <li>Nghe người bản xứ phát âm hoặc các ví dụ bên dưới.</li>
       <li>Bấm nút ghi âm giọng của bạn đọc âm tiết đó và nghe lại để so sánh.</li>
       <li>Luyện phân biệt các cặp tối thiểu (cùng phụ âm và nguyên âm, chỉ khác chữ cái báo thanh ở cuối = khác nghĩa).</li>
       <li>Dành 5–10 phút mỗi ngày chỉ để luyện nghe và phân biệt thanh điệu trước khi học nghĩa từ.</li>
@@ -373,7 +404,7 @@
     <h2>이 트레이너 활용 방법</h2>
     <ol>
       <li>아래 7가지 성조 설명과 단어 끝 성조 표기 알파벳(RPA)을 확인합니다.</li>
-      <li>원어민 발음(추천: YouTube ‘Study Hmong’ 채널 성조 훈련 영상)을 주의 깊게 듣습니다.</li>
+      <li>원어민 발음이나 아래 예시 음성을 주의 깊게 듣습니다.</li>
       <li>아래 녹음 버튼으로 자신의 발음을 녹음하고 재생하여 원어민 소리와 비교합니다.</li>
       <li>최소대립쌍(자음·모음은 같고 성조 알파벳만 다른 단어들)을 구분해 발음해 봅니다.</li>
       <li>단어 뜻을 외우기 전에 매일 5~10분씩 순수한 소리 구분 연습에 집중하세요.</li>
@@ -451,7 +482,7 @@
     <h2>このトレーナーの使い方</h2>
     <ol>
       <li>下記の7つの声調の解説と、語末の声調記号アルファベット（RPA表記）を確認します。</li>
-      <li>ネイティブの発音（おすすめ：YouTube「Study Hmong」チャンネルの声調ドリル動画）を聴きます。</li>
+      <li>ネイティブの発音や下の音声例を聴きます。</li>
       <li>下の録音ボタンで自分の発音を録音し、再生してネイティブの音と比較します。</li>
       <li>ミニマルペア（子音・母音は同じで、語末の声調記号だけが異なる単語）を聴き分け・発音練習します。</li>
       <li>単語の意味を暗記する前に、毎日5〜10分間「純粋な音の聴き分け」に集中しましょう。</li>
@@ -532,48 +563,52 @@
   <p id="status">Ready</p>
 </div>
 
+
+<!-- TONE EAR TRAINER (merged from former module 4) -->
+<div class="card" id="tone-ear-trainer">
+<div class="tet-panel"><h2><span data-tet="title"></span></h2><p class="tet-sub" data-tet="sub"></p></div>
+<div class="tet-panel tet-center">
+ <div class="tet-score-row"><span class="tet-badge"><span data-tet="score"></span>: <b id="tet-sc">0/0</b></span><span class="tet-badge"><span data-tet="streak"></span>: <b id="tet-sk">0</b></span><span class="tet-badge"><span data-tet="best"></span>: <b id="tet-bs">0</b></span></div>
+ <div class="tet-seg"><button type="button" id="tet-l4" onclick="TET.setLvl(4)" data-tet="lvl4"></button><button type="button" id="tet-l8" onclick="TET.setLvl(8)" data-tet="lvl8"></button></div>
+ <div><button type="button" class="tet-btn tet-big-play" id="tet-playBtn" onclick="TET.playQ()" data-tet="play"></button></div>
+ <p class="tet-sub" id="tet-prompt" data-tet="pressPlay" style="margin-top:10px"></p>
+ <div class="tet-grid" id="tet-choices"></div>
+ <div id="tet-fb"></div>
+ <div style="margin-top:10px"><button type="button" class="tet-btn tet-outline" onclick="TET.resetScore()" data-tet="reset"></button></div>
+</div>
+<div class="tet-panel"><b data-tet="ref"></b><div class="tet-grid" id="tet-refs"></div></div>
+</div>
+
 <!-- RECOMMENDED RESOURCES -->
 <div class="card" id="res-en">
   <h2>Recommended Native Practice</h2>
-  <ul>
-    <li>Study Hmong YouTube channel – dedicated tone drill videos (search “How To Read Hmong - Tone Drills”)</li>
-    <li>Hmonglus app – audio flashcards</li>
-    <li>Learn Hmong Language app – free tone lessons</li>
-    <li>Record a native Hmong speaker if available in your congregation and practice along</li>
-  </ul>
+    <p>Hmonglus app – audio flashcards</p>
+  <p>Learn Hmong Language app – free tone lessons</p>
+  <p>Record a native Hmong speaker if available in your congregation and practice along</p>
   <p>Daily habit: 5–10 minutes of pure listening and repeating tones. This builds the auditory precision that research links to faster language learning.</p>
 </div>
 
 <div class="card hidden" id="res-vi">
   <h2>Tài Liệu Luyện Nghe Giọng Bản Xứ Gợi Ý</h2>
-  <ul>
-    <li>Kênh YouTube <strong>Study Hmong</strong> – các video luyện thanh điệu (tìm “How To Read Hmong - Tone Drills”)</li>
-    <li>Ứng dụng <strong>Hmonglus</strong> – thẻ từ vựng có âm thanh</li>
-    <li>Ứng dụng <strong>Learn Hmong Language</strong> – bài học thanh điệu miễn phí</li>
-    <li>Ghi âm giọng của anh chị người H'Mông bản xứ trong hội thánh và luyện đọc theo mỗi ngày</li>
-  </ul>
+    <p>Ứng dụng <strong>Hmonglus</strong> – thẻ từ vựng có âm thanh</p>
+  <p>Ứng dụng <strong>Learn Hmong Language</strong> – bài học thanh điệu miễn phí</p>
+  <p>Ghi âm giọng của anh chị người H'Mông bản xứ trong hội thánh và luyện đọc theo mỗi ngày</p>
   <p>Thói quen hàng ngày: Dành 5–10 phút nghe và lặp lại chuẩn từng thanh điệu trước khi ghép câu dài.</p>
 </div>
 
 <div class="card hidden" id="res-ko">
   <h2>추천 원어민 발음 학습 자료</h2>
-  <ul>
-    <li><strong>Study Hmong</strong> YouTube 채널 – 성조 집중 훈련 영상 (“How To Read Hmong - Tone Drills” 검색)</li>
-    <li><strong>Hmonglus</strong> 앱 – 원어민 음성 단어 카드</li>
-    <li><strong>Learn Hmong Language</strong> 앱 – 무료 기초 성조 레슨</li>
-    <li>회중 내 몽족어 원어민 형제·자매의 발음을 녹음하여 매일 따라 읽으며 비교해 보세요</li>
-  </ul>
+    <p><strong>Hmonglus</strong> 앱 – 원어민 음성 단어 카드</p>
+  <p><strong>Learn Hmong Language</strong> 앱 – 무료 기초 성조 레슨</p>
+  <p>회중 내 몽족어 원어민 형제·자매의 발음을 녹음하여 매일 따라 읽으며 비교해 보세요</p>
   <p>매일 습관: 긴 문장을 말하기 전에 하루 5~10분씩 성조를 듣고 똑같이 따라 하는 훈련이 발음 정확도를 크게 높여 줍니다.</p>
 </div>
 
 <div class="card hidden" id="res-ja">
   <h2>おすすめのネイティブ音声教材</h2>
-  <ul>
-    <li>YouTubeチャンネル <strong>Study Hmong</strong> – 声調ドリル動画（「How To Read Hmong - Tone Drills」で検索）</li>
-    <li><strong>Hmonglus</strong> アプリ – 音声付き単語フラッシュカード</li>
-    <li><strong>Learn Hmong Language</strong> アプリ – 無料の基礎声調レッスン</li>
-    <li>会衆内にモン語ネイティブの兄弟姉妹がいれば発音を録音させてもらい、毎日シャドーイング練習をしましょう</li>
-  </ul>
+    <p><strong>Hmonglus</strong> アプリ – 音声付き単語フラッシュカード</p>
+  <p><strong>Learn Hmong Language</strong> アプリ – 無料の基礎声調レッスン</p>
+  <p>会衆内にモン語ネイティブの兄弟姉妹がいれば発音を録音させてもらい、毎日シャドーイング練習をしましょう</p>
   <p>毎日の習慣：長い文を作る前に、1日5〜10分間、純粋に声調を聴いて真似る練習を続けることで聴覚の精度が高まります。</p>
 </div>
 
@@ -707,6 +742,54 @@ if (qLang === 'vi' || qLang === 'ko' || qLang === 'ja' || qLang === 'en') {
 function play(w){if(cur){cur.pause();}var a=new Audio('audio/tones/'+w+'.mp3');cur=a;a.onerror=function(){synth(w);};var p=a.play();if(p&&p.catch)p.catch(function(){synth(w);});}
 document.addEventListener('click',function(e){var t=e.target.closest('[data-tone]');if(t){e.preventDefault();play(t.getAttribute('data-tone'));}});
 document.addEventListener('keydown',function(e){var t=e.target.closest&&e.target.closest('.tone-word');if(t&&(e.key==='Enter'||e.key===' ')){e.preventDefault();play(t.getAttribute('data-tone'));}});})();
+</script>
+<script>
+(function(){
+const STR={"en": {"hub": "← Practice Hub", "navSound": "Sound Trainer", "navFc": "Flashcards", "male": "Male", "female": "Female", "recMale": "● Rec Male", "recFemale": "● Rec Female", "stop": "■ Stop", "studio": "🎙️ Instructor studio", "studioOn": "Instructor studio is ON: record a Male or Female clip for each line; it uploads to the cloud for all students.", "noClip": "No instructor recording yet", "uploading": "Uploading…", "uploaded": "Saved to cloud ✅", "upFail": "Saved on this device only (cloud unavailable)", "tooBig": "Clip too long — keep it under ~4 seconds.", "micErr": "Microphone not available. Allow mic access and try again.", "yourTurn": "🎤 Your turn", "playMine": "▶ My recording", "needsReview": "needs review", "score": "Score", "streak": "Streak", "next": "Next →", "check": "Check", "reveal": "Reveal", "correct": "Correct!", "wrong": "Not quite.", "title": "🎧 Tone Ear Trainer", "sub": "Listen to an instructor recording of the syllable \"to\" and pick which of the 8 White Hmong tones you heard.", "play": "▶ Play sound", "again": "🔁 Replay", "ref": "Reference: tap to hear each tone", "lvl": "Choices", "lvl4": "4 tones", "lvl8": "All 8", "reset": "Reset score", "best": "Best streak", "pick": "Which tone did you hear?", "pressPlay": "Press ▶ to hear a sound.", "ans": "Answer"}, "vi": {"hub": "← Trang luyện tập", "navSound": "Luyện âm", "navFc": "Thẻ từ", "male": "Nam", "female": "Nữ", "recMale": "● Ghi Nam", "recFemale": "● Ghi Nữ", "stop": "■ Dừng", "studio": "🎙️ Phòng thu giảng viên", "studioOn": "Phòng thu giảng viên đang BẬT: ghi giọng Nam hoặc Nữ cho từng dòng; tệp sẽ tải lên đám mây cho mọi học viên.", "noClip": "Chưa có bản ghi của giảng viên", "uploading": "Đang tải lên…", "uploaded": "Đã lưu lên đám mây ✅", "upFail": "Chỉ lưu trên thiết bị này (không kết nối được đám mây)", "tooBig": "Đoạn ghi quá dài — giữ dưới khoảng 4 giây.", "micErr": "Không dùng được micro. Hãy cho phép micro rồi thử lại.", "yourTurn": "🎤 Đến lượt bạn", "playMine": "▶ Bản ghi của tôi", "needsReview": "cần duyệt", "score": "Điểm", "streak": "Chuỗi", "next": "Tiếp →", "check": "Kiểm tra", "reveal": "Hiện đáp án", "correct": "Đúng rồi!", "wrong": "Chưa đúng.", "title": "🎧 Luyện Tai Thanh Điệu", "sub": "Nghe bản ghi âm của giảng viên cho âm tiết \"to\" và chọn 1 trong 8 thanh điệu tiếng Hmông Trắng mà bạn nghe được.", "play": "▶ Phát âm", "again": "🔁 Nghe lại", "ref": "Tham khảo: chạm để nghe từng thanh", "lvl": "Số lựa chọn", "lvl4": "4 thanh", "lvl8": "Cả 8", "reset": "Đặt lại điểm", "best": "Chuỗi tốt nhất", "pick": "Bạn nghe thanh nào?", "pressPlay": "Nhấn ▶ để nghe.", "ans": "Đáp án"}, "ko": {"hub": "← 연습 허브", "navSound": "발음 트레이너", "navFc": "플래시카드", "male": "남성", "female": "여성", "recMale": "● 남성 녹음", "recFemale": "● 여성 녹음", "stop": "■ 정지", "studio": "🎙️ 강사 스튜디오", "studioOn": "강사 스튜디오 켜짐: 각 줄에 남성 또는 여성 음성을 녹음하면 모든 학생을 위해 클라우드에 업로드됩니다.", "noClip": "아직 강사 녹음이 없습니다", "uploading": "업로드 중…", "uploaded": "클라우드에 저장됨 ✅", "upFail": "이 기기에만 저장됨 (클라우드 사용 불가)", "tooBig": "녹음이 너무 깁니다 — 약 4초 이내로 해 주세요.", "micErr": "마이크를 사용할 수 없습니다. 권한을 허용하고 다시 시도하세요.", "yourTurn": "🎤 내 차례", "playMine": "▶ 내 녹음", "needsReview": "검토 필요", "score": "점수", "streak": "연속", "next": "다음 →", "check": "확인", "reveal": "정답 보기", "correct": "정답!", "wrong": "아쉬워요.", "title": "🎧 성조 듣기 트레이너", "sub": "강사가 녹음한 음절 \"to\"를 듣고 백몽족어 8개 성조 중 어떤 성조인지 고르세요.", "play": "▶ 소리 재생", "again": "🔁 다시 듣기", "ref": "참고: 눌러서 각 성조 듣기", "lvl": "선택지", "lvl4": "4개 성조", "lvl8": "8개 모두", "reset": "점수 초기화", "best": "최고 연속", "pick": "어떤 성조를 들었나요?", "pressPlay": "▶ 를 눌러 들어 보세요.", "ans": "정답"}, "ja": {"hub": "← 練習ハブ", "navSound": "発音トレーナー", "navFc": "単語カード", "male": "男性", "female": "女性", "recMale": "● 男性を録音", "recFemale": "● 女性を録音", "stop": "■ 停止", "studio": "🎙️ 講師スタジオ", "studioOn": "講師スタジオON：各行に男性または女性の音声を録音すると、全受講生向けにクラウドへ保存されます。", "noClip": "講師の録音はまだありません", "uploading": "アップロード中…", "uploaded": "クラウドに保存しました ✅", "upFail": "この端末にのみ保存（クラウド未接続）", "tooBig": "録音が長すぎます — 約4秒以内にしてください。", "micErr": "マイクを使用できません。許可してから再試行してください。", "yourTurn": "🎤 あなたの番", "playMine": "▶ 自分の録音", "needsReview": "要確認", "score": "スコア", "streak": "連続", "next": "次へ →", "check": "確認", "reveal": "答えを見る", "correct": "正解！", "wrong": "惜しい！", "title": "🎧 声調聞き取りトレーナー", "sub": "講師が録音した音節「to」を聞いて、白モン語の8つの声調のどれかを選びましょう。", "play": "▶ 再生", "again": "🔁 もう一度", "ref": "参考：タップして各声調を聞く", "lvl": "選択肢", "lvl4": "4声調", "lvl8": "8つすべて", "reset": "スコアをリセット", "best": "最高連続", "pick": "どの声調が聞こえましたか？", "pressPlay": "▶ を押して聞いてください。", "ans": "答え"}};
+const LANGS=['en','vi','ko','ja'];
+const $=id=>document.getElementById('tet-'+id);
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let uiLang=(function(){const q=new URLSearchParams(location.search).get('lang');if(LANGS.includes(q))return q;let s='en';try{s=localStorage.getItem('hmong_ui_lang')||'en'}catch(e){}return LANGS.includes(s)?s:'en';})();
+function t(k){return (STR[uiLang]&&STR[uiLang][k]!=null)?STR[uiLang][k]:(STR.en[k]!=null?STR.en[k]:k);}
+function L(o){if(!o)return '';if(typeof o==='string')return o;return o[uiLang]||o.en||'';}
+function studentCode(){let c='';const q=new URLSearchParams(location.search).get('code');try{c=(q||localStorage.getItem('hmong_student_code')||'')}catch(e){c=q||''}c=c.trim().toUpperCase().replace(/^HMONG-/,'HMOOB-');return /^HMOOB-\d{2}$/.test(c)?c:'';}
+let curAudio=null;
+function playUrl(u){try{if(curAudio)curAudio.pause();curAudio=new Audio(u);const p=curAudio.play();if(p&&p.catch)p.catch(()=>{});}catch(e){}}
+const TONES=[
+ {w:'tob',m:'-b',d:{en:'high',vi:'cao',ko:'높은 평조',ja:'高平調'}},
+ {w:'toj',m:'-j',d:{en:'high-falling',vi:'cao giáng',ko:'높은 하강조',ja:'高下降調'}},
+ {w:'tov',m:'-v',d:{en:'mid-rising',vi:'trung thăng',ko:'중간 상승조',ja:'中上昇調'}},
+ {w:'tos',m:'-s',d:{en:'low',vi:'thấp',ko:'낮은 평조',ja:'低平調'}},
+ {w:'tom',m:'-m',d:{en:'low, creaky (glottal stop)',vi:'thấp, tắc thanh hầu',ko:'낮은 성문 폐쇄조',ja:'低・声門閉鎖調'}},
+ {w:'tog',m:'-g',d:{en:'mid-low breathy',vi:'trung thấp, có hơi thở',ko:'중저 기식조',ja:'中低・息もれ調'}},
+ {w:'to',m:'(none)',d:{en:'mid (unmarked)',vi:'trung (không dấu)',ko:'중간 평조(무표기)',ja:'中平調（無表記）'}},
+ {w:'tod',m:'-d',d:{en:'low-rising (variant of -m)',vi:'thấp thăng (biến thể của -m)',ko:'낮은 상승조(-m 변이)',ja:'低上昇調（-m の変種）'}},
+];
+const KEY='hmong_tone_ear_'+(studentCode()||'GUEST');
+let st={c:0,n:0,s:0,b:0,lvl:8};try{Object.assign(st,JSON.parse(localStorage.getItem(KEY)||'{}'))}catch(e){}
+let q=null,opts=[],answered=false,played=false;
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}};
+const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+function aud(w){playUrl('audio/tones/'+w+'.mp3');}
+function newQ(){let pick;do{pick=TONES[Math.floor(Math.random()*8)]}while(q&&pick===q&&Math.random()<.7);q=pick;answered=false;played=false;
+ if(st.lvl===4){opts=shuffle([q,...shuffle(TONES.filter(x=>x!==q)).slice(0,3)]);}else opts=TONES.slice();$('fb').innerHTML='';render();}
+function playQ(){if(!q||answered)newQ();played=true;aud(q.w);$('playBtn').textContent=t('again');$('prompt').textContent=t('pick');}
+function choose(w){if(!q||answered)return;answered=true;st.n++;const ok=w===q.w;if(ok){st.c++;st.s++;st.b=Math.max(st.b,st.s)}else st.s=0;save();
+ $('fb').innerHTML=`<div class="tet-feedback ${ok?'ok':'bad'}">${ok?'✅ '+t('correct'):'❌ '+t('wrong')} ${t('ans')}: <b>${q.w}</b> (${q.m}, ${esc(L(q.d))}) <button class="tet-btn tet-outline tet-mini" onclick="TET.aud('${q.w}')">▶</button> <button class="tet-btn tet-mini" onclick="TET.newQ();TET.playQ();TET.render()">${t('next')}</button></div>`;render(w);}
+function render(chosen){$('choices').innerHTML=opts.map(o=>{let cls='tet-quiz';if(answered){if(o===q)cls+=' correct';else if(o.w===chosen)cls+=' wrong';}
+ return `<button class="${cls}" onclick="TET.choose('${o.w}')"><b style="font-size:1.2rem">${o.w}</b><br><span class="tet-mini">${o.m} · ${esc(L(o.d))}</span></button>`}).join('');
+ $('refs').innerHTML=TONES.map(o=>`<button class="tet-btn tet-outline" onclick="TET.aud('${o.w}')">▶ ${o.w} <span class="tet-mini">(${o.m})</span></button>`).join('');
+ $('sc').textContent=st.c+'/'+st.n;$('sk').textContent=st.s;$('bs').textContent=st.b;$('l4').classList.toggle('active',st.lvl===4);$('l8').classList.toggle('active',st.lvl===8);}
+function setLvl(n){st.lvl=n;save();newQ();onLang();}
+function resetScore(){st.c=st.n=st.s=0;save();render();}
+function onLang(){render();$('playBtn').textContent=(played&&!answered)?t('again'):t('play');$('prompt').textContent=played?t('pick'):t('pressPlay');}
+
+function setLang(l){uiLang=LANGS.includes(l)?l:'en';document.querySelectorAll('#tone-ear-trainer [data-tet]').forEach(e=>{e.textContent=t(e.dataset.tet)});onLang();}
+window.TET={aud,newQ,playQ,render,choose,setLvl,resetScore,setLang};
+const origSet=window.setUILang;
+window.setUILang=function(l){origSet(l);setLang(l);};
+newQ();setLang(uiLang);
+})();
 </script>
 </body>
 </html>
