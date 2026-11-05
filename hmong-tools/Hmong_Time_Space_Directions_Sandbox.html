@@ -626,7 +626,7 @@ const UI_LABELS = {
   },
   ko: {
     draftBadge: "🛠️ 인터랙티브 샌드박스 초안 (아직 라이브 허브에 게시되지 않음)",
-    mainTitle: "몽족어 시간 · 방위 · 공간 이동 인터랙티브 모듈",
+    mainTitle: "몽어 시간 · 방위 · 공간 이동 인터랙티브 모듈",
     mainSub: "날짜와 시간대 슬라이더를 움직이고, 나침반과 공간 이동 컨트롤러를 직접 조작해 보세요.",
     tabTime: "⏳ 1. 시간 & 하늘 타임라인",
     tabDir: "🧭 2. 동서남북 & 지형 방위",
@@ -635,8 +635,8 @@ const UI_LABELS = {
     resetToday: "🎯 오늘(hnub no)로 이동",
     vertTitle: "↕️ 세로 슬라이더: 하루의 시간대",
     vertSub: "새벽부터 밤까지 슬라이드하거나 클릭하세요:",
-    combinedLabel: "결합된 몽족어 시간 표현",
-    dirGridHeading: "기본 4방위(동·서·남·북) 및 몽족어 산악·계곡 상대 방위:",
+    combinedLabel: "결합된 몽어 시간 표현",
+    dirGridHeading: "기본 4방위(동·서·남·북) 및 몽어 산악·계곡 상대 방위:",
     spaceListHeading: "핵심 공간 이동 표현 12가지 (카드를 클릭해 이동해 보세요):"
   },
   ja: {
@@ -760,7 +760,7 @@ function renderTimeModule() {
   if (d.tense === 'past') {
     exHm = `${capPhrase} kuv tau kawm lus Hmoob.`;
     exTr = curLang === 'vi' ? `"${dGloss} (${todGloss}) tôi đã học tiếng H'Mông." (dùng 'tau' cho quá khứ)`
-      : curLang === 'ko' ? `"${dGloss} (${todGloss})에 저는 몽족어를 배웠습니다." (과거 표지 'tau' 사용)`
+      : curLang === 'ko' ? `"${dGloss} (${todGloss})에 저는 몽어를 배웠습니다." (과거 표지 'tau' 사용)`
       : curLang === 'ja' ? `「${dGloss}（${todGloss}）、私はモン語を学びました。」（過去マーカー tau を使用）`
       : `"${dGloss} (${todGloss}), I studied Hmong." (uses past marker 'tau')`;
   } else if (d.tense === 'future') {
