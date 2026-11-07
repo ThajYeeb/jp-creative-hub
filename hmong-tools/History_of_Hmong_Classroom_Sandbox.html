@@ -125,8 +125,8 @@
 
   <div class="panel">
     <h1 id="uiTitle">History of the Hmong — Classroom Player <span class="sb-tag">Sandbox</span></h1>
-    <p class="sub" id="uiSub">Hidden class player. Students pick a language for subtitles.</p>
-    <p class="help" id="uiHelp">On the laptop connected to the projector, create a room and load the video file. Students scan the QR code or type the room code and pick a language. Phones follow the subtitles even without the video file. Keep phones on Classroom speakers so they stay silent and everyone hears the original soundtrack from the room.</p>
+    <p class="sub" id="uiSub">Hidden class player. Students pick a language for subtitles and headphone audio.</p>
+    <p class="help" id="uiHelp">On the laptop connected to the projector, create a room and load the video file. Students scan the QR code or type the room code, pick a language, and use headphones to hear a natural-speed interpretation. Phones can follow with subtitles and headphone audio even without the video file. Use Classroom speakers to keep a phone silent.</p>
     <div class="row">
       <button class="btn" id="btnCreate" onclick="createRoom()">Create a room</button>
       <input type="text" id="roomInput" maxlength="8" placeholder="Room code" autocomplete="off" style="width:8em;text-transform:uppercase;">
@@ -148,7 +148,7 @@
       <span class="file-name" id="fileName"></span>
     </div>
     <div class="row">
-      <span id="uiPlayLang" style="font-weight:700;">Subtitles</span>
+      <span id="uiPlayLang" style="font-weight:700;">Subtitles &amp; headphone language</span>
       <button class="btn btn-outline active" id="plEn" onclick="setPlayLang('en')">EN</button>
       <button class="btn btn-outline" id="plVi" onclick="setPlayLang('vi')">VI</button>
       <button class="btn btn-outline" id="plKo" onclick="setPlayLang('ko')">KO</button>
@@ -156,6 +156,7 @@
     <div class="row">
       <span id="uiAudio" style="font-weight:700;">Audio</span>
       <button class="btn btn-outline active" id="modeOriginal" onclick="setAudioMode('original')">Original soundtrack</button>
+      <button class="btn btn-outline" id="modeHeadphones" onclick="setAudioMode('headphones')">Headphones</button>
       <button class="btn btn-outline" id="modeSpeakers" onclick="setAudioMode('speakers')">Classroom speakers</button>
     </div>
   </div>
@@ -172,20 +173,23 @@
     </details>
   </div>
 
+<audio id="interp" preload="auto"></audio>
+
 <script>
 var UI = {
   en: {
     navHub: "← Practice Hub",
     title: "History of the Hmong — Classroom Player",
-    sub: "Hidden class player. Students pick a language for subtitles.",
-    help: "On the laptop connected to the projector, create a room and load the video file. Students scan the QR code or type the room code and pick a language. Phones follow the subtitles even without the video file. Keep phones on Classroom speakers so they stay silent and everyone hears the original soundtrack from the room.",
+    sub: "Hidden class player. Students pick a language for subtitles and headphone audio.",
+    help: "On the laptop connected to the projector, create a room and load the video file. Students scan the QR code or type the room code, pick a language, and use headphones to hear a natural-speed interpretation. Phones can follow with subtitles and headphone audio even without the video file. Use Classroom speakers to keep a phone silent.",
     create: "Create a room",
     join: "Join",
     roomPh: "Room code",
     load: "Load video file",
-    playLang: "Subtitles",
+    playLang: "Subtitles & headphone language",
     audio: "Audio",
     original: "Original soundtrack",
+    headphones: "Headphones",
     speakers: "Classroom speakers",
     ost: "On-screen text",
     hosting: "Hosting — students can join",
@@ -198,15 +202,16 @@ var UI = {
   vi: {
     navHub: "← Trung tâm luyện tập",
     title: "Lịch sử người Hmong — Trình phát trong lớp",
-    sub: "Trình phát ẩn cho lớp học. Học viên chọn ngôn ngữ cho phụ đề.",
-    help: "Trên máy tính nối với máy chiếu, hãy tạo một phòng và tải tệp video. Học viên quét mã QR hoặc nhập mã phòng, rồi chọn ngôn ngữ. Điện thoại vẫn theo phụ đề ngay cả khi chưa có tệp video. Để điện thoại ở chế độ Loa trong lớp để máy im lặng và cả lớp nghe nhạc nền gốc từ loa phòng.",
+    sub: "Trình phát ẩn cho lớp học. Học viên chọn ngôn ngữ cho phụ đề và âm thanh qua tai nghe.",
+    help: "Trên máy tính nối với máy chiếu, hãy tạo một phòng và tải tệp video. Học viên quét mã QR hoặc nhập mã phòng, chọn ngôn ngữ, rồi dùng tai nghe để nghe bản phiên dịch nói ở tốc độ tự nhiên. Điện thoại vẫn theo phụ đề và bản nghe ngay cả khi chưa có tệp video. Chọn Loa trong lớp nếu muốn điện thoại im lặng.",
     create: "Tạo phòng",
     join: "Tham gia",
     roomPh: "Mã phòng",
     load: "Tải tệp video",
-    playLang: "Phụ đề",
+    playLang: "Phụ đề và ngôn ngữ nghe qua tai nghe",
     audio: "Âm thanh",
     original: "Nhạc nền gốc",
+    headphones: "Tai nghe",
     speakers: "Loa trong lớp",
     ost: "Chữ trên màn hình",
     hosting: "Đang làm máy chủ — học viên có thể tham gia",
@@ -219,15 +224,16 @@ var UI = {
   ko: {
     navHub: "← 연습 허브",
     title: "흐몽족의 역사 — 교실 재생기",
-    sub: "수업용 숨겨진 재생기입니다. 학생들이 자막 언어를 고릅니다.",
-    help: "프로젝터에 연결된 노트북에서 방을 만들고 동영상 파일을 불러오세요. 학생들은 QR 코드를 스캔하거나 방 코드를 입력한 뒤 언어를 선택합니다. 동영상 파일이 없어도 자막을 따라갈 수 있습니다. 휴대폰은 교실 스피커로 두어 소리를 끄고, 모두 교실의 원본 사운드트랙을 듣게 하세요.",
+    sub: "수업용 숨겨진 재생기입니다. 학생들이 자막과 헤드폰 통역 언어를 고릅니다.",
+    help: "프로젝터에 연결된 노트북에서 방을 만들고 동영상 파일을 불러오세요. 학생들은 QR 코드를 스캔하거나 방 코드를 입력한 뒤 언어를 선택하고, 헤드폰으로 자연스러운 속도의 통역을 들을 수 있습니다. 동영상 파일이 없어도 자막과 헤드폰 통역으로 따라갈 수 있습니다. 휴대폰을 조용히 두려면 교실 스피커를 선택하세요.",
     create: "방 만들기",
     join: "참여",
     roomPh: "방 코드",
     load: "동영상 파일 불러오기",
-    playLang: "자막",
+    playLang: "자막 및 헤드폰 언어",
     audio: "오디오",
     original: "원본 사운드트랙",
+    headphones: "헤드폰",
     speakers: "교실 스피커",
     ost: "화면 글자",
     hosting: "진행 중 — 학생이 참여할 수 있습니다",
@@ -240,15 +246,16 @@ var UI = {
   ja: {
     navHub: "← 練習ハブ",
     title: "モンの歴史 — 教室プレーヤー",
-    sub: "授業用の非公開プレーヤーです。生徒は字幕の言語を選びます。",
-    help: "プロジェクターに接続したノートパソコンでルームを作成し、動画ファイルを読み込みます。生徒はQRコードをスキャンするかルームコードを入力し、言語を選びます。動画ファイルがなくても字幕でついていけます。携帯電話は教室のスピーカーのまま無音にして、みんな教室の元のサウンドトラックを聞くようにします。",
+    sub: "授業用の非公開プレーヤーです。生徒は字幕とヘッドフォン通訳の言語を選びます。",
+    help: "プロジェクターに接続したノートパソコンでルームを作成し、動画ファイルを読み込みます。生徒はQRコードをスキャンするかルームコードを入力し、言語を選んでヘッドフォンで自然な速さの通訳を聞けます。動画ファイルがなくても、字幕とヘッドフォン通訳でついていけます。携帯電話を無音にするには教室のスピーカーを選びます。",
     create: "ルームを作成",
     join: "参加",
     roomPh: "ルームコード",
     load: "動画ファイルを読み込む",
-    playLang: "字幕",
+    playLang: "字幕とヘッドフォンの言語",
     audio: "音声",
     original: "元のサウンドトラック",
+    headphones: "ヘッドフォン",
     speakers: "教室のスピーカー",
     ost: "画面上の文字",
     hosting: "ホスト中 — 生徒が参加できます",
@@ -294,6 +301,7 @@ function setUILang(lang) {
   document.getElementById('uiPlayLang').textContent = t('playLang');
   document.getElementById('uiAudio').textContent = t('audio');
   document.getElementById('modeOriginal').textContent = t('original');
+  document.getElementById('modeHeadphones').textContent = t('headphones');
   document.getElementById('modeSpeakers').textContent = t('speakers');
   document.getElementById('uiOst').textContent = t('ost');
   refreshStatus();
@@ -366,12 +374,18 @@ function setPlayLang(lang) {
   ['plEn','plVi','plKo'].forEach(function(id) {
     document.getElementById(id).classList.toggle('active', id === ({en:'plEn',vi:'plVi',ko:'plKo'})[lang]);
   });
+  var a = document.getElementById('interp');
+  var keep = mediaTime();
+  a.src = 'history-hmong-classroom/history-hmong.' + lang + '.mp3';
+  try { a.currentTime = keep; } catch(e) {}
+  applyAudioMode();
   renderCues();
 }
 
 function setAudioMode(mode) {
   audioMode = mode;
   document.getElementById('modeOriginal').classList.toggle('active', mode === 'original');
+  document.getElementById('modeHeadphones').classList.toggle('active', mode === 'headphones');
   document.getElementById('modeSpeakers').classList.toggle('active', mode === 'speakers');
   applyAudioMode();
 }
@@ -383,7 +397,29 @@ function hasVideo() {
 
 function applyAudioMode() {
   var v = document.getElementById('player');
-  v.muted = (audioMode !== 'original');
+  var a = document.getElementById('interp');
+  if (audioMode === 'original') {
+    v.muted = false;
+    a.pause();
+  } else if (audioMode === 'headphones') {
+    v.muted = true;
+    a.muted = false;
+    try { a.currentTime = mediaTime(); } catch(e) {}
+    if ((hasVideo() && !v.paused) || virtualPlaying) a.play().catch(function(){});
+  } else {
+    v.muted = true;
+    a.pause();
+    a.muted = true;
+  }
+}
+
+function syncInterp(force) {
+  var a = document.getElementById('interp');
+  if (audioMode !== 'headphones') return;
+  var now = mediaTime();
+  if (force || Math.abs((a.currentTime || 0) - now) > 0.35) {
+    try { a.currentTime = now; } catch(e) {}
+  }
 }
 
 function pageBase() {
@@ -426,6 +462,12 @@ function onRemote(msg) {
     if (Math.abs(v.currentTime - virtualTime) > 0.45) v.currentTime = virtualTime;
     if (msg.paused && !v.paused) v.pause();
     if (!msg.paused && v.paused) v.play().catch(function(){});
+  }
+  var a = document.getElementById('interp');
+  if (audioMode === 'headphones') {
+    try { a.currentTime = virtualTime; } catch(e) {}
+    if (msg.paused) a.pause();
+    else a.play().catch(function(){});
   }
   renderCues();
   setTimeout(function(){ applyingRemote = false; }, 80);
@@ -473,7 +515,7 @@ function joinRoom(code) {
   if (typeof Peer === 'undefined') { refreshStatus(); return; }
   teardownPeer();
   isHost = false;
-  setAudioMode('speakers');
+  setAudioMode('headphones');
   showRoom(code);
   document.getElementById('statusPill').textContent = t('waiting');
   peer = new Peer();
@@ -516,24 +558,29 @@ document.addEventListener('DOMContentLoaded', function() {
   else refreshStatus();
 
   var v = document.getElementById('player');
+  var a = document.getElementById('interp');
   document.getElementById('fileInput').addEventListener('change', function(e) {
     if (e.target.files && e.target.files[0]) loadFile(e.target.files[0]);
   });
   v.addEventListener('play', function() {
     virtualPlaying = true;
+    if (audioMode === 'headphones') { syncInterp(true); a.play().catch(function(){}); }
     emitIfHost('play');
   });
   v.addEventListener('pause', function() {
     virtualPlaying = false;
+    a.pause();
     emitIfHost('pause');
   });
   v.addEventListener('seeked', function() {
     virtualTime = v.currentTime;
+    syncInterp(true);
     emitIfHost('seek');
     renderCues();
   });
   v.addEventListener('timeupdate', function() {
     virtualTime = v.currentTime;
+    syncInterp(false);
     renderCues();
   });
   lastTick = performance.now();
@@ -542,6 +589,7 @@ document.addEventListener('DOMContentLoaded', function() {
     lastTick = now;
     if (!hasVideo() && virtualPlaying) {
       virtualTime += dt;
+      syncInterp(false);
       renderCues();
     }
     requestAnimationFrame(tick);
