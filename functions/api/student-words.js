@@ -24,13 +24,11 @@ const ROSTER = {
   'HMOOB-12': 'Hoa Phạm (Phạm Thị Hoa)',
   'HMOOB-13': 'Kim Kwang Tae',
   'HMOOB-14': 'Lee Jong Hee',
-  'HMOOB-15': 'Tsim Meej',
-  'HMOOB-16': 'Paj Nyiag',
+  'HMOOB-15': 'Jeon Sung Joong (Tuấn Anh)',
+  'HMOOB-16': 'Lim In Hye (Quỳnh Hoa)',
   'HMOOB-17': 'Txawj Thaiv',
   'HMOOB-18': 'Nkauj Huab',
   'HMOOB-19': 'Kim Kim',
-  'HMOOB-20': 'Tuan Anh',
-  'HMOOB-21': 'Quynh Hoa',
 };
 
 const json = (obj, status = 200) =>
