@@ -29,6 +29,8 @@ const ROSTER = {
   'HMOOB-17': 'Txawj Thaiv',
   'HMOOB-18': 'Nkauj Huab',
   'HMOOB-19': 'Kim Kim',
+  'HMOOB-20': 'Tuan Anh',
+  'HMOOB-21': 'Quynh Hoa',
 };
 
 const json = (obj, status = 200) =>
