@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>History of the Hmong — Classroom Player (Sandbox)</title>
+<script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+  :root {
+    --bg: #f4f6f9; --card: #ffffff; --accent: #1F4E79; --accent2: #2E75B6;
+    --text: #1e293b; --muted: #64748b; --border: #cbd5e1;
+    --ok-bg: #ecfdf5; --ok-border: #10b981; --warn-bg: #fffbeb; --warn-border: #f59e0b;
+  }
+  * { box-sizing: border-box; }
+  body { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 18px 14px 48px; line-height: 1.5; max-width: 1100px; margin-left: auto; margin-right: auto; }
+  .top-bar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 14px; }
+  .nav-links { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .nav-links a { text-decoration: none; color: var(--accent); font-weight: 600; font-size: 0.9rem; background: #e2e8f0; padding: 6px 12px; border-radius: 8px; }
+  .lang-switch { display: inline-flex; flex-wrap: wrap; background: #e2e8f0; border-radius: 999px; padding: 3px; gap: 2px; }
+  .lang-btn { background: transparent; color: #334155; border: none; padding: 6px 12px; border-radius: 999px; font-size: 0.85rem; font-weight: 700; cursor: pointer; }
+  .lang-btn.active { background: var(--accent); color: #fff; }
+  .panel { background: var(--card); border-radius: 12px; padding: 16px 18px; margin-bottom: 14px; box-shadow: 0 2px 8px rgba(0,0,0,.06); border: 1px solid #e2e8f0; }
+  h1 { color: var(--accent); font-size: 1.45rem; margin: 0 0 4px; }
+  .sub { color: var(--muted); font-size: 0.92rem; margin: 0 0 10px; }
+  .row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 8px; }
+  input[type="text"], select { padding: 8px 11px; border: 1px solid var(--border); border-radius: 8px; font-size: 0.92rem; background: #fff; color: var(--text); }
+  .btn { background: var(--accent); color: #fff; border: none; padding: 8px 14px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 0.9rem; }
+  .btn:hover { background: var(--accent2); }
+  .btn-outline { background: #f1f5f9; color: var(--text); border: 1px solid var(--border); }
+  .btn-outline.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .theme-toggle-btn {
+    background: #e2e8f0; color: #334155; border: 1px solid var(--border);
+    padding: 6px 12px; border-radius: 999px; font-size: 0.85rem; font-weight: 700; cursor: pointer;
+  }
+  .sb-tag { display:inline-block; font-size:0.7rem; font-weight:800; background:#fef3c7; color:#92400e; border-radius:6px; padding:2px 7px; vertical-align:middle; margin-left:6px; }
+  .code-badge { display:inline-flex; align-items:center; gap:8px; background:var(--ok-bg); border:1px solid var(--ok-border); color:#065f46; border-radius:999px; padding:4px 12px; font-size:0.95rem; font-weight:700; letter-spacing:0.08em; }
+  .status-pill { display:inline-block; background:#e0f2fe; color:#0369a1; border-radius:999px; padding:4px 12px; font-size:0.84rem; font-weight:700; }
+  .help { color: var(--muted); font-size: 0.92rem; margin: 8px 0 0; }
+  .player-wrap { position: relative; background: #000; border-radius: 12px; overflow: hidden; }
+  video { width: 100%; display: block; max-height: 70vh; background: #000; min-height: 200px; }
+  .cue {
+    position: absolute; left: 50%; transform: translateX(-50%);
+    width: 94%; text-align: center; color: #fff;
+    text-shadow: 0 1px 4px #000, 0 0 8px #000;
+    font-weight: 700; pointer-events: none;
+    background: rgba(0,0,0,0.45); border-radius: 8px; padding: 6px 10px;
+  }
+  .cue:empty { display: none; }
+  .cue-top { top: 8%; font-size: 0.95rem; }
+  .cue-bot { bottom: 14%; font-size: 1.05rem; }
+  #qrbox { width: 160px; height: 160px; background: #fff; border-radius: 8px; padding: 6px; }
+  #qrbox:empty { display: none; }
+  details.more { margin-top: 12px; }
+  details.more summary { cursor: pointer; font-weight: 700; color: var(--accent); font-size: 0.95rem; }
+  .ost-body { margin-top: 8px; background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; min-height: 2.5em; }
+  .file-name { font-size: 0.86rem; color: var(--muted); }
+  html[data-theme="dark"] {
+    --bg: #0f172a; --card: #1e293b; --accent: #60a5fa; --accent2: #3b82f6;
+    --text: #f1f5f9; --muted: #94a3b8; --border: #334155;
+    --ok-bg: #064e3b; --ok-border: #10b981; --warn-bg: #451a03; --warn-border: #f59e0b;
+  }
+  html[data-theme="dark"] body { background: var(--bg); color: var(--text); }
+  html[data-theme="dark"] .panel { background: var(--card); border-color: var(--border); }
+  html[data-theme="dark"] .lang-switch { background: #334155 !important; }
+  html[data-theme="dark"] .lang-btn { color: #cbd5e1 !important; }
+  html[data-theme="dark"] .lang-btn.active { background: #2563eb !important; color: #fff !important; }
+  html[data-theme="dark"] .nav-links a { background: #334155; color: #93c5fd; }
+  html[data-theme="dark"] .btn-outline { background: #334155; color: #f1f5f9; border-color: #475569; }
+  html[data-theme="dark"] .btn-outline.active { background: #2563eb; color: #fff; border-color: #2563eb; }
+  html[data-theme="dark"] .theme-toggle-btn { background: #334155 !important; color: #f8fafc !important; border-color: #475569 !important; }
+  html[data-theme="dark"] input, html[data-theme="dark"] select { background: #0f172a; color: #f1f5f9; border-color: #475569; }
+  html[data-theme="dark"] .ost-body { background: #0f172a; }
+  html[data-theme="dark"] .code-badge { color: #a7f3d0; }
+  html[data-theme="dark"] .status-pill { background: #1e3a5f; color: #bfdbfe; }
+  html[data-theme="dark"] .sb-tag { background: #78350f; color: #fde68a; }
+  @media (max-width: 600px) {
+    body { padding: 12px 10px 40px; }
+    h1 { font-size: 1.2rem; }
+    .cue-bot { font-size: 0.95rem; }
+  }
+</style>
+<script>
+(function(){
+  function applyTheme(t) {
+    document.documentElement.setAttribute('data-theme', t);
+    var btn = document.getElementById('themeToggleBtn');
+    if (btn) {
+      btn.innerHTML = t === 'dark' ? '☀️ Light' : '🌙 Dark';
+      btn.title = t === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode';
+    }
+  }
+  window.toggleHmongTheme = function() {
+    var cur = document.documentElement.getAttribute('data-theme') || 'light';
+    var next = cur === 'dark' ? 'light' : 'dark';
+    try { localStorage.setItem('hmong_theme', next); } catch(e) {}
+    applyTheme(next);
+  };
+  var saved = 'light';
+  try {
+    saved = localStorage.getItem('hmong_theme') ||
+      (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  } catch(e) {}
+  applyTheme(saved);
+  document.addEventListener('DOMContentLoaded', function() { applyTheme(saved); });
+})();
+</script>
+</head>
+<body>
+  <div class="top-bar">
+    <div class="nav-links">
+      <a id="navHub" href="./index.html">← Practice Hub</a>
+    </div>
+    <div style="display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap;">
+      <button type="button" class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleHmongTheme()">🌙 Dark</button>
+      <div class="lang-switch">
+        <button class="lang-btn active" id="btnEn" onclick="setUILang('en')">EN</button>
+        <button class="lang-btn" id="btnVi" onclick="setUILang('vi')">VI</button>
+        <button class="lang-btn" id="btnKo" onclick="setUILang('ko')">한</button>
+        <button class="lang-btn" id="btnJa" onclick="setUILang('ja')">日</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h1 id="uiTitle">History of the Hmong — Classroom Player <span class="sb-tag">Sandbox</span></h1>
+    <p class="sub" id="uiSub">Hidden class player. Students pick a language for subtitles and headphone audio.</p>
+    <p class="help" id="uiHelp">On the laptop connected to the projector, create a room and load the video file. Students scan the QR code or type the room code, pick a language, choose headphones or classroom speakers, and load the same video on their phone if asked. Phones can also follow with subtitles and headphone audio even without the video file.</p>
+    <div class="row">
+      <button class="btn" id="btnCreate" onclick="createRoom()">Create a room</button>
+      <input type="text" id="roomInput" maxlength="8" placeholder="Room code" autocomplete="off" style="width:8em;text-transform:uppercase;">
+      <button class="btn btn-outline" id="btnJoin" onclick="joinTypedRoom()">Join</button>
+      <span class="code-badge" id="roomBadge" hidden></span>
+      <span class="status-pill" id="statusPill"></span>
+    </div>
+    <div class="row" id="qrRow" style="margin-top:12px;align-items:flex-start;">
+      <div id="qrbox"></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="row">
+      <label class="btn btn-outline" id="lblLoad">
+        <span id="uiLoad">Load video file</span>
+        <input type="file" id="fileInput" accept="video/*" hidden>
+      </label>
+      <span class="file-name" id="fileName"></span>
+    </div>
+    <div class="row">
+      <span id="uiPlayLang" style="font-weight:700;">Subtitles &amp; headphone language</span>
+      <button class="btn btn-outline active" id="plEn" onclick="setPlayLang('en')">EN</button>
+      <button class="btn btn-outline" id="plVi" onclick="setPlayLang('vi')">VI</button>
+      <button class="btn btn-outline" id="plKo" onclick="setPlayLang('ko')">KO</button>
+    </div>
+    <div class="row">
+      <span id="uiAudio" style="font-weight:700;">Audio</span>
+      <button class="btn btn-outline" id="modeOriginal" onclick="setAudioMode('original')">Original soundtrack</button>
+      <button class="btn btn-outline active" id="modeHeadphones" onclick="setAudioMode('headphones')">Headphones</button>
+      <button class="btn btn-outline" id="modeSpeakers" onclick="setAudioMode('speakers')">Classroom speakers</button>
+    </div>
+  </div>
+
+  <div class="panel" style="padding:10px;">
+    <div class="player-wrap">
+      <video id="player" playsinline preload="metadata" controls></video>
+      <div class="cue cue-top" id="cueOst"></div>
+      <div class="cue cue-bot" id="cueSpeech"></div>
+    </div>
+    <details class="more" id="ostDetails">
+      <summary id="uiOst">On-screen text</summary>
+      <div class="ost-body" id="ostBody"></div>
+    </details>
+  </div>
+
+<audio id="interp" preload="auto"></audio>
+
+<script>
+var UI = {
+  en: {
+    navHub: "← Practice Hub",
+    title: "History of the Hmong — Classroom Player",
+    sub: "Hidden class player. Students pick a language for subtitles and headphone audio.",
+    help: "On the laptop connected to the projector, create a room and load the video file. Students scan the QR code or type the room code, pick a language, choose headphones or classroom speakers, and load the same video on their phone if asked. Phones can also follow with subtitles and headphone audio even without the video file.",
+    create: "Create a room",
+    join: "Join",
+    roomPh: "Room code",
+    load: "Load video file",
+    playLang: "Subtitles & headphone language",
+    audio: "Audio",
+    original: "Original soundtrack",
+    headphones: "Headphones",
+    speakers: "Classroom speakers",
+    ost: "On-screen text",
+    hosting: "Hosting — students can join",
+    following: "Following the host",
+    independent: "Playing independently",
+    waiting: "Connecting…",
+    videoNeeded: "No video loaded yet",
+    fileReady: "Video ready"
+  },
+  vi: {
+    navHub: "← Trung tâm luyện tập",
+    title: "Lịch sử người Hmong — Trình phát trong lớp",
+    sub: "Trình phát ẩn cho lớp học. Học viên chọn ngôn ngữ cho phụ đề và âm thanh qua tai nghe.",
+    help: "Trên máy tính nối với máy chiếu, hãy tạo một phòng và tải tệp video. Học viên quét mã QR hoặc nhập mã phòng, chọn ngôn ngữ, chọn tai nghe hoặc loa trong lớp, rồi tải cùng tệp video trên điện thoại nếu được yêu cầu. Điện thoại vẫn có thể theo phụ đề và bản phiên dịch qua tai nghe ngay cả khi chưa có tệp video.",
+    create: "Tạo phòng",
+    join: "Tham gia",
+    roomPh: "Mã phòng",
+    load: "Tải tệp video",
+    playLang: "Phụ đề và ngôn ngữ nghe qua tai nghe",
+    audio: "Âm thanh",
+    original: "Nhạc nền gốc",
+    headphones: "Tai nghe",
+    speakers: "Loa trong lớp",
+    ost: "Chữ trên màn hình",
+    hosting: "Đang làm máy chủ — học viên có thể tham gia",
+    following: "Đang theo máy chủ",
+    independent: "Đang phát độc lập",
+    waiting: "Đang kết nối…",
+    videoNeeded: "Chưa tải video",
+    fileReady: "Video đã sẵn sàng"
+  },
+  ko: {
+    navHub: "← 연습 허브",
+    title: "흐몽족의 역사 — 교실 재생기",
+    sub: "수업용 숨겨진 재생기입니다. 학생들이 자막과 헤드폰 통역 언어를 고릅니다.",
+    help: "프로젝터에 연결된 노트북에서 방을 만들고 동영상 파일을 불러오세요. 학생들은 QR 코드를 스캔하거나 방 코드를 입력한 뒤 언어를 선택하고, 헤드폰 또는 교실 스피커를 고른 다음, 요청되면 휴대폰에서도 같은 동영상을 불러옵니다. 동영상 파일이 없어도 자막과 헤드폰 통역으로 따라갈 수 있습니다.",
+    create: "방 만들기",
+    join: "참여",
+    roomPh: "방 코드",
+    load: "동영상 파일 불러오기",
+    playLang: "자막 및 헤드폰 언어",
+    audio: "오디오",
+    original: "원본 사운드트랙",
+    headphones: "헤드폰",
+    speakers: "교실 스피커",
+    ost: "화면 글자",
+    hosting: "진행 중 — 학생이 참여할 수 있습니다",
+    following: "진행자를 따라가는 중",
+    independent: "독립 재생",
+    waiting: "연결 중…",
+    videoNeeded: "아직 동영상이 없습니다",
+    fileReady: "동영상을 불러왔습니다"
+  },
+  ja: {
+    navHub: "← 練習ハブ",
+    title: "モンの歴史 — 教室プレーヤー",
+    sub: "授業用の非公開プレーヤーです。生徒は字幕とヘッドフォン通訳の言語を選びます。",
+    help: "プロジェクターに接続したノートパソコンでルームを作成し、動画ファイルを読み込みます。生徒はQRコードをスキャンするかルームコードを入力し、言語とヘッドフォンまたは教室スピーカーを選んでから、求められたら同じ動画をスマホに読み込みます。動画ファイルがなくても、字幕とヘッドフォン通訳でついていけます。",
+    create: "ルームを作成",
+    join: "参加",
+    roomPh: "ルームコード",
+    load: "動画ファイルを読み込む",
+    playLang: "字幕とヘッドフォンの言語",
+    audio: "音声",
+    original: "元のサウンドトラック",
+    headphones: "ヘッドフォン",
+    speakers: "教室のスピーカー",
+    ost: "画面上の文字",
+    hosting: "ホスト中 — 生徒が参加できます",
+    following: "ホストに同期中",
+    independent: "単独再生",
+    waiting: "接続中…",
+    videoNeeded: "動画はまだありません",
+    fileReady: "動画の準備ができました"
+  }
+};
+
+var uiLang = 'en';
+var playLang = 'en';
+var audioMode = 'headphones';
+var cues = { en: [], vi: [], ko: [] };
+var isHost = false;
+var peer = null;
+var conns = [];
+var hostConn = null;
+var roomCode = '';
+var virtualTime = 0;
+var virtualPlaying = false;
+var lastTick = 0;
+var applyingRemote = false;
+
+function t(key) { return (UI[uiLang] || UI.en)[key] || UI.en[key] || key; }
+
+function setUILang(lang) {
+  uiLang = lang;
+  document.documentElement.lang = lang;
+  ['btnEn','btnVi','btnKo','btnJa'].forEach(function(id) {
+    var b = document.getElementById(id);
+    if (b) b.classList.toggle('active', id === ({en:'btnEn',vi:'btnVi',ko:'btnKo',ja:'btnJa'})[lang]);
+  });
+  document.getElementById('navHub').textContent = t('navHub');
+  document.getElementById('uiTitle').innerHTML = t('title') + ' <span class="sb-tag">Sandbox</span>';
+  document.getElementById('uiSub').textContent = t('sub');
+  document.getElementById('uiHelp').textContent = t('help');
+  document.getElementById('btnCreate').textContent = t('create');
+  document.getElementById('btnJoin').textContent = t('join');
+  document.getElementById('roomInput').placeholder = t('roomPh');
+  document.getElementById('uiLoad').textContent = t('load');
+  document.getElementById('uiPlayLang').textContent = t('playLang');
+  document.getElementById('uiAudio').textContent = t('audio');
+  document.getElementById('modeOriginal').textContent = t('original');
+  document.getElementById('modeHeadphones').textContent = t('headphones');
+  document.getElementById('modeSpeakers').textContent = t('speakers');
+  document.getElementById('uiOst').textContent = t('ost');
+  refreshStatus();
+}
+
+function refreshStatus() {
+  var el = document.getElementById('statusPill');
+  if (isHost) el.textContent = t('hosting');
+  else if (hostConn && hostConn.open) el.textContent = t('following');
+  else el.textContent = t('independent');
+}
+
+function toSec(ts) {
+  var p = ts.trim().split(':');
+  if (p.length === 3) return (+p[0])*3600 + (+p[1])*60 + parseFloat(p[2]);
+  if (p.length === 2) return (+p[0])*60 + parseFloat(p[1]);
+  return parseFloat(ts) || 0;
+}
+
+function parseVTT(text) {
+  var out = [];
+  text.replace(/\r/g,'').split(/\n\n+/).forEach(function(block) {
+    var lines = block.split('\n').filter(Boolean);
+    if (!lines.length || lines[0].indexOf('WEBVTT') === 0) return;
+    var timeLine = lines.find(function(l){ return l.indexOf('-->') !== -1; });
+    if (!timeLine) return;
+    var parts = timeLine.split('-->');
+    var start = toSec(parts[0]);
+    var end = toSec(parts[1].trim().split(/\s+/)[0]);
+    var body = lines.slice(lines.indexOf(timeLine)+1).join(' ').replace(/\s+/g,' ').trim();
+    var ost = /^\[(On screen|Trên màn hình|화면)\]/i.test(body);
+    body = body.replace(/^\[(On screen|Trên màn hình|화면)\]\s*/i, '');
+    out.push({ start: start, end: end, text: body, ost: ost });
+  });
+  return out;
+}
+
+function loadTracks() {
+  ['en','vi','ko'].forEach(function(lang) {
+    fetch('history-hmong-classroom/history-hmong.' + lang + '.vtt').then(function(r){ return r.text(); }).then(function(txt) {
+      cues[lang] = parseVTT(txt);
+      if (lang === playLang) renderCues();
+    }).catch(function(){});
+  });
+}
+
+function mediaTime() {
+  var v = document.getElementById('player');
+  if (v && v.src && !isNaN(v.currentTime)) return v.currentTime;
+  return virtualTime;
+}
+
+function renderCues() {
+  var now = mediaTime();
+  var list = cues[playLang] || [];
+  var ost = '', speech = '';
+  list.forEach(function(c) {
+    if (now >= c.start && now < c.end) {
+      if (c.ost) ost = c.text;
+      else speech = c.text;
+    }
+  });
+  document.getElementById('cueOst').textContent = ost;
+  document.getElementById('cueSpeech').textContent = speech;
+  document.getElementById('ostBody').textContent = ost || '—';
+}
+
+function setPlayLang(lang) {
+  playLang = lang;
+  ['plEn','plVi','plKo'].forEach(function(id) {
+    document.getElementById(id).classList.toggle('active', id === ({en:'plEn',vi:'plVi',ko:'plKo'})[lang]);
+  });
+  var a = document.getElementById('interp');
+  var keep = mediaTime();
+  a.src = 'history-hmong-classroom/history-hmong.' + lang + '.mp3';
+  try { a.currentTime = keep; } catch(e) {}
+  applyAudioMode();
+  renderCues();
+}
+
+function setAudioMode(mode) {
+  audioMode = mode;
+  document.getElementById('modeOriginal').classList.toggle('active', mode === 'original');
+  document.getElementById('modeHeadphones').classList.toggle('active', mode === 'headphones');
+  document.getElementById('modeSpeakers').classList.toggle('active', mode === 'speakers');
+  applyAudioMode();
+}
+
+function hasVideo() {
+  var v = document.getElementById('player');
+  return !!(v && v.src);
+}
+
+function applyAudioMode() {
+  var v = document.getElementById('player');
+  var a = document.getElementById('interp');
+  if (audioMode === 'original') {
+    v.muted = false;
+    a.pause();
+  } else if (audioMode === 'headphones') {
+    v.muted = true;
+    a.muted = false;
+    try { a.currentTime = mediaTime(); } catch(e) {}
+    if ((hasVideo() && !v.paused) || virtualPlaying) a.play().catch(function(){});
+  } else {
+    v.muted = true;
+    a.pause();
+    a.muted = true;
+  }
+}
+
+function syncInterp(force) {
+  var a = document.getElementById('interp');
+  if (audioMode !== 'headphones') return;
+  var now = mediaTime();
+  if (force || Math.abs((a.currentTime || 0) - now) > 0.35) {
+    try { a.currentTime = now; } catch(e) {}
+  }
+}
+
+function pageBase() {
+  return location.origin && location.origin !== 'null'
+    ? location.origin + location.pathname
+    : location.href.split('?')[0];
+}
+
+function showRoom(code) {
+  roomCode = code;
+  var badge = document.getElementById('roomBadge');
+  badge.hidden = false;
+  badge.textContent = code;
+  var box = document.getElementById('qrbox');
+  box.innerHTML = '';
+  if (window.QRCode && location.protocol !== 'file:') {
+    new QRCode(box, { text: pageBase() + '?room=' + encodeURIComponent(code), width: 148, height: 148 });
+  }
+}
+
+function peerId(code) { return 'hmongclass-' + code.toLowerCase(); }
+
+function broadcast(msg) {
+  if (!isHost) return;
+  conns.forEach(function(c) { if (c.open) try { c.send(msg); } catch(e) {} });
+}
+
+function hostState() {
+  var v = document.getElementById('player');
+  return { type: 'sync', time: mediaTime(), paused: hasVideo() ? v.paused : !virtualPlaying };
+}
+
+function onRemote(msg) {
+  if (!msg || isHost) return;
+  applyingRemote = true;
+  virtualTime = msg.time || 0;
+  virtualPlaying = !msg.paused;
+  var v = document.getElementById('player');
+  if (hasVideo()) {
+    if (Math.abs(v.currentTime - virtualTime) > 0.45) v.currentTime = virtualTime;
+    if (msg.paused && !v.paused) v.pause();
+    if (!msg.paused && v.paused) v.play().catch(function(){});
+  }
+  var a = document.getElementById('interp');
+  if (audioMode === 'headphones') {
+    try { a.currentTime = virtualTime; } catch(e) {}
+    if (msg.paused) a.pause();
+    else a.play().catch(function(){});
+  }
+  renderCues();
+  setTimeout(function(){ applyingRemote = false; }, 80);
+}
+
+function wireHostConn(conn) {
+  conn.on('open', function() {
+    conns.push(conn);
+    try { conn.send(hostState()); } catch(e) {}
+  });
+  conn.on('close', function() { conns = conns.filter(function(c){ return c !== conn; }); });
+}
+
+function createRoom() {
+  if (typeof Peer === 'undefined') { refreshStatus(); return; }
+  var code = Math.random().toString(36).replace(/[^a-z0-9]/g,'').slice(0,4).toUpperCase();
+  startHost(code);
+}
+
+function startHost(code) {
+  teardownPeer();
+  isHost = true;
+  setAudioMode('original');
+  showRoom(code);
+  refreshStatus();
+  peer = new Peer(peerId(code));
+  peer.on('open', function() {
+    showRoom(code);
+    try { history.replaceState(null, '', '?host=' + encodeURIComponent(code)); } catch(e) {}
+    refreshStatus();
+  });
+  peer.on('connection', wireHostConn);
+  peer.on('error', function() {
+    isHost = true;
+    refreshStatus();
+  });
+}
+
+function joinTypedRoom() {
+  var code = (document.getElementById('roomInput').value || '').trim().toUpperCase();
+  if (code) joinRoom(code);
+}
+
+function joinRoom(code) {
+  if (typeof Peer === 'undefined') { refreshStatus(); return; }
+  teardownPeer();
+  isHost = false;
+  showRoom(code);
+  document.getElementById('statusPill').textContent = t('waiting');
+  peer = new Peer();
+  peer.on('open', function() {
+    hostConn = peer.connect(peerId(code));
+    hostConn.on('open', function() { refreshStatus(); });
+    hostConn.on('data', onRemote);
+    hostConn.on('close', function() { hostConn = null; refreshStatus(); });
+  });
+  peer.on('error', function() { refreshStatus(); });
+}
+
+function teardownPeer() {
+  try { if (peer) peer.destroy(); } catch(e) {}
+  peer = null; conns = []; hostConn = null;
+}
+
+function loadFile(file) {
+  if (!file) return;
+  var v = document.getElementById('player');
+  if (v.src) URL.revokeObjectURL(v.src);
+  v.src = URL.createObjectURL(file);
+  document.getElementById('fileName').textContent = file.name;
+  applyAudioMode();
+}
+
+function emitIfHost(type) {
+  if (applyingRemote || !isHost) return;
+  var v = document.getElementById('player');
+  broadcast({ type: type, time: mediaTime(), paused: hasVideo() ? v.paused : !virtualPlaying });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  loadTracks();
+  setUILang('en');
+  setPlayLang('en');
+  var params = new URLSearchParams(location.search);
+  if (params.get('room')) joinRoom(params.get('room').toUpperCase());
+  else if (params.get('host')) startHost(params.get('host').toUpperCase());
+  else refreshStatus();
+
+  var v = document.getElementById('player');
+  var a = document.getElementById('interp');
+  document.getElementById('fileInput').addEventListener('change', function(e) {
+    if (e.target.files && e.target.files[0]) loadFile(e.target.files[0]);
+  });
+  v.addEventListener('play', function() {
+    virtualPlaying = true;
+    if (audioMode === 'headphones') { syncInterp(true); a.play().catch(function(){}); }
+    emitIfHost('play');
+  });
+  v.addEventListener('pause', function() {
+    virtualPlaying = false;
+    a.pause();
+    emitIfHost('pause');
+  });
+  v.addEventListener('seeked', function() {
+    virtualTime = v.currentTime;
+    syncInterp(true);
+    emitIfHost('seek');
+    renderCues();
+  });
+  v.addEventListener('timeupdate', function() {
+    virtualTime = v.currentTime;
+    syncInterp(false);
+    renderCues();
+  });
+  lastTick = performance.now();
+  function tick(now) {
+    var dt = (now - lastTick) / 1000;
+    lastTick = now;
+    if (!hasVideo() && virtualPlaying) {
+      virtualTime += dt;
+      syncInterp(false);
+      renderCues();
+    }
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+  setInterval(function() {
+    if (isHost && virtualPlaying) emitIfHost('sync');
+  }, 1500);
+});
+</script>
+</body>
+</html>
