@@ -14,6 +14,7 @@ const MAX_CLIP_CHARS = 95000;
 // v_a male saved 2026-11-03: 0.84 s of room noise, no voice ("running water"). Exact-signature match,
 // so a new recording of the same sound is served normally.
 const BLOCKED_CLIP_SIGS = new Set(['7052:gICKQGII2mIrbSvCHFO7a427i7OBALeG94EB8YFi']);
+const isEmptyDataUrl = (u) => typeof u === 'string' && /^data:[^,]*,\s*$/.test(u);
 const isBlockedClip = (u) => typeof u === 'string' && !!u && BLOCKED_CLIP_SIGS.has(u.length + ':' + u.slice(-40));
 
 const json = (obj, status = 200) =>
@@ -96,6 +97,7 @@ export async function onRequestGet(context) {
 
   try {
     const clips = {};
+    const newest = {};
     let offset = '';
     const formula = "FIND('PHON-', {Student Code})=1";
 
@@ -125,8 +127,14 @@ export async function onRequestGet(context) {
           fields['Custom Words JSON'],
           fields['Progress JSON']
         );
-        if (isBlockedClip(male)) male = '';
-        if (isBlockedClip(female)) female = '';
+        if (isBlockedClip(male) || isEmptyDataUrl(male)) male = '';
+        if (isBlockedClip(female) || isEmptyDataUrl(female)) female = '';
+        const updatedAt = String(fields['Updated At'] || '');
+        // Duplicate PHON-<ID> rows exist (e.g. two PHON-V_A rows created in the same second);
+        // keep the most recently updated one instead of whichever Airtable lists last.
+        if (newest[id] !== undefined && newest[id] > updatedAt) continue;
+        newest[id] = updatedAt;
+        delete clips[id];
         if (male || female) {
           clips[id] = {
             male: male || '',

@@ -673,7 +673,7 @@ let activeRec = null; // { mediaRecorder, stream, chunks, mode: 'studio'|'studen
 // Matched by exact signature so a NEW recording of the same sound still plays normally.
 const BLOCKED_CLIP_SIGS = new Set(['7052:gICKQGII2mIrbSvCHFO7a427i7OBALeG94EB8YFi']);
 function clipSig(u) { return (typeof u === 'string' && u) ? (u.length + ':' + u.slice(-40)) : ''; }
-function isBlockedClip(u) { return BLOCKED_CLIP_SIGS.has(clipSig(u)); }
+function isBlockedClip(u) { return BLOCKED_CLIP_SIGS.has(clipSig(u)) || (typeof u === 'string' && /^data:[^,]*,\s*$/.test(u)); }
 function scrubBlockedClips() {
   let changed = false;
   for (const id of Object.keys(clips)) {
