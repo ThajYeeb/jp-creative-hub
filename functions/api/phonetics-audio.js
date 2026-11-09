@@ -10,6 +10,12 @@ const TABLE_ID_DEFAULT = 'tbl1BVwFM2yXr4xAk'; // Student Words
 const MAX_BODY = 110000;
 const MAX_CLIP_CHARS = 95000;
 
+// Stale cloud recordings that must not be served (they would override the cleaned static clips).
+// v_a male saved 2026-11-03: 0.84 s of room noise, no voice ("running water"). Exact-signature match,
+// so a new recording of the same sound is served normally.
+const BLOCKED_CLIP_SIGS = new Set(['7052:gICKQGII2mIrbSvCHFO7a427i7OBALeG94EB8YFi']);
+const isBlockedClip = (u) => typeof u === 'string' && !!u && BLOCKED_CLIP_SIGS.has(u.length + ':' + u.slice(-40));
+
 const json = (obj, status = 200) =>
   new Response(JSON.stringify(obj), {
     status,
@@ -115,10 +121,12 @@ export async function onRequestGet(context) {
         const id = normalizeId(rawCode.slice(5));
         if (!id) continue;
 
-        const { male, female } = parseVoicePayload(
+        let { male, female } = parseVoicePayload(
           fields['Custom Words JSON'],
           fields['Progress JSON']
         );
+        if (isBlockedClip(male)) male = '';
+        if (isBlockedClip(female)) female = '';
         if (male || female) {
           clips[id] = {
             male: male || '',

@@ -668,6 +668,23 @@ const studentClips = {}; // temporary in-memory student recordings per id
 // Active recorder state
 let activeRec = null; // { mediaRecorder, stream, chunks, mode: 'studio'|'student', id, voice }
 
+// Stale cloud/cached recordings that must never override the cleaned static clips.
+// v_a male (saved to cloud 2026-11-03): 0.84 s of room noise only, no voice ("running water").
+// Matched by exact signature so a NEW recording of the same sound still plays normally.
+const BLOCKED_CLIP_SIGS = new Set(['7052:gICKQGII2mIrbSvCHFO7a427i7OBALeG94EB8YFi']);
+function clipSig(u) { return (typeof u === 'string' && u) ? (u.length + ':' + u.slice(-40)) : ''; }
+function isBlockedClip(u) { return BLOCKED_CLIP_SIGS.has(clipSig(u)); }
+function scrubBlockedClips() {
+  let changed = false;
+  for (const id of Object.keys(clips)) {
+    for (const v of ['male', 'female']) {
+      if (clips[id] && isBlockedClip(clips[id][v])) { clips[id][v] = ''; changed = true; }
+    }
+  }
+  return changed;
+}
+const STATIC_CLIP_VER = '20261110';
+
 // IndexedDB helper for persistent local cache
 const DB_NAME = 'HmongPhoneticsAudioDB';
 const STORE_NAME = 'clips';
@@ -743,15 +760,15 @@ function hasFemaleClip(id) { return !!(clips[id] && clips[id].female) || hasStat
 async function playVoiceClip(id, voice) {
   const item = PHONETICS_ITEMS.find(x => x.id === id);
   const entry = clips[id] || {};
-  const dataUrl = entry[voice] || '';
+  const dataUrl = isBlockedClip(entry[voice]) ? '' : (entry[voice] || '');
   if (dataUrl) {
     if (await playDataUrl(dataUrl)) return;
   }
   if (voice === 'male' && hasStaticMale(id)) {
-    if (await playDataUrl('audio/male/' + encodeURIComponent(id) + '.mp3')) return;
+    if (await playDataUrl('audio/male/' + encodeURIComponent(id) + '.mp3?v=' + STATIC_CLIP_VER)) return;
   }
   if (voice === 'female' && hasStaticFemale(id)) {
-    if (await playDataUrl('audio/female/' + encodeURIComponent(id) + '.mp3')) return;
+    if (await playDataUrl('audio/female/' + encodeURIComponent(id) + '.mp3?v=' + STATIC_CLIP_VER)) return;
   }
   if (!dataUrl || voice === 'male' || hasStaticFemale(id)) playFallbackSynth(item, voice);
 }
@@ -916,8 +933,8 @@ async function fetchClipsFromCloud() {
     if (data && data.ok && data.clips) {
       for (const [id, val] of Object.entries(data.clips)) {
         if (!clips[id]) clips[id] = { male: '', female: '' };
-        if (val.male) clips[id].male = val.male;
-        if (val.female) clips[id].female = val.female;
+        if (val.male && !isBlockedClip(val.male)) clips[id].male = val.male;
+        if (val.female && !isBlockedClip(val.female)) clips[id].female = val.female;
       }
       await saveLocalClipsCache();
       renderGrid();
@@ -1165,6 +1182,7 @@ document.getElementById('importAudioFileInput').addEventListener('change', async
   for (const [id, val] of Object.entries(cached)) {
     clips[id] = val;
   }
+  if (scrubBlockedClips()) saveLocalClipsCache();
   setUILang(urlLang || savedLang || 'en');
   fetchClipsFromCloud();
 })();
