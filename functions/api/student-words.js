@@ -32,6 +32,7 @@ const ROSTER = {
   'HMOOB-20': 'Jeon Sung Joong (Tuấn Anh)',
   'HMOOB-21': 'Lim In Hye (Quỳnh Hoa)',
   'HMOOB-22': 'Đương Nguyễn',
+  'HMOOB-23': 'Kab Nag',
 };
 
 const json = (obj, status = 200) =>
