@@ -85,34 +85,30 @@
     60% { transform:translateX(-5px); }
     80% { transform:translateX(5px); }
   }
-  .fig-grid { display:grid; grid-template-columns: minmax(160px, .85fr) minmax(180px, 1fr); gap:8px; align-items:stretch; }
-  .fig-grid.closeups { grid-template-columns: 1fr 1fr; margin-top:8px; }
+  .fig-grid { display:grid; gap:8px; align-items:start; }
+  .fig-grid.n4 { grid-template-columns: 1fr 1fr; }
+  .fig-grid.n3 { grid-template-columns: 1.1fr 1fr 1fr; }
+  .fig-grid.n1 { grid-template-columns: minmax(0, 420px); justify-content:center; }
+  .fig-grid.v-bones { grid-template-columns: minmax(0, 340px); }
   .fig-card { background:#fff; border:1px solid var(--border); border-radius:12px; padding:6px; }
   .fig-cap { font-size:.75rem; font-weight:800; color:var(--muted); text-transform:uppercase; letter-spacing:.4px; text-align:center; margin:0 0 2px; }
-  .fig-card svg { width:100%; height:auto; display:block; touch-action:manipulation; user-select:none; -webkit-user-select:none; }
-  .part { cursor:pointer; }
-  .part .hit { fill:transparent; stroke:none; pointer-events:all; }
-  .part .vis { transition: filter .15s, stroke .15s, stroke-width .15s; }
-  .part:hover .vis, .part.lit .vis { stroke:#1F4E79; stroke-width:2.6; filter:drop-shadow(0 0 5px rgba(46,117,182,.85)); }
-  .part.ok .vis { stroke:#059669; stroke-width:3; filter:drop-shadow(0 0 8px #10b981); }
-  .part.bad .vis { stroke:#dc2626; stroke-width:3; filter:drop-shadow(0 0 8px #ef4444); }
-  .part .vis.body-reg { fill:rgba(46,117,182,0); stroke:none; filter:none; }
-  .part:hover .vis.body-reg, .part.lit .vis.body-reg { fill:rgba(46,117,182,0.33); stroke:#1F4E79; stroke-width:2.2; filter:none; }
-  .part.ok .vis.body-reg { fill:rgba(16,185,129,0.42); stroke:#059669; stroke-width:3; filter:none; }
-  .part.bad .vis.body-reg { fill:rgba(239,68,68,0.42); stroke:#dc2626; stroke-width:3; filter:none; }
-  .wf, .vis.wf {
-    fill: none; stroke: #1e3a5f; stroke-width: 1.35;
-    stroke-linejoin: round; stroke-linecap: round;
-  }
-  .wf-soft, .vis.wf-soft {
-    fill: none; stroke: #1e3a5f; stroke-width: 0.85;
-    stroke-linejoin: round; stroke-linecap: round; opacity: 0.55;
-  }
-  .part:hover .vis.wf, .part.lit .vis.wf,
-  .part:hover .vis.wf-soft, .part.lit .vis.wf-soft,
-  .part.ok .vis.wf, .part.ok .vis.wf-soft,
-  .part.bad .vis.wf, .part.bad .vis.wf-soft { fill: none; }
-  .skin, .hair { fill: none; stroke: #1e3a5f; stroke-width: 1.35; stroke-linejoin: round; }
+  .fig-img { position:relative; width:100%; border-radius:8px; overflow:hidden; background:#fff; touch-action:manipulation; user-select:none; -webkit-user-select:none; -webkit-tap-highlight-color:transparent; }
+  .fig-img img { display:block; width:100%; height:100%; object-fit:contain; pointer-events:none; }
+  .hs-layer { position:absolute; inset:0; width:100%; height:100%; overflow:visible; }
+  .part { cursor:pointer; outline:none; }
+  .hs { fill:rgba(46,117,182,0); stroke:rgba(31,78,121,0); stroke-width:2; pointer-events:all; transition: fill .15s, stroke .15s; }
+  @media (hover:hover) { .part:hover .hs { fill:rgba(46,117,182,.22); stroke:#1F4E79; stroke-dasharray:4 3; } }
+  .part:focus-visible .hs { fill:rgba(46,117,182,.22); stroke:#1F4E79; }
+  .part.lit .hs { fill:rgba(46,117,182,.32); stroke:#1F4E79; stroke-width:2.5; filter:drop-shadow(0 0 4px rgba(46,117,182,.9)); }
+  .part.ok .hs { fill:rgba(16,185,129,.38); stroke:#059669; stroke-width:3; filter:drop-shadow(0 0 5px #10b981); }
+  .part.bad .hs { fill:rgba(239,68,68,.38); stroke:#dc2626; stroke-width:3; filter:drop-shadow(0 0 5px #ef4444); }
+  .part[data-id="skin"].lit .hs, .part[data-id="skin"].ok .hs, .part[data-id="skin"].bad .hs { fill-opacity:.55; }
+  .pin-line { stroke:#94a3b8; stroke-width:1.5; stroke-dasharray:3 3; }
+  .pin { position:absolute; transform:translate(-50%,-50%); width:clamp(26px, 15%, 40px); aspect-ratio:1; border-radius:50%; border:2px solid #94a3b8; background:#fff; font-size:clamp(13px, 2.2vw, 20px); line-height:1; padding:0; display:flex; align-items:center; justify-content:center; box-shadow:0 1px 4px rgba(0,0,0,.18); transition: box-shadow .15s, border-color .15s; }
+  @media (hover:hover) { .pin:hover { border-color:#1F4E79; box-shadow:0 0 0 3px rgba(46,117,182,.35); } }
+  .pin.lit { border-color:#1F4E79; box-shadow:0 0 0 4px rgba(46,117,182,.5), 0 0 10px rgba(46,117,182,.8); }
+  .pin.ok { border-color:#059669; box-shadow:0 0 0 4px rgba(16,185,129,.55), 0 0 12px #10b981; }
+  .pin.bad { border-color:#dc2626; box-shadow:0 0 0 4px rgba(239,68,68,.55), 0 0 12px #ef4444; }
   .word-bank { display:flex; flex-wrap:wrap; gap:6px; max-height:260px; overflow:auto; margin-top:8px; }
   .word-bank button { background:#f8fafc; border:1px solid var(--border); border-radius:8px; padding:6px 8px; font-size:.8rem; font-weight:700; cursor:pointer; color:var(--text); }
   .word-bank button.active { background:var(--accent); color:#fff; border-color:var(--accent); }
@@ -146,22 +142,20 @@
   html[data-theme="dark"] .board { background: linear-gradient(180deg, #1e293b, #0f172a); }
   html[data-theme="dark"] table, html[data-theme="dark"] th, html[data-theme="dark"] td { border-color:#334155; color:#e2e8f0; }
   html[data-theme="dark"] th { background:#0f172a; }
-  html[data-theme="dark"] .part:hover .vis, html[data-theme="dark"] .part.lit .vis { stroke:#93c5fd; }
-  html[data-theme="dark"] .part:hover .vis.body-reg, html[data-theme="dark"] .part.lit .vis.body-reg { fill:rgba(96,165,250,0.35); stroke:#93c5fd; }
-  html[data-theme="dark"] .wf, html[data-theme="dark"] .vis.wf,
-  html[data-theme="dark"] .wf-soft, html[data-theme="dark"] .vis.wf-soft,
-  html[data-theme="dark"] .skin, html[data-theme="dark"] .hair { stroke:#93c5fd; }
+  html[data-theme="dark"] .fig-card { background:#f8fafc !important; }
+  html[data-theme="dark"] .fig-cap { color:#334155; }
 
   @media (max-width: 860px) {
     .main { grid-template-columns: 1fr; }
-    .fig-grid, .fig-grid.closeups { grid-template-columns: 1fr 1fr; }
     .hmong-word { font-size:2rem; }
     body { padding:12px 10px 40px; }
     .nav-links a { font-size:0.8rem; padding:5px 9px; }
     .quiz-choices { grid-template-columns:1fr; }
   }
   @media (max-width: 520px) {
-    .fig-grid { grid-template-columns: 1fr; }
+    .fig-grid.n3 { grid-template-columns: 1fr 1fr; }
+    .fig-grid.n3 .fig-card:first-child { grid-row: span 2; }
+    .board { padding:6px; }
   }
 </style>
 <script>
@@ -259,53 +253,53 @@
 <script>
 /* ===== Vocabulary: spellings from JC's "21. HUMAN BODY PARTS.doc". Do not "correct" these. ===== */
 const PARTS = [
-  {id:'abdomen',  diagram:'outside', views:['front'],           hm:'Plab mog',        en:'abdomen',     vi:'bụng dưới',     ko:'아랫배',    ja:'下腹部'},
-  {id:'ankle',    diagram:'outside', views:['front','back'],    hm:'Lub dab taws',    en:'ankle',       vi:'mắt cá chân',    ko:'발목',     ja:'足首'},
-  {id:'arm',      diagram:'outside', views:['front','back'],    hm:'Txhais caj npab', en:'arm',         vi:'cánh tay',       ko:'팔',       ja:'腕',     pair:true},
-  {id:'back',     diagram:'outside', views:['back'],            hm:'Lub nraub qaum',  en:'back',        vi:'lưng',           ko:'등',       ja:'背中'},
-  {id:'beard',    diagram:'outside', views:['front'],           hm:'Hwj txwv',        en:'beard',       vi:'râu',            ko:'수염',     ja:'ひげ'},
-  {id:'bladder',  diagram:'inside',  views:['organs'],          hm:'Lub zais zis',    en:'bladder',     vi:'bàng quang',     ko:'방광',     ja:'膀胱'},
-  {id:'blood',    diagram:'inside',  views:['organs'],          hm:'Ntshav',          en:'blood',       vi:'máu',            ko:'피',       ja:'血'},
-  {id:'bone',     diagram:'inside',  views:['bones'],           hm:'Pob txha',        en:'bone',        vi:'xương',          ko:'뼈',       ja:'骨'},
-  {id:'brain',    diagram:'inside',  views:['organs'],          hm:'Paj hlwb',        en:'brain',       vi:'não',            ko:'뇌',       ja:'脳'},
-  {id:'butt',     diagram:'outside', views:['back'],            hm:'Lub pob tw',      en:'butt',        vi:'mông',           ko:'엉덩이',   ja:'お尻'},
-  {id:'chest',    diagram:'outside', views:['front'],           hm:'Hauv siab',       en:'chest',       vi:'ngực',           ko:'가슴',     ja:'胸'},
-  {id:'chin',     diagram:'outside', views:['front'],           hm:'Lub puab tsaig',  en:'chin',        vi:'cằm',            ko:'턱',       ja:'あご'},
-  {id:'ear',      diagram:'outside', views:['front','back'],    hm:'Lub pob ntseg',   en:'ear',         vi:'tai',            ko:'귀',       ja:'耳'},
-  {id:'elbow',    diagram:'outside', views:['front','back'],    hm:'Lub luj tshib',   en:'elbow',       vi:'khuỷu tay',      ko:'팔꿈치',   ja:'肘'},
-  {id:'eye',      diagram:'outside', views:['front'],           hm:'Lub qhov muag',   en:'eye',         vi:'mắt',            ko:'눈',       ja:'目'},
-  {id:'eyebrow',  diagram:'outside', views:['front'],           hm:'Plaub muag',      en:'eyebrow',     vi:'lông mày',       ko:'눈썹',     ja:'眉',     alias:'eyelash'},
-  {id:'eyelid',   diagram:'outside', views:['front'],           hm:'Daim tawv muag',  en:'eyelid',      vi:'mí mắt',         ko:'눈꺼풀',   ja:'まぶた'},
-  {id:'eyelash',  diagram:'outside', views:['front'],           hm:'Plaub muag',      en:'eyelash',     vi:'lông mi',        ko:'속눈썹',   ja:'まつげ',  alias:'eyebrow'},
-  {id:'finger',   diagram:'outside', views:['front','back'],    hm:'Ntiv tes',        en:'finger',      vi:'ngón tay',       ko:'손가락',   ja:'指'},
-  {id:'fingernail',diagram:'outside',views:['front','back'],    hm:'Rau tes',         en:'fingernail',  vi:'móng tay',       ko:'손톱',     ja:'手の爪'},
-  {id:'foot',     diagram:'outside', views:['front','back'],    hm:'Txhais kotaw',    en:'foot',        vi:'bàn chân',       ko:'발',       ja:'足',     pair:true},
-  {id:'forehead', diagram:'outside', views:['front'],           hm:'Lub hauv pliaj',  en:'forehead',    vi:'trán',           ko:'이마',     ja:'額'},
-  {id:'hair',     diagram:'outside', views:['front','back'],    hm:'Plaub hau',       en:'hair',        vi:'tóc',            ko:'머리카락', ja:'髪'},
-  {id:'hand',     diagram:'outside', views:['front','back'],    hm:'Txhais tes',      en:'hand',        vi:'bàn tay',        ko:'손',       ja:'手',     pair:true},
-  {id:'head',     diagram:'outside', views:['front','back'],    hm:'Lub taubhau',     en:'head',        vi:'đầu',            ko:'머리',     ja:'頭'},
-  {id:'heart',    diagram:'inside',  views:['organs'],          hm:'Plawv',           en:'heart',       vi:'tim',            ko:'심장',     ja:'心臓'},
-  {id:'heel',     diagram:'outside', views:['front','back'],    hm:'Lub luj taws',    en:'heel',        vi:'gót chân',       ko:'발꿈치',   ja:'かかと'},
-  {id:'intestines',diagram:'inside', views:['organs'],          hm:'Hnyuv',           en:'intestines',  vi:'ruột',           ko:'장',       ja:'腸'},
-  {id:'kidney',   diagram:'inside',  views:['organs'],          hm:'Lub raum',        en:'kidney',      vi:'thận',           ko:'신장',     ja:'腎臓'},
-  {id:'knee',     diagram:'outside', views:['front','back'],    hm:'Lub hauv caug',   en:'knee',        vi:'đầu gối',        ko:'무릎',     ja:'膝'},
-  {id:'leg',      diagram:'outside', views:['front','back'],    hm:'Txhais ceg',      en:'leg',         vi:'chân',           ko:'다리',     ja:'脚',     pair:true},
-  {id:'lip',      diagram:'outside', views:['front'],           hm:'Daim tawv ncauj', en:'lip',         vi:'môi',            ko:'입술',     ja:'唇'},
-  {id:'liver',    diagram:'inside',  views:['organs'],          hm:'Siab',            en:'liver',       vi:'gan',            ko:'간',       ja:'肝臓'},
-  {id:'lung',     diagram:'inside',  views:['organs'],          hm:'Lub ntsws',       en:'lung',        vi:'phổi',           ko:'폐',       ja:'肺'},
-  {id:'mouth',    diagram:'outside', views:['front'],           hm:'Lub qhov ncauj',  en:'mouth',       vi:'miệng',          ko:'입',       ja:'口'},
-  {id:'neck',     diagram:'outside', views:['front','back'],    hm:'Caj dab',         en:'neck',        vi:'cổ',             ko:'목',       ja:'首'},
-  {id:'nose',     diagram:'outside', views:['front'],           hm:'Lub qhov ntswg',  en:'nose',        vi:'mũi',            ko:'코',       ja:'鼻'},
-  {id:'shoulder', diagram:'outside', views:['front','back'],    hm:'Lub xub pwg',     en:'shoulder',    vi:'vai',            ko:'어깨',     ja:'肩'},
-  {id:'skin',     diagram:'outside', views:['front','back'],    hm:'Tawv nqaij',      en:'skin',        vi:'da',             ko:'피부',     ja:'肌'},
-  {id:'stomach',  diagram:'both',    views:['front','organs'],  hm:'Plab',            en:'stomach',     vi:'dạ dày',         ko:'위',       ja:'胃'},
-  {id:'thigh',    diagram:'outside', views:['front','back'],    hm:'Lub ncej qab',    en:'thigh',       vi:'đùi',            ko:'허벅지',   ja:'太もも'},
-  {id:'thumb',    diagram:'outside', views:['front','back'],    hm:'Taub tes',        en:'thumb',       vi:'ngón cái',       ko:'엄지',     ja:'親指'},
-  {id:'toe',      diagram:'outside', views:['front','back'],    hm:'Ntiv taw',        en:'toe',         vi:'ngón chân',      ko:'발가락',   ja:'足の指'},
-  {id:'toenail',  diagram:'outside', views:['front','back'],    hm:'Rau tawv',        en:'toenail',     vi:'móng chân',      ko:'발톱',     ja:'足の爪'},
-  {id:'tongue',   diagram:'outside', views:['front'],           hm:'Tus nplaig',      en:'tongue',      vi:'lưỡi',           ko:'혀',       ja:'舌'},
-  {id:'tooth',    diagram:'outside', views:['front'],           hm:'Hniav',           en:'tooth',       vi:'răng',           ko:'이',       ja:'歯'},
-  {id:'wrist',    diagram:'outside', views:['front','back'],    hm:'Lub dab teg',     en:'wrist',       vi:'cổ tay',         ko:'손목',     ja:'手首'}
+  {id:'abdomen',  diagram:'outside', hm:'Plab mog',        en:'abdomen',     vi:'bụng dưới',     ko:'아랫배',    ja:'下腹部'},
+  {id:'ankle',    diagram:'outside', hm:'Lub dab taws',    en:'ankle',       vi:'mắt cá chân',    ko:'발목',     ja:'足首'},
+  {id:'arm',      diagram:'outside', hm:'Txhais caj npab', en:'arm',         vi:'cánh tay',       ko:'팔',       ja:'腕',     pair:true},
+  {id:'back',     diagram:'outside', hm:'Lub nraub qaum',  en:'back',        vi:'lưng',           ko:'등',       ja:'背中'},
+  {id:'beard',    diagram:'outside', hm:'Hwj txwv',        en:'beard',       vi:'râu',            ko:'수염',     ja:'ひげ'},
+  {id:'bladder',  diagram:'inside',  hm:'Lub zais zis',    en:'bladder',     vi:'bàng quang',     ko:'방광',     ja:'膀胱'},
+  {id:'blood',    diagram:'inside',  hm:'Ntshav',          en:'blood',       vi:'máu',            ko:'피',       ja:'血'},
+  {id:'bone',     diagram:'inside',  hm:'Pob txha',        en:'bone',        vi:'xương',          ko:'뼈',       ja:'骨'},
+  {id:'brain',    diagram:'inside',  hm:'Paj hlwb',        en:'brain',       vi:'não',            ko:'뇌',       ja:'脳'},
+  {id:'butt',     diagram:'outside', hm:'Lub pob tw',      en:'butt',        vi:'mông',           ko:'엉덩이',   ja:'お尻'},
+  {id:'chest',    diagram:'outside', hm:'Hauv siab',       en:'chest',       vi:'ngực',           ko:'가슴',     ja:'胸'},
+  {id:'chin',     diagram:'outside', hm:'Lub puab tsaig',  en:'chin',        vi:'cằm',            ko:'턱',       ja:'あご'},
+  {id:'ear',      diagram:'outside', hm:'Lub pob ntseg',   en:'ear',         vi:'tai',            ko:'귀',       ja:'耳'},
+  {id:'elbow',    diagram:'outside', hm:'Lub luj tshib',   en:'elbow',       vi:'khuỷu tay',      ko:'팔꿈치',   ja:'肘'},
+  {id:'eye',      diagram:'outside', hm:'Lub qhov muag',   en:'eye',         vi:'mắt',            ko:'눈',       ja:'目'},
+  {id:'eyebrow',  diagram:'outside', hm:'Plaub muag',      en:'eyebrow',     vi:'lông mày',       ko:'눈썹',     ja:'眉',     alias:'eyelash'},
+  {id:'eyelid',   diagram:'outside', hm:'Daim tawv muag',  en:'eyelid',      vi:'mí mắt',         ko:'눈꺼풀',   ja:'まぶた'},
+  {id:'eyelash',  diagram:'outside', hm:'Plaub muag',      en:'eyelash',     vi:'lông mi',        ko:'속눈썹',   ja:'まつげ',  alias:'eyebrow'},
+  {id:'finger',   diagram:'outside', hm:'Ntiv tes',        en:'finger',      vi:'ngón tay',       ko:'손가락',   ja:'指'},
+  {id:'fingernail',diagram:'outside',hm:'Rau tes',         en:'fingernail',  vi:'móng tay',       ko:'손톱',     ja:'手の爪'},
+  {id:'foot',     diagram:'outside', hm:'Txhais kotaw',    en:'foot',        vi:'bàn chân',       ko:'발',       ja:'足',     pair:true},
+  {id:'forehead', diagram:'outside', hm:'Lub hauv pliaj',  en:'forehead',    vi:'trán',           ko:'이마',     ja:'額'},
+  {id:'hair',     diagram:'outside', hm:'Plaub hau',       en:'hair',        vi:'tóc',            ko:'머리카락', ja:'髪'},
+  {id:'hand',     diagram:'outside', hm:'Txhais tes',      en:'hand',        vi:'bàn tay',        ko:'손',       ja:'手',     pair:true},
+  {id:'head',     diagram:'outside', hm:'Lub taubhau',     en:'head',        vi:'đầu',            ko:'머리',     ja:'頭'},
+  {id:'heart',    diagram:'inside',  hm:'Plawv',           en:'heart',       vi:'tim',            ko:'심장',     ja:'心臓'},
+  {id:'heel',     diagram:'outside', hm:'Lub luj taws',    en:'heel',        vi:'gót chân',       ko:'발꿈치',   ja:'かかと'},
+  {id:'intestines',diagram:'inside', hm:'Hnyuv',           en:'intestines',  vi:'ruột',           ko:'장',       ja:'腸'},
+  {id:'kidney',   diagram:'inside',  hm:'Lub raum',        en:'kidney',      vi:'thận',           ko:'신장',     ja:'腎臓'},
+  {id:'knee',     diagram:'outside', hm:'Lub hauv caug',   en:'knee',        vi:'đầu gối',        ko:'무릎',     ja:'膝'},
+  {id:'leg',      diagram:'outside', hm:'Txhais ceg',      en:'leg',         vi:'chân',           ko:'다리',     ja:'脚',     pair:true},
+  {id:'lip',      diagram:'outside', hm:'Daim tawv ncauj', en:'lip',         vi:'môi',            ko:'입술',     ja:'唇'},
+  {id:'liver',    diagram:'inside',  hm:'Siab',            en:'liver',       vi:'gan',            ko:'간',       ja:'肝臓'},
+  {id:'lung',     diagram:'inside',  hm:'Lub ntsws',       en:'lung',        vi:'phổi',           ko:'폐',       ja:'肺'},
+  {id:'mouth',    diagram:'outside', hm:'Lub qhov ncauj',  en:'mouth',       vi:'miệng',          ko:'입',       ja:'口'},
+  {id:'neck',     diagram:'outside', hm:'Caj dab',         en:'neck',        vi:'cổ',             ko:'목',       ja:'首'},
+  {id:'nose',     diagram:'outside', hm:'Lub qhov ntswg',  en:'nose',        vi:'mũi',            ko:'코',       ja:'鼻'},
+  {id:'shoulder', diagram:'outside', hm:'Lub xub pwg',     en:'shoulder',    vi:'vai',            ko:'어깨',     ja:'肩'},
+  {id:'skin',     diagram:'outside', hm:'Tawv nqaij',      en:'skin',        vi:'da',             ko:'피부',     ja:'肌'},
+  {id:'stomach',  diagram:'both',    hm:'Plab',            en:'stomach',     vi:'dạ dày',         ko:'위',       ja:'胃'},
+  {id:'thigh',    diagram:'outside', hm:'Lub ncej qab',    en:'thigh',       vi:'đùi',            ko:'허벅지',   ja:'太もも'},
+  {id:'thumb',    diagram:'outside', hm:'Taub tes',        en:'thumb',       vi:'ngón cái',       ko:'엄지',     ja:'親指'},
+  {id:'toe',      diagram:'outside', hm:'Ntiv taw',        en:'toe',         vi:'ngón chân',      ko:'발가락',   ja:'足の指'},
+  {id:'toenail',  diagram:'outside', hm:'Rau tawv',        en:'toenail',     vi:'móng chân',      ko:'발톱',     ja:'足の爪'},
+  {id:'tongue',   diagram:'outside', hm:'Tus nplaig',      en:'tongue',      vi:'lưỡi',           ko:'혀',       ja:'舌'},
+  {id:'tooth',    diagram:'outside', hm:'Hniav',           en:'tooth',       vi:'răng',           ko:'이',       ja:'歯'},
+  {id:'wrist',    diagram:'outside', hm:'Lub dab teg',     en:'wrist',       vi:'cổ tay',         ko:'손목',     ja:'手首'}
 ];
 
 const STR = {
@@ -429,324 +423,145 @@ function save(){try{localStorage.setItem(storageKey(), JSON.stringify(st));}catc
 
 let selected=null, q=null, opts=[], answered=false, gameOver=false;
 
-function partG(id, vis, extraHit){
-  const p=byId(id); const label=p?p.hm:id;
-  return `<g class="part" data-id="${id}" role="button" tabindex="0" aria-label="${esc(label)}">${extraHit||''}${vis}</g>`;
-}
-const BODY_SIL = 'M 200.0,38.0 C 224.0,38.0 242.0,54.0 244.0,86.0 C 245.0,108.0 238.0,124.0 226.0,136.0 C 222.0,146.0 224.0,154.0 226.0,166.0 C 252.0,170.0 282.0,176.0 304.0,182.0 C 320.0,190.0 330.0,218.0 328.0,252.0 C 330.0,290.0 334.0,318.0 336.0,338.0 C 338.0,362.0 334.0,418.0 330.0,450.0 C 332.0,456.0 344.0,464.0 350.0,476.0 C 356.0,486.0 354.0,500.0 346.0,506.0 C 340.0,510.0 336.0,504.0 334.0,494.0 C 338.0,516.0 340.0,536.0 338.0,552.0 C 334.0,560.0 326.0,560.0 324.0,550.0 C 324.0,560.0 316.0,562.0 314.0,550.0 C 312.0,560.0 304.0,560.0 304.0,548.0 C 300.0,556.0 292.0,552.0 294.0,538.0 C 296.0,520.0 300.0,504.0 306.0,490.0 C 300.0,478.0 302.0,464.0 308.0,454.0 C 312.0,420.0 316.0,372.0 314.0,340.0 C 310.0,300.0 296.0,252.0 278.0,218.0 C 268.0,204.0 258.0,200.0 250.0,204.0 C 254.0,242.0 260.0,282.0 258.0,312.0 C 250.0,334.0 252.0,350.0 258.0,362.0 C 268.0,390.0 278.0,412.0 282.0,426.0 C 276.0,452.0 270.0,502.0 266.0,538.0 C 260.0,582.0 254.0,618.0 256.0,638.0 C 260.0,678.0 252.0,726.0 246.0,778.0 C 246.0,794.0 248.0,810.0 242.0,822.0 C 246.0,834.0 260.0,844.0 274.0,848.0 C 282.0,850.0 284.0,856.0 278.0,858.0 C 268.0,860.0 256.0,858.0 246.0,856.0 C 236.0,858.0 224.0,856.0 216.0,850.0 C 208.0,844.0 210.0,834.0 216.0,826.0 C 222.0,814.0 228.0,798.0 230.0,780.0 C 236.0,730.0 230.0,680.0 226.0,640.0 C 220.0,600.0 216.0,560.0 214.0,520.0 C 214.0,490.0 214.0,472.0 214.0,464.0 C 214.0,456.0 208.0,452.0 200.0,452.0 C 192.0,452.0 186.0,456.0 186.0,464.0 C 186.0,472.0 186.0,490.0 186.0,520.0 C 184.0,560.0 180.0,600.0 174.0,640.0 C 170.0,680.0 164.0,730.0 170.0,780.0 C 172.0,798.0 178.0,814.0 184.0,826.0 C 190.0,834.0 192.0,844.0 184.0,850.0 C 176.0,856.0 164.0,858.0 154.0,856.0 C 144.0,858.0 132.0,860.0 122.0,858.0 C 116.0,856.0 118.0,850.0 126.0,848.0 C 140.0,844.0 154.0,834.0 158.0,822.0 C 152.0,810.0 154.0,794.0 154.0,778.0 C 148.0,726.0 140.0,678.0 144.0,638.0 C 146.0,618.0 140.0,582.0 134.0,538.0 C 130.0,502.0 124.0,452.0 118.0,426.0 C 122.0,412.0 132.0,390.0 142.0,362.0 C 148.0,350.0 150.0,334.0 142.0,312.0 C 140.0,282.0 146.0,242.0 150.0,204.0 C 142.0,200.0 132.0,204.0 122.0,218.0 C 104.0,252.0 90.0,300.0 86.0,340.0 C 84.0,372.0 88.0,420.0 92.0,454.0 C 98.0,464.0 100.0,478.0 94.0,490.0 C 100.0,504.0 104.0,520.0 106.0,538.0 C 108.0,552.0 100.0,556.0 96.0,548.0 C 96.0,560.0 88.0,560.0 86.0,550.0 C 84.0,562.0 76.0,560.0 76.0,550.0 C 74.0,560.0 66.0,560.0 62.0,552.0 C 60.0,536.0 62.0,516.0 66.0,494.0 C 64.0,504.0 60.0,510.0 54.0,506.0 C 46.0,500.0 44.0,486.0 50.0,476.0 C 56.0,464.0 68.0,456.0 70.0,450.0 C 66.0,418.0 62.0,362.0 64.0,338.0 C 66.0,318.0 70.0,290.0 72.0,252.0 C 70.0,218.0 80.0,190.0 96.0,182.0 C 118.0,176.0 148.0,170.0 174.0,166.0 C 176.0,154.0 178.0,146.0 174.0,136.0 C 162.0,124.0 155.0,108.0 156.0,86.0 C 158.0,54.0 176.0,38.0 200.0,38.0 Z';
+/* ---- Realistic illustrated panels with percentage hotspots ----
+   Shapes: ['id','e',cx,cy,rx,ry] ellipse, ['id','p',[[x,y],...]] polygon, ['id','pin',x,y,emoji,tx,ty] callout pin.
+   All coordinates are % of the panel image, so they scale with the responsive image. */
+const IMG_BASE='./assets/body/';
+const PANELS={
+  front:{img:'front.webp', w:420, h:864, cap:'body'},
+  back:{img:'back.webp', w:380, h:864, cap:'body'},
+  face:{img:'face.webp', w:400, h:670, cap:'face'},
+  hand:{img:'hand.webp', w:380, h:640, cap:'hand'},
+  foot:{img:'foot.webp', w:300, h:600, cap:'foot'},
+  organs:{img:'organs.webp', w:350, h:500, cap:'organs'},
+  bones:{img:'bones.webp', w:380, h:864, cap:'bones'}
+};
+const VIEW_PANELS={front:['front','face','hand','foot'], back:['back','hand','foot'], organs:['organs'], bones:['bones']};
+const SIL={"front":[[47.9,0.6],[42.6,1.7],[41.0,2.5],[39.8,4.2],[39.5,8.2],[42.9,11.3],[42.9,14.4],[41.4,15.0],[28.1,17.9],[24.3,20.7],[21.2,31.8],[17.4,37.3],[14.5,47.5],[11.2,49.4],[9.0,52.5],[11.4,52.7],[11.7,56.6],[14.5,57.2],[16.7,56.8],[17.6,55.7],[19.5,55.4],[21.2,50.1],[20.7,47.9],[27.6,39.0],[31.7,30.6],[32.6,30.6],[34.3,35.0],[30.2,49.4],[30.0,55.2],[32.6,63.1],[30.7,74.9],[33.8,86.6],[33.3,88.7],[31.9,90.3],[28.1,92.5],[27.4,94.1],[31.7,95.1],[36.9,95.1],[39.8,94.3],[42.6,92.4],[40.5,89.4],[40.2,85.0],[43.8,74.5],[43.1,68.5],[45.2,65.0],[46.2,59.7],[48.8,53.0],[50.0,52.9],[53.1,60.1],[54.0,65.4],[56.2,69.0],[55.5,75.1],[58.6,83.1],[57.9,91.2],[56.2,92.5],[60.5,95.0],[64.5,95.3],[69.3,94.8],[71.4,94.0],[70.7,92.6],[67.4,90.6],[65.5,88.7],[65.0,86.0],[68.6,74.4],[68.3,71.2],[66.7,67.2],[66.7,62.6],[68.3,58.9],[69.3,53.0],[65.0,35.2],[66.7,30.4],[67.9,30.6],[71.4,38.8],[77.9,46.9],[79.5,55.4],[81.4,55.7],[82.4,56.8],[85.2,57.2],[86.0,56.6],[87.4,56.6],[88.1,56.1],[87.6,52.5],[90.0,52.7],[90.5,52.3],[88.3,49.5],[85.0,47.7],[83.8,45.8],[81.9,37.4],[78.1,31.9],[76.0,25.5],[76.0,22.6],[74.5,20.0],[70.2,17.6],[56.4,14.5],[56.7,10.3],[58.1,10.0],[59.5,7.8],[58.8,6.8],[59.3,4.1],[55.2,1.3]],"back":[[48.2,0.7],[43.2,1.4],[40.0,2.7],[38.4,4.4],[39.2,6.5],[38.4,8.2],[39.7,10.0],[41.3,10.3],[41.8,14.2],[25.5,17.8],[20.8,20.9],[17.6,31.9],[13.7,38.0],[11.8,48.0],[9.2,51.4],[9.2,54.3],[10.5,56.2],[12.4,57.1],[14.2,56.9],[16.3,55.9],[16.1,53.6],[18.2,50.0],[17.9,47.8],[25.3,38.8],[28.9,30.9],[30.5,30.7],[32.4,35.8],[27.6,52.8],[30.3,63.3],[30.0,68.2],[28.2,72.0],[27.9,75.6],[31.6,87.3],[30.8,89.5],[26.6,90.9],[25.8,92.5],[29.5,93.9],[33.7,94.3],[38.4,94.2],[42.9,93.2],[42.6,92.4],[38.9,91.4],[38.7,84.5],[42.4,76.2],[42.1,68.9],[44.2,65.5],[45.3,60.4],[48.2,54.9],[48.4,51.9],[49.7,51.7],[53.2,60.0],[54.2,65.5],[56.6,69.4],[56.1,76.0],[59.7,84.6],[58.9,88.0],[59.5,91.4],[55.5,92.8],[57.9,93.9],[63.7,94.3],[68.4,94.0],[73.2,92.2],[72.4,91.0],[69.2,90.3],[67.4,89.2],[66.8,87.5],[70.5,75.5],[70.3,72.1],[68.4,68.1],[68.2,63.0],[70.3,57.2],[70.8,51.5],[66.3,36.2],[66.3,33.3],[67.9,30.7],[69.5,30.9],[73.4,39.0],[80.3,46.8],[80.8,50.5],[82.6,53.4],[81.8,55.7],[83.4,56.0],[83.7,56.8],[86.3,57.1],[88.2,56.2],[89.7,54.2],[89.7,51.7],[87.1,48.1],[84.7,37.3],[80.5,31.0],[77.9,21.1],[73.4,17.9],[56.6,14.1],[56.6,10.6],[58.4,10.0],[59.7,8.2],[59.2,3.7],[58.2,2.7],[54.5,1.3]]};
+const SHAPES={
+  front:[
+    ['skin','p',SIL.front],
+    ['head','e',50,8.2,9,5],['hair','e',50,3,9.5,2.8],['neck','e',50,15,5,2],
+    ['shoulder','e',31,19.5,6,3],['shoulder','e',69,19.5,6,3],
+    ['chest','e',50,23.5,13,4.5],['stomach','e',50,32,10.5,3.8],['abdomen','e',50,40.5,10.5,4.2],
+    ['arm','p',[[24,21],[32,22.5],[29.5,33.5],[25,35.5],[21,34.5]]],['arm','p',[[19.5,37.5],[25.5,37.5],[22,46.2],[17.5,46]]],
+    ['arm','p',[[76,21],[68,22.5],[70.5,33.5],[75,35.5],[79,34.5]]],['arm','p',[[80.5,37.5],[74.5,37.5],[78,46.2],[82.5,46]]],
+    ['elbow','e',23,36.3,3.6,2],['elbow','e',77,36.3,3.6,2],
+    ['wrist','e',19.5,47.5,3.2,1.4],['wrist','e',81,47.5,3.2,1.4],
+    ['hand','e',16,52.5,5.2,3.8],['hand','e',84,52.5,5.2,3.8],
+    ['thigh','e',39,56,7,7.5],['thigh','e',61,56,7,7.5],
+    ['knee','e',38.5,66.5,5,2.6],['knee','e',61.5,66.5,5,2.6],
+    ['leg','e',37.5,78,4.8,8.5],['leg','e',62.5,78,4.8,8.5],
+    ['ankle','e',36.5,89.2,3.8,1.5],['ankle','e',63.5,89.2,3.8,1.5],
+    ['foot','e',34,93.4,6.5,2.2],['foot','e',66,93.4,6.5,2.2]
+  ],
+  back:[
+    ['skin','p',SIL.back],
+    ['head','e',50,7,10.5,6],['hair','e',50,4.2,9.5,4],
+    ['ear','e',39.5,8.5,2.3,2],['ear','e',60.5,8.5,2.3,2],
+    ['neck','e',50,13.5,5.5,2],
+    ['shoulder','e',30,18.5,7,3],['shoulder','e',71,18.5,7,3],
+    ['back','e',50,29,14,10],['butt','e',50,46.5,14,5],
+    ['arm','p',[[24,20.5],[32,22],[27,33.5],[22,35.5],[18,34]]],['arm','p',[[17.5,37.5],[23.5,37.5],[19.5,46.5],[14.5,46]]],
+    ['arm','p',[[77,20.5],[69,22],[74,33.5],[79,35.5],[83,34]]],['arm','p',[[83.5,37.5],[77.5,37.5],[81.5,46.5],[86.5,46]]],
+    ['elbow','e',20.5,36,3.8,2.1],['elbow','e',80.5,36,3.8,2.1],
+    ['wrist','e',16.5,48,3.4,1.4],['wrist','e',84.5,48,3.4,1.4],
+    ['hand','e',13.5,52.2,5.2,3.6],['hand','e',86.5,52.2,5.2,3.6],
+    ['fingernail','e',13,56,4.2,1.2],['fingernail','e',87,56,4.2,1.2],
+    ['thigh','e',39,57.5,7.5,5.5],['thigh','e',61,57.5,7.5,5.5],
+    ['knee','e',39,67,5.5,2.5],['knee','e',61,67,5.5,2.5],
+    ['leg','e',38.5,77.5,5.5,7.5],['leg','e',61.5,77.5,5.5,7.5],
+    ['ankle','e',38,89,3.6,1.5],['ankle','e',62.5,89,3.6,1.5],
+    ['heel','e',38,92.4,4,1.7],['heel','e',63,92.4,4,1.7]
+  ],
+  face:[
+    ['neck','e',50,82,19,7.5],
+    ['hair','p',[[9,26],[13,12],[25,5],[45,1.5],[66,2.5],[81,9],[90,18],[92,31],[86,40],[83,24],[70,19],[50,17.5],[30,19],[19,23],[16,40],[10,36]]],
+    ['forehead','e',50,24.5,22,4.8],
+    ['ear','e',12.5,45,4.6,7],['ear','e',87.5,45,4.6,7],
+    ['eyebrow','e',35,31.3,10,1.9],['eyebrow','e',65,31.3,10,1.9],
+    ['eyelash','e',34.8,38.5,6.5,0.9],['eyelash','e',65.6,38.5,6.5,0.9],
+    ['eye','e',34.8,36.6,6.5,1.5],['eye','e',65.6,36.6,6.5,1.5],
+    ['eyelid','e',34.8,34.3,7,1.2],['eyelid','e',65.6,34.3,7,1.2],
+    ['nose','p',[[46,37.5],[54,37.5],[57.5,45],[59.5,50],[50,51.5],[40.5,50],[42.5,45]]],
+    ['beard','e',29,61,5.5,5],['beard','e',71,61,5.5,5],
+    ['lip','e',50,57.3,13,2.8],['mouth','e',50,57.1,12,0.9],
+    ['chin','e',50,67.8,10,3.4],
+    ['tooth','pin',20,57,'🦷',37,57],['tongue','pin',80,57,'👅',63,57]
+  ],
+  hand:[
+    ['hand','p',[[33,46],[45,35],[78,36],[88,39],[86,55],[80,70],[37,70],[29,60]]],
+    ['finger','e',39.5,21,5.5,13],['finger','e',57,19,5.5,15],['finger','e',72,22,5.5,13.5],['finger','e',85,29,5.3,11],
+    ['thumb','p',[[6,32],[12,31],[22,39],[31,49],[29,56],[21,58],[15,50],[8,40]]],
+    ['wrist','e',55,76,15,4]
+  ],
+  foot:[
+    ['ankle','e',45,22,28,9],
+    ['foot','e',45,54,27,14],
+    ['toe','e',22,86,11,8],['toe','e',45,87.5,7.5,8],['toe','e',60,84.5,6.5,7],['toe','e',72,81.5,5.5,6],['toe','e',83,77,5,5],
+    ['toenail','e',23,87.3,7,3],['toenail','e',45,91.4,5,1.9],['toenail','e',60.2,88.4,4,1.8],['toenail','e',72.5,84.9,3.5,1.6],['toenail','e',82.7,79.4,3,1.4]
+  ],
+  organs:[
+    ['brain','e',50,7.5,10,5.3],
+    ['lung','e',38.5,42,6.5,10],['lung','e',61.5,42,6.5,10],
+    ['heart','e',51,45,6.8,5.5],
+    ['blood','e',50.5,37.3,4.2,2.8],
+    ['liver','e',41.5,55.5,8,4.3],
+    ['stomach','e',56,57.8,7,4.4],
+    ['intestines','e',50,70,12.5,7.5],
+    ['kidney','e',42,77,4.5,4.6],['kidney','e',59.5,77,4.5,4.6],
+    ['bladder','e',50,86.6,4.6,3.3]
+  ],
+  bones:[
+    ['bone','e',50,6,9,6],['bone','e',50,18.5,18,1.6],['bone','e',50,26,13.5,8],['bone','e',50,37,3,4],['bone','e',50,44.5,15,5],
+    ['bone','p',[[25,19],[29,20],[23,36],[19,35]]],['bone','p',[[75,19],[71,20],[77,36],[81,35]]],
+    ['bone','p',[[19,36],[23,37],[17,48],[13,47]]],['bone','p',[[81,36],[77,37],[83,48],[87,47]]],
+    ['bone','e',13,52.5,6,5],['bone','e',87,52.5,6,5],
+    ['bone','p',[[32,47],[38,47],[38.5,65.5],[33.5,65.5]]],['bone','p',[[62,47],[68,47],[66.5,65.5],[61.5,65.5]]],
+    ['bone','e',36,67.5,4,2.4],['bone','e',63,67.5,4,2.4],
+    ['bone','p',[[33,69.5],[39,69.5],[37.5,90.5],[33.5,90.5]]],['bone','p',[[61,69.5],[67,69.5],[66.5,90.5],[62.5,90.5]]],
+    ['bone','e',34,94,7,2.6],['bone','e',66,94,7,2.6]
+  ]
+};
+/* derive each word's views from where its hotspots are drawn */
+PARTS.forEach(p=>{
+  const vs=[];
+  Object.entries(VIEW_PANELS).forEach(([v,panels])=>{ if(panels.some(pn=>(SHAPES[pn]||[]).some(s=>s[0]===p.id))) vs.push(v); });
+  p.views=vs;
+});
 
-function faceSVG(){
-  if(st.view==='back'){
-    return `<svg viewBox="0 0 260 350" role="img" aria-label="${esc(t('face'))}">
-      ${partG('neck', `<path class="vis wf" d="M96,250 C90,290 98,330 112,348 M164,250 C170,290 162,330 148,348"/>`,
-        `<rect class="hit" x="90" y="246" width="80" height="104"/>`)}
-      ${partG('ear', `
-        <path class="vis wf" d="M70,122 C52,124 44,148 48,172 C52,190 66,196 76,184 C78,166 76,138 70,122 Z"/>
-        <path class="vis wf-soft" d="M66,140 C58,144 58,168 66,180"/>
-        <path class="vis wf" d="M190,122 C208,124 216,148 212,172 C208,190 194,196 184,184 C182,166 184,138 190,122 Z"/>
-        <path class="vis wf-soft" d="M194,140 C202,144 202,168 194,180"/>`,
-        `<ellipse class="hit" cx="58" cy="158" rx="26" ry="42"/><ellipse class="hit" cx="202" cy="158" rx="26" ry="42"/>`)}
-      ${partG('head', `<path class="vis wf" d="M130,18 C88,18 62,60 60,112 C58,158 70,200 96,232 C110,250 122,262 130,266 C138,262 150,250 164,232 C190,200 202,158 200,112 C198,60 172,18 130,18 Z"/>`,
-        `<ellipse class="hit" cx="130" cy="140" rx="74" ry="118"/>`)}
-      ${partG('hair', `<path class="vis wf" d="M68,128 C58,40 96,8 130,8 C164,8 202,40 192,128 M76,118 C84,60 108,36 130,34 C152,36 176,60 184,118"/>
-        <path class="vis wf-soft" d="M100,28 C110,70 108,110 102,140 M130,20 L130,90 M160,28 C150,70 152,110 158,140"/>`,
-        `<path class="hit" d="M56,8 H204 V132 H56 Z"/>`)}
-      <g class="mesh" pointer-events="none">
-        <path class="wf-soft" d="M108,250 C104,290 110,328 118,346 M152,250 C156,290 150,328 142,346"/>
-      </g>
-    </svg>`;
-  }
-  /* Front face — Loomis proportions, thin medical line art. Short hair, short jaw beard as contour only. */
-  return `<svg viewBox="0 0 260 360" role="img" aria-label="${esc(t('face'))}">
-    ${partG('neck', `<path class="vis wf" d="M98,250 C92,292 100,332 114,352 M162,250 C168,292 160,332 146,352"/>`,
-      `<rect class="hit" x="90" y="248" width="80" height="108"/>`)}
-    ${partG('ear', `
-      <path class="vis wf" d="M64,120 C50,124 44,148 48,172 C54,188 66,190 74,178 C76,162 72,136 64,120 Z"/>
-      <path class="vis wf-soft" d="M62,138 C56,144 56,166 62,176 M68,150 C64,154 64,166 68,172"/>
-      <path class="vis wf" d="M196,120 C210,124 216,148 212,172 C206,188 194,190 186,178 C184,162 188,136 196,120 Z"/>
-      <path class="vis wf-soft" d="M198,138 C204,144 204,166 198,176 M192,150 C196,154 196,166 192,172"/>`,
-      `<ellipse class="hit" cx="56" cy="156" rx="26" ry="44"/><ellipse class="hit" cx="204" cy="156" rx="26" ry="44"/>`)}
-    ${partG('head', `<path class="vis wf" d="M130,16 C90,16 62,58 60,110 C58,154 68,196 92,228 C106,248 120,260 130,264 C140,260 154,248 168,228 C192,196 202,154 200,110 C198,58 170,16 130,16 Z"/>`,
-      `<ellipse class="hit" cx="130" cy="140" rx="74" ry="118"/>`)}
-    ${partG('hair', `<path class="vis wf" d="M70,118 C58,34 96,6 130,6 C164,6 202,34 190,118"/>
-      <path class="vis wf-soft" d="M80,112 C96,78 164,78 180,112 M100,20 C108,48 108,70 102,90 M160,20 C152,48 152,70 158,90"/>`,
-      `<path class="hit" d="M56,4 H204 V122 H56 Z"/>`)}
-    ${partG('forehead', `<path class="vis wf-soft" d="M86,88 C108,72 152,72 174,88"/>`,
-      `<path class="hit" d="M78,42 H182 V116 H78 Z"/>`)}
-    ${partG('eyebrow', `<path class="vis wf" d="M82,116 C98,106 116,106 124,114 M136,114 C144,106 162,106 178,116"/>`,
-      `<rect class="hit" x="74" y="98" width="54" height="24"/><rect class="hit" x="132" y="98" width="54" height="24"/>`)}
-    ${partG('eyelid', `<path class="vis wf" d="M86,128 C100,120 116,120 124,130 M136,130 C144,120 160,120 174,128"/>`,
-      `<rect class="hit" x="80" y="116" width="48" height="16"/><rect class="hit" x="132" y="116" width="48" height="16"/>`)}
-    ${partG('eyelash', `<path class="vis wf" d="M90,126 L88,121 M100,122 L99,117 M110,122 L111,117 M120,126 L122,122 M140,126 L138,122 M150,122 L149,117 M160,122 L161,117 M170,126 L172,121"/>`,
-      `<rect class="hit" x="78" y="108" width="50" height="16"/><rect class="hit" x="132" y="108" width="50" height="16"/>`)}
-    ${partG('eye', `
-      <path class="vis wf" d="M86,134 C100,124 118,124 124,134 C118,142 100,142 86,134 Z"/>
-      <ellipse class="vis wf" cx="105" cy="134" rx="6.5" ry="7"/>
-      <circle class="vis wf" cx="105" cy="134" r="2"/>
-      <path class="vis wf" d="M136,134 C142,124 160,124 174,134 C160,142 142,142 136,134 Z"/>
-      <ellipse class="vis wf" cx="155" cy="134" rx="6.5" ry="7"/>
-      <circle class="vis wf" cx="155" cy="134" r="2"/>`,
-      `<ellipse class="hit" cx="105" cy="134" rx="24" ry="16"/><ellipse class="hit" cx="155" cy="134" rx="24" ry="16"/>`)}
-    ${partG('nose', `<path class="vis wf" d="M126,148 C124,162 122,172 118,182 C116,186 120,190 126,190 C130,192 130,192 134,190 C140,190 144,186 142,182 C138,172 136,162 134,148"/>
-      <path class="vis wf-soft" d="M122,184 C126,188 130,186 130,186 C130,186 134,188 138,184"/>`,
-      `<rect class="hit" x="108" y="118" width="44" height="80"/>`)}
-    ${partG('lip', `<path class="vis wf" d="M104,208 C116,200 124,198 130,204 C136,198 144,200 156,208 C146,212 138,214 130,212 C122,214 114,212 104,208 Z"/>
-      <path class="vis wf" d="M106,214 C118,226 142,226 154,214"/>`,
-      `<rect class="hit" x="96" y="194" width="68" height="38"/>`)}
-    ${partG('mouth', `<path class="vis wf" d="M108,210 C120,216 140,216 152,210"/>`,
-      `<ellipse class="hit" cx="130" cy="214" rx="28" ry="12"/>`)}
-    ${partG('tooth', `<path class="vis wf-soft" d="M118,210 L118,214 L142,214 L142,210"/>`,
-      `<rect class="hit" x="110" y="208" width="40" height="12"/>`)}
-    ${partG('tongue', `<path class="vis wf-soft" d="M120,220 C128,226 132,226 140,220"/>`,
-      `<ellipse class="hit" cx="130" cy="224" rx="20" ry="12"/>`)}
-    ${partG('chin', `<path class="vis wf" d="M108,246 C118,260 142,260 152,246"/>`,
-      `<ellipse class="hit" cx="130" cy="252" rx="34" ry="22"/>`)}
-    ${partG('beard', `<path class="vis wf-soft" d="M86,200 L84,210 M96,214 L94,224 M108,230 L106,240 M130,242 L130,254 M152,230 L154,240 M164,214 L166,224 M174,200 L176,210"/>`,
-      `<path class="hit" d="M70,184 C64,220 90,262 130,274 C170,262 196,220 190,184 L170,190 C160,228 140,246 130,248 C120,246 100,228 90,190 Z"/>`)}
-    <g class="mesh" pointer-events="none">
-      <path class="wf-soft" d="M112,250 C108,292 114,330 122,350 M148,250 C152,292 146,330 138,350"/>
-    </g>
-  </svg>`;
+function shapeSVG(s){
+  const [id,kind]=s;
+  if(kind==='e') return `<ellipse class="vis hs" vector-effect="non-scaling-stroke" cx="${s[2]}" cy="${s[3]}" rx="${s[4]}" ry="${s[5]}"/>`;
+  if(kind==='p') return `<polygon class="vis hs" vector-effect="non-scaling-stroke" points="${s[2].map(pt=>pt.join(',')).join(' ')}"/>`;
+  return '';
 }
-
-function bodyMeshFront(){
-  return `<g class="mesh" pointer-events="none">
-    <path class="wf-soft" d="M176,98 C190,86 210,86 224,98 M186,50 C192,70 208,70 214,50"/>
-    <path class="wf-soft" d="M188,102 C194,98 200,98 206,102 M194,110 C197,108 203,108 206,110"/>
-    <path class="wf-soft" d="M200,106 L200,122 M194,128 C198,126 202,126 206,128"/>
-    <path class="wf-soft" d="M200,166 C232,170 272,178 304,184 M200,166 C168,170 128,178 96,184"/>
-    <path class="wf-soft" d="M250,204 C232,190 212,186 200,186 C188,186 168,190 150,204"/>
-    <path class="wf-soft" d="M200,186 L200,350"/>
-    <path class="wf-soft" d="M168,232 C186,224 214,224 232,232"/>
-    <path class="wf" d="M160,412 C186,406 214,406 240,412 C242,430 236,448 228,454 C216,448 200,446 200,446 C200,446 184,448 172,454 C164,448 158,430 160,412 Z"/>
-    <path class="wf-soft" d="M168,412 L172,452 M232,412 L228,452"/>
-    <path class="wf-soft" d="M246,628 C258,624 268,632 266,644 C262,654 252,654 246,646 C242,638 242,632 246,628 Z"/>
-    <path class="wf-soft" d="M154,628 C142,624 132,632 134,644 C138,654 148,654 154,646 C158,638 158,632 154,628 Z"/>
-    <path class="wf-soft" d="M256,650 L250,770 M144,650 L150,770"/>
-  </g>`;
+function panelHTML(key){
+  const P=PANELS[key]; const list=SHAPES[key]||[];
+  /* group consecutive shapes by id, keep z-order */
+  let svg=''; let pins='';
+  list.forEach(s=>{
+    const p=byId(s[0]); const label=p?p.hm:s[0];
+    if(s[1]==='pin'){
+      svg+=`<line class="pin-line" data-for="${s[0]}" x1="${s[2]}" y1="${s[3]}" x2="${s[5]}" y2="${s[6]}" vector-effect="non-scaling-stroke"/>`;
+      pins+=`<button type="button" class="part pin" data-id="${s[0]}" aria-label="${esc(label)}" style="left:${s[2]}%;top:${s[3]}%">${s[4]}</button>`;
+    } else {
+      svg+=`<g class="part" data-id="${s[0]}" role="button" tabindex="0" aria-label="${esc(label)}">${shapeSVG(s)}</g>`;
+    }
+  });
+  return `<div class="fig-card fig-${key}"><div class="fig-cap">${esc(t(P.cap))}</div>
+    <div class="fig-img" style="aspect-ratio:${P.w}/${P.h}">
+      <img src="${IMG_BASE+P.img}" width="${P.w}" height="${P.h}" alt="${esc(t(P.cap))}" draggable="false" decoding="async">
+      <svg class="hs-layer" viewBox="0 0 100 100" preserveAspectRatio="none" aria-label="${esc(t(P.cap))}">${svg}</svg>
+      ${pins}
+    </div></div>`;
 }
-function bodyMeshBack(){
-  return `<g class="mesh" pointer-events="none">
-    <path class="wf-soft" d="M170,90 C180,48 220,48 230,90 M180,84 C188,62 212,62 220,84"/>
-    <path class="wf" d="M200,160 L200,412"/>
-    <path class="wf-soft" d="M200,168 C186,176 174,188 168,204 C164,220 168,234 178,242 C188,230 198,222 200,220"/>
-    <path class="wf-soft" d="M200,168 C214,176 226,188 232,204 C236,220 232,234 222,242 C212,230 202,222 200,220"/>
-    <path class="wf" d="M160,412 C186,406 214,406 240,412 C242,430 236,448 228,454 C216,448 200,446 200,446 C200,446 184,448 172,454 C164,448 158,430 160,412 Z"/>
-    <path class="wf-soft" d="M248,780 L238,844 M152,780 L162,844"/>
-  </g>`;
-}
-
-function bodyFrontSVG(){
-  return `<svg viewBox="0 0 400 900" role="img" aria-label="${esc(t('body'))}">
-    ${partG('skin', `<path class="vis wf" d="${BODY_SIL}"/>`)}
-    ${partG('hair', `<path class="vis wf" d="M174,90 C176,42 224,42 226,90"/>`, `<path class="hit" d="M166,34 H234 V92 H166 Z"/>`)}
-    ${partG('head', `<ellipse class="vis body-reg" cx="200" cy="100" rx="44" ry="62"/>`, `<ellipse class="hit" cx="200" cy="100" rx="50" ry="68"/>`)}
-    ${partG('neck', `<path class="vis body-reg" d="M180,138 H220 V172 H180 Z"/>`, `<rect class="hit" x="174" y="132" width="52" height="44"/>`)}
-    ${partG('shoulder', `<path class="vis body-reg" d="M100,168 L170,160 L170,210 L110,216 Z"/><path class="vis body-reg" d="M300,168 L230,160 L230,210 L290,216 Z"/>`,
-      `<path class="hit" d="M88,154 H178 V222 H88 Z"/><path class="hit" d="M222,154 H312 V222 H222 Z"/>`)}
-    ${partG('chest', `<path class="vis body-reg" d="M152,170 L248,170 L252,292 L148,292 Z"/>`)}
-    ${partG('stomach', `<path class="vis body-reg" d="M150,286 L250,286 L256,358 L144,358 Z"/>`)}
-    ${partG('abdomen', `<path class="vis body-reg" d="M148,350 L252,350 L248,424 L152,424 Z"/>`)}
-    ${partG('arm', `<path class="vis body-reg" d="M112,210 L92,330 L120,336 L150,214 Z"/><path class="vis body-reg" d="M288,210 L308,330 L280,336 L250,214 Z"/>`,
-      `<path class="hit" d="M84,200 H154 V332 H84 Z"/><path class="hit" d="M246,200 H316 V332 H246 Z"/>`)}
-    ${partG('elbow', `<circle class="vis body-reg" cx="70" cy="338" r="20"/><circle class="vis body-reg" cx="330" cy="338" r="20"/>`,
-      `<circle class="hit" cx="70" cy="338" r="28"/><circle class="hit" cx="330" cy="338" r="28"/>`)}
-    ${partG('wrist', `<rect class="vis body-reg" x="52" y="444" width="40" height="26" rx="6"/><rect class="vis body-reg" x="308" y="444" width="40" height="26" rx="6"/>`,
-      `<rect class="hit" x="46" y="436" width="52" height="36"/><rect class="hit" x="302" y="436" width="52" height="36"/>`)}
-    ${partG('hand', `<path class="vis body-reg" d="M36,468 H110 V562 H36 Z"/><path class="vis body-reg" d="M290,468 H364 V562 H290 Z"/>`)}
-    ${partG('thigh', `<path class="vis body-reg" d="M152,424 L186,424 L186,575 L150,575 Z"/><path class="vis body-reg" d="M214,424 L248,424 L250,575 L214,575 Z"/>`)}
-    ${partG('knee', `<circle class="vis body-reg" cx="168" cy="636" r="22"/><circle class="vis body-reg" cx="232" cy="636" r="22"/>`,
-      `<circle class="hit" cx="168" cy="636" r="28"/><circle class="hit" cx="232" cy="636" r="28"/>`)}
-    ${partG('leg', `<path class="vis body-reg" d="M148,658 L186,658 L180,770 L150,770 Z"/><path class="vis body-reg" d="M214,658 L252,658 L250,770 L220,770 Z"/>`)}
-    ${partG('ankle', `<circle class="vis body-reg" cx="164" cy="800" r="16"/><circle class="vis body-reg" cx="236" cy="800" r="16"/>`,
-      `<circle class="hit" cx="164" cy="800" r="24"/><circle class="hit" cx="236" cy="800" r="24"/>`)}
-    ${partG('foot', `<path class="vis body-reg" d="M118,818 H200 V860 H118 Z"/><path class="vis body-reg" d="M200,818 H282 V860 H200 Z"/>`)}
-    ${partG('heel', `<ellipse class="vis body-reg" cx="150" cy="848" rx="18" ry="14"/><ellipse class="vis body-reg" cx="250" cy="848" rx="18" ry="14"/>`,
-      `<ellipse class="hit" cx="150" cy="848" rx="24" ry="20"/><ellipse class="hit" cx="250" cy="848" rx="24" ry="20"/>`)}
-    ${bodyMeshFront()}
-  </svg>`;
-}
-
-function bodyBackSVG(){
-  return `<svg viewBox="0 0 400 900" role="img" aria-label="${esc(t('body'))}">
-    ${partG('skin', `<path class="vis wf" d="${BODY_SIL}"/>`)}
-    ${partG('hair', `<path class="vis wf" d="M172,100 C174,38 226,38 228,100"/>`, `<path class="hit" d="M164,34 H236 V112 H164 Z"/>`)}
-    ${partG('head', `<ellipse class="vis body-reg" cx="200" cy="100" rx="44" ry="62"/>`, `<ellipse class="hit" cx="200" cy="100" rx="50" ry="68"/>`)}
-    ${partG('ear', `<ellipse class="vis body-reg" cx="158" cy="104" rx="10" ry="18"/><ellipse class="vis body-reg" cx="242" cy="104" rx="10" ry="18"/>`,
-      `<ellipse class="hit" cx="158" cy="104" rx="16" ry="24"/><ellipse class="hit" cx="242" cy="104" rx="16" ry="24"/>`)}
-    ${partG('neck', `<path class="vis body-reg" d="M180,138 H220 V172 H180 Z"/>`, `<rect class="hit" x="174" y="132" width="52" height="44"/>`)}
-    ${partG('shoulder', `<path class="vis body-reg" d="M100,168 L170,160 L170,210 L110,216 Z"/><path class="vis body-reg" d="M300,168 L230,160 L230,210 L290,216 Z"/>`,
-      `<path class="hit" d="M88,154 H178 V222 H88 Z"/><path class="hit" d="M222,154 H312 V222 H222 Z"/>`)}
-    ${partG('back', `<path class="vis body-reg" d="M152,170 L248,170 L250,410 L150,410 Z"/>`)}
-    ${partG('butt', `<path class="vis body-reg" d="M158,412 L242,412 L238,456 L162,456 Z"/>`)}
-    ${partG('arm', `<path class="vis body-reg" d="M112,210 L92,330 L120,336 L150,214 Z"/><path class="vis body-reg" d="M288,210 L308,330 L280,336 L250,214 Z"/>`,
-      `<path class="hit" d="M84,200 H154 V332 H84 Z"/><path class="hit" d="M246,200 H316 V332 H246 Z"/>`)}
-    ${partG('elbow', `<circle class="vis body-reg" cx="70" cy="338" r="20"/><circle class="vis body-reg" cx="330" cy="338" r="20"/>`,
-      `<circle class="hit" cx="70" cy="338" r="28"/><circle class="hit" cx="330" cy="338" r="28"/>`)}
-    ${partG('wrist', `<rect class="vis body-reg" x="52" y="444" width="40" height="26" rx="6"/><rect class="vis body-reg" x="308" y="444" width="40" height="26" rx="6"/>`,
-      `<rect class="hit" x="46" y="436" width="52" height="36"/><rect class="hit" x="302" y="436" width="52" height="36"/>`)}
-    ${partG('hand', `<path class="vis body-reg" d="M36,468 H110 V562 H36 Z"/><path class="vis body-reg" d="M290,468 H364 V562 H290 Z"/>`)}
-    ${partG('thigh', `<path class="vis body-reg" d="M152,456 L186,456 L186,575 L150,575 Z"/><path class="vis body-reg" d="M214,456 L248,456 L250,575 L214,575 Z"/>`)}
-    ${partG('knee', `<circle class="vis body-reg" cx="168" cy="636" r="22"/><circle class="vis body-reg" cx="232" cy="636" r="22"/>`,
-      `<circle class="hit" cx="168" cy="636" r="28"/><circle class="hit" cx="232" cy="636" r="28"/>`)}
-    ${partG('leg', `<path class="vis body-reg" d="M148,658 L186,658 L180,770 L150,770 Z"/><path class="vis body-reg" d="M214,658 L252,658 L250,770 L220,770 Z"/>`)}
-    ${partG('ankle', `<circle class="vis body-reg" cx="164" cy="800" r="16"/><circle class="vis body-reg" cx="236" cy="800" r="16"/>`,
-      `<circle class="hit" cx="164" cy="800" r="24"/><circle class="hit" cx="236" cy="800" r="24"/>`)}
-    ${partG('foot', `<path class="vis body-reg" d="M130,818 H200 V860 H130 Z"/><path class="vis body-reg" d="M200,818 H270 V860 H200 Z"/>`)}
-    ${partG('heel', `<ellipse class="vis body-reg" cx="168" cy="848" rx="22" ry="16"/><ellipse class="vis body-reg" cx="232" cy="848" rx="22" ry="16"/>`,
-      `<ellipse class="hit" cx="168" cy="848" rx="28" ry="22"/><ellipse class="hit" cx="232" cy="848" rx="28" ry="22"/>`)}
-    ${bodyMeshBack()}
-  </svg>`;
-}
-
-function handSVG(){
-  /* Dorsal right hand, fingers up, thumb left. Four fingers + thumb, tapered wrist, nails, joints. */
-  const outline = "M130,385 C126,350 120,310 122,270 C110,255 92,228 70,198 C54,176 42,148 44,126 C46,108 62,100 76,108 C90,116 104,140 114,166 C122,184 128,198 134,200 C132,150 130,90 132,42 C134,24 148,16 160,26 C168,34 170,50 168,70 C166,110 166,150 166,198 C168,140 170,80 174,28 C176,10 192,6 204,18 C212,26 214,44 212,64 C208,110 206,160 204,200 C208,150 214,100 220,56 C224,38 240,34 250,48 C258,58 258,76 254,96 C246,140 236,180 230,202 C236,170 250,140 260,100 C266,82 282,80 288,96 C294,112 288,132 278,154 C262,190 248,220 240,242 C238,280 242,330 238,385 C220,394 148,394 130,385 Z";
-  return `<svg viewBox="0 0 330 410" role="img" aria-label="${esc(t('hand'))}">
-    ${partG('wrist', `<path class="vis wf" d="M130,385 C126,350 120,310 122,272 M238,385 C242,330 238,280 236,248 M130,385 C148,394 220,394 238,385"/>
-      <path class="vis wf-soft" d="M148,385 L146,310 M220,385 L222,310 M140,360 C160,354 210,354 230,360"/>`,
-      `<rect class="hit" x="116" y="300" width="132" height="102"/>`)}
-    ${partG('hand', `<path class="vis wf" d="${outline}"/>
-      <path class="vis wf-soft" d="M166,198 L150,255 M204,200 L204,255 M230,202 L236,255 M150,215 L132,245 M220,215 L238,245"/>`,
-      `<path class="hit" d="M110,190 H250 V310 H110 Z"/>`)}
-    ${partG('thumb', `<path class="vis wf-soft" d="M70,126 C84,130 100,148 112,172 M58,150 L94,162"/>`,
-      `<path class="hit" d="M34,96 H130 V220 H34 Z"/>`)}
-    ${partG('finger', `
-      <path class="vis wf-soft" d="M134,92 L164,92 M176,82 L210,82 M222,96 L252,96 M260,128 L286,128 M134,128 L164,128 M176,122 L210,122 M222,132 L250,132 M258,150 L280,150"/>`,
-      `<path class="hit" d="M124,8 H172 V200 H124 Z"/><path class="hit" d="M168,2 H220 V200 H168 Z"/><path class="hit" d="M214,28 H270 V202 H214 Z"/><path class="hit" d="M240,78 H304 V210 H240 Z"/>`)}
-    ${partG('fingernail', `
-      <path class="vis wf" d="M136,36 C138,26 152,22 160,32 C158,42 140,44 136,36 Z"/>
-      <path class="vis wf" d="M178,22 C180,12 196,8 204,20 C202,30 182,32 178,22 Z"/>
-      <path class="vis wf" d="M224,50 C226,40 242,38 250,50 C246,60 228,62 224,50 Z"/>
-      <path class="vis wf" d="M264,92 C266,82 282,80 288,92 C284,102 268,104 264,92 Z"/>
-      <path class="vis wf" d="M48,120 C50,110 66,108 74,120 C70,130 52,132 48,120 Z"/>`,
-      `<ellipse class="hit" cx="148" cy="32" rx="18" ry="16"/><ellipse class="hit" cx="191" cy="20" rx="18" ry="16"/><ellipse class="hit" cx="237" cy="50" rx="18" ry="16"/><ellipse class="hit" cx="276" cy="92" rx="18" ry="16"/><ellipse class="hit" cx="60" cy="120" rx="20" ry="16"/>`)}
-  </svg>`;
-}
-
-function footSVG(){
-  /* Elevated medial 3/4 of a left foot. Columnar shin, heel, arch, five toes, nails. One outline. */
-  const outline = "M112,8 L152,8 C150,50 156,92 160,118 C184,130 230,142 275,150 C298,148 314,140 326,136 C342,124 362,130 370,148 C376,160 372,174 358,180 C368,174 384,178 390,194 C392,206 382,216 368,218 C378,216 388,224 388,236 C386,248 372,254 358,250 C366,254 370,264 364,272 C356,282 342,282 330,274 C336,284 334,294 322,298 C308,302 294,294 290,282 C252,298 200,292 158,268 C128,250 104,232 88,238 C68,246 50,226 50,200 C50,174 68,158 90,156 C100,136 106,88 110,40 L112,8 Z";
-  return `<svg viewBox="0 0 420 330" role="img" aria-label="${esc(t('foot'))}">
-    ${partG('foot', `<path class="vis wf" d="${outline}"/>`,
-      `<path class="hit" d="M40,4 H408 V316 H40 Z"/>`)}
-    ${partG('ankle', `<path class="vis wf" d="M112,8 L152,8 C150,50 156,92 160,118 L110,40 L112,8 Z"/>
-      <path class="vis wf-soft" d="M128,8 L132,100"/>`,
-      `<ellipse class="hit" cx="138" cy="70" rx="48" ry="72"/>`)}
-    ${partG('heel', `<path class="vis wf-soft" d="M88,238 C68,246 50,226 50,200 C50,174 68,158 90,156 C82,176 80,210 88,238 Z"/>`,
-      `<ellipse class="hit" cx="78" cy="200" rx="48" ry="54"/>`)}
-    ${partG('toe', `
-      <path class="vis wf-soft" d="M326,136 C342,148 354,164 344,178 M358,180 C372,188 382,204 368,216 M368,218 C380,228 382,242 358,250 M330,274 C344,268 354,260 358,250"/>`,
-      `<path class="hit" d="M270,118 H408 V310 H270 Z"/>`)}
-    ${partG('toenail', `
-      <path class="vis wf" d="M344,138 C348,130 362,130 366,140 C362,148 348,148 344,138 Z"/>
-      <path class="vis wf" d="M372,186 C376,178 388,180 390,190 C386,198 374,198 372,186 Z"/>
-      <path class="vis wf" d="M372,228 C376,220 388,222 388,232 C384,240 374,240 372,228 Z"/>
-      <path class="vis wf" d="M348,264 C352,256 364,258 364,268 C360,276 350,276 348,264 Z"/>`,
-      `<ellipse class="hit" cx="355" cy="138" rx="16" ry="14"/><ellipse class="hit" cx="382" cy="188" rx="14" ry="14"/><ellipse class="hit" cx="380" cy="230" rx="14" ry="14"/><ellipse class="hit" cx="356" cy="266" rx="14" ry="14"/>`)}
-    <g class="mesh" pointer-events="none">
-      <path class="wf-soft" d="M160,118 C210,134 250,146 300,152"/>
-      <path class="wf-soft" d="M88,238 C140,216 200,210 260,226"/>
-    </g>
-  </svg>`;
-}
-
-function organsSVG(){
-  return `<svg viewBox="0 20 400 640" role="img" aria-label="${esc(t('organs'))}">
-    <path class="wf-soft" d="${BODY_SIL}" pointer-events="none"/>
-    ${partG('brain', `<path class="vis wf" d="M200,46 C174,46 154,62 152,86 C150,108 164,124 188,128 C196,130 198,126 200,122 C202,126 204,130 212,128 C236,124 250,108 248,86 C246,62 226,46 200,46 Z"/>
-      <path class="vis wf-soft" d="M200,48 L200,122 M160,70 C172,66 184,74 196,70 M204,70 C216,74 228,66 240,70 M158,92 C170,86 184,96 196,92 M204,92 C216,96 230,86 242,92 M164,114 C180,108 220,108 236,114"/>`,
-      `<ellipse class="hit" cx="200" cy="88" rx="60" ry="48"/>`)}
-    ${partG('lung', `
-      <path class="vis wf" d="M116,178 C100,188 96,230 100,268 C104,300 122,314 144,306 C156,300 162,278 160,250 C158,218 150,190 136,178 C128,174 120,174 116,178 Z"/>
-      <path class="vis wf-soft" d="M108,230 C124,224 148,230 154,238 M114,266 C130,260 146,268 150,276 M118,210 L150,218"/>
-      <path class="vis wf" d="M284,178 C300,188 304,230 300,268 C296,300 278,314 256,306 C244,300 238,278 240,250 C242,218 250,190 264,178 C272,174 280,174 284,178 Z"/>
-      <path class="vis wf-soft" d="M246,230 C262,224 286,230 292,238 M250,266 C266,260 286,268 290,276 M250,210 L282,218"/>`,
-      `<path class="hit" d="M90,170 H170 V318 H90 Z"/><path class="hit" d="M230,170 H310 V318 H230 Z"/>`)}
-    ${partG('blood', `<path class="vis wf-soft" d="M214,248 C216,268 216,298 214,338 L214,390 M214,270 C186,286 170,320 160,350 M214,270 C242,286 258,320 268,350"/>`,
-      `<path class="hit" fill="none" stroke="transparent" stroke-width="20" d="M214,248 C216,268 216,298 214,338 L214,390 M214,270 C186,286 170,320 160,350 M214,270 C242,286 258,320 268,350"/>`)}
-    ${partG('heart', `<path class="vis wf" d="M200,206 C200,196 210,188 222,190 C234,192 242,200 240,210 C250,224 254,244 248,262 C242,278 228,290 214,292 C202,294 192,286 186,274 C178,260 174,244 178,228 C180,216 188,208 200,206 Z"/>
-      <path class="vis wf-soft" d="M222,190 C226,200 228,214 224,240 M196,230 C210,236 228,234 236,224"/>`,
-      `<ellipse class="hit" cx="214" cy="242" rx="46" ry="50"/>`)}
-    ${partG('liver', `<path class="vis wf" d="M108,308 C108,288 132,276 164,278 C194,280 222,288 236,300 C246,308 248,320 238,328 C220,342 188,352 160,354 C128,356 108,348 104,332 C100,320 102,314 108,308 Z"/>
-      <path class="vis wf-soft" d="M168,280 C170,308 176,336 190,348"/>`,
-      `<path class="hit" d="M96,272 H250 V360 H96 Z"/>`)}
-    ${partG('stomach', `<path class="vis wf" d="M214,306 C204,298 214,288 230,286 C250,284 268,298 270,320 C272,346 258,370 236,376 C220,378 210,366 214,348 C218,330 216,316 214,306 Z"/>
-      <path class="vis wf-soft" d="M230,296 C242,308 248,336 236,360"/>`,
-      `<ellipse class="hit" cx="236" cy="332" rx="42" ry="50"/>`)}
-    ${partG('kidney', `
-      <path class="vis wf" d="M126,358 C108,366 100,388 108,406 C116,424 140,426 150,412 C158,400 154,378 144,366 C138,358 132,356 126,358 Z"/>
-      <path class="vis wf" d="M274,352 C292,360 300,382 292,400 C284,418 260,420 250,406 C242,394 246,372 256,360 C262,352 268,350 274,352 Z"/>
-      <path class="vis wf-soft" d="M122,384 L142,384 M258,378 L278,378"/>`,
-      `<ellipse class="hit" cx="128" cy="390" rx="32" ry="40"/><ellipse class="hit" cx="272" cy="384" rx="32" ry="40"/>`)}
-    ${partG('intestines', `
-      <path class="vis wf" d="M132,518 L132,400 C132,384 148,376 168,378 L248,380 C268,382 276,398 274,416 L270,518 C266,538 238,550 216,542 C198,536 188,522 196,508"/>
-      <path class="vis wf" d="M156,430 C174,418 196,438 216,426 C234,416 254,430 250,450 C240,474 206,480 184,466 C166,456 164,438 178,430 C196,422 220,440 234,452 M160,470 C178,458 200,476 220,464 C236,456 250,468 244,484"/>`,
-      `<path class="hit" d="M114,370 H286 V556 H114 Z"/>`)}
-    ${partG('bladder', `<path class="vis wf" d="M200,536 C176,540 162,554 164,572 C166,590 180,602 200,602 C220,602 234,590 236,572 C238,554 224,540 200,536 Z"/>`,
-      `<ellipse class="hit" cx="200" cy="570" rx="42" ry="38"/>`)}
-  </svg>`;
-}
-
-function bonesSVG(){
-  const b = 'class="vis wf"';
-  const sf = 'class="vis wf-soft"';
-  return `<svg viewBox="0 20 400 850" role="img" aria-label="${esc(t('bones'))}">
-    <path class="wf-soft" d="${BODY_SIL}" pointer-events="none"/>
-    ${partG('bone', `
-      <path ${b} d="M168,46 C148,54 142,78 146,106 C150,126 166,138 186,136 C190,140 196,142 200,142 C204,142 210,140 214,136 C234,138 250,126 254,106 C258,78 252,54 232,46 C220,40 180,40 168,46 Z"/>
-      <ellipse ${b} cx="176" cy="100" rx="13" ry="10"/>
-      <ellipse ${b} cx="224" cy="100" rx="13" ry="10"/>
-      <path ${b} d="M200,110 L194,128 C196,134 204,134 206,128 Z"/>
-      <path ${sf} d="M184,138 L216,138"/>
-      <path ${b} d="M170,130 L168,150 C168,162 180,172 200,174 C220,172 232,162 232,150 L230,130"/>
-      <path ${b} d="M190,174 L190,188 L210,188 L210,174"/>
-      <path ${b} d="M194,188 L194,418 M206,188 L206,418"/>
-      <path ${sf} d="M194,208 H206 M194,228 H206 M194,248 H206 M194,268 H206 M194,288 H206 M194,308 H206 M194,328 H206 M194,348 H206 M194,368 H206 M194,388 H206 M194,408 H206"/>
-      <path ${b} d="M200,176 C234,172 272,182 302,196 M200,176 C166,172 128,182 98,196"/>
-      <path ${b} d="M197,188 L197,276 M203,188 L203,276"/>
-      <path ${b} d="M197,196 C160,202 128,216 114,236 M197,212 C158,220 126,236 116,256 M197,228 C156,238 128,254 118,274 M197,244 C160,256 136,272 124,290 M197,260 C166,272 146,286 136,302 M197,276 C170,288 154,300 146,314"/>
-      <path ${b} d="M203,196 C240,202 272,216 286,236 M203,212 C242,220 274,236 284,256 M203,228 C244,238 272,254 282,274 M203,244 C240,256 264,272 276,290 M203,260 C234,272 254,286 264,302 M203,276 C230,288 246,300 254,314"/>
-      <path ${sf} d="M146,314 C168,330 200,336 200,336 C200,336 232,330 254,314"/>
-      <path ${b} d="M200,416 C172,410 140,416 126,438 C116,456 124,478 148,490 C170,500 190,502 200,502 C210,502 230,500 252,490 C276,478 284,456 274,438 C260,416 228,410 200,416 Z"/>
-      <path ${sf} d="M154,436 C170,430 186,428 200,428 C214,428 230,430 246,436"/>
-      <path ${b} d="M186,424 L200,470 L214,424 M186,492 C194,500 206,500 214,492"/>
-      <path ${b} d="M104,198 C96,232 88,282 80,334 L94,338 C102,288 110,238 118,202 Z"/>
-      <path ${b} d="M296,198 C304,232 312,282 320,334 L306,338 C298,288 290,238 282,202 Z"/>
-      <circle ${b} cx="84" cy="340" r="8"/><circle ${b} cx="316" cy="340" r="8"/>
-      <path ${b} d="M72,350 L68,468 M92,350 L90,468"/>
-      <path ${b} d="M328,350 L332,468 M308,350 L310,468"/>
-      <path ${sf} d="M68,468 C72,480 88,480 92,468 M308,468 C312,480 328,480 332,468"/>
-      <path ${b} d="M170,494 C164,542 160,592 164,628 L178,628 C176,592 180,542 186,498 Z"/>
-      <path ${b} d="M230,494 C236,542 240,592 236,628 L222,628 C224,592 220,542 214,498 Z"/>
-      <circle ${b} cx="170" cy="638" r="10"/><circle ${b} cx="230" cy="638" r="10"/>
-      <path ${b} d="M160,650 L154,776 M176,650 L172,776"/>
-      <path ${b} d="M240,650 L246,776 M224,650 L228,776"/>
-      <path ${b} d="M150,778 C138,800 128,826 148,838 C168,848 188,836 190,818 L172,776"/>
-      <path ${b} d="M250,778 C262,800 272,826 252,838 C232,848 212,836 210,818 L228,776"/>
-    `)}
-  </svg>`;
-}
-
-function card(cap, svg){ return `<div class="fig-card"><div class="fig-cap">${esc(cap)}</div>${svg}</div>`; }
 
 function renderDiagram(){
   const stage=$('diagramStage');
-  if(st.diagram==='inside'){
-    const svg=st.insideView==='bones'?bonesSVG():organsSVG();
-    stage.innerHTML=`<div class="fig-card">${svg}</div>`;
-  } else {
-    const body=st.view==='back'?bodyBackSVG():bodyFrontSVG();
-    stage.innerHTML=`
-      <div class="fig-grid">
-        ${card(t('face'), faceSVG())}
-        ${card(t('body'), body)}
-      </div>
-      <div class="fig-grid closeups">
-        ${card(t('hand'), handSVG())}
-        ${card(t('foot'), footSVG())}
-      </div>`;
-  }
+  const view=st.diagram==='inside'?st.insideView:st.view;
+  const panels=VIEW_PANELS[view]||[];
+  stage.innerHTML=`<div class="fig-grid n${panels.length} v-${view}">${panels.map(panelHTML).join('')}</div>`;
   bindDiagram();
   highlight(selected, '');
 }
