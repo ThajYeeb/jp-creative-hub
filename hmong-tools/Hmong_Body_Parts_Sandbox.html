@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Lub Cev / The Body (Sandbox)</title>
+<style>
+  :root {
+    --bg: #f4f6f9; --card: #ffffff; --accent: #1F4E79; --accent2: #2E75B6;
+    --text: #1e293b; --muted: #64748b; --border: #cbd5e1;
+    --ok-bg: #ecfdf5; --ok-border: #10b981; --warn-bg: #fffbeb; --warn-border: #f59e0b;
+    --skin: #f0c4a0; --skin-stroke: #c48960; --hair: #4a3426;
+    --board: #e8eef5;
+  }
+  * { box-sizing: border-box; }
+  body { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 18px 14px 48px; line-height: 1.5; max-width: 1100px; margin-left: auto; margin-right: auto; }
+  .top-bar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 14px; }
+  .nav-links { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .nav-links a { text-decoration: none; color: var(--accent); font-weight: 600; font-size: 0.9rem; background: #e2e8f0; padding: 6px 12px; border-radius: 8px; }
+  .nav-links a.active { background: var(--accent); color: #fff; }
+  .lang-switch { display: inline-flex; flex-wrap: wrap; background: #e2e8f0; border-radius: 999px; padding: 3px; gap: 2px; }
+  .lang-btn { background: transparent; color: #334155; border: none; padding: 6px 12px; border-radius: 999px; font-size: 0.85rem; font-weight: 700; cursor: pointer; }
+  .lang-btn.active { background: var(--accent); color: #fff; }
+  .panel { background: var(--card); border-radius: 12px; padding: 16px 18px; margin-bottom: 14px; box-shadow: 0 2px 8px rgba(0,0,0,.06); border: 1px solid #e2e8f0; }
+  h1 { color: var(--accent); font-size: 1.45rem; margin: 0 0 4px; }
+  .sub { color: var(--muted); font-size: 0.92rem; margin: 0; }
+  .btn { background: var(--accent); color: #fff; border: none; padding: 8px 14px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 0.9rem; }
+  .btn:hover { background: var(--accent2); }
+  .btn-outline { background: #f1f5f9; color: var(--text); border: 1px solid var(--border); }
+  .btn-outline.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .btn-ok { background: #059669; color: #fff; }
+  .btn-warn { background: #d97706; color: #fff; }
+  .pills { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0; }
+  .pill { background: #f1f5f9; border: 1px solid var(--border); border-radius: 999px; padding: 5px 12px; font-size: 0.84rem; font-weight: 600; cursor: pointer; color: #334155; }
+  .pill.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .hidden { display: none !important; }
+  .sb-tag { display:inline-block; font-size:0.7rem; font-weight:800; background:#fef3c7; color:#92400e; border-radius:6px; padding:2px 7px; vertical-align:middle; margin-left:6px; }
+  .code-badge { display:inline-flex; align-items:center; gap:8px; background:var(--ok-bg); border:1px solid var(--ok-border); color:#065f46; border-radius:999px; padding:4px 12px; font-size:0.85rem; font-weight:700; }
+  .code-badge.guest { background:#f1f5f9; border-color:var(--border); color:var(--muted); }
+  .link-btn { background:none; border:none; color:var(--accent2); font-weight:600; cursor:pointer; padding:0 4px; font-size:0.82rem; text-decoration:underline; }
+  .seg { display:flex; gap:4px; background:#e2e8f0; border-radius:10px; padding:3px; }
+  .seg button { flex:1; border:none; background:transparent; padding:8px 8px; border-radius:8px; font-weight:700; font-size:0.88rem; cursor:pointer; color:var(--text); }
+  .seg button.active { background:var(--accent); color:#fff; }
+  .score-row{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0;align-items:center}
+  .score-row .badge{font-size:.85rem;background:#e0f2fe;color:#0369a1;padding:3px 9px;border-radius:999px;font-weight:700}
+  .lives { display:inline-flex; gap:4px; align-items:center; font-weight:800; color:#b45309; }
+  .lives .pip { width:14px; height:14px; border-radius:50%; background:#f59e0b; box-shadow:0 0 0 2px #fde68a; }
+  .lives .pip.off { background:#e2e8f0; box-shadow:none; }
+  .mini{font-size:.8rem;padding:6px 10px}
+  .btn-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;align-items:center}
+  .studio-bar{background:#fffbeb;border:1px dashed #f59e0b;border-radius:10px;padding:10px;margin-top:10px;font-size:.88rem}
+  .feedback{margin-top:10px;padding:10px 12px;border-radius:10px;font-weight:600}
+  .feedback.ok{background:var(--ok-bg);border:1px solid var(--ok-border)}
+  .feedback.bad{background:#fef2f2;border:1px solid #ef4444}
+  .theme-toggle-btn {
+    background: #e2e8f0; color: #1e293b; border: 1px solid #cbd5e1;
+    padding: 6px 12px; border-radius: 999px; font-size: 0.85rem; font-weight: 700; cursor: pointer;
+    display: inline-flex; align-items: center; gap: 5px; margin: 0;
+  }
+  .theme-toggle-btn:hover { background: #cbd5e1; }
+  .sync-row { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-top:8px; }
+  input[type="text"] { padding:8px 11px; border:1px solid var(--border); border-radius:8px; font-size:0.92rem; }
+  .pair-note { font-size:0.84rem; color:var(--muted); margin-top:4px; }
+  .hmong-word { font-size:2.4rem; font-weight:800; color:var(--accent); margin:4px 0; letter-spacing:0.3px; line-height:1.15; }
+  .meaning-main { font-size:1.35rem; font-weight:700; color:#0f172a; margin:4px 0; }
+  .prompt-box { text-align:center; padding:8px 4px 12px; }
+  .quiz-choices { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:12px; }
+  .quiz-btn { padding:14px 10px; border-radius:10px; border:2px solid var(--border); background:#fff; font-weight:700; font-size:1.02rem; cursor:pointer; text-align:center; }
+  .quiz-btn.correct { border-color:#10b981; background:#ecfdf5; color:#065f46; }
+  .quiz-btn.wrong { border-color:#ef4444; background:#fef2f2; color:#991b1b; }
+
+  .main { display:grid; grid-template-columns: 1.35fr .9fr; gap:14px; align-items:start; }
+  .board {
+    background: linear-gradient(180deg, #f8fafc, var(--board));
+    border:2px solid var(--border); border-radius:16px; padding:10px 10px 14px;
+    position:relative; transition: box-shadow .2s, transform .2s;
+  }
+  .board.buzz { animation: board-buzz .35s ease; box-shadow:0 0 0 5px #ef4444, 0 0 22px rgba(239,68,68,.45); }
+  .board.glow-ok { box-shadow:0 0 0 5px #10b981, 0 0 22px rgba(16,185,129,.4); }
+  @keyframes board-buzz {
+    0%,100% { transform:translateX(0); }
+    20% { transform:translateX(-8px); }
+    40% { transform:translateX(8px); }
+    60% { transform:translateX(-5px); }
+    80% { transform:translateX(5px); }
+  }
+  .fig-grid { display:grid; grid-template-columns: minmax(160px, .85fr) minmax(180px, 1fr); gap:8px; align-items:stretch; }
+  .fig-grid.closeups { grid-template-columns: 1fr 1fr; margin-top:8px; }
+  .fig-card { background:#fff; border:1px solid var(--border); border-radius:12px; padding:6px; }
+  .fig-cap { font-size:.75rem; font-weight:800; color:var(--muted); text-transform:uppercase; letter-spacing:.4px; text-align:center; margin:0 0 2px; }
+  .fig-card svg { width:100%; height:auto; display:block; touch-action:manipulation; user-select:none; -webkit-user-select:none; }
+  .part { cursor:pointer; }
+  .part .hit { fill:transparent; stroke:none; pointer-events:all; }
+  .part .vis { transition: filter .15s, stroke .15s, stroke-width .15s; }
+  .part:hover .vis, .part.lit .vis { stroke:#1F4E79; stroke-width:2.6; filter:drop-shadow(0 0 5px rgba(46,117,182,.85)); }
+  .part.ok .vis { stroke:#059669; stroke-width:3; filter:drop-shadow(0 0 8px #10b981); }
+  .part.bad .vis { stroke:#dc2626; stroke-width:3; filter:drop-shadow(0 0 8px #ef4444); }
+  .part .vis.body-reg { fill:rgba(46,117,182,0); stroke:none; filter:none; }
+  .part:hover .vis.body-reg, .part.lit .vis.body-reg { fill:rgba(46,117,182,0.33); stroke:#1F4E79; stroke-width:2.2; filter:none; }
+  .part.ok .vis.body-reg { fill:rgba(16,185,129,0.42); stroke:#059669; stroke-width:3; filter:none; }
+  .part.bad .vis.body-reg { fill:rgba(239,68,68,0.42); stroke:#dc2626; stroke-width:3; filter:none; }
+  .skin { fill:var(--skin); stroke:var(--skin-stroke); stroke-width:1.6; stroke-linejoin:round; }
+  .hair { fill:var(--hair); stroke:#2a1c14; stroke-width:1; }
+  .word-bank { display:flex; flex-wrap:wrap; gap:6px; max-height:260px; overflow:auto; margin-top:8px; }
+  .word-bank button { background:#f8fafc; border:1px solid var(--border); border-radius:8px; padding:6px 8px; font-size:.8rem; font-weight:700; cursor:pointer; color:var(--text); }
+  .word-bank button.active { background:var(--accent); color:#fff; border-color:var(--accent); }
+  .word-bank button .g { display:block; font-weight:600; font-size:.7rem; color:var(--muted); }
+  .word-bank button.active .g { color:#dbeafe; }
+
+  html[data-theme="dark"] {
+    --bg: #0f172a; --card: #1e293b; --accent: #60a5fa; --accent2: #3b82f6;
+    --text: #f1f5f9; --muted: #94a3b8; --border: #334155;
+    --ok-bg: #064e3b; --ok-border: #10b981; --warn-bg: #451a03; --warn-border: #f59e0b;
+    --skin: #c99572; --skin-stroke: #8a5a3c; --hair: #1f140e; --board: #0f172a;
+    color-scheme: dark;
+  }
+  html[data-theme="dark"] body { background: var(--bg); color: var(--text); }
+  html[data-theme="dark"] .panel, html[data-theme="dark"] .fig-card, html[data-theme="dark"] .quiz-btn:not(.correct):not(.wrong) {
+    background: var(--card) !important; color: var(--text) !important; border-color: var(--border) !important;
+  }
+  html[data-theme="dark"] .lang-switch, html[data-theme="dark"] .seg { background: #334155 !important; }
+  html[data-theme="dark"] .lang-btn { color: #cbd5e1 !important; }
+  html[data-theme="dark"] .lang-btn.active { background: #2563eb !important; color: #fff !important; }
+  html[data-theme="dark"] .pill, html[data-theme="dark"] .btn-outline:not(.active), html[data-theme="dark"] .nav-links a:not(.active), html[data-theme="dark"] .word-bank button:not(.active), html[data-theme="dark"] .theme-toggle-btn {
+    background: #334155 !important; color: #f1f5f9 !important; border-color: #475569 !important;
+  }
+  html[data-theme="dark"] .meaning-main, html[data-theme="dark"] p { color: #cbd5e1 !important; }
+  html[data-theme="dark"] .code-badge { color:#a7f3d0; }
+  html[data-theme="dark"] .code-badge.guest { color:#94a3b8; background:#0f172a; }
+  html[data-theme="dark"] .score-row .badge { background:#1e3a8a; color:#bfdbfe; }
+  html[data-theme="dark"] .feedback.bad { background:#450a0a; }
+  html[data-theme="dark"] .studio-bar { background:#2e2310; color:#fde68a; border-color:#b45309; }
+  html[data-theme="dark"] input { background:#0f172a; color:#f1f5f9; border-color:#475569; }
+  html[data-theme="dark"] .board { background: linear-gradient(180deg, #1e293b, #0f172a); }
+  html[data-theme="dark"] table, html[data-theme="dark"] th, html[data-theme="dark"] td { border-color:#334155; color:#e2e8f0; }
+  html[data-theme="dark"] th { background:#0f172a; }
+  html[data-theme="dark"] .part:hover .vis, html[data-theme="dark"] .part.lit .vis { stroke:#93c5fd; }
+  html[data-theme="dark"] .part:hover .vis.body-reg, html[data-theme="dark"] .part.lit .vis.body-reg { fill:rgba(96,165,250,0.35); stroke:#93c5fd; }
+
+  @media (max-width: 860px) {
+    .main { grid-template-columns: 1fr; }
+    .fig-grid, .fig-grid.closeups { grid-template-columns: 1fr 1fr; }
+    .hmong-word { font-size:2rem; }
+    body { padding:12px 10px 40px; }
+    .nav-links a { font-size:0.8rem; padding:5px 9px; }
+    .quiz-choices { grid-template-columns:1fr; }
+  }
+  @media (max-width: 520px) {
+    .fig-grid { grid-template-columns: 1fr; }
+  }
+</style>
+<script>
+(function(){
+  function applyTheme(t) {
+    document.documentElement.setAttribute('data-theme', t);
+    var btn = document.getElementById('themeToggleBtn');
+    if (btn) {
+      btn.innerHTML = t === 'dark' ? '☀️ Light' : '🌙 Dark';
+      btn.title = t === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode';
+    }
+  }
+  window.toggleHmongTheme = function() {
+    var cur = document.documentElement.getAttribute('data-theme') || 'light';
+    var next = cur === 'dark' ? 'light' : 'dark';
+    try { localStorage.setItem('hmong_theme', next); } catch(e) {}
+    applyTheme(next);
+  };
+  var saved = 'light';
+  try {
+    saved = localStorage.getItem('hmong_theme') ||
+      (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  } catch(e) {}
+  applyTheme(saved);
+  document.addEventListener('DOMContentLoaded', function() { applyTheme(saved); });
+})();
+</script>
+</head>
+<body>
+<div class="top-bar">
+  <div class="nav-links">
+    <a href="./index.html" data-i="hub">← Practice Hub</a>
+    <a href="./Hmong_Sound_Trainer.html" data-i="navSound">Sound Trainer</a>
+    <a href="./Hmong_Flashcards.html" data-i="navFc">Flashcards</a>
+  </div>
+  <div style="display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap;">
+    <button type="button" class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleHmongTheme()">🌙 Dark</button>
+    <div class="lang-switch">
+      <button class="lang-btn" id="btnEn" onclick="setUILang('en')">EN</button>
+      <button class="lang-btn" id="btnVi" onclick="setUILang('vi')">VI</button>
+      <button class="lang-btn" id="btnKo" onclick="setUILang('ko')">한</button>
+      <button class="lang-btn" id="btnJa" onclick="setUILang('ja')">日</button>
+    </div>
+  </div>
+</div>
+
+<div class="panel">
+  <h1><span data-i="title"></span> <span class="sb-tag">SANDBOX</span></h1>
+  <p class="sub" data-i="sub"></p>
+  <div class="sync-row">
+    <span class="code-badge guest" id="codeBadge"></span>
+    <button type="button" class="link-btn" id="codeChangeBtn" onclick="toggleCodeBox()"></button>
+  </div>
+  <div class="sync-row hidden" id="codeBox">
+    <input type="text" id="codeInput" placeholder="HMOOB-01" style="width:140px;text-transform:uppercase" maxlength="10">
+    <button type="button" class="btn mini" onclick="applyCode()">OK</button>
+    <span class="mini" style="color:var(--muted)" data-i="codeHint"></span>
+  </div>
+</div>
+
+<div class="panel">
+  <div class="seg" id="diagramSeg" style="max-width:420px;margin-bottom:8px"></div>
+  <div class="seg" id="modeSeg" style="max-width:560px"></div>
+  <div class="pills" id="viewPills"></div>
+  <div class="score-row">
+    <span class="badge"><span data-i="score"></span>: <b id="sc">0/0</b></span>
+    <span class="badge"><span data-i="streak"></span>: <b id="sk">0</b></span>
+    <span class="badge" id="bestWrap"><span data-i="best"></span>: <b id="best">0</b></span>
+    <span class="lives hidden" id="livesRow"></span>
+  </div>
+  <p class="mini" style="margin:0;color:var(--muted)" data-i="pairNote"></p>
+</div>
+
+<div class="main">
+  <div class="board" id="board">
+    <div id="diagramStage"></div>
+  </div>
+  <div class="panel" style="margin:0">
+    <div id="prompt" class="prompt-box"></div>
+    <div class="btn-row" style="justify-content:center" id="playRow"></div>
+    <div id="answer"></div>
+    <div id="out"></div>
+    <div id="bankWrap">
+      <b class="mini" data-i="wordList"></b>
+      <div class="word-bank" id="bank"></div>
+    </div>
+  </div>
+</div>
+
+<div class="panel">
+  <div id="studioNote"></div>
+  <b data-i="ref"></b>
+  <div id="ref"></div>
+</div>
+<script>
+/* ===== Vocabulary: spellings from JC's "21. HUMAN BODY PARTS.doc". Do not "correct" these. ===== */
+const PARTS = [
+  {id:'abdomen',  diagram:'outside', views:['front'],           hm:'Plab mog',        en:'abdomen',     vi:'bụng dưới',     ko:'아랫배',    ja:'下腹部'},
+  {id:'ankle',    diagram:'outside', views:['front','back'],    hm:'Lub dab taws',    en:'ankle',       vi:'mắt cá chân',    ko:'발목',     ja:'足首'},
+  {id:'arm',      diagram:'outside', views:['front','back'],    hm:'Txhais caj npab', en:'arm',         vi:'cánh tay',       ko:'팔',       ja:'腕',     pair:true},
+  {id:'back',     diagram:'outside', views:['back'],            hm:'Lub nraub qaum',  en:'back',        vi:'lưng',           ko:'등',       ja:'背中'},
+  {id:'beard',    diagram:'outside', views:['front'],           hm:'Hwj txwv',        en:'beard',       vi:'râu',            ko:'수염',     ja:'ひげ'},
+  {id:'bladder',  diagram:'inside',  views:['organs'],          hm:'Lub zais zis',    en:'bladder',     vi:'bàng quang',     ko:'방광',     ja:'膀胱'},
+  {id:'blood',    diagram:'inside',  views:['organs'],          hm:'Ntshav',          en:'blood',       vi:'máu',            ko:'피',       ja:'血'},
+  {id:'bone',     diagram:'inside',  views:['bones'],           hm:'Pob txha',        en:'bone',        vi:'xương',          ko:'뼈',       ja:'骨'},
+  {id:'brain',    diagram:'inside',  views:['organs'],          hm:'Paj hlwb',        en:'brain',       vi:'não',            ko:'뇌',       ja:'脳'},
+  {id:'butt',     diagram:'outside', views:['back'],            hm:'Lub pob tw',      en:'butt',        vi:'mông',           ko:'엉덩이',   ja:'お尻'},
+  {id:'chest',    diagram:'outside', views:['front'],           hm:'Hauv siab',       en:'chest',       vi:'ngực',           ko:'가슴',     ja:'胸'},
+  {id:'chin',     diagram:'outside', views:['front'],           hm:'Lub puab tsaig',  en:'chin',        vi:'cằm',            ko:'턱',       ja:'あご'},
+  {id:'ear',      diagram:'outside', views:['front','back'],    hm:'Lub pob ntseg',   en:'ear',         vi:'tai',            ko:'귀',       ja:'耳'},
+  {id:'elbow',    diagram:'outside', views:['front','back'],    hm:'Lub luj tshib',   en:'elbow',       vi:'khuỷu tay',      ko:'팔꿈치',   ja:'肘'},
+  {id:'eye',      diagram:'outside', views:['front'],           hm:'Lub qhov muag',   en:'eye',         vi:'mắt',            ko:'눈',       ja:'目'},
+  {id:'eyebrow',  diagram:'outside', views:['front'],           hm:'Plaub muag',      en:'eyebrow',     vi:'lông mày',       ko:'눈썹',     ja:'眉',     alias:'eyelash'},
+  {id:'eyelid',   diagram:'outside', views:['front'],           hm:'Daim tawv muag',  en:'eyelid',      vi:'mí mắt',         ko:'눈꺼풀',   ja:'まぶた'},
+  {id:'eyelash',  diagram:'outside', views:['front'],           hm:'Plaub muag',      en:'eyelash',     vi:'lông mi',        ko:'속눈썹',   ja:'まつげ',  alias:'eyebrow'},
+  {id:'finger',   diagram:'outside', views:['front','back'],    hm:'Ntiv tes',        en:'finger',      vi:'ngón tay',       ko:'손가락',   ja:'指'},
+  {id:'fingernail',diagram:'outside',views:['front','back'],    hm:'Rau tes',         en:'fingernail',  vi:'móng tay',       ko:'손톱',     ja:'手の爪'},
+  {id:'foot',     diagram:'outside', views:['front','back'],    hm:'Txhais kotaw',    en:'foot',        vi:'bàn chân',       ko:'발',       ja:'足',     pair:true},
+  {id:'forehead', diagram:'outside', views:['front'],           hm:'Lub hauv pliaj',  en:'forehead',    vi:'trán',           ko:'이마',     ja:'額'},
+  {id:'hair',     diagram:'outside', views:['front','back'],    hm:'Plaub hau',       en:'hair',        vi:'tóc',            ko:'머리카락', ja:'髪'},
+  {id:'hand',     diagram:'outside', views:['front','back'],    hm:'Txhais tes',      en:'hand',        vi:'bàn tay',        ko:'손',       ja:'手',     pair:true},
+  {id:'head',     diagram:'outside', views:['front','back'],    hm:'Lub taubhau',     en:'head',        vi:'đầu',            ko:'머리',     ja:'頭'},
+  {id:'heart',    diagram:'inside',  views:['organs'],          hm:'Plawv',           en:'heart',       vi:'tim',            ko:'심장',     ja:'心臓'},
+  {id:'heel',     diagram:'outside', views:['front','back'],    hm:'Lub luj taws',    en:'heel',        vi:'gót chân',       ko:'발꿈치',   ja:'かかと'},
+  {id:'intestines',diagram:'inside', views:['organs'],          hm:'Hnyuv',           en:'intestines',  vi:'ruột',           ko:'장',       ja:'腸'},
+  {id:'kidney',   diagram:'inside',  views:['organs'],          hm:'Lub raum',        en:'kidney',      vi:'thận',           ko:'신장',     ja:'腎臓'},
+  {id:'knee',     diagram:'outside', views:['front','back'],    hm:'Lub hauv caug',   en:'knee',        vi:'đầu gối',        ko:'무릎',     ja:'膝'},
+  {id:'leg',      diagram:'outside', views:['front','back'],    hm:'Txhais ceg',      en:'leg',         vi:'chân',           ko:'다리',     ja:'脚',     pair:true},
+  {id:'lip',      diagram:'outside', views:['front'],           hm:'Daim tawv ncauj', en:'lip',         vi:'môi',            ko:'입술',     ja:'唇'},
+  {id:'liver',    diagram:'inside',  views:['organs'],          hm:'Siab',            en:'liver',       vi:'gan',            ko:'간',       ja:'肝臓'},
+  {id:'lung',     diagram:'inside',  views:['organs'],          hm:'Lub ntsws',       en:'lung',        vi:'phổi',           ko:'폐',       ja:'肺'},
+  {id:'mouth',    diagram:'outside', views:['front'],           hm:'Lub qhov ncauj',  en:'mouth',       vi:'miệng',          ko:'입',       ja:'口'},
+  {id:'neck',     diagram:'outside', views:['front','back'],    hm:'Caj dab',         en:'neck',        vi:'cổ',             ko:'목',       ja:'首'},
+  {id:'nose',     diagram:'outside', views:['front'],           hm:'Lub qhov ntswg',  en:'nose',        vi:'mũi',            ko:'코',       ja:'鼻'},
+  {id:'shoulder', diagram:'outside', views:['front','back'],    hm:'Lub xub pwg',     en:'shoulder',    vi:'vai',            ko:'어깨',     ja:'肩'},
+  {id:'skin',     diagram:'outside', views:['front','back'],    hm:'Tawv nqaij',      en:'skin',        vi:'da',             ko:'피부',     ja:'肌'},
+  {id:'stomach',  diagram:'both',    views:['front','organs'],  hm:'Plab',            en:'stomach',     vi:'dạ dày',         ko:'위',       ja:'胃'},
+  {id:'thigh',    diagram:'outside', views:['front','back'],    hm:'Lub ncej qab',    en:'thigh',       vi:'đùi',            ko:'허벅지',   ja:'太もも'},
+  {id:'thumb',    diagram:'outside', views:['front','back'],    hm:'Taub tes',        en:'thumb',       vi:'ngón cái',       ko:'엄지',     ja:'親指'},
+  {id:'toe',      diagram:'outside', views:['front','back'],    hm:'Ntiv taw',        en:'toe',         vi:'ngón chân',      ko:'발가락',   ja:'足の指'},
+  {id:'toenail',  diagram:'outside', views:['front','back'],    hm:'Rau tawv',        en:'toenail',     vi:'móng chân',      ko:'발톱',     ja:'足の爪'},
+  {id:'tongue',   diagram:'outside', views:['front'],           hm:'Tus nplaig',      en:'tongue',      vi:'lưỡi',           ko:'혀',       ja:'舌'},
+  {id:'tooth',    diagram:'outside', views:['front'],           hm:'Hniav',           en:'tooth',       vi:'răng',           ko:'이',       ja:'歯'},
+  {id:'wrist',    diagram:'outside', views:['front','back'],    hm:'Lub dab teg',     en:'wrist',       vi:'cổ tay',         ko:'손목',     ja:'手首'}
+];
+
+const STR = {
+  en: {hub:"← Practice Hub", navSound:"Sound Trainer", navFc:"Flashcards", title:"Lub Cev / The Body", sub:"Tap a body part to see its White Hmong name. In Find-it, tap the part that matches the word — a classroom game in the spirit of Operation.", outside:"👤 Outside", inside:"🫀 Inside", front:"Front", back:"Back", organs:"Organs", bones:"Bones", explore:"👀 Explore", findIt:"🎯 Find it", whichWord:"🔁 Which word?", score:"Score", streak:"Streak", best:"Best", lives:"Lives", next:"Next →", correct:"Correct!", wrong:"Not quite.", buzz:"Buzz!", gameOver:"Game over", playAgain:"Play again", tapHint:"Tap a body part.", findPrompt:"Tap this part:", hearAgain:"▶ Hear again", pickWord:"What is the highlighted part called?", wordList:"Word list", ref:"Reference", studioOn:"Instructor studio is ON: record a Male or Female clip for each line; it uploads to the cloud for all students.", male:"Male", female:"Female", recMale:"● Rec Male", recFemale:"● Rec Female", stop:"■ Stop", noClip:"No instructor recording yet", uploading:"Uploading…", uploaded:"Saved to cloud ✅", upFail:"Saved on this device only (cloud unavailable)", tooBig:"Clip too long — keep it under ~4 seconds.", micErr:"Microphone not available. Allow mic access and try again.", playingAs:"Playing as", guest:"Guest — scores stay on this device", change:"change", codeHint:"Enter HMOOB-01..23, or leave blank for Guest.", pairNote:"txhais = one of a pair (hand, foot, arm, leg). khub = a pair.", face:"Face", body:"Body", hand:"Hand", foot:"Foot", skinBtn:"Skin (whole body)"},
+  vi: {hub:"← Trang luyện tập", navSound:"Luyện âm", navFc:"Thẻ từ", title:"Lub Cev / Cơ thể", sub:"Chạm vào một bộ phận cơ thể để xem tên tiếng Hmông Trắng. Trong Find-it, hãy chạm đúng bộ phận theo từ — trò chơi lớp học theo kiểu Operation.", outside:"👤 Bên ngoài", inside:"🫀 Bên trong", front:"Phía trước", back:"Phía sau", organs:"Cơ quan", bones:"Xương", explore:"👀 Khám phá", findIt:"🎯 Tìm bộ phận", whichWord:"🔁 Từ nào?", score:"Điểm", streak:"Chuỗi", best:"Cao nhất", lives:"Mạng", next:"Tiếp →", correct:"Đúng rồi!", wrong:"Chưa đúng.", buzz:"Bíp!", gameOver:"Hết mạng", playAgain:"Chơi lại", tapHint:"Chạm vào một bộ phận cơ thể.", findPrompt:"Hãy chạm vào:", hearAgain:"▶ Nghe lại", pickWord:"Bộ phận đang sáng có tên gì?", wordList:"Danh sách từ", ref:"Tham khảo", studioOn:"Phòng thu giảng viên đang BẬT: ghi giọng Nam hoặc Nữ cho từng dòng; tệp sẽ tải lên đám mây cho mọi học viên.", male:"Nam", female:"Nữ", recMale:"● Ghi Nam", recFemale:"● Ghi Nữ", stop:"■ Dừng", noClip:"Chưa có bản ghi của giảng viên", uploading:"Đang tải lên…", uploaded:"Đã lưu lên đám mây ✅", upFail:"Chỉ lưu trên thiết bị này (không kết nối được đám mây)", tooBig:"Đoạn ghi quá dài — giữ dưới khoảng 4 giây.", micErr:"Không dùng được micro. Hãy cho phép micro rồi thử lại.", playingAs:"Đang dùng mã", guest:"Khách — điểm lưu trên thiết bị này", change:"đổi", codeHint:"Nhập HMOOB-01..23, hoặc để trống nếu là Khách.", pairNote:"txhais = một bên của một đôi (tay, chân, cánh tay, cẳng chân). khub = một đôi.", face:"Mặt", body:"Người", hand:"Tay", foot:"Bàn chân", skinBtn:"Da (cả cơ thể)"},
+  ko: {hub:"← 연습 허브", navSound:"발음 트레이너", navFc:"플래시카드", title:"Lub Cev / 몸", sub:"신체 부위를 눌러 백몽어 이름을 보세요. Find-it에서는 단어에 맞는 부위를 누르세요 — 교실용 Operation 같은 게임입니다.", outside:"👤 바깥", inside:"🫀 안쪽", front:"앞", back:"뒤", organs:"장기", bones:"뼈", explore:"👀 살펴보기", findIt:"🎯 찾기", whichWord:"🔁 어느 단어?", score:"점수", streak:"연속", best:"최고", lives:"목숨", next:"다음 →", correct:"정답!", wrong:"아쉬워요.", buzz:"버즈!", gameOver:"게임 오버", playAgain:"다시 하기", tapHint:"신체 부위를 누르세요.", findPrompt:"이 부위를 누르세요:", hearAgain:"▶ 다시 듣기", pickWord:"빛나는 부위의 백몽어 이름은?", wordList:"단어 목록", ref:"참고", studioOn:"강사 스튜디오 켜짐: 각 줄에 남성 또는 여성 음성을 녹음하면 모든 학생을 위해 클라우드에 업로드됩니다.", male:"남성", female:"여성", recMale:"● 남성 녹음", recFemale:"● 여성 녹음", stop:"■ 정지", noClip:"아직 강사 녹음이 없습니다", uploading:"업로드 중…", uploaded:"클라우드에 저장됨 ✅", upFail:"이 기기에만 저장됨 (클라우드 사용 불가)", tooBig:"녹음이 너무 깁니다 — 약 4초 이내로 해 주세요.", micErr:"마이크를 사용할 수 없습니다. 권한을 허용하고 다시 시도하세요.", playingAs:"사용 코드", guest:"게스트 — 점수는 이 기기에 저장됩니다", change:"변경", codeHint:"HMOOB-01..23를 입력하거나 비워 두면 게스트입니다.", pairNote:"txhais = 한 쌍 중의 하나(손, 발, 팔, 다리). khub = 한 쌍.", face:"얼굴", body:"몸", hand:"손", foot:"발", skinBtn:"피부 (전신)"},
+  ja: {hub:"← 練習ハブ", navSound:"発音トレーナー", navFc:"単語カード", title:"Lub Cev / 体", sub:"体の部位をタップしてホワイトモン語の名前を見ましょう。Find-it では単語に合う部位をタップします — 教室向けの Operation 風ゲームです。", outside:"👤 外側", inside:"🫀 内側", front:"前", back:"後ろ", organs:"内臓", bones:"骨", explore:"👀 さがす", findIt:"🎯 見つけよう", whichWord:"🔁 どの語？", score:"スコア", streak:"連続", best:"ベスト", lives:"ライフ", next:"次へ →", correct:"正解！", wrong:"惜しい！", buzz:"ブザー！", gameOver:"ゲームオーバー", playAgain:"もう一度", tapHint:"体の部位をタップしてください。", findPrompt:"この部位をタップ:", hearAgain:"▶ もう一度聞く", pickWord:"光っている部位の名前は？", wordList:"単語リスト", ref:"参考", studioOn:"講師スタジオON：各行に男性または女性の音声を録音すると、全受講生向けにクラウドへ保存されます。", male:"男性", female:"女性", recMale:"● 男性を録音", recFemale:"● 女性を録音", stop:"■ 停止", noClip:"講師の録音はまだありません", uploading:"アップロード中…", uploaded:"クラウドに保存しました ✅", upFail:"この端末にのみ保存（クラウド未接続）", tooBig:"録音が長すぎます — 約4秒以内にしてください。", micErr:"マイクを使用できません。許可してから再試行してください。", playingAs:"コード", guest:"ゲスト — スコアはこの端末に保存されます", change:"変更", codeHint:"HMOOB-01..23 を入力。空欄ならゲストです。", pairNote:"txhais = 対の一方（手・足・腕・脚）。khub = 一対。", face:"顔", body:"体", hand:"手", foot:"足", skinBtn:"肌（全身）"}
+};
+
+const LANGS=['en','vi','ko','ja'];
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let uiLang=(function(){const q=new URLSearchParams(location.search).get('lang');if(LANGS.includes(q)){try{localStorage.setItem('hmong_ui_lang',q)}catch(e){}return q;}let s='en';try{s=localStorage.getItem('hmong_ui_lang')||'en'}catch(e){}return LANGS.includes(s)?s:'en';})();
+function t(k){return (STR[uiLang]&&STR[uiLang][k]!=null)?STR[uiLang][k]:(STR.en[k]!=null?STR.en[k]:k);}
+function L(p){if(!p)return '';return p[uiLang]||p.en||'';}
+function gloss(p){return L(p);}
+function glossAll(p){return [...new Set(sameHm(p).map(a=>gloss(a)))].join(' / ');}
+function setUILang(l){if(!LANGS.includes(l))l='en';uiLang=l;try{localStorage.setItem('hmong_ui_lang',l)}catch(e){}document.documentElement.lang=l;
+  LANGS.forEach(x=>{const b=$('btn'+x[0].toUpperCase()+x[1]);if(b)b.classList.toggle('active',x===l)});
+  document.querySelectorAll('[data-i]').forEach(e=>{e.textContent=t(e.dataset.i)});
+  document.title=t('title')+' (Sandbox)';
+  renderCodeBadge();
+  if(typeof onLang==='function')onLang();
+}
+function studentCode(){let c='';const q=new URLSearchParams(location.search).get('code');try{c=(q||localStorage.getItem('hmong_student_code')||'')}catch(e){c=q||''}c=c.trim().toUpperCase().replace(/^HMONG-/,'HMOOB-');return /^HMOOB-\d{2}$/.test(c)?c:'';}
+function renderCodeBadge(){
+  const c=studentCode();
+  const el=$('codeBadge');
+  if(!el)return;
+  if(c){el.className='code-badge';el.textContent='✓ '+t('playingAs')+' '+c;}
+  else {el.className='code-badge guest';el.textContent=t('guest');}
+  const b=$('codeChangeBtn'); if(b)b.textContent=t('change');
+}
+function toggleCodeBox(){ $('codeBox').classList.toggle('hidden'); const inp=$('codeInput'); inp.value=studentCode(); inp.focus(); }
+function applyCode(){
+  let c=($('codeInput').value||'').trim().toUpperCase().replace(/^HMONG-/,'HMOOB-');
+  if(c && !/^HMOOB-\d{2}$/.test(c)){ $('codeInput').focus(); return; }
+  try{ if(c) localStorage.setItem('hmong_student_code',c); else localStorage.removeItem('hmong_student_code'); }catch(e){}
+  $('codeBox').classList.add('hidden');
+  loadState(); renderCodeBadge(); renderAll();
+}
+
+/* audio */
+let curAudio=null;
+function playUrl(u){try{if(curAudio)curAudio.pause();curAudio=new Audio(u);const p=curAudio.play();if(p&&p.catch)p.catch(()=>{});}catch(e){}}
+const REC_TYPES=['audio/mp4','audio/webm;codecs=opus','audio/webm','audio/ogg'];
+let activeRec=null;
+async function startRec(onDone,maxMs){
+  if(activeRec){stopRec();return null;}
+  const stream=await navigator.mediaDevices.getUserMedia({audio:true});
+  const mt=(window.MediaRecorder&&MediaRecorder.isTypeSupported)?REC_TYPES.find(x=>MediaRecorder.isTypeSupported(x)):null;
+  const mr=mt?new MediaRecorder(stream,{mimeType:mt}):new MediaRecorder(stream);
+  const chunks=[];mr.ondataavailable=e=>{if(e.data&&e.data.size)chunks.push(e.data)};
+  mr.onstop=()=>{stream.getTracks().forEach(tr=>tr.stop());const type=mr.mimeType||mt||(chunks[0]&&chunks[0].type)||'audio/mp4';activeRec=null;onDone(new Blob(chunks,{type}));};
+  mr.start(250);activeRec={mr,timer:maxMs?setTimeout(stopRec,maxMs):null};return activeRec;
+}
+function stopRec(){if(activeRec){clearTimeout(activeRec.timer);if(activeRec.mr.state!=='inactive')activeRec.mr.stop();}}
+function blobToDataUrl(b){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result);r.onerror=rej;r.readAsDataURL(b);});}
+let CLIPS={};const CLIP_CACHE='hmong_sandbox_clips_cache';
+try{CLIPS=JSON.parse(localStorage.getItem(CLIP_CACHE)||'{}')||{}}catch(e){CLIPS={}}
+const STUDIO=new URLSearchParams(location.search).get('studio')==='1';
+async function loadCloudClips(ids){try{const r=await fetch('/api/phonetics-audio',{cache:'no-store'});if(!r.ok)return;const d=await r.json();if(d&&d.ok&&d.clips){const keep={};for(const [id,v] of Object.entries(d.clips)){if(!ids||ids.includes(id))keep[id]={male:v.male||'',female:v.female||''};}CLIPS=Object.assign(CLIPS,keep);try{localStorage.setItem(CLIP_CACHE,JSON.stringify(CLIPS))}catch(e){}if(typeof onClips==='function')onClips();}}catch(e){}}
+function hasClip(id,v){return !!(CLIPS[id]&&CLIPS[id][v]);}
+function playClip(id,v){if(!v){v=hasClip(id,'female')?'female':'male';}if(hasClip(id,v))playUrl(CLIPS[id][v]);}
+function clipId(p){return 'body_'+p.id;}
+async function uploadClip(id,voice,label,blob,statusEl){
+  const url=await blobToDataUrl(blob);if(url.length>95000){if(statusEl)statusEl.textContent=t('tooBig');return false;}
+  if(!CLIPS[id])CLIPS[id]={male:'',female:''};CLIPS[id][voice]=url;try{localStorage.setItem(CLIP_CACHE,JSON.stringify(CLIPS))}catch(e){}
+  if(statusEl)statusEl.textContent=t('uploading');
+  try{const r=await fetch('/api/phonetics-audio',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id,voice,label,audioDataUrl:url})});const d=await r.json();if(statusEl)statusEl.textContent=(d&&d.ok)?t('uploaded'):t('upFail');}catch(e){if(statusEl)statusEl.textContent=t('upFail');}
+  if(typeof onClips==='function')onClips();return true;
+}
+function clipButtons(id,label){
+  let h='';['male','female'].forEach(v=>{h+=`<button class="btn btn-outline mini" ${hasClip(id,v)?'':'disabled style="opacity:.45"'} onclick="playClip('${id}','${v}')">▶ ${t(v)}</button>`;});
+  if(STUDIO){h+=`<button class="btn btn-warn mini" onclick="studioRec(this,'${id}','male',${esc(JSON.stringify(label||id))})">${t('recMale')}</button><button class="btn btn-warn mini" onclick="studioRec(this,'${id}','female',${esc(JSON.stringify(label||id))})">${t('recFemale')}</button><span class="mini" id="st_${id}"></span>`;}
+  return h;
+}
+async function studioRec(btn,id,voice,label){const st=$('st_'+id);if(activeRec){stopRec();return;}
+  try{btn.textContent=t('stop');await startRec(async b=>{btn.textContent=t(voice==='male'?'recMale':'recFemale');await uploadClip(id,voice,label,b,st);},4500);}catch(e){btn.textContent=t(voice==='male'?'recMale':'recFemale');if(st)st.textContent=t('micErr');}}
+
+function buzzSound(ok){
+  try{
+    const ctx=new (window.AudioContext||window.webkitAudioContext)();
+    const o=ctx.createOscillator(), g=ctx.createGain();
+    o.type=ok?'sine':'sawtooth';
+    o.frequency.value=ok?880:130;
+    g.gain.value=ok?0.08:0.12;
+    o.connect(g); g.connect(ctx.destination);
+    o.start();
+    if(ok){ o.frequency.exponentialRampToValueAtTime(1320, ctx.currentTime+0.12); g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime+0.28); o.stop(ctx.currentTime+0.3); }
+    else { setTimeout(()=>{o.frequency.value=90;},90); g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime+0.35); o.stop(ctx.currentTime+0.38); }
+  }catch(e){}
+}
+
+function byId(id){return PARTS.find(p=>p.id===id);}
+function sameHm(p){return PARTS.filter(x=>x.hm===p.hm);}
+function inDiagram(p, diagram){return p.diagram===diagram || p.diagram==='both';}
+function visibleParts(){
+  const diagram=st.diagram;
+  const view=diagram==='outside'?st.view:st.insideView;
+  return PARTS.filter(p=>inDiagram(p,diagram) && p.views.includes(view));
+}
+function uniqueVisible(){
+  const seen=new Set(); const out=[];
+  visibleParts().forEach(p=>{ if(!seen.has(p.hm)){ seen.add(p.hm); out.push(p); } });
+  return out;
+}
+
+function storageKey(){return 'hmong_body_'+(studentCode()||'GUEST');}
+let st={diagram:'outside', view:'front', insideView:'organs', mode:'explore', c:0, n:0, s:0, best:0, lives:3};
+function loadState(){
+  st={diagram:'outside', view:'front', insideView:'organs', mode:'explore', c:0, n:0, s:0, best:0, lives:3};
+  try{Object.assign(st, JSON.parse(localStorage.getItem(storageKey())||'{}'));}catch(e){}
+  if(!['outside','inside'].includes(st.diagram))st.diagram='outside';
+  if(!['front','back'].includes(st.view))st.view='front';
+  if(!['organs','bones'].includes(st.insideView))st.insideView='organs';
+  if(!['explore','find','rev'].includes(st.mode))st.mode='explore';
+  if(typeof st.lives!=='number'||st.lives<0)st.lives=3;
+}
+function save(){try{localStorage.setItem(storageKey(), JSON.stringify(st));}catch(e){}}
+
+let selected=null, q=null, opts=[], answered=false, gameOver=false;
+
+function partG(id, vis, extraHit){
+  const p=byId(id); const label=p?p.hm:id;
+  return `<g class="part" data-id="${id}" role="button" tabindex="0" aria-label="${esc(label)}">${extraHit||''}${vis}</g>`;
+}
+function faceSVG(){
+  if(st.view==='back'){
+    return `<svg viewBox="0 0 240 300" role="img" aria-label="${esc(t('face'))}">
+      ${partG('hair', `<path class="vis hair" d="M48,150 C40,20 200,20 192,150 C170,70 70,70 48,150 Z"/>`)}
+      ${partG('head', `<ellipse class="vis skin" cx="120" cy="160" rx="78" ry="100"/>`)}
+      ${partG('ear', `<ellipse class="vis skin" cx="38" cy="165" rx="16" ry="26"/><ellipse class="vis skin" cx="202" cy="165" rx="16" ry="26"/>`)}
+      ${partG('neck', `<rect class="vis skin" x="88" y="248" width="64" height="44" rx="12"/>`)}
+      ${partG('hair', `<path class="vis hair" d="M55,145 C50,30 190,30 185,145 L170,80 Q120,28 70,80 Z"/>`)}
+    </svg>`;
+  }
+  return `<svg viewBox="0 0 240 310" role="img" aria-label="${esc(t('face'))}">
+    ${partG('neck', `<rect class="vis skin" x="88" y="250" width="64" height="52" rx="12"/>`)}
+    ${partG('ear', `<ellipse class="vis skin" cx="36" cy="160" rx="16" ry="28"/><ellipse class="vis skin" cx="204" cy="160" rx="16" ry="28"/>`,
+      `<ellipse class="hit" cx="36" cy="160" rx="22" ry="34"/><ellipse class="hit" cx="204" cy="160" rx="22" ry="34"/>`)}
+    ${partG('head', `<ellipse class="vis skin" cx="120" cy="150" rx="80" ry="104"/>`)}
+    ${partG('hair', `<path class="vis hair" d="M48,130 C42,18 198,18 192,130 C180,70 60,70 48,130 Z M70,70 Q120,28 170,70 Q140,95 120,88 Q100,95 70,70 Z"/>`)}
+    ${partG('forehead', `<path class="vis skin" d="M68,78 Q120,58 172,78 L168,112 Q120,98 72,112 Z"/>`, `<rect class="hit" x="62" y="58" width="116" height="58"/>`)}
+    ${partG('beard', `<path class="vis" fill="#6b4a32" stroke="#3b2a1e" stroke-width="1" d="M70,200 Q78,248 120,268 Q162,248 170,200 Q150,230 120,236 Q90,230 70,200 Z"/>`)}
+    ${partG('chin', `<ellipse class="vis skin" cx="120" cy="238" rx="28" ry="20"/>`, `<ellipse class="hit" cx="120" cy="240" rx="34" ry="26"/>`)}
+    ${partG('eyebrow', `<path class="vis hair" d="M68,114 Q90,102 112,114" fill="none" stroke="#4a3426" stroke-width="6" stroke-linecap="round"/>
+      <path class="vis hair" d="M128,114 Q150,102 172,114" fill="none" stroke="#4a3426" stroke-width="6" stroke-linecap="round"/>`,
+      `<rect class="hit" x="62" y="96" width="56" height="24"/><rect class="hit" x="122" y="96" width="56" height="24"/>`)}
+    ${partG('eyelid', `<path class="vis skin" d="M72,122 Q90,114 110,122 Q90,126 72,122 Z"/><path class="vis skin" d="M130,122 Q150,114 168,122 Q150,126 130,122 Z"/>`,
+      `<rect class="hit" x="68" y="110" width="46" height="16"/><rect class="hit" x="126" y="110" width="46" height="16"/>`)}
+    ${partG('eye', `<ellipse class="vis" fill="#fff" stroke="#5b3d2e" stroke-width="1.4" cx="90" cy="132" rx="18" ry="11"/>
+      <ellipse class="vis" fill="#fff" stroke="#5b3d2e" stroke-width="1.4" cx="150" cy="132" rx="18" ry="11"/>
+      <circle fill="#3b2a1e" cx="90" cy="132" r="6"/><circle fill="#3b2a1e" cx="150" cy="132" r="6"/>
+      <circle fill="#fff" cx="93" cy="129" r="2"/><circle fill="#fff" cx="153" cy="129" r="2"/>`,
+      `<ellipse class="hit" cx="90" cy="132" rx="22" ry="16"/><ellipse class="hit" cx="150" cy="132" rx="22" ry="16"/>`)}
+    ${partG('eyelash', `<path class="vis hair" d="M74,122 L70,112 M82,118 L80,108 M90,117 L90,106 M98,118 L100,108 M106,122 L110,112" fill="none" stroke="#2a1c14" stroke-width="2" stroke-linecap="round"/>
+      <path class="vis hair" d="M134,122 L130,112 M142,118 L140,108 M150,117 L150,106 M158,118 L160,108 M166,122 L170,112" fill="none" stroke="#2a1c14" stroke-width="2" stroke-linecap="round"/>`,
+      `<rect class="hit" x="66" y="102" width="48" height="18"/><rect class="hit" x="126" y="102" width="48" height="18"/>`)}
+    ${partG('nose', `<path class="vis skin" d="M120,138 L108,178 Q120,188 132,178 Z"/>`, `<rect class="hit" x="100" y="132" width="40" height="60"/>`)}
+    ${partG('lip', `<path class="vis" fill="#c46b6b" stroke="#a34d4d" stroke-width="1" d="M88,200 Q120,188 152,200 Q120,214 88,200 Z"/>`,
+      `<rect class="hit" x="80" y="184" width="80" height="34"/>`)}
+    ${partG('mouth', `<ellipse class="vis" fill="#7a3a3a" cx="120" cy="202" rx="22" ry="8"/>`, `<ellipse class="hit" cx="120" cy="202" rx="28" ry="14"/>`)}
+    ${partG('tooth', `<rect class="vis" fill="#fff" stroke="#d0d0d0" x="104" y="195" width="8" height="8" rx="1"/>
+      <rect class="vis" fill="#fff" stroke="#d0d0d0" x="113" y="195" width="8" height="8" rx="1"/>
+      <rect class="vis" fill="#fff" stroke="#d0d0d0" x="122" y="195" width="8" height="8" rx="1"/>
+      <rect class="vis" fill="#fff" stroke="#d0d0d0" x="131" y="195" width="8" height="8" rx="1"/>`,
+      `<rect class="hit" x="100" y="192" width="40" height="14"/>`)}
+    ${partG('tongue', `<ellipse class="vis" fill="#e08989" stroke="#c46b6b" cx="120" cy="210" rx="12" ry="6"/>`,
+      `<ellipse class="hit" cx="120" cy="212" rx="20" ry="12"/>`)}
+  </svg>`;
+}
+
+function bodySilhouette(){
+  return `<path class="vis skin" d="M180,28 C152,28 140,52 140,78 C140,96 146,112 154,122 C148,128 128,140 100,152 C78,164 68,178 64,198 C54,250 46,305 52,348 C54,390 50,430 48,455 C36,458 28,472 30,492 C32,518 58,536 80,528 C94,522 100,508 98,490 C98,475 94,462 90,455 C94,428 98,395 102,355 C108,315 118,260 128,210 C132,198 140,192 148,196 L148,365 C148,392 148,408 146,418 L138,530 C134,562 136,582 140,620 L136,698 C134,722 132,738 138,750 C116,756 100,772 108,790 C114,804 146,810 166,796 L170,752 C172,720 174,680 176,620 C178,560 176,520 176,428 L184,428 C184,520 182,560 184,620 C186,680 188,720 190,752 L194,796 C214,810 246,804 252,790 C260,772 244,756 222,750 C228,738 226,722 224,698 L220,620 C224,582 226,562 222,530 L214,418 C212,408 212,392 212,365 L212,196 C220,192 228,198 232,210 C242,260 252,315 258,355 C262,395 266,428 270,455 C266,462 262,475 262,490 C260,508 266,522 280,528 C302,536 328,518 330,492 C332,472 324,458 312,455 C310,430 306,390 308,348 C314,305 306,250 296,198 C292,178 282,164 260,152 C232,140 212,128 206,122 C214,112 220,96 220,78 C220,52 208,28 180,28 Z"/>`;
+}
+function bodyFrontSVG(){
+  return `<svg viewBox="0 0 360 840" role="img" aria-label="${esc(t('body'))}">
+    ${partG('skin', bodySilhouette())}
+    ${partG('hair', `<path class="vis hair" d="M145,78 C144,28 216,28 215,78 C200,48 160,48 145,78 Z"/>`)}
+    ${partG('head', `<ellipse class="vis body-reg" cx="180" cy="76" rx="38" ry="46"/>`)}
+    ${partG('neck', `<rect class="vis body-reg" x="162" y="114" width="36" height="36" rx="10"/>`)}
+    ${partG('shoulder', `<path class="vis body-reg" d="M72,168 Q110,145 160,150 L160,188 Q110,180 80,200 Z"/><path class="vis body-reg" d="M288,168 Q250,145 200,150 L200,188 Q250,180 280,200 Z"/>`)}
+    ${partG('chest', `<path class="vis body-reg" d="M148,168 L212,168 L220,275 L140,275 Z"/>`)}
+    ${partG('stomach', `<path class="vis body-reg" d="M140,272 L220,272 L216,340 L144,340 Z"/>`)}
+    ${partG('abdomen', `<path class="vis body-reg" d="M144,337 L216,337 L208,412 L152,412 Z"/>`)}
+    ${partG('arm', `<path class="vis body-reg" d="M90,175 L58,345 L88,350 L122,200 Z"/><path class="vis body-reg" d="M270,175 L302,345 L272,350 L238,200 Z"/>`)}
+    ${partG('elbow', `<circle class="vis body-reg" cx="70" cy="348" r="18"/><circle class="vis body-reg" cx="290" cy="348" r="18"/>`,
+      `<circle class="hit" cx="70" cy="348" r="26"/><circle class="hit" cx="290" cy="348" r="26"/>`)}
+    ${partG('wrist', `<rect class="vis body-reg" x="46" y="448" width="40" height="22" rx="8"/><rect class="vis body-reg" x="274" y="448" width="40" height="22" rx="8"/>`,
+      `<rect class="hit" x="40" y="440" width="52" height="32"/><rect class="hit" x="268" y="440" width="52" height="32"/>`)}
+    ${partG('hand', `<ellipse class="vis body-reg" cx="62" cy="500" rx="26" ry="30"/><ellipse class="vis body-reg" cx="298" cy="500" rx="26" ry="30"/>`)}
+    ${partG('thigh', `<path class="vis body-reg" d="M146,418 L174,418 L170,538 L148,538 Z"/><path class="vis body-reg" d="M186,418 L214,418 L212,538 L190,538 Z"/>`)}
+    ${partG('knee', `<circle class="vis body-reg" cx="159" cy="555" r="18"/><circle class="vis body-reg" cx="201" cy="555" r="18"/>`,
+      `<circle class="hit" cx="159" cy="555" r="24"/><circle class="hit" cx="201" cy="555" r="24"/>`)}
+    ${partG('leg', `<path class="vis body-reg" d="M144,570 L172,570 L166,700 L150,700 Z"/><path class="vis body-reg" d="M188,570 L216,570 L214,700 L194,700 Z"/>`)}
+    ${partG('ankle', `<circle class="vis body-reg" cx="156" cy="720" r="13"/><circle class="vis body-reg" cx="204" cy="720" r="13"/>`,
+      `<circle class="hit" cx="156" cy="720" r="20"/><circle class="hit" cx="204" cy="720" r="20"/>`)}
+    ${partG('foot', `<ellipse class="vis body-reg" cx="140" cy="772" rx="28" ry="16"/><ellipse class="vis body-reg" cx="220" cy="772" rx="28" ry="16"/>`)}
+    ${partG('heel', `<ellipse class="vis body-reg" cx="122" cy="776" rx="11" ry="13"/><ellipse class="vis body-reg" cx="238" cy="776" rx="11" ry="13"/>`,
+      `<ellipse class="hit" cx="122" cy="776" rx="18" ry="18"/><ellipse class="hit" cx="238" cy="776" rx="18" ry="18"/>`)}
+  </svg>`;
+}
+
+function bodyBackSVG(){
+  return `<svg viewBox="0 0 360 840" role="img" aria-label="${esc(t('body'))}">
+    ${partG('skin', bodySilhouette())}
+    ${partG('hair', `<path class="vis hair" d="M142,100 C140,28 220,28 218,100 C200,55 160,55 142,100 Z"/>`)}
+    ${partG('head', `<ellipse class="vis body-reg" cx="180" cy="76" rx="38" ry="46"/>`)}
+    ${partG('ear', `<ellipse class="vis body-reg" cx="140" cy="80" rx="9" ry="16"/><ellipse class="vis body-reg" cx="220" cy="80" rx="9" ry="16"/>`)}
+    ${partG('neck', `<rect class="vis body-reg" x="162" y="114" width="36" height="36" rx="10"/>`)}
+    ${partG('shoulder', `<path class="vis body-reg" d="M72,168 Q110,145 160,150 L160,188 Q110,180 80,200 Z"/><path class="vis body-reg" d="M288,168 Q250,145 200,150 L200,188 Q250,180 280,200 Z"/>`)}
+    ${partG('back', `<path class="vis body-reg" d="M148,168 L212,168 L214,390 L146,390 Z"/>`)}
+    ${partG('butt', `<ellipse class="vis body-reg" cx="162" cy="418" rx="28" ry="26"/><ellipse class="vis body-reg" cx="198" cy="418" rx="28" ry="26"/>`)}
+    ${partG('arm', `<path class="vis body-reg" d="M90,175 L58,345 L88,350 L122,200 Z"/><path class="vis body-reg" d="M270,175 L302,345 L272,350 L238,200 Z"/>`)}
+    ${partG('elbow', `<circle class="vis body-reg" cx="70" cy="348" r="18"/><circle class="vis body-reg" cx="290" cy="348" r="18"/>`,
+      `<circle class="hit" cx="70" cy="348" r="26"/><circle class="hit" cx="290" cy="348" r="26"/>`)}
+    ${partG('wrist', `<rect class="vis body-reg" x="46" y="448" width="40" height="22" rx="8"/><rect class="vis body-reg" x="274" y="448" width="40" height="22" rx="8"/>`,
+      `<rect class="hit" x="40" y="440" width="52" height="32"/><rect class="hit" x="268" y="440" width="52" height="32"/>`)}
+    ${partG('hand', `<ellipse class="vis body-reg" cx="62" cy="500" rx="26" ry="30"/><ellipse class="vis body-reg" cx="298" cy="500" rx="26" ry="30"/>`)}
+    ${partG('thigh', `<path class="vis body-reg" d="M146,432 L174,432 L170,538 L148,538 Z"/><path class="vis body-reg" d="M186,432 L214,432 L212,538 L190,538 Z"/>`)}
+    ${partG('knee', `<circle class="vis body-reg" cx="159" cy="555" r="18"/><circle class="vis body-reg" cx="201" cy="555" r="18"/>`,
+      `<circle class="hit" cx="159" cy="555" r="24"/><circle class="hit" cx="201" cy="555" r="24"/>`)}
+    ${partG('leg', `<path class="vis body-reg" d="M144,570 L172,570 L166,700 L150,700 Z"/><path class="vis body-reg" d="M188,570 L216,570 L214,700 L194,700 Z"/>`)}
+    ${partG('ankle', `<circle class="vis body-reg" cx="156" cy="720" r="13"/><circle class="vis body-reg" cx="204" cy="720" r="13"/>`,
+      `<circle class="hit" cx="156" cy="720" r="20"/><circle class="hit" cx="204" cy="720" r="20"/>`)}
+    ${partG('foot', `<ellipse class="vis body-reg" cx="152" cy="768" rx="22" ry="15"/><ellipse class="vis body-reg" cx="208" cy="768" rx="22" ry="15"/>`)}
+    ${partG('heel', `<ellipse class="vis body-reg" cx="148" cy="782" rx="14" ry="16"/><ellipse class="vis body-reg" cx="212" cy="782" rx="14" ry="16"/>`,
+      `<ellipse class="hit" cx="148" cy="782" rx="22" ry="22"/><ellipse class="hit" cx="212" cy="782" rx="22" ry="22"/>`)}
+  </svg>`;
+}
+
+function handSVG(){
+  /* Right hand, palm toward us, fingers up, thumb on the left */
+  return `<svg viewBox="0 0 260 320" role="img" aria-label="${esc(t('hand'))}">
+    ${partG('hand', `<path class="vis skin" d="M86,200 Q78,130 100,118 L170,118 Q198,130 186,200 Q180,250 130,258 Q90,250 86,200 Z"/>`)}
+    ${partG('wrist', `<rect class="vis skin" x="96" y="248" width="68" height="50" rx="16"/>`, `<rect class="hit" x="88" y="242" width="84" height="64"/>`)}
+    ${partG('thumb', `<path class="vis skin" d="M86,190 Q40,150 42,118 Q62,108 86,148 Q96,170 96,196 Z"/>`, `<ellipse class="hit" cx="64" cy="150" rx="36" ry="48"/>`)}
+    ${partG('finger', `
+      <path class="vis skin" d="M100,122 L96,40 Q108,28 120,40 L122,122 Z"/>
+      <path class="vis skin" d="M126,118 L126,22 Q140,10 152,22 L150,118 Z"/>
+      <path class="vis skin" d="M156,122 L160,36 Q174,26 184,40 L176,122 Z"/>
+      <path class="vis skin" d="M180,130 L196,58 Q210,50 214,66 L196,140 Z"/>`)}
+    ${partG('fingernail', `
+      <rect class="vis" fill="#f8efe6" stroke="#c48960" x="100" y="32" width="16" height="16" rx="5"/>
+      <rect class="vis" fill="#f8efe6" stroke="#c48960" x="130" y="16" width="16" height="16" rx="5"/>
+      <rect class="vis" fill="#f8efe6" stroke="#c48960" x="162" y="30" width="16" height="16" rx="5"/>
+      <rect class="vis" fill="#f8efe6" stroke="#c48960" x="194" y="54" width="14" height="14" rx="5"/>
+      <rect class="vis" fill="#f8efe6" stroke="#c48960" x="44" y="112" width="16" height="14" rx="5"/>`,
+      `<rect class="hit" x="94" y="24" width="28" height="30"/><rect class="hit" x="124" y="8" width="28" height="30"/><rect class="hit" x="156" y="22" width="28" height="30"/><rect class="hit" x="186" y="46" width="28" height="30"/><rect class="hit" x="36" y="102" width="30" height="28"/>`)}
+  </svg>`;
+}
+
+function footSVG(){
+  return `<svg viewBox="0 0 320 200" role="img" aria-label="${esc(t('foot'))}">
+    ${partG('foot', `<path class="vis skin" d="M108,28 L132,28 C140,70 148,88 168,98 L248,108 C270,102 292,112 300,128 C308,148 290,160 268,162 L200,168 C130,170 78,160 62,140 C48,120 62,96 88,90 C98,70 104,45 108,28 Z"/>`)}
+    ${partG('ankle', `<path class="vis body-reg" d="M108,28 L132,28 C136,60 138,82 132,100 L108,100 C106,72 106,48 108,28 Z"/>`,
+      `<ellipse class="hit" cx="120" cy="70" rx="36" ry="48"/>`)}
+    ${partG('heel', `<ellipse class="vis body-reg" cx="80" cy="128" rx="26" ry="28"/>`, `<ellipse class="hit" cx="80" cy="130" rx="36" ry="36"/>`)}
+    ${partG('toe', `
+      <ellipse class="vis body-reg" cx="292" cy="130" rx="16" ry="18"/>
+      <ellipse class="vis body-reg" cx="274" cy="116" rx="12" ry="14"/>
+      <ellipse class="vis body-reg" cx="258" cy="110" rx="11" ry="12"/>
+      <ellipse class="vis body-reg" cx="244" cy="108" rx="10" ry="11"/>
+      <ellipse class="vis body-reg" cx="232" cy="110" rx="9" ry="10"/>`)}
+    ${partG('toenail', `
+      <ellipse class="vis" fill="#f8efe6" stroke="#c48960" cx="298" cy="122" rx="7" ry="6"/>
+      <ellipse class="vis" fill="#f8efe6" stroke="#c48960" cx="278" cy="108" rx="6" ry="5"/>
+      <ellipse class="vis" fill="#f8efe6" stroke="#c48960" cx="260" cy="102" rx="5.5" ry="5"/>
+      <ellipse class="vis" fill="#f8efe6" stroke="#c48960" cx="246" cy="100" rx="5" ry="4.5"/>
+      <ellipse class="vis" fill="#f8efe6" stroke="#c48960" cx="234" cy="102" rx="4.5" ry="4"/>`,
+      `<ellipse class="hit" cx="298" cy="122" rx="14" ry="14"/><ellipse class="hit" cx="278" cy="108" rx="12" ry="12"/><ellipse class="hit" cx="260" cy="102" rx="12" ry="12"/><ellipse class="hit" cx="246" cy="100" rx="11" ry="11"/><ellipse class="hit" cx="234" cy="102" rx="11" ry="11"/>`)}
+  </svg>`;
+}
+
+function organsSVG(){
+  const outline=`<path fill="#f0c4a0" fill-opacity=".22" stroke="#c48960" stroke-width="1.5" d="M180,40 C150,40 142,70 142,94 L142,118 L80,150 L70,300 L68,430 L100,440 L112,390 L128,390 L148,520 L154,640 L148,720 L170,780 L180,760 L190,780 L212,720 L206,640 L212,520 L232,390 L248,390 L260,440 L292,430 L290,300 L280,150 L218,118 L218,94 C218,70 210,40 180,40 Z"/>`;
+  return `<svg viewBox="0 0 360 800" role="img" aria-label="${esc(t('organs'))}">
+    ${outline}
+    ${partG('brain', `<path class="vis" fill="#f4b8c5" stroke="#c47386" stroke-width="1.6" d="M180,46 C152,46 144,78 148,100 C160,118 200,118 212,100 C216,78 208,46 180,46 Z"/>`)}
+    ${partG('lung', `<path class="vis" fill="#ef9a9a" stroke="#c05c5c" d="M100,175 Q95,230 112,300 Q140,310 150,250 Q148,190 128,168 Z"/>
+      <path class="vis" fill="#ef9a9a" stroke="#c05c5c" d="M260,175 Q265,230 248,300 Q220,310 210,250 Q212,190 232,168 Z"/>`)}
+    ${partG('blood', `<path class="vis" fill="none" stroke="#dc2626" stroke-width="4" d="M200,250 L200,400 M200,280 L150,300 L130,390 M200,280 L250,300 L270,390 M200,400 L160,500 M200,400 L240,500"/>
+      <circle class="vis" fill="#dc2626" cx="214" cy="248" r="8"/>`,
+      `<path class="hit" fill="none" stroke="transparent" stroke-width="22" d="M200,250 L200,400 M200,280 L150,300 L130,390 M200,280 L250,300 L270,390 M200,400 L160,500 M200,400 L240,500"/><circle class="hit" cx="214" cy="248" r="16"/>`)}
+    ${partG('heart', `<path class="vis" fill="#e11d48" stroke="#9f1239" d="M200,220 C200,200 230,196 230,222 C230,246 200,270 200,270 C200,270 170,246 170,222 C170,196 200,200 200,220 Z"/>`,
+      `<circle class="hit" cx="200" cy="230" r="36"/>`)}
+    ${partG('liver', `<path class="vis" fill="#b45309" stroke="#7c2d12" d="M100,300 Q95,345 130,360 Q170,355 175,325 Q150,290 100,300 Z"/>`)}
+    ${partG('stomach', `<path class="vis" fill="#f2c14e" stroke="#b45309" d="M190,315 Q230,300 245,335 Q248,370 215,380 Q185,365 190,315 Z"/>`)}
+    ${partG('kidney', `<ellipse class="vis" fill="#c45c5c" stroke="#7f1d1d" cx="128" cy="400" rx="16" ry="26"/>
+      <ellipse class="vis" fill="#c45c5c" stroke="#7f1d1d" cx="232" cy="400" rx="16" ry="26"/>`,
+      `<ellipse class="hit" cx="128" cy="400" rx="24" ry="34"/><ellipse class="hit" cx="232" cy="400" rx="24" ry="34"/>`)}
+    ${partG('intestines', `<path class="vis" fill="#e8a87c" stroke="#b45309" stroke-width="3" fill="none" d="M140,430 C160,420 180,450 200,430 C220,410 240,450 230,470 C210,500 160,490 150,460 C140,440 170,450 190,470 C210,490 170,510 155,500"/>
+      <path class="vis" fill="#e8a87c" stroke="#b45309" d="M135,425 Q180,410 235,430 Q250,480 200,520 Q140,500 135,425 Z" fill-opacity=".85"/>`)}
+    ${partG('bladder', `<ellipse class="vis" fill="#f5e6a8" stroke="#ca8a04" cx="180" cy="545" rx="28" ry="22"/>`,
+      `<ellipse class="hit" cx="180" cy="545" rx="36" ry="30"/>`)}
+  </svg>`;
+}
+
+function bonesSVG(){
+  const b='fill="#f5f0e6" stroke="#b8a078" stroke-width="1.6"';
+  return `<svg viewBox="0 0 360 800" role="img" aria-label="${esc(t('bones'))}">
+    <path fill="#f0c4a0" fill-opacity=".12" stroke="#c48960" stroke-width="1.2" d="M180,40 C150,40 142,70 142,94 L142,118 L80,150 L70,300 L68,430 L100,440 L112,390 L128,390 L148,520 L154,640 L148,720 L170,780 L180,760 L190,780 L212,720 L206,640 L212,520 L232,390 L248,390 L260,440 L292,430 L290,300 L280,150 L218,118 L218,94 C218,70 210,40 180,40 Z"/>
+    ${partG('bone', `
+      <ellipse class="vis" ${b} cx="180" cy="78" rx="32" ry="40"/>
+      <rect class="vis" ${b} x="172" y="118" width="16" height="28" rx="4"/>
+      <path class="vis" ${b} d="M175,146 L185,146 L185,390 L175,390 Z"/>
+      <path class="vis" ${b} d="M120,175 Q180,160 240,175 L248,200 Q180,188 112,200 Z"/>
+      <path class="vis" ${b} d="M130,210 L230,210 M128,228 L232,228 M126,246 L234,246 M128,264 L232,264"/>
+      <path class="vis" ${b} d="M132,390 Q180,410 228,390 L220,450 Q180,470 140,450 Z"/>
+      <path class="vis" ${b} d="M86,160 L58,330 L70,336 L98,168 Z"/>
+      <path class="vis" ${b} d="M274,160 L302,330 L290,336 L262,168 Z"/>
+      <circle class="vis" ${b} cx="62" cy="332" r="10"/><circle class="vis" ${b} cx="298" cy="332" r="10"/>
+      <path class="vis" ${b} d="M54,340 L54,450 L70,450 L70,340 Z"/><path class="vis" ${b} d="M290,340 L290,450 L306,450 L306,340 Z"/>
+      <path class="vis" ${b} d="M148,450 L168,450 L162,650 L150,650 Z"/><path class="vis" ${b} d="M192,450 L212,450 L210,650 L198,650 Z"/>
+      <circle class="vis" ${b} cx="156" cy="545" r="12"/><circle class="vis" ${b} cx="204" cy="545" r="12"/>
+      <ellipse class="vis" ${b} cx="150" cy="730" rx="24" ry="10"/><ellipse class="vis" ${b} cx="210" cy="730" rx="24" ry="10"/>
+    `)}
+  </svg>`;
+}
+function card(cap, svg){ return `<div class="fig-card"><div class="fig-cap">${esc(cap)}</div>${svg}</div>`; }
+
+function renderDiagram(){
+  const stage=$('diagramStage');
+  if(st.diagram==='inside'){
+    const svg=st.insideView==='bones'?bonesSVG():organsSVG();
+    stage.innerHTML=`<div class="fig-card">${svg}</div>`;
+  } else {
+    const body=st.view==='back'?bodyBackSVG():bodyFrontSVG();
+    stage.innerHTML=`
+      <div class="fig-grid">
+        ${card(t('face'), faceSVG())}
+        ${card(t('body'), body)}
+      </div>
+      <div class="fig-grid closeups">
+        ${card(t('hand'), handSVG())}
+        ${card(t('foot'), footSVG())}
+      </div>`;
+  }
+  bindDiagram();
+  highlight(selected, '');
+}
+
+function bindDiagram(){
+  const root=$('diagramStage');
+  root.querySelectorAll('.part').forEach(g=>{
+    g.addEventListener('click', ev=>{ ev.stopPropagation(); onPart(g.getAttribute('data-id')); });
+    g.addEventListener('keydown', ev=>{ if(ev.key==='Enter'||ev.key===' '){ ev.preventDefault(); onPart(g.getAttribute('data-id')); }});
+  });
+}
+
+function highlight(id, cls){
+  document.querySelectorAll('.part').forEach(g=>{
+    g.classList.remove('lit','ok','bad');
+    if(id && g.getAttribute('data-id')===id) g.classList.add(cls||'lit');
+    else if(id){
+      const a=byId(id), b=byId(g.getAttribute('data-id'));
+      if(a && b && a.hm===b.hm) g.classList.add(cls||'lit');
+    }
+  });
+  document.querySelectorAll('.word-bank button').forEach(b=>{
+    b.classList.toggle('active', !!id && (b.dataset.id===id || (byId(id)&&byId(b.dataset.id)&&byId(id).hm===byId(b.dataset.id).hm)));
+  });
+}
+
+function flashBoard(ok){
+  const b=$('board');
+  b.classList.remove('buzz','glow-ok');
+  void b.offsetWidth;
+  b.classList.add(ok?'glow-ok':'buzz');
+  setTimeout(()=>b.classList.remove('buzz','glow-ok'), 600);
+}
+
+function ensureViewFor(p){
+  if(!p)return;
+  if(p.diagram==='inside' || (p.diagram==='both' && st.diagram==='inside')){
+    st.diagram='inside';
+    if(!p.views.includes(st.insideView)) st.insideView=p.views.find(v=>v==='organs'||v==='bones')||p.views[0];
+  } else {
+    st.diagram='outside';
+    if(!p.views.includes(st.view)) st.view=p.views.includes('front')?'front':p.views[0];
+  }
+}
+
+function playPart(p){ if(!p)return; const id=clipId(p); if(hasClip(id,'female')||hasClip(id,'male')) playClip(id); }
+
+function showInfo(p){
+  if(!p){ $('prompt').innerHTML=`<p class="sub">${esc(t('tapHint'))}</p>`; $('playRow').innerHTML=''; return; }
+  $('prompt').innerHTML=`<div class="hmong-word">${esc(p.hm)}</div><div class="meaning-main">${esc(glossAll(p))}</div>${p.pair?`<div class="pair-note">${esc(t('pairNote'))}</div>`:''}`;
+  $('playRow').innerHTML=clipButtons(clipId(p), p.hm);
+}
+
+function renderBank(){
+  const wrap=$('bankWrap');
+  if(st.mode!=='explore'){ wrap.classList.add('hidden'); return; }
+  wrap.classList.remove('hidden');
+  const list=uniqueVisible();
+  $('bank').innerHTML=list.map(p=>`<button type="button" data-id="${p.id}" onclick="onPart('${p.id}')">${esc(p.hm)}<span class="g">${esc(glossAll(p))}${p.id==='skin'?' — '+t('skinBtn'):''}</span></button>`).join('');
+}
+
+function renderScore(){
+  $('sc').textContent=st.c+'/'+st.n;
+  $('sk').textContent=st.s;
+  $('best').textContent=st.best||0;
+  const live=st.mode==='find';
+  $('livesRow').classList.toggle('hidden', !live);
+  if(live){
+    const n=Math.max(0, st.lives);
+    $('livesRow').innerHTML=`<span>${esc(t('lives'))}</span> `+[0,1,2].map(i=>`<span class="pip ${i<n?'':'off'}"></span>`).join('');
+  }
+}
+
+function renderControls(){
+  $('diagramSeg').innerHTML=[['outside','outside'],['inside','inside']].map(([k,l])=>`<button class="${st.diagram===k?'active':''}" onclick="setDiagram('${k}')">${t(l)}</button>`).join('');
+  $('modeSeg').innerHTML=[['explore','explore'],['find','findIt'],['rev','whichWord']].map(([k,l])=>`<button class="${st.mode===k?'active':''}" onclick="setMode('${k}')">${t(l)}</button>`).join('');
+  if(st.diagram==='outside'){
+    $('viewPills').innerHTML=[['front','front'],['back','back']].map(([k,l])=>`<button class="pill ${st.view===k?'active':''}" onclick="setView('${k}')">${t(l)}</button>`).join('');
+  } else {
+    $('viewPills').innerHTML=[['organs','organs'],['bones','bones']].map(([k,l])=>`<button class="pill ${st.insideView===k?'active':''}" onclick="setInside('${k}')">${t(l)}</button>`).join('');
+  }
+}
+
+function setDiagram(d){ st.diagram=d; if(st.mode==='explore') selected=null; save(); if(st.mode!=='explore') newQ(); else renderAll(); }
+function setView(v){ st.view=v; save(); if(st.mode!=='explore') newQ(); else renderAll(); }
+function setInside(v){ st.insideView=v; save(); if(st.mode!=='explore') newQ(); else renderAll(); }
+function setMode(m){ st.mode=m; selected=null; answered=false; gameOver=false; if(m==='find' && (st.lives||0)<=0) st.lives=3; save(); if(m==='explore'){ q=null; renderAll(); } else newQ(); }
+
+function onPart(id){
+  const p=byId(id); if(!p)return;
+  if(st.mode==='explore'){
+    selected=id;
+    if(p.diagram==='inside' && st.diagram!=='inside'){ st.diagram='inside'; }
+    if(p.diagram==='outside' && st.diagram!=='outside'){ st.diagram='outside'; }
+    if(!p.views.includes(st.diagram==='outside'?st.view:st.insideView) && p.diagram!=='both'){
+      if(st.diagram==='outside') st.view=p.views.includes('front')?'front':p.views[0];
+      else st.insideView=p.views[0];
+      renderDiagram(); renderControls();
+    }
+    highlight(id,'lit'); showInfo(p); playPart(p); renderBank();
+    return;
+  }
+  if(st.mode==='find'){ tapFind(id); return; }
+  /* reverse mode ignores body taps */
+}
+
+function matchPart(id, target){
+  if(!target)return false;
+  if(id===target.id) return true;
+  const p=byId(id);
+  return !!(p && p.hm===target.hm);
+}
+
+function score(ok){
+  st.n++;
+  if(ok){ st.c++; st.s++; if(st.s>(st.best||0)) st.best=st.s; }
+  else { st.s=0; if(st.mode==='find') st.lives=Math.max(0,(st.lives||3)-1); }
+  save(); answered=true; renderScore();
+}
+
+function newQ(){
+  const pool=uniqueVisible();
+  if(!pool.length){ q=null; renderAll(); return; }
+  let pick=pool[Math.floor(Math.random()*pool.length)];
+  if(q && pool.length>1){ let g=0; while(pick.hm===q.hm && g++<20) pick=pool[Math.floor(Math.random()*pool.length)]; }
+  q=pick; answered=false; gameOver=false;
+  const seen=new Set([q.hm]); opts=[q];
+  const all=PARTS.filter(p=>inDiagram(p, st.diagram));
+  /* unique by hm */
+  const uniq=[]; const u=new Set();
+  all.forEach(p=>{ if(!u.has(p.hm)){ u.add(p.hm); uniq.push(p); } });
+  let guard=0;
+  while(opts.length<4 && guard++<80){
+    const o=uniq[Math.floor(Math.random()*uniq.length)];
+    if(!seen.has(o.hm)){ seen.add(o.hm); opts.push(o); }
+  }
+  opts.sort(()=>Math.random()-.5);
+  selected = st.mode==='rev'?q.id:null;
+  if(st.mode==='find'){ ensureViewFor(q); }
+  renderAll(true);
+  if(st.mode==='find') playPart(q);
+}
+
+function tapFind(id){
+  if(answered || gameOver || !q)return;
+  const ok=matchPart(id,q);
+  score(ok); buzzSound(ok); flashBoard(ok);
+  highlight(ok?id:q.id, ok?'ok':'');
+  if(!ok){ highlight(id,'bad'); setTimeout(()=>highlight(q.id,'ok'), 350); }
+  const over=st.mode==='find' && st.lives<=0;
+  if(over) gameOver=true;
+  $('out').innerHTML=`<div class="feedback ${ok?'ok':'bad'}">${ok?'✅ '+t('correct'):'❌ '+(t('buzz')+' — '+t('wrong'))} <b>${esc(q.hm)}</b> · ${esc(glossAll(q))}${over?'<div style="margin-top:6px">'+esc(t('gameOver'))+'</div>':''}
+    <div class="btn-row" style="justify-content:center;margin-top:8px"><button class="btn" onclick="${over?'resetGame()':'newQ()'}">${over?t('playAgain'):t('next')}</button></div></div>`;
+}
+
+function tapChoice(i){
+  if(answered||!q)return;
+  const ok=opts[i].hm===q.hm;
+  score(ok); buzzSound(ok); flashBoard(ok);
+  $('answer').querySelectorAll('.quiz-btn').forEach((b,k)=>{
+    if(opts[k].hm===q.hm) b.classList.add('correct');
+    else if(k===i) b.classList.add('wrong');
+  });
+  highlight(q.id, ok?'ok':'ok');
+  $('out').innerHTML=`<div class="feedback ${ok?'ok':'bad'}">${ok?'✅ '+t('correct'):'❌ '+t('wrong')} <b>${esc(q.hm)}</b>
+    <div class="btn-row" style="justify-content:center;margin-top:8px"><button class="btn" onclick="newQ()">${t('next')}</button></div></div>`;
+}
+
+function resetGame(){ st.lives=3; st.c=0; st.n=0; st.s=0; save(); gameOver=false; newQ(); }
+
+function renderAll(keepQ){
+  renderControls(); renderScore(); renderDiagram(); renderBank();
+  $('studioNote').innerHTML=STUDIO?`<div class="studio-bar">${t('studioOn')}</div>`:'';
+  $('out').innerHTML='';
+  if(st.mode==='explore'){
+    $('answer').innerHTML='';
+    if(selected){ const p=byId(selected); highlight(selected,'lit'); showInfo(p); }
+    else showInfo(null);
+  } else if(st.mode==='find'){
+    if(!q){ $('prompt').innerHTML=''; return; }
+    $('prompt').innerHTML=`<div class="sub">${esc(t('findPrompt'))}</div><div class="hmong-word">${esc(q.hm)}</div><div class="meaning-main">${esc(glossAll(q))}</div>`;
+    $('playRow').innerHTML=clipButtons(clipId(q), q.hm)+(hasClip(clipId(q),'male')||hasClip(clipId(q),'female')?` <button class="btn btn-outline mini" onclick="playPart(q)">${t('hearAgain')}</button>`:'');
+    $('answer').innerHTML='';
+  } else {
+    if(!q){ $('prompt').innerHTML=''; return; }
+    highlight(q.id,'lit');
+    $('prompt').innerHTML=`<div class="sub">${esc(t('pickWord'))}</div>`;
+    $('playRow').innerHTML='';
+    $('answer').innerHTML=`<div class="quiz-choices">${opts.map((o,i)=>`<button class="quiz-btn" onclick="tapChoice(${i})">${esc(o.hm)}<div class="mini" style="font-weight:600;color:var(--muted)">${esc(glossAll(o))}</div></button>`).join('')}</div>`;
+  }
+  renderRef();
+}
+
+function renderRef(){
+  const groups=[['outside', PARTS.filter(p=>p.diagram==='outside'||p.diagram==='both')],['inside', PARTS.filter(p=>p.diagram==='inside'||p.diagram==='both')]];
+  let html='';
+  groups.forEach(([lab,list])=>{
+    const uniq=[]; const seen=new Set();
+    list.forEach(p=>{ if(!seen.has(p.hm)){ seen.add(p.hm); uniq.push(p); } });
+    html+=`<h3 style="color:var(--accent);font-size:1rem;margin:12px 0 6px">${esc(t(lab))}</h3>`;
+    html+=`<table style="width:100%;border-collapse:collapse">${uniq.map(p=>`<tr>
+      <td style="padding:6px;border-bottom:1px solid var(--border);width:38%"><b style="color:var(--accent)">${esc(p.hm)}</b></td>
+      <td style="padding:6px;border-bottom:1px solid var(--border)">${esc(glossAll(p))}</td>
+      <td style="padding:6px;border-bottom:1px solid var(--border)">${clipButtons(clipId(p),p.hm)}</td>
+    </tr>`).join('')}</table>`;
+  });
+  /* eyebrow/eyelash share a word — note in reference only once, gloss already joined? unique by hm uses first (eyebrow). Let's join glosses. */
+  $('ref').innerHTML=html;
+}
+
+function onClips(){ if(st.mode==='explore' && selected) showInfo(byId(selected)); else if(q && st.mode==='find') $('playRow').innerHTML=clipButtons(clipId(q), q.hm); renderRef(); }
+function onLang(){ renderAll(); }
+
+loadState();
+(function applyQuery(){
+  const qs=new URLSearchParams(location.search);
+  const m=qs.get('mode'); if(m==='find'||m==='rev'||m==='explore') st.mode=m;
+  const d=qs.get('diagram'); if(d==='inside'||d==='outside') st.diagram=d;
+  const v=qs.get('view'); if(v==='back'||v==='front') st.view=v;
+  const iv=qs.get('inside'); if(iv==='bones'||iv==='organs') st.insideView=iv;
+  const part=qs.get('part'); if(part&&byId(part)) selected=part;
+})();
+setUILang(uiLang);
+if(st.mode==='explore'){ renderAll(); if(selected) onPart(selected); } else newQ();
+loadCloudClips(null);
+</script>
+</body>
+</html>
