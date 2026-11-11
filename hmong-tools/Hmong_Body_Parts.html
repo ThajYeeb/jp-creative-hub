@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lub Cev / The Body</title>
+<style>
+  :root {
+    --bg: #f4f6f9; --card: #ffffff; --accent: #1F4E79; --accent2: #2E75B6;
+    --text: #1e293b; --muted: #64748b; --border: #cbd5e1;
+    --ok-bg: #ecfdf5; --ok-border: #10b981; --warn-bg: #fffbeb; --warn-border: #f59e0b;
+    --skin: #f0c4a0; --skin-stroke: #c48960; --hair: #4a3426;
+    --board: #e8eef5;
+  }
+  * { box-sizing: border-box; }
+  body { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 18px 14px 48px; line-height: 1.5; max-width: 1100px; margin-left: auto; margin-right: auto; }
+  .top-bar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 14px; }
+  .nav-links { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .nav-links a { text-decoration: none; color: var(--accent); font-weight: 600; font-size: 0.9rem; background: #e2e8f0; padding: 6px 12px; border-radius: 8px; }
+  .nav-links a.active { background: var(--accent); color: #fff; }
+  .lang-switch { display: inline-flex; flex-wrap: wrap; background: #e2e8f0; border-radius: 999px; padding: 3px; gap: 2px; }
+  .lang-btn { background: transparent; color: #334155; border: none; padding: 6px 12px; border-radius: 999px; font-size: 0.85rem; font-weight: 700; cursor: pointer; }
+  .lang-btn.active { background: var(--accent); color: #fff; }
+  .panel { background: var(--card); border-radius: 12px; padding: 16px 18px; margin-bottom: 14px; box-shadow: 0 2px 8px rgba(0,0,0,.06); border: 1px solid #e2e8f0; }
+  h1 { color: var(--accent); font-size: 1.45rem; margin: 0 0 4px; }
+  .sub { color: var(--muted); font-size: 0.92rem; margin: 0; }
+  .btn { background: var(--accent); color: #fff; border: none; padding: 8px 14px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 0.9rem; }
+  .btn:hover { background: var(--accent2); }
+  .btn-outline { background: #f1f5f9; color: var(--text); border: 1px solid var(--border); }
+  .btn-outline.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .btn-ok { background: #059669; color: #fff; }
+  .btn-warn { background: #d97706; color: #fff; }
+  .pills { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0; }
+  .pill { background: #f1f5f9; border: 1px solid var(--border); border-radius: 999px; padding: 5px 12px; font-size: 0.84rem; font-weight: 600; cursor: pointer; color: #334155; }
+  .pill.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .hidden { display: none !important; }
+  .sb-tag { display:inline-block; font-size:0.7rem; font-weight:800; background:#fef3c7; color:#92400e; border-radius:6px; padding:2px 7px; vertical-align:middle; margin-left:6px; }
+  .code-badge { display:inline-flex; align-items:center; gap:8px; background:var(--ok-bg); border:1px solid var(--ok-border); color:#065f46; border-radius:999px; padding:4px 12px; font-size:0.85rem; font-weight:700; }
+  .code-badge.guest { background:#f1f5f9; border-color:var(--border); color:var(--muted); }
+  .link-btn { background:none; border:none; color:var(--accent2); font-weight:600; cursor:pointer; padding:0 4px; font-size:0.82rem; text-decoration:underline; }
+  .seg { display:flex; gap:4px; background:#e2e8f0; border-radius:10px; padding:3px; }
+  .seg button { flex:1; border:none; background:transparent; padding:8px 8px; border-radius:8px; font-weight:700; font-size:0.88rem; cursor:pointer; color:var(--text); }
+  .seg button.active { background:var(--accent); color:#fff; }
+  .score-row{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0;align-items:center}
+  .score-row .badge{font-size:.85rem;background:#e0f2fe;color:#0369a1;padding:3px 9px;border-radius:999px;font-weight:700}
+  .lives { display:inline-flex; gap:4px; align-items:center; font-weight:800; color:#b45309; }
+  .lives .pip { width:14px; height:14px; border-radius:50%; background:#f59e0b; box-shadow:0 0 0 2px #fde68a; }
+  .lives .pip.off { background:#e2e8f0; box-shadow:none; }
+  .mini{font-size:.8rem;padding:6px 10px}
+  .btn-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;align-items:center}
+  .studio-bar{background:#fffbeb;border:1px dashed #f59e0b;border-radius:10px;padding:10px;margin-top:10px;font-size:.88rem}
+  .feedback{margin-top:10px;padding:10px 12px;border-radius:10px;font-weight:600}
+  .feedback.ok{background:var(--ok-bg);border:1px solid var(--ok-border)}
+  .feedback.bad{background:#fef2f2;border:1px solid #ef4444}
+  .theme-toggle-btn {
+    background: #e2e8f0; color: #1e293b; border: 1px solid #cbd5e1;
+    padding: 6px 12px; border-radius: 999px; font-size: 0.85rem; font-weight: 700; cursor: pointer;
+    display: inline-flex; align-items: center; gap: 5px; margin: 0;
+  }
+  .theme-toggle-btn:hover { background: #cbd5e1; }
+  .sync-row { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-top:8px; }
+  input[type="text"] { padding:8px 11px; border:1px solid var(--border); border-radius:8px; font-size:0.92rem; }
+  .pair-note { font-size:0.84rem; color:var(--muted); margin-top:4px; }
+  .hmong-word { font-size:2.4rem; font-weight:800; color:var(--accent); margin:4px 0; letter-spacing:0.3px; line-height:1.15; }
+  .meaning-main { font-size:1.35rem; font-weight:700; color:#0f172a; margin:4px 0; }
+  .prompt-box { text-align:center; padding:8px 4px 12px; }
+  .quiz-choices { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:12px; }
+  .quiz-btn { padding:14px 10px; border-radius:10px; border:2px solid var(--border); background:#fff; font-weight:700; font-size:1.02rem; cursor:pointer; text-align:center; }
+  .quiz-btn.correct { border-color:#10b981; background:#ecfdf5; color:#065f46; }
+  .quiz-btn.wrong { border-color:#ef4444; background:#fef2f2; color:#991b1b; }
+
+  .main { display:grid; grid-template-columns: 1.35fr .9fr; gap:14px; align-items:start; }
+  .board {
+    background: linear-gradient(180deg, #f8fafc, var(--board));
+    border:2px solid var(--border); border-radius:16px; padding:10px 10px 14px;
+    position:relative; transition: box-shadow .2s, transform .2s;
+  }
+  .board.buzz { animation: board-buzz .35s ease; box-shadow:0 0 0 5px #ef4444, 0 0 22px rgba(239,68,68,.45); }
+  .board.glow-ok { box-shadow:0 0 0 5px #10b981, 0 0 22px rgba(16,185,129,.4); }
+  @keyframes board-buzz {
+    0%,100% { transform:translateX(0); }
+    20% { transform:translateX(-8px); }
+    40% { transform:translateX(8px); }
+    60% { transform:translateX(-5px); }
+    80% { transform:translateX(5px); }
+  }
+  .fig-grid { display:grid; gap:8px; align-items:start; }
+  .fig-grid.n4 { grid-template-columns: 1fr 1fr; }
+  .fig-grid.n3 { grid-template-columns: 1.1fr 1fr 1fr; }
+  .fig-grid.n1 { grid-template-columns: minmax(0, 420px); justify-content:center; }
+  .fig-grid.v-bones { grid-template-columns: minmax(0, 340px); }
+  .fig-card { background:#fff; border:1px solid var(--border); border-radius:12px; padding:6px; }
+  .fig-cap { font-size:.75rem; font-weight:800; color:var(--muted); text-transform:uppercase; letter-spacing:.4px; text-align:center; margin:0 0 2px; }
+  .fig-img { position:relative; width:100%; border-radius:8px; overflow:hidden; background:#fff; touch-action:manipulation; user-select:none; -webkit-user-select:none; -webkit-tap-highlight-color:transparent; }
+  .fig-img img { display:block; width:100%; height:100%; object-fit:contain; pointer-events:none; }
+  .hs-layer { position:absolute; inset:0; width:100%; height:100%; overflow:visible; }
+  .part { cursor:pointer; outline:none; }
+  .hs { fill:rgba(46,117,182,0); stroke:rgba(31,78,121,0); stroke-width:2; pointer-events:all; transition: fill .15s, stroke .15s; }
+  @media (hover:hover) { .part:hover .hs { fill:rgba(46,117,182,.22); stroke:#1F4E79; stroke-dasharray:4 3; } }
+  .part:focus-visible .hs { fill:rgba(46,117,182,.22); stroke:#1F4E79; }
+  .part.lit .hs { fill:rgba(46,117,182,.32); stroke:#1F4E79; stroke-width:2.5; filter:drop-shadow(0 0 4px rgba(46,117,182,.9)); }
+  .part.ok .hs { fill:rgba(16,185,129,.38); stroke:#059669; stroke-width:3; filter:drop-shadow(0 0 5px #10b981); }
+  .part.bad .hs { fill:rgba(239,68,68,.38); stroke:#dc2626; stroke-width:3; filter:drop-shadow(0 0 5px #ef4444); }
+  .part[data-id="skin"].lit .hs, .part[data-id="skin"].ok .hs, .part[data-id="skin"].bad .hs { fill-opacity:.55; }
+  .pin-line { stroke:#94a3b8; stroke-width:1.5; stroke-dasharray:3 3; }
+  .pin { position:absolute; transform:translate(-50%,-50%); width:clamp(26px, 15%, 40px); aspect-ratio:1; border-radius:50%; border:2px solid #94a3b8; background:#fff; font-size:clamp(13px, 2.2vw, 20px); line-height:1; padding:0; display:flex; align-items:center; justify-content:center; box-shadow:0 1px 4px rgba(0,0,0,.18); transition: box-shadow .15s, border-color .15s; }
+  @media (hover:hover) { .pin:hover { border-color:#1F4E79; box-shadow:0 0 0 3px rgba(46,117,182,.35); } }
+  .pin.lit { border-color:#1F4E79; box-shadow:0 0 0 4px rgba(46,117,182,.5), 0 0 10px rgba(46,117,182,.8); }
+  .pin.ok { border-color:#059669; box-shadow:0 0 0 4px rgba(16,185,129,.55), 0 0 12px #10b981; }
+  .pin.bad { border-color:#dc2626; box-shadow:0 0 0 4px rgba(239,68,68,.55), 0 0 12px #ef4444; }
+  .word-bank { display:flex; flex-wrap:wrap; gap:6px; max-height:260px; overflow:auto; margin-top:8px; }
+  .word-bank button { background:#f8fafc; border:1px solid var(--border); border-radius:8px; padding:6px 8px; font-size:.8rem; font-weight:700; cursor:pointer; color:var(--text); }
+  .word-bank button.active { background:var(--accent); color:#fff; border-color:var(--accent); }
+  .word-bank button .g { display:block; font-weight:600; font-size:.7rem; color:var(--muted); }
+  .word-bank button.active .g { color:#dbeafe; }
+
+  html[data-theme="dark"] {
+    --bg: #0f172a; --card: #1e293b; --accent: #60a5fa; --accent2: #3b82f6;
+    --text: #f1f5f9; --muted: #94a3b8; --border: #334155;
+    --ok-bg: #064e3b; --ok-border: #10b981; --warn-bg: #451a03; --warn-border: #f59e0b;
+    --skin: #c99572; --skin-stroke: #8a5a3c; --hair: #1f140e; --board: #0f172a;
+    color-scheme: dark;
+  }
+  html[data-theme="dark"] body { background: var(--bg); color: var(--text); }
+  html[data-theme="dark"] .panel, html[data-theme="dark"] .fig-card, html[data-theme="dark"] .quiz-btn:not(.correct):not(.wrong) {
+    background: var(--card) !important; color: var(--text) !important; border-color: var(--border) !important;
+  }
+  html[data-theme="dark"] .lang-switch, html[data-theme="dark"] .seg { background: #334155 !important; }
+  html[data-theme="dark"] .lang-btn { color: #cbd5e1 !important; }
+  html[data-theme="dark"] .lang-btn.active { background: #2563eb !important; color: #fff !important; }
+  html[data-theme="dark"] .pill, html[data-theme="dark"] .btn-outline:not(.active), html[data-theme="dark"] .nav-links a:not(.active), html[data-theme="dark"] .word-bank button:not(.active), html[data-theme="dark"] .theme-toggle-btn {
+    background: #334155 !important; color: #f1f5f9 !important; border-color: #475569 !important;
+  }
+  html[data-theme="dark"] .meaning-main, html[data-theme="dark"] p { color: #cbd5e1 !important; }
+  html[data-theme="dark"] .code-badge { color:#a7f3d0; }
+  html[data-theme="dark"] .code-badge.guest { color:#94a3b8; background:#0f172a; }
+  html[data-theme="dark"] .score-row .badge { background:#1e3a8a; color:#bfdbfe; }
+  html[data-theme="dark"] .feedback.bad { background:#450a0a; }
+  html[data-theme="dark"] .studio-bar { background:#2e2310; color:#fde68a; border-color:#b45309; }
+  html[data-theme="dark"] input { background:#0f172a; color:#f1f5f9; border-color:#475569; }
+  html[data-theme="dark"] .board { background: linear-gradient(180deg, #1e293b, #0f172a); }
+  html[data-theme="dark"] table, html[data-theme="dark"] th, html[data-theme="dark"] td { border-color:#334155; color:#e2e8f0; }
+  html[data-theme="dark"] th { background:#0f172a; }
+  html[data-theme="dark"] .fig-card { background:#f8fafc !important; }
+  html[data-theme="dark"] .fig-cap { color:#334155; }
+
+  @media (max-width: 860px) {
+    .main { grid-template-columns: 1fr; }
+    .hmong-word { font-size:2rem; }
+    body { padding:12px 10px 40px; }
+    .nav-links a { font-size:0.8rem; padding:5px 9px; }
+    .quiz-choices { grid-template-columns:1fr; }
+  }
+  @media (max-width: 520px) {
+    .fig-grid.n3 { grid-template-columns: 1fr 1fr; }
+    .fig-grid.n3 .fig-card:first-child { grid-row: span 2; }
+    .board { padding:6px; }
+  }
+</style>
+<script>
+(function(){
+  function applyTheme(t) {
+    document.documentElement.setAttribute('data-theme', t);
+    var btn = document.getElementById('themeToggleBtn');
+    if (btn) {
+      btn.innerHTML = t === 'dark' ? '☀️ Light' : '🌙 Dark';
+      btn.title = t === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode';
+    }
+  }
+  window.toggleHmongTheme = function() {
+    var cur = document.documentElement.getAttribute('data-theme') || 'light';
+    var next = cur === 'dark' ? 'light' : 'dark';
+    try { localStorage.setItem('hmong_theme', next); } catch(e) {}
+    applyTheme(next);
+  };
+  var saved = 'light';
+  try {
+    saved = localStorage.getItem('hmong_theme') ||
+      (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  } catch(e) {}
+  applyTheme(saved);
+  document.addEventListener('DOMContentLoaded', function() { applyTheme(saved); });
+})();
+</script>
+</head>
+<body>
+<div class="top-bar">
+  <div class="nav-links">
+    <a href="./index.html" data-i="hub">← Practice Hub</a>
+    <a href="./Hmong_Sound_Trainer.html" data-i="navSound">Sound Trainer</a>
+    <a href="./Hmong_Flashcards.html" data-i="navFc">Flashcards</a>
+  </div>
+  <div style="display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap;">
+    <button type="button" class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleHmongTheme()">🌙 Dark</button>
+    <div class="lang-switch">
+      <button class="lang-btn" id="btnEn" onclick="setUILang('en')">EN</button>
+      <button class="lang-btn" id="btnVi" onclick="setUILang('vi')">VI</button>
+      <button class="lang-btn" id="btnKo" onclick="setUILang('ko')">한</button>
+      <button class="lang-btn" id="btnJa" onclick="setUILang('ja')">日</button>
+    </div>
+  </div>
+</div>
+
+<div class="panel">
+  <h1><span data-i="title"></span></h1>
+  <p class="sub" data-i="sub"></p>
+  <div class="sync-row">
+    <span class="code-badge guest" id="codeBadge"></span>
+    <button type="button" class="link-btn" id="codeChangeBtn" onclick="toggleCodeBox()"></button>
+  </div>
+  <div class="sync-row hidden" id="codeBox">
+    <input type="text" id="codeInput" placeholder="HMOOB-01" style="width:140px;text-transform:uppercase" maxlength="10">
+    <button type="button" class="btn mini" onclick="applyCode()">OK</button>
+    <span class="mini" style="color:var(--muted)" data-i="codeHint"></span>
+  </div>
+</div>
+
+<div class="panel">
+  <div class="seg" id="diagramSeg" style="max-width:420px;margin-bottom:8px"></div>
+  <div class="seg" id="modeSeg" style="max-width:560px"></div>
+  <div class="pills" id="viewPills"></div>
+  <div class="score-row">
+    <span class="badge"><span data-i="score"></span>: <b id="sc">0/0</b></span>
+    <span class="badge"><span data-i="streak"></span>: <b id="sk">0</b></span>
+    <span class="badge" id="bestWrap"><span data-i="best"></span>: <b id="best">0</b></span>
+    <span class="lives hidden" id="livesRow"></span>
+  </div>
+  <p class="mini" style="margin:0;color:var(--muted)" data-i="pairNote"></p>
+</div>
+
+<div class="main">
+  <div class="board" id="board">
+    <div id="diagramStage"></div>
+  </div>
+  <div class="panel" style="margin:0">
+    <div id="prompt" class="prompt-box"></div>
+    <div class="btn-row" style="justify-content:center" id="playRow"></div>
+    <div id="answer"></div>
+    <div id="out"></div>
+    <div id="bankWrap">
+      <b class="mini" data-i="wordList"></b>
+      <div class="word-bank" id="bank"></div>
+    </div>
+  </div>
+</div>
+
+<div class="panel">
+  <div id="studioNote"></div>
+  <b data-i="ref"></b>
+  <div id="ref"></div>
+</div>
+<script>
+/* ===== Vocabulary: spellings from JC's "21. HUMAN BODY PARTS.doc". Do not "correct" these. ===== */
+const PARTS = [
+  {id:'abdomen',  diagram:'outside', hm:'Plab mog',        en:'abdomen',     vi:'bụng dưới',     ko:'아랫배',    ja:'下腹部'},
+  {id:'ankle',    diagram:'outside', hm:'Lub dab taws',    en:'ankle',       vi:'mắt cá chân',    ko:'발목',     ja:'足首'},
+  {id:'arm',      diagram:'outside', hm:'Txhais caj npab', en:'arm',         vi:'cánh tay',       ko:'팔',       ja:'腕',     pair:true},
+  {id:'back',     diagram:'outside', hm:'Lub nraub qaum',  en:'back',        vi:'lưng',           ko:'등',       ja:'背中'},
+  {id:'beard',    diagram:'outside', hm:'Hwj txwv',        en:'beard',       vi:'râu',            ko:'수염',     ja:'ひげ'},
+  {id:'bladder',  diagram:'inside',  hm:'Lub zais zis',    en:'bladder',     vi:'bàng quang',     ko:'방광',     ja:'膀胱'},
+  {id:'blood',    diagram:'inside',  hm:'Ntshav',          en:'blood',       vi:'máu',            ko:'피',       ja:'血'},
+  {id:'bone',     diagram:'inside',  hm:'Pob txha',        en:'bone',        vi:'xương',          ko:'뼈',       ja:'骨'},
+  {id:'brain',    diagram:'inside',  hm:'Paj hlwb',        en:'brain',       vi:'não',            ko:'뇌',       ja:'脳'},
+  {id:'butt',     diagram:'outside', hm:'Lub pob tw',      en:'butt',        vi:'mông',           ko:'엉덩이',   ja:'お尻'},
+  {id:'chest',    diagram:'outside', hm:'Hauv siab',       en:'chest',       vi:'ngực',           ko:'가슴',     ja:'胸'},
+  {id:'chin',     diagram:'outside', hm:'Lub puab tsaig',  en:'chin',        vi:'cằm',            ko:'턱',       ja:'あご'},
+  {id:'ear',      diagram:'outside', hm:'Lub pob ntseg',   en:'ear',         vi:'tai',            ko:'귀',       ja:'耳'},
+  {id:'elbow',    diagram:'outside', hm:'Lub luj tshib',   en:'elbow',       vi:'khuỷu tay',      ko:'팔꿈치',   ja:'肘'},
+  {id:'eye',      diagram:'outside', hm:'Lub qhov muag',   en:'eye',         vi:'mắt',            ko:'눈',       ja:'目'},
+  {id:'eyebrow',  diagram:'outside', hm:'Plaub muag',      en:'eyebrow',     vi:'lông mày',       ko:'눈썹',     ja:'眉',     alias:'eyelash'},
+  {id:'eyelid',   diagram:'outside', hm:'Daim tawv muag',  en:'eyelid',      vi:'mí mắt',         ko:'눈꺼풀',   ja:'まぶた'},
+  {id:'eyelash',  diagram:'outside', hm:'Plaub muag',      en:'eyelash',     vi:'lông mi',        ko:'속눈썹',   ja:'まつげ',  alias:'eyebrow'},
+  {id:'finger',   diagram:'outside', hm:'Ntiv tes',        en:'finger',      vi:'ngón tay',       ko:'손가락',   ja:'指'},
+  {id:'fingernail',diagram:'outside',hm:'Rau tes',         en:'fingernail',  vi:'móng tay',       ko:'손톱',     ja:'手の爪'},
+  {id:'foot',     diagram:'outside', hm:'Txhais kotaw',    en:'foot',        vi:'bàn chân',       ko:'발',       ja:'足',     pair:true},
+  {id:'forehead', diagram:'outside', hm:'Lub hauv pliaj',  en:'forehead',    vi:'trán',           ko:'이마',     ja:'額'},
+  {id:'hair',     diagram:'outside', hm:'Plaub hau',       en:'hair',        vi:'tóc',            ko:'머리카락', ja:'髪'},
+  {id:'hand',     diagram:'outside', hm:'Txhais tes',      en:'hand',        vi:'bàn tay',        ko:'손',       ja:'手',     pair:true},
+  {id:'head',     diagram:'outside', hm:'Lub taubhau',     en:'head',        vi:'đầu',            ko:'머리',     ja:'頭'},
+  {id:'heart',    diagram:'inside',  hm:'Plawv',           en:'heart',       vi:'tim',            ko:'심장',     ja:'心臓'},
+  {id:'heel',     diagram:'outside', hm:'Lub luj taws',    en:'heel',        vi:'gót chân',       ko:'발꿈치',   ja:'かかと'},
+  {id:'intestines',diagram:'inside', hm:'Hnyuv',           en:'intestines',  vi:'ruột',           ko:'장',       ja:'腸'},
+  {id:'kidney',   diagram:'inside',  hm:'Lub raum',        en:'kidney',      vi:'thận',           ko:'신장',     ja:'腎臓'},
+  {id:'knee',     diagram:'outside', hm:'Lub hauv caug',   en:'knee',        vi:'đầu gối',        ko:'무릎',     ja:'膝'},
+  {id:'leg',      diagram:'outside', hm:'Txhais ceg',      en:'leg',         vi:'chân',           ko:'다리',     ja:'脚',     pair:true},
+  {id:'lip',      diagram:'outside', hm:'Daim tawv ncauj', en:'lip',         vi:'môi',            ko:'입술',     ja:'唇'},
+  {id:'liver',    diagram:'inside',  hm:'Siab',            en:'liver',       vi:'gan',            ko:'간',       ja:'肝臓'},
+  {id:'lung',     diagram:'inside',  hm:'Lub ntsws',       en:'lung',        vi:'phổi',           ko:'폐',       ja:'肺'},
+  {id:'mouth',    diagram:'outside', hm:'Lub qhov ncauj',  en:'mouth',       vi:'miệng',          ko:'입',       ja:'口'},
+  {id:'neck',     diagram:'outside', hm:'Caj dab',         en:'neck',        vi:'cổ',             ko:'목',       ja:'首'},
+  {id:'nose',     diagram:'outside', hm:'Lub qhov ntswg',  en:'nose',        vi:'mũi',            ko:'코',       ja:'鼻'},
+  {id:'shoulder', diagram:'outside', hm:'Lub xub pwg',     en:'shoulder',    vi:'vai',            ko:'어깨',     ja:'肩'},
+  {id:'skin',     diagram:'outside', hm:'Tawv nqaij',      en:'skin',        vi:'da',             ko:'피부',     ja:'肌'},
+  {id:'stomach',  diagram:'both',    hm:'Plab',            en:'stomach',     vi:'dạ dày',         ko:'위',       ja:'胃'},
+  {id:'thigh',    diagram:'outside', hm:'Lub ncej qab',    en:'thigh',       vi:'đùi',            ko:'허벅지',   ja:'太もも'},
+  {id:'thumb',    diagram:'outside', hm:'Taub tes',        en:'thumb',       vi:'ngón cái',       ko:'엄지',     ja:'親指'},
+  {id:'toe',      diagram:'outside', hm:'Ntiv taw',        en:'toe',         vi:'ngón chân',      ko:'발가락',   ja:'足の指'},
+  {id:'toenail',  diagram:'outside', hm:'Rau taw',         en:'toenail',     vi:'móng chân',      ko:'발톱',     ja:'足の爪'},
+  {id:'tongue',   diagram:'outside', hm:'Tus nplaig',      en:'tongue',      vi:'lưỡi',           ko:'혀',       ja:'舌'},
+  {id:'tooth',    diagram:'outside', hm:'Hniav',           en:'tooth',       vi:'răng',           ko:'이',       ja:'歯'},
+  {id:'wrist',    diagram:'outside', hm:'Lub dab teg',     en:'wrist',       vi:'cổ tay',         ko:'손목',     ja:'手首'}
+];
+
+const STR = {
+  en: {hub:"← Practice Hub", navSound:"Sound Trainer", navFc:"Flashcards", title:"Lub Cev / The Body", sub:"Tap a body part to see its White Hmong name. In Find-it, tap the part that matches the word — a classroom game in the spirit of Operation.", outside:"👤 Outside", inside:"🫀 Inside", front:"Front", back:"Back", organs:"Organs", bones:"Bones", explore:"👀 Explore", findIt:"🎯 Find it", whichWord:"🔁 Which word?", score:"Score", streak:"Streak", best:"Best", lives:"Lives", next:"Next →", correct:"Correct!", wrong:"Not quite.", buzz:"Buzz!", gameOver:"Game over", playAgain:"Play again", tapHint:"Tap a body part.", findPrompt:"Tap this part:", hearAgain:"▶ Hear again", pickWord:"What is the highlighted part called?", wordList:"Word list", ref:"Reference", studioOn:"Instructor studio is ON: record a Male or Female clip for each line; it uploads to the cloud for all students.", male:"Male", female:"Female", recMale:"● Rec Male", recFemale:"● Rec Female", stop:"■ Stop", noClip:"No instructor recording yet", uploading:"Uploading…", uploaded:"Saved to cloud ✅", upFail:"Saved on this device only (cloud unavailable)", tooBig:"Clip too long — keep it under ~4 seconds.", micErr:"Microphone not available. Allow mic access and try again.", playingAs:"Playing as", guest:"Guest — scores stay on this device", change:"change", codeHint:"Enter HMOOB-01..23, or leave blank for Guest.", pairNote:"txhais = one of a pair (hand, foot, arm, leg). khub = a pair.", face:"Face", body:"Body", hand:"Hand", foot:"Foot", skinBtn:"Skin (whole body)"},
+  vi: {hub:"← Trang luyện tập", navSound:"Luyện âm", navFc:"Thẻ từ", title:"Lub Cev / Cơ thể", sub:"Chạm vào một bộ phận cơ thể để xem tên tiếng Hmông Trắng. Trong Find-it, hãy chạm đúng bộ phận theo từ — trò chơi lớp học theo kiểu Operation.", outside:"👤 Bên ngoài", inside:"🫀 Bên trong", front:"Phía trước", back:"Phía sau", organs:"Cơ quan", bones:"Xương", explore:"👀 Khám phá", findIt:"🎯 Tìm bộ phận", whichWord:"🔁 Từ nào?", score:"Điểm", streak:"Chuỗi", best:"Cao nhất", lives:"Mạng", next:"Tiếp →", correct:"Đúng rồi!", wrong:"Chưa đúng.", buzz:"Bíp!", gameOver:"Hết mạng", playAgain:"Chơi lại", tapHint:"Chạm vào một bộ phận cơ thể.", findPrompt:"Hãy chạm vào:", hearAgain:"▶ Nghe lại", pickWord:"Bộ phận đang sáng có tên gì?", wordList:"Danh sách từ", ref:"Tham khảo", studioOn:"Phòng thu giảng viên đang BẬT: ghi giọng Nam hoặc Nữ cho từng dòng; tệp sẽ tải lên đám mây cho mọi học viên.", male:"Nam", female:"Nữ", recMale:"● Ghi Nam", recFemale:"● Ghi Nữ", stop:"■ Dừng", noClip:"Chưa có bản ghi của giảng viên", uploading:"Đang tải lên…", uploaded:"Đã lưu lên đám mây ✅", upFail:"Chỉ lưu trên thiết bị này (không kết nối được đám mây)", tooBig:"Đoạn ghi quá dài — giữ dưới khoảng 4 giây.", micErr:"Không dùng được micro. Hãy cho phép micro rồi thử lại.", playingAs:"Đang dùng mã", guest:"Khách — điểm lưu trên thiết bị này", change:"đổi", codeHint:"Nhập HMOOB-01..23, hoặc để trống nếu là Khách.", pairNote:"txhais = một bên của một đôi (tay, chân, cánh tay, cẳng chân). khub = một đôi.", face:"Mặt", body:"Người", hand:"Tay", foot:"Bàn chân", skinBtn:"Da (cả cơ thể)"},
+  ko: {hub:"← 연습 허브", navSound:"발음 트레이너", navFc:"플래시카드", title:"Lub Cev / 몸", sub:"신체 부위를 눌러 백몽어 이름을 보세요. Find-it에서는 단어에 맞는 부위를 누르세요 — 교실용 Operation 같은 게임입니다.", outside:"👤 바깥", inside:"🫀 안쪽", front:"앞", back:"뒤", organs:"장기", bones:"뼈", explore:"👀 살펴보기", findIt:"🎯 찾기", whichWord:"🔁 어느 단어?", score:"점수", streak:"연속", best:"최고", lives:"목숨", next:"다음 →", correct:"정답!", wrong:"아쉬워요.", buzz:"버즈!", gameOver:"게임 오버", playAgain:"다시 하기", tapHint:"신체 부위를 누르세요.", findPrompt:"이 부위를 누르세요:", hearAgain:"▶ 다시 듣기", pickWord:"빛나는 부위의 백몽어 이름은?", wordList:"단어 목록", ref:"참고", studioOn:"강사 스튜디오 켜짐: 각 줄에 남성 또는 여성 음성을 녹음하면 모든 학생을 위해 클라우드에 업로드됩니다.", male:"남성", female:"여성", recMale:"● 남성 녹음", recFemale:"● 여성 녹음", stop:"■ 정지", noClip:"아직 강사 녹음이 없습니다", uploading:"업로드 중…", uploaded:"클라우드에 저장됨 ✅", upFail:"이 기기에만 저장됨 (클라우드 사용 불가)", tooBig:"녹음이 너무 깁니다 — 약 4초 이내로 해 주세요.", micErr:"마이크를 사용할 수 없습니다. 권한을 허용하고 다시 시도하세요.", playingAs:"사용 코드", guest:"게스트 — 점수는 이 기기에 저장됩니다", change:"변경", codeHint:"HMOOB-01..23를 입력하거나 비워 두면 게스트입니다.", pairNote:"txhais = 한 쌍 중의 하나(손, 발, 팔, 다리). khub = 한 쌍.", face:"얼굴", body:"몸", hand:"손", foot:"발", skinBtn:"피부 (전신)"},
+  ja: {hub:"← 練習ハブ", navSound:"発音トレーナー", navFc:"単語カード", title:"Lub Cev / 体", sub:"体の部位をタップしてホワイトモン語の名前を見ましょう。Find-it では単語に合う部位をタップします — 教室向けの Operation 風ゲームです。", outside:"👤 外側", inside:"🫀 内側", front:"前", back:"後ろ", organs:"内臓", bones:"骨", explore:"👀 さがす", findIt:"🎯 見つけよう", whichWord:"🔁 どの語？", score:"スコア", streak:"連続", best:"ベスト", lives:"ライフ", next:"次へ →", correct:"正解！", wrong:"惜しい！", buzz:"ブザー！", gameOver:"ゲームオーバー", playAgain:"もう一度", tapHint:"体の部位をタップしてください。", findPrompt:"この部位をタップ:", hearAgain:"▶ もう一度聞く", pickWord:"光っている部位の名前は？", wordList:"単語リスト", ref:"参考", studioOn:"講師スタジオON：各行に男性または女性の音声を録音すると、全受講生向けにクラウドへ保存されます。", male:"男性", female:"女性", recMale:"● 男性を録音", recFemale:"● 女性を録音", stop:"■ 停止", noClip:"講師の録音はまだありません", uploading:"アップロード中…", uploaded:"クラウドに保存しました ✅", upFail:"この端末にのみ保存（クラウド未接続）", tooBig:"録音が長すぎます — 約4秒以内にしてください。", micErr:"マイクを使用できません。許可してから再試行してください。", playingAs:"コード", guest:"ゲスト — スコアはこの端末に保存されます", change:"変更", codeHint:"HMOOB-01..23 を入力。空欄ならゲストです。", pairNote:"txhais = 対の一方（手・足・腕・脚）。khub = 一対。", face:"顔", body:"体", hand:"手", foot:"足", skinBtn:"肌（全身）"}
+};
+
+const LANGS=['en','vi','ko','ja'];
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let uiLang=(function(){const q=new URLSearchParams(location.search).get('lang');if(LANGS.includes(q)){try{localStorage.setItem('hmong_ui_lang',q)}catch(e){}return q;}let s='en';try{s=localStorage.getItem('hmong_ui_lang')||'en'}catch(e){}return LANGS.includes(s)?s:'en';})();
+function t(k){return (STR[uiLang]&&STR[uiLang][k]!=null)?STR[uiLang][k]:(STR.en[k]!=null?STR.en[k]:k);}
+function L(p){if(!p)return '';return p[uiLang]||p.en||'';}
+function gloss(p){return L(p);}
+function glossAll(p){return [...new Set(sameHm(p).map(a=>gloss(a)))].join(' / ');}
+function setUILang(l){if(!LANGS.includes(l))l='en';uiLang=l;try{localStorage.setItem('hmong_ui_lang',l)}catch(e){}document.documentElement.lang=l;
+  LANGS.forEach(x=>{const b=$('btn'+x[0].toUpperCase()+x[1]);if(b)b.classList.toggle('active',x===l)});
+  document.querySelectorAll('[data-i]').forEach(e=>{e.textContent=t(e.dataset.i)});
+  document.title=t('title');
+  renderCodeBadge();
+  if(typeof onLang==='function')onLang();
+}
+function studentCode(){let c='';const q=new URLSearchParams(location.search).get('code');try{c=(q||localStorage.getItem('hmong_student_code')||'')}catch(e){c=q||''}c=c.trim().toUpperCase().replace(/^HMONG-/,'HMOOB-');return /^HMOOB-\d{2}$/.test(c)?c:'';}
+function renderCodeBadge(){
+  const c=studentCode();
+  const el=$('codeBadge');
+  if(!el)return;
+  if(c){el.className='code-badge';el.textContent='✓ '+t('playingAs')+' '+c;}
+  else {el.className='code-badge guest';el.textContent=t('guest');}
+  const b=$('codeChangeBtn'); if(b)b.textContent=t('change');
+}
+function toggleCodeBox(){ $('codeBox').classList.toggle('hidden'); const inp=$('codeInput'); inp.value=studentCode(); inp.focus(); }
+function applyCode(){
+  let c=($('codeInput').value||'').trim().toUpperCase().replace(/^HMONG-/,'HMOOB-');
+  if(c && !/^HMOOB-\d{2}$/.test(c)){ $('codeInput').focus(); return; }
+  try{ if(c) localStorage.setItem('hmong_student_code',c); else localStorage.removeItem('hmong_student_code'); }catch(e){}
+  $('codeBox').classList.add('hidden');
+  loadState(); renderCodeBadge(); renderAll();
+}
+
+/* audio */
+let curAudio=null;
+function playUrl(u){try{if(curAudio)curAudio.pause();curAudio=new Audio(u);const p=curAudio.play();if(p&&p.catch)p.catch(()=>{});}catch(e){}}
+const REC_TYPES=['audio/mp4','audio/webm;codecs=opus','audio/webm','audio/ogg'];
+let activeRec=null;
+async function startRec(onDone,maxMs){
+  if(activeRec){stopRec();return null;}
+  const stream=await navigator.mediaDevices.getUserMedia({audio:true});
+  const mt=(window.MediaRecorder&&MediaRecorder.isTypeSupported)?REC_TYPES.find(x=>MediaRecorder.isTypeSupported(x)):null;
+  const mr=mt?new MediaRecorder(stream,{mimeType:mt}):new MediaRecorder(stream);
+  const chunks=[];mr.ondataavailable=e=>{if(e.data&&e.data.size)chunks.push(e.data)};
+  mr.onstop=()=>{stream.getTracks().forEach(tr=>tr.stop());const type=mr.mimeType||mt||(chunks[0]&&chunks[0].type)||'audio/mp4';activeRec=null;onDone(new Blob(chunks,{type}));};
+  mr.start(250);activeRec={mr,timer:maxMs?setTimeout(stopRec,maxMs):null};return activeRec;
+}
+function stopRec(){if(activeRec){clearTimeout(activeRec.timer);if(activeRec.mr.state!=='inactive')activeRec.mr.stop();}}
+function blobToDataUrl(b){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result);r.onerror=rej;r.readAsDataURL(b);});}
+let CLIPS={};const CLIP_CACHE='hmong_sandbox_clips_cache';
+try{CLIPS=JSON.parse(localStorage.getItem(CLIP_CACHE)||'{}')||{}}catch(e){CLIPS={}}
+const STUDIO=new URLSearchParams(location.search).get('studio')==='1';
+async function loadCloudClips(ids){try{const r=await fetch('/api/phonetics-audio',{cache:'no-store'});if(!r.ok)return;const d=await r.json();if(d&&d.ok&&d.clips){const keep={};for(const [id,v] of Object.entries(d.clips)){if(!ids||ids.includes(id))keep[id]={male:v.male||'',female:v.female||''};}CLIPS=Object.assign(CLIPS,keep);try{localStorage.setItem(CLIP_CACHE,JSON.stringify(CLIPS))}catch(e){}if(typeof onClips==='function')onClips();}}catch(e){}}
+function hasClip(id,v){return !!(CLIPS[id]&&CLIPS[id][v]);}
+function playClip(id,v){if(!v){v=hasClip(id,'female')?'female':'male';}if(hasClip(id,v))playUrl(CLIPS[id][v]);}
+function clipId(p){return 'body_'+p.id;}
+async function uploadClip(id,voice,label,blob,statusEl){
+  const url=await blobToDataUrl(blob);if(url.length>95000){if(statusEl)statusEl.textContent=t('tooBig');return false;}
+  if(!CLIPS[id])CLIPS[id]={male:'',female:''};CLIPS[id][voice]=url;try{localStorage.setItem(CLIP_CACHE,JSON.stringify(CLIPS))}catch(e){}
+  if(statusEl)statusEl.textContent=t('uploading');
+  try{const r=await fetch('/api/phonetics-audio',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id,voice,label,audioDataUrl:url})});const d=await r.json();if(statusEl)statusEl.textContent=(d&&d.ok)?t('uploaded'):t('upFail');}catch(e){if(statusEl)statusEl.textContent=t('upFail');}
+  if(typeof onClips==='function')onClips();return true;
+}
+function clipButtons(id,label){
+  let h='';['male','female'].forEach(v=>{h+=`<button class="btn btn-outline mini" ${hasClip(id,v)?'':'disabled style="opacity:.45"'} onclick="playClip('${id}','${v}')">▶ ${t(v)}</button>`;});
+  if(STUDIO){h+=`<button class="btn btn-warn mini" onclick="studioRec(this,'${id}','male',${esc(JSON.stringify(label||id))})">${t('recMale')}</button><button class="btn btn-warn mini" onclick="studioRec(this,'${id}','female',${esc(JSON.stringify(label||id))})">${t('recFemale')}</button><span class="mini" id="st_${id}"></span>`;}
+  return h;
+}
+async function studioRec(btn,id,voice,label){const st=$('st_'+id);if(activeRec){stopRec();return;}
+  try{btn.textContent=t('stop');await startRec(async b=>{btn.textContent=t(voice==='male'?'recMale':'recFemale');await uploadClip(id,voice,label,b,st);},4500);}catch(e){btn.textContent=t(voice==='male'?'recMale':'recFemale');if(st)st.textContent=t('micErr');}}
+
+function buzzSound(ok){
+  try{
+    const ctx=new (window.AudioContext||window.webkitAudioContext)();
+    const o=ctx.createOscillator(), g=ctx.createGain();
+    o.type=ok?'sine':'sawtooth';
+    o.frequency.value=ok?880:130;
+    g.gain.value=ok?0.08:0.12;
+    o.connect(g); g.connect(ctx.destination);
+    o.start();
+    if(ok){ o.frequency.exponentialRampToValueAtTime(1320, ctx.currentTime+0.12); g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime+0.28); o.stop(ctx.currentTime+0.3); }
+    else { setTimeout(()=>{o.frequency.value=90;},90); g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime+0.35); o.stop(ctx.currentTime+0.38); }
+  }catch(e){}
+}
+
+function byId(id){return PARTS.find(p=>p.id===id);}
+function sameHm(p){return PARTS.filter(x=>x.hm===p.hm);}
+function inDiagram(p, diagram){return p.diagram===diagram || p.diagram==='both';}
+function visibleParts(){
+  const diagram=st.diagram;
+  const view=diagram==='outside'?st.view:st.insideView;
+  return PARTS.filter(p=>inDiagram(p,diagram) && p.views.includes(view));
+}
+function uniqueVisible(){
+  const seen=new Set(); const out=[];
+  visibleParts().forEach(p=>{ if(!seen.has(p.hm)){ seen.add(p.hm); out.push(p); } });
+  return out;
+}
+
+function storageKey(){return 'hmong_body_'+(studentCode()||'GUEST');}
+let st={diagram:'outside', view:'front', insideView:'organs', mode:'explore', c:0, n:0, s:0, best:0, lives:3};
+function loadState(){
+  st={diagram:'outside', view:'front', insideView:'organs', mode:'explore', c:0, n:0, s:0, best:0, lives:3};
+  try{Object.assign(st, JSON.parse(localStorage.getItem(storageKey())||'{}'));}catch(e){}
+  if(!['outside','inside'].includes(st.diagram))st.diagram='outside';
+  if(!['front','back'].includes(st.view))st.view='front';
+  if(!['organs','bones'].includes(st.insideView))st.insideView='organs';
+  if(!['explore','find','rev'].includes(st.mode))st.mode='explore';
+  if(typeof st.lives!=='number'||st.lives<0)st.lives=3;
+}
+function save(){try{localStorage.setItem(storageKey(), JSON.stringify(st));}catch(e){}}
+
+let selected=null, q=null, opts=[], answered=false, gameOver=false;
+
+/* ---- Realistic illustrated panels with percentage hotspots ----
+   Shapes: ['id','e',cx,cy,rx,ry] ellipse, ['id','p',[[x,y],...]] polygon, ['id','pin',x,y,emoji,tx,ty] callout pin.
+   All coordinates are % of the panel image, so they scale with the responsive image. */
+const IMG_BASE='./assets/body/';
+const PANELS={
+  front:{img:'front.webp', w:420, h:864, cap:'body'},
+  back:{img:'back.webp', w:380, h:864, cap:'body'},
+  face:{img:'face.webp', w:400, h:670, cap:'face'},
+  hand:{img:'hand.webp', w:380, h:640, cap:'hand'},
+  foot:{img:'foot.webp', w:300, h:600, cap:'foot'},
+  organs:{img:'organs.webp', w:350, h:500, cap:'organs'},
+  bones:{img:'bones.webp', w:380, h:864, cap:'bones'}
+};
+const VIEW_PANELS={front:['front','face','hand','foot'], back:['back','hand','foot'], organs:['organs'], bones:['bones']};
+const SIL={"front":[[47.9,0.6],[42.6,1.7],[41.0,2.5],[39.8,4.2],[39.5,8.2],[42.9,11.3],[42.9,14.4],[41.4,15.0],[28.1,17.9],[24.3,20.7],[21.2,31.8],[17.4,37.3],[14.5,47.5],[11.2,49.4],[9.0,52.5],[11.4,52.7],[11.7,56.6],[14.5,57.2],[16.7,56.8],[17.6,55.7],[19.5,55.4],[21.2,50.1],[20.7,47.9],[27.6,39.0],[31.7,30.6],[32.6,30.6],[34.3,35.0],[30.2,49.4],[30.0,55.2],[32.6,63.1],[30.7,74.9],[33.8,86.6],[33.3,88.7],[31.9,90.3],[28.1,92.5],[27.4,94.1],[31.7,95.1],[36.9,95.1],[39.8,94.3],[42.6,92.4],[40.5,89.4],[40.2,85.0],[43.8,74.5],[43.1,68.5],[45.2,65.0],[46.2,59.7],[48.8,53.0],[50.0,52.9],[53.1,60.1],[54.0,65.4],[56.2,69.0],[55.5,75.1],[58.6,83.1],[57.9,91.2],[56.2,92.5],[60.5,95.0],[64.5,95.3],[69.3,94.8],[71.4,94.0],[70.7,92.6],[67.4,90.6],[65.5,88.7],[65.0,86.0],[68.6,74.4],[68.3,71.2],[66.7,67.2],[66.7,62.6],[68.3,58.9],[69.3,53.0],[65.0,35.2],[66.7,30.4],[67.9,30.6],[71.4,38.8],[77.9,46.9],[79.5,55.4],[81.4,55.7],[82.4,56.8],[85.2,57.2],[86.0,56.6],[87.4,56.6],[88.1,56.1],[87.6,52.5],[90.0,52.7],[90.5,52.3],[88.3,49.5],[85.0,47.7],[83.8,45.8],[81.9,37.4],[78.1,31.9],[76.0,25.5],[76.0,22.6],[74.5,20.0],[70.2,17.6],[56.4,14.5],[56.7,10.3],[58.1,10.0],[59.5,7.8],[58.8,6.8],[59.3,4.1],[55.2,1.3]],"back":[[48.2,0.7],[43.2,1.4],[40.0,2.7],[38.4,4.4],[39.2,6.5],[38.4,8.2],[39.7,10.0],[41.3,10.3],[41.8,14.2],[25.5,17.8],[20.8,20.9],[17.6,31.9],[13.7,38.0],[11.8,48.0],[9.2,51.4],[9.2,54.3],[10.5,56.2],[12.4,57.1],[14.2,56.9],[16.3,55.9],[16.1,53.6],[18.2,50.0],[17.9,47.8],[25.3,38.8],[28.9,30.9],[30.5,30.7],[32.4,35.8],[27.6,52.8],[30.3,63.3],[30.0,68.2],[28.2,72.0],[27.9,75.6],[31.6,87.3],[30.8,89.5],[26.6,90.9],[25.8,92.5],[29.5,93.9],[33.7,94.3],[38.4,94.2],[42.9,93.2],[42.6,92.4],[38.9,91.4],[38.7,84.5],[42.4,76.2],[42.1,68.9],[44.2,65.5],[45.3,60.4],[48.2,54.9],[48.4,51.9],[49.7,51.7],[53.2,60.0],[54.2,65.5],[56.6,69.4],[56.1,76.0],[59.7,84.6],[58.9,88.0],[59.5,91.4],[55.5,92.8],[57.9,93.9],[63.7,94.3],[68.4,94.0],[73.2,92.2],[72.4,91.0],[69.2,90.3],[67.4,89.2],[66.8,87.5],[70.5,75.5],[70.3,72.1],[68.4,68.1],[68.2,63.0],[70.3,57.2],[70.8,51.5],[66.3,36.2],[66.3,33.3],[67.9,30.7],[69.5,30.9],[73.4,39.0],[80.3,46.8],[80.8,50.5],[82.6,53.4],[81.8,55.7],[83.4,56.0],[83.7,56.8],[86.3,57.1],[88.2,56.2],[89.7,54.2],[89.7,51.7],[87.1,48.1],[84.7,37.3],[80.5,31.0],[77.9,21.1],[73.4,17.9],[56.6,14.1],[56.6,10.6],[58.4,10.0],[59.7,8.2],[59.2,3.7],[58.2,2.7],[54.5,1.3]]};
+const SHAPES={
+  front:[
+    ['skin','p',SIL.front],
+    ['head','e',50,8.2,9,5],['hair','e',50,3,9.5,2.8],['neck','e',50,15,5,2],
+    ['shoulder','e',31,19.5,6,3],['shoulder','e',69,19.5,6,3],
+    ['chest','e',50,23.5,13,4.5],['stomach','e',50,32,10.5,3.8],['abdomen','e',50,40.5,10.5,4.2],
+    ['arm','p',[[24,21],[32,22.5],[29.5,33.5],[25,35.5],[21,34.5]]],['arm','p',[[19.5,37.5],[25.5,37.5],[22,46.2],[17.5,46]]],
+    ['arm','p',[[76,21],[68,22.5],[70.5,33.5],[75,35.5],[79,34.5]]],['arm','p',[[80.5,37.5],[74.5,37.5],[78,46.2],[82.5,46]]],
+    ['elbow','e',23,36.3,3.6,2],['elbow','e',77,36.3,3.6,2],
+    ['wrist','e',19.5,47.5,3.2,1.4],['wrist','e',81,47.5,3.2,1.4],
+    ['hand','e',16,52.5,5.2,3.8],['hand','e',84,52.5,5.2,3.8],
+    ['thigh','e',39,56,7,7.5],['thigh','e',61,56,7,7.5],
+    ['knee','e',38.5,66.5,5,2.6],['knee','e',61.5,66.5,5,2.6],
+    ['leg','e',37.5,78,4.8,8.5],['leg','e',62.5,78,4.8,8.5],
+    ['ankle','e',36.5,89.2,3.8,1.5],['ankle','e',63.5,89.2,3.8,1.5],
+    ['foot','e',34,93.4,6.5,2.2],['foot','e',66,93.4,6.5,2.2]
+  ],
+  back:[
+    ['skin','p',SIL.back],
+    ['head','e',50,7,10.5,6],['hair','e',50,4.2,9.5,4],
+    ['ear','e',39.5,8.5,2.3,2],['ear','e',60.5,8.5,2.3,2],
+    ['neck','e',50,13.5,5.5,2],
+    ['shoulder','e',30,18.5,7,3],['shoulder','e',71,18.5,7,3],
+    ['back','e',50,29,14,10],['butt','e',50,46.5,14,5],
+    ['arm','p',[[24,20.5],[32,22],[27,33.5],[22,35.5],[18,34]]],['arm','p',[[17.5,37.5],[23.5,37.5],[19.5,46.5],[14.5,46]]],
+    ['arm','p',[[77,20.5],[69,22],[74,33.5],[79,35.5],[83,34]]],['arm','p',[[83.5,37.5],[77.5,37.5],[81.5,46.5],[86.5,46]]],
+    ['elbow','e',20.5,36,3.8,2.1],['elbow','e',80.5,36,3.8,2.1],
+    ['wrist','e',16.5,48,3.4,1.4],['wrist','e',84.5,48,3.4,1.4],
+    ['hand','e',13.5,52.2,5.2,3.6],['hand','e',86.5,52.2,5.2,3.6],
+    ['fingernail','e',13,56,4.2,1.2],['fingernail','e',87,56,4.2,1.2],
+    ['thigh','e',39,57.5,7.5,5.5],['thigh','e',61,57.5,7.5,5.5],
+    ['knee','e',39,67,5.5,2.5],['knee','e',61,67,5.5,2.5],
+    ['leg','e',38.5,77.5,5.5,7.5],['leg','e',61.5,77.5,5.5,7.5],
+    ['ankle','e',38,89,3.6,1.5],['ankle','e',62.5,89,3.6,1.5],
+    ['heel','e',38,92.4,4,1.7],['heel','e',63,92.4,4,1.7]
+  ],
+  face:[
+    ['neck','e',50,82,19,7.5],
+    ['hair','p',[[9,26],[13,12],[25,5],[45,1.5],[66,2.5],[81,9],[90,18],[92,31],[86,40],[83,24],[70,19],[50,17.5],[30,19],[19,23],[16,40],[10,36]]],
+    ['forehead','e',50,24.5,22,4.8],
+    ['ear','e',12.5,45,4.6,7],['ear','e',87.5,45,4.6,7],
+    ['eyebrow','e',35,31.3,10,1.9],['eyebrow','e',65,31.3,10,1.9],
+    ['eyelash','e',34.8,38.5,6.5,0.9],['eyelash','e',65.6,38.5,6.5,0.9],
+    ['eye','e',34.8,36.6,6.5,1.5],['eye','e',65.6,36.6,6.5,1.5],
+    ['eyelid','e',34.8,34.3,7,1.2],['eyelid','e',65.6,34.3,7,1.2],
+    ['nose','p',[[46,37.5],[54,37.5],[57.5,45],[59.5,50],[50,51.5],[40.5,50],[42.5,45]]],
+    ['beard','e',29,61,5.5,5],['beard','e',71,61,5.5,5],
+    ['lip','e',50,57.3,13,2.8],['mouth','e',50,57.1,12,0.9],
+    ['chin','e',50,67.8,10,3.4],
+    ['tooth','pin',20,57,'🦷',37,57],['tongue','pin',80,57,'👅',63,57]
+  ],
+  hand:[
+    ['hand','p',[[33,46],[45,35],[78,36],[88,39],[86,55],[80,70],[37,70],[29,60]]],
+    ['finger','e',39.5,21,5.5,13],['finger','e',57,19,5.5,15],['finger','e',72,22,5.5,13.5],['finger','e',85,29,5.3,11],
+    ['thumb','p',[[6,32],[12,31],[22,39],[31,49],[29,56],[21,58],[15,50],[8,40]]],
+    ['wrist','e',55,76,15,4]
+  ],
+  foot:[
+    ['ankle','e',45,22,28,9],
+    ['foot','e',45,54,27,14],
+    ['toe','e',22,86,11,8],['toe','e',45,87.5,7.5,8],['toe','e',60,84.5,6.5,7],['toe','e',72,81.5,5.5,6],['toe','e',83,77,5,5],
+    ['toenail','e',23,87.3,7,3],['toenail','e',45,91.4,5,1.9],['toenail','e',60.2,88.4,4,1.8],['toenail','e',72.5,84.9,3.5,1.6],['toenail','e',82.7,79.4,3,1.4]
+  ],
+  organs:[
+    ['brain','e',50,7.5,10,5.3],
+    ['lung','e',38.5,42,6.5,10],['lung','e',61.5,42,6.5,10],
+    ['heart','e',51,45,6.8,5.5],
+    ['blood','e',50.5,37.3,4.2,2.8],
+    ['liver','e',41.5,55.5,8,4.3],
+    ['stomach','e',56,57.8,7,4.4],
+    ['intestines','e',50,70,12.5,7.5],
+    ['kidney','e',42,77,4.5,4.6],['kidney','e',59.5,77,4.5,4.6],
+    ['bladder','e',50,86.6,4.6,3.3]
+  ],
+  bones:[
+    ['bone','e',50,6,9,6],['bone','e',50,18.5,18,1.6],['bone','e',50,26,13.5,8],['bone','e',50,37,3,4],['bone','e',50,44.5,15,5],
+    ['bone','p',[[25,19],[29,20],[23,36],[19,35]]],['bone','p',[[75,19],[71,20],[77,36],[81,35]]],
+    ['bone','p',[[19,36],[23,37],[17,48],[13,47]]],['bone','p',[[81,36],[77,37],[83,48],[87,47]]],
+    ['bone','e',13,52.5,6,5],['bone','e',87,52.5,6,5],
+    ['bone','p',[[32,47],[38,47],[38.5,65.5],[33.5,65.5]]],['bone','p',[[62,47],[68,47],[66.5,65.5],[61.5,65.5]]],
+    ['bone','e',36,67.5,4,2.4],['bone','e',63,67.5,4,2.4],
+    ['bone','p',[[33,69.5],[39,69.5],[37.5,90.5],[33.5,90.5]]],['bone','p',[[61,69.5],[67,69.5],[66.5,90.5],[62.5,90.5]]],
+    ['bone','e',34,94,7,2.6],['bone','e',66,94,7,2.6]
+  ]
+};
+/* derive each word's views from where its hotspots are drawn */
+PARTS.forEach(p=>{
+  const vs=[];
+  Object.entries(VIEW_PANELS).forEach(([v,panels])=>{ if(panels.some(pn=>(SHAPES[pn]||[]).some(s=>s[0]===p.id))) vs.push(v); });
+  p.views=vs;
+});
+
+function shapeSVG(s){
+  const [id,kind]=s;
+  if(kind==='e') return `<ellipse class="vis hs" vector-effect="non-scaling-stroke" cx="${s[2]}" cy="${s[3]}" rx="${s[4]}" ry="${s[5]}"/>`;
+  if(kind==='p') return `<polygon class="vis hs" vector-effect="non-scaling-stroke" points="${s[2].map(pt=>pt.join(',')).join(' ')}"/>`;
+  return '';
+}
+function panelHTML(key){
+  const P=PANELS[key]; const list=SHAPES[key]||[];
+  /* group consecutive shapes by id, keep z-order */
+  let svg=''; let pins='';
+  list.forEach(s=>{
+    const p=byId(s[0]); const label=p?p.hm:s[0];
+    if(s[1]==='pin'){
+      svg+=`<line class="pin-line" data-for="${s[0]}" x1="${s[2]}" y1="${s[3]}" x2="${s[5]}" y2="${s[6]}" vector-effect="non-scaling-stroke"/>`;
+      pins+=`<button type="button" class="part pin" data-id="${s[0]}" aria-label="${esc(label)}" style="left:${s[2]}%;top:${s[3]}%">${s[4]}</button>`;
+    } else {
+      svg+=`<g class="part" data-id="${s[0]}" role="button" tabindex="0" aria-label="${esc(label)}">${shapeSVG(s)}</g>`;
+    }
+  });
+  return `<div class="fig-card fig-${key}"><div class="fig-cap">${esc(t(P.cap))}</div>
+    <div class="fig-img" style="aspect-ratio:${P.w}/${P.h}">
+      <img src="${IMG_BASE+P.img}" width="${P.w}" height="${P.h}" alt="${esc(t(P.cap))}" draggable="false" decoding="async">
+      <svg class="hs-layer" viewBox="0 0 100 100" preserveAspectRatio="none" aria-label="${esc(t(P.cap))}">${svg}</svg>
+      ${pins}
+    </div></div>`;
+}
+
+function renderDiagram(){
+  const stage=$('diagramStage');
+  const view=st.diagram==='inside'?st.insideView:st.view;
+  const panels=VIEW_PANELS[view]||[];
+  stage.innerHTML=`<div class="fig-grid n${panels.length} v-${view}">${panels.map(panelHTML).join('')}</div>`;
+  bindDiagram();
+  highlight(selected, '');
+}
+
+function bindDiagram(){
+  const root=$('diagramStage');
+  root.querySelectorAll('.part').forEach(g=>{
+    g.addEventListener('click', ev=>{ ev.stopPropagation(); onPart(g.getAttribute('data-id')); });
+    g.addEventListener('keydown', ev=>{ if(ev.key==='Enter'||ev.key===' '){ ev.preventDefault(); onPart(g.getAttribute('data-id')); }});
+  });
+}
+
+function highlight(id, cls){
+  document.querySelectorAll('.part').forEach(g=>{
+    g.classList.remove('lit','ok','bad');
+    if(id && g.getAttribute('data-id')===id) g.classList.add(cls||'lit');
+    else if(id){
+      const a=byId(id), b=byId(g.getAttribute('data-id'));
+      if(a && b && a.hm===b.hm) g.classList.add(cls||'lit');
+    }
+  });
+  document.querySelectorAll('.word-bank button').forEach(b=>{
+    b.classList.toggle('active', !!id && (b.dataset.id===id || (byId(id)&&byId(b.dataset.id)&&byId(id).hm===byId(b.dataset.id).hm)));
+  });
+}
+
+function flashBoard(ok){
+  const b=$('board');
+  b.classList.remove('buzz','glow-ok');
+  void b.offsetWidth;
+  b.classList.add(ok?'glow-ok':'buzz');
+  setTimeout(()=>b.classList.remove('buzz','glow-ok'), 600);
+}
+
+function ensureViewFor(p){
+  if(!p)return;
+  if(p.diagram==='inside' || (p.diagram==='both' && st.diagram==='inside')){
+    st.diagram='inside';
+    if(!p.views.includes(st.insideView)) st.insideView=p.views.find(v=>v==='organs'||v==='bones')||p.views[0];
+  } else {
+    st.diagram='outside';
+    if(!p.views.includes(st.view)) st.view=p.views.includes('front')?'front':p.views[0];
+  }
+}
+
+function playPart(p){ if(!p)return; const id=clipId(p); if(hasClip(id,'female')||hasClip(id,'male')) playClip(id); }
+
+function showInfo(p){
+  if(!p){ $('prompt').innerHTML=`<p class="sub">${esc(t('tapHint'))}</p>`; $('playRow').innerHTML=''; return; }
+  $('prompt').innerHTML=`<div class="hmong-word">${esc(p.hm)}</div><div class="meaning-main">${esc(glossAll(p))}</div>${p.pair?`<div class="pair-note">${esc(t('pairNote'))}</div>`:''}`;
+  $('playRow').innerHTML=clipButtons(clipId(p), p.hm);
+}
+
+function renderBank(){
+  const wrap=$('bankWrap');
+  if(st.mode!=='explore'){ wrap.classList.add('hidden'); return; }
+  wrap.classList.remove('hidden');
+  const list=uniqueVisible();
+  $('bank').innerHTML=list.map(p=>`<button type="button" data-id="${p.id}" onclick="onPart('${p.id}')">${esc(p.hm)}<span class="g">${esc(glossAll(p))}${p.id==='skin'?' — '+t('skinBtn'):''}</span></button>`).join('');
+}
+
+function renderScore(){
+  $('sc').textContent=st.c+'/'+st.n;
+  $('sk').textContent=st.s;
+  $('best').textContent=st.best||0;
+  const live=st.mode==='find';
+  $('livesRow').classList.toggle('hidden', !live);
+  if(live){
+    const n=Math.max(0, st.lives);
+    $('livesRow').innerHTML=`<span>${esc(t('lives'))}</span> `+[0,1,2].map(i=>`<span class="pip ${i<n?'':'off'}"></span>`).join('');
+  }
+}
+
+function renderControls(){
+  $('diagramSeg').innerHTML=[['outside','outside'],['inside','inside']].map(([k,l])=>`<button class="${st.diagram===k?'active':''}" onclick="setDiagram('${k}')">${t(l)}</button>`).join('');
+  $('modeSeg').innerHTML=[['explore','explore'],['find','findIt'],['rev','whichWord']].map(([k,l])=>`<button class="${st.mode===k?'active':''}" onclick="setMode('${k}')">${t(l)}</button>`).join('');
+  if(st.diagram==='outside'){
+    $('viewPills').innerHTML=[['front','front'],['back','back']].map(([k,l])=>`<button class="pill ${st.view===k?'active':''}" onclick="setView('${k}')">${t(l)}</button>`).join('');
+  } else {
+    $('viewPills').innerHTML=[['organs','organs'],['bones','bones']].map(([k,l])=>`<button class="pill ${st.insideView===k?'active':''}" onclick="setInside('${k}')">${t(l)}</button>`).join('');
+  }
+}
+
+function setDiagram(d){ st.diagram=d; if(st.mode==='explore') selected=null; save(); if(st.mode!=='explore') newQ(); else renderAll(); }
+function setView(v){ st.view=v; save(); if(st.mode!=='explore') newQ(); else renderAll(); }
+function setInside(v){ st.insideView=v; save(); if(st.mode!=='explore') newQ(); else renderAll(); }
+function setMode(m){ st.mode=m; selected=null; answered=false; gameOver=false; if(m==='find' && (st.lives||0)<=0) st.lives=3; save(); if(m==='explore'){ q=null; renderAll(); } else newQ(); }
+
+function onPart(id){
+  const p=byId(id); if(!p)return;
+  if(st.mode==='explore'){
+    selected=id;
+    if(p.diagram==='inside' && st.diagram!=='inside'){ st.diagram='inside'; }
+    if(p.diagram==='outside' && st.diagram!=='outside'){ st.diagram='outside'; }
+    if(!p.views.includes(st.diagram==='outside'?st.view:st.insideView) && p.diagram!=='both'){
+      if(st.diagram==='outside') st.view=p.views.includes('front')?'front':p.views[0];
+      else st.insideView=p.views[0];
+      renderDiagram(); renderControls();
+    }
+    highlight(id,'lit'); showInfo(p); playPart(p); renderBank();
+    return;
+  }
+  if(st.mode==='find'){ tapFind(id); return; }
+  /* reverse mode ignores body taps */
+}
+
+function matchPart(id, target){
+  if(!target)return false;
+  if(id===target.id) return true;
+  const p=byId(id);
+  return !!(p && p.hm===target.hm);
+}
+
+function score(ok){
+  st.n++;
+  if(ok){ st.c++; st.s++; if(st.s>(st.best||0)) st.best=st.s; }
+  else { st.s=0; if(st.mode==='find') st.lives=Math.max(0,(st.lives||3)-1); }
+  save(); answered=true; renderScore();
+}
+
+function newQ(){
+  const pool=uniqueVisible();
+  if(!pool.length){ q=null; renderAll(); return; }
+  let pick=pool[Math.floor(Math.random()*pool.length)];
+  if(q && pool.length>1){ let g=0; while(pick.hm===q.hm && g++<20) pick=pool[Math.floor(Math.random()*pool.length)]; }
+  q=pick; answered=false; gameOver=false;
+  const seen=new Set([q.hm]); opts=[q];
+  const all=PARTS.filter(p=>inDiagram(p, st.diagram));
+  /* unique by hm */
+  const uniq=[]; const u=new Set();
+  all.forEach(p=>{ if(!u.has(p.hm)){ u.add(p.hm); uniq.push(p); } });
+  let guard=0;
+  while(opts.length<4 && guard++<80){
+    const o=uniq[Math.floor(Math.random()*uniq.length)];
+    if(!seen.has(o.hm)){ seen.add(o.hm); opts.push(o); }
+  }
+  opts.sort(()=>Math.random()-.5);
+  selected = st.mode==='rev'?q.id:null;
+  if(st.mode==='find'){ ensureViewFor(q); }
+  renderAll(true);
+  if(st.mode==='find') playPart(q);
+}
+
+function tapFind(id){
+  if(answered || gameOver || !q)return;
+  const ok=matchPart(id,q);
+  score(ok); buzzSound(ok); flashBoard(ok);
+  highlight(ok?id:q.id, ok?'ok':'');
+  if(!ok){ highlight(id,'bad'); setTimeout(()=>highlight(q.id,'ok'), 350); }
+  const over=st.mode==='find' && st.lives<=0;
+  if(over) gameOver=true;
+  $('out').innerHTML=`<div class="feedback ${ok?'ok':'bad'}">${ok?'✅ '+t('correct'):'❌ '+(t('buzz')+' — '+t('wrong'))} <b>${esc(q.hm)}</b> · ${esc(glossAll(q))}${over?'<div style="margin-top:6px">'+esc(t('gameOver'))+'</div>':''}
+    <div class="btn-row" style="justify-content:center;margin-top:8px"><button class="btn" onclick="${over?'resetGame()':'newQ()'}">${over?t('playAgain'):t('next')}</button></div></div>`;
+}
+
+function tapChoice(i){
+  if(answered||!q)return;
+  const ok=opts[i].hm===q.hm;
+  score(ok); buzzSound(ok); flashBoard(ok);
+  $('answer').querySelectorAll('.quiz-btn').forEach((b,k)=>{
+    if(opts[k].hm===q.hm) b.classList.add('correct');
+    else if(k===i) b.classList.add('wrong');
+  });
+  highlight(q.id, ok?'ok':'ok');
+  $('out').innerHTML=`<div class="feedback ${ok?'ok':'bad'}">${ok?'✅ '+t('correct'):'❌ '+t('wrong')} <b>${esc(q.hm)}</b>
+    <div class="btn-row" style="justify-content:center;margin-top:8px"><button class="btn" onclick="newQ()">${t('next')}</button></div></div>`;
+}
+
+function resetGame(){ st.lives=3; st.c=0; st.n=0; st.s=0; save(); gameOver=false; newQ(); }
+
+function renderAll(keepQ){
+  renderControls(); renderScore(); renderDiagram(); renderBank();
+  $('studioNote').innerHTML=STUDIO?`<div class="studio-bar">${t('studioOn')}</div>`:'';
+  $('out').innerHTML='';
+  if(st.mode==='explore'){
+    $('answer').innerHTML='';
+    if(selected){ const p=byId(selected); highlight(selected,'lit'); showInfo(p); }
+    else showInfo(null);
+  } else if(st.mode==='find'){
+    if(!q){ $('prompt').innerHTML=''; return; }
+    $('prompt').innerHTML=`<div class="sub">${esc(t('findPrompt'))}</div><div class="hmong-word">${esc(q.hm)}</div><div class="meaning-main">${esc(glossAll(q))}</div>`;
+    $('playRow').innerHTML=clipButtons(clipId(q), q.hm)+(hasClip(clipId(q),'male')||hasClip(clipId(q),'female')?` <button class="btn btn-outline mini" onclick="playPart(q)">${t('hearAgain')}</button>`:'');
+    $('answer').innerHTML='';
+  } else {
+    if(!q){ $('prompt').innerHTML=''; return; }
+    highlight(q.id,'lit');
+    $('prompt').innerHTML=`<div class="sub">${esc(t('pickWord'))}</div>`;
+    $('playRow').innerHTML='';
+    $('answer').innerHTML=`<div class="quiz-choices">${opts.map((o,i)=>`<button class="quiz-btn" onclick="tapChoice(${i})">${esc(o.hm)}<div class="mini" style="font-weight:600;color:var(--muted)">${esc(glossAll(o))}</div></button>`).join('')}</div>`;
+  }
+  renderRef();
+}
+
+function renderRef(){
+  const groups=[['outside', PARTS.filter(p=>p.diagram==='outside'||p.diagram==='both')],['inside', PARTS.filter(p=>p.diagram==='inside'||p.diagram==='both')]];
+  let html='';
+  groups.forEach(([lab,list])=>{
+    const uniq=[]; const seen=new Set();
+    list.forEach(p=>{ if(!seen.has(p.hm)){ seen.add(p.hm); uniq.push(p); } });
+    html+=`<h3 style="color:var(--accent);font-size:1rem;margin:12px 0 6px">${esc(t(lab))}</h3>`;
+    html+=`<table style="width:100%;border-collapse:collapse">${uniq.map(p=>`<tr>
+      <td style="padding:6px;border-bottom:1px solid var(--border);width:38%"><b style="color:var(--accent)">${esc(p.hm)}</b></td>
+      <td style="padding:6px;border-bottom:1px solid var(--border)">${esc(glossAll(p))}</td>
+      <td style="padding:6px;border-bottom:1px solid var(--border)">${clipButtons(clipId(p),p.hm)}</td>
+    </tr>`).join('')}</table>`;
+  });
+  /* eyebrow/eyelash share a word — note in reference only once, gloss already joined? unique by hm uses first (eyebrow). Let's join glosses. */
+  $('ref').innerHTML=html;
+}
+
+function onClips(){ if(st.mode==='explore' && selected) showInfo(byId(selected)); else if(q && st.mode==='find') $('playRow').innerHTML=clipButtons(clipId(q), q.hm); renderRef(); }
+function onLang(){ renderAll(); }
+
+loadState();
+(function applyQuery(){
+  const qs=new URLSearchParams(location.search);
+  const m=qs.get('mode'); if(m==='find'||m==='rev'||m==='explore') st.mode=m;
+  const d=qs.get('diagram'); if(d==='inside'||d==='outside') st.diagram=d;
+  const v=qs.get('view'); if(v==='back'||v==='front') st.view=v;
+  const iv=qs.get('inside'); if(iv==='bones'||iv==='organs') st.insideView=iv;
+  const part=qs.get('part'); if(part&&byId(part)) selected=part;
+})();
+setUILang(uiLang);
+if(st.mode==='explore'){ renderAll(); if(selected) onPart(selected); } else newQ();
+loadCloudClips(null);
+</script>
+</body>
+</html>
