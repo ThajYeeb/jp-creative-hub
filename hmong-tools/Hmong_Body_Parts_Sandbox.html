@@ -100,8 +100,19 @@
   .part:hover .vis.body-reg, .part.lit .vis.body-reg { fill:rgba(46,117,182,0.33); stroke:#1F4E79; stroke-width:2.2; filter:none; }
   .part.ok .vis.body-reg { fill:rgba(16,185,129,0.42); stroke:#059669; stroke-width:3; filter:none; }
   .part.bad .vis.body-reg { fill:rgba(239,68,68,0.42); stroke:#dc2626; stroke-width:3; filter:none; }
-  .skin { fill:var(--skin); stroke:var(--skin-stroke); stroke-width:1.6; stroke-linejoin:round; }
-  .hair { fill:var(--hair); stroke:#2a1c14; stroke-width:1; }
+  .wf, .vis.wf {
+    fill: none; stroke: #1e3a5f; stroke-width: 1.35;
+    stroke-linejoin: round; stroke-linecap: round;
+  }
+  .wf-soft, .vis.wf-soft {
+    fill: none; stroke: #1e3a5f; stroke-width: 0.85;
+    stroke-linejoin: round; stroke-linecap: round; opacity: 0.55;
+  }
+  .part:hover .vis.wf, .part.lit .vis.wf,
+  .part:hover .vis.wf-soft, .part.lit .vis.wf-soft,
+  .part.ok .vis.wf, .part.ok .vis.wf-soft,
+  .part.bad .vis.wf, .part.bad .vis.wf-soft { fill: none; }
+  .skin, .hair { fill: none; stroke: #1e3a5f; stroke-width: 1.35; stroke-linejoin: round; }
   .word-bank { display:flex; flex-wrap:wrap; gap:6px; max-height:260px; overflow:auto; margin-top:8px; }
   .word-bank button { background:#f8fafc; border:1px solid var(--border); border-radius:8px; padding:6px 8px; font-size:.8rem; font-weight:700; cursor:pointer; color:var(--text); }
   .word-bank button.active { background:var(--accent); color:#fff; border-color:var(--accent); }
@@ -137,6 +148,9 @@
   html[data-theme="dark"] th { background:#0f172a; }
   html[data-theme="dark"] .part:hover .vis, html[data-theme="dark"] .part.lit .vis { stroke:#93c5fd; }
   html[data-theme="dark"] .part:hover .vis.body-reg, html[data-theme="dark"] .part.lit .vis.body-reg { fill:rgba(96,165,250,0.35); stroke:#93c5fd; }
+  html[data-theme="dark"] .wf, html[data-theme="dark"] .vis.wf,
+  html[data-theme="dark"] .wf-soft, html[data-theme="dark"] .vis.wf-soft,
+  html[data-theme="dark"] .skin, html[data-theme="dark"] .hair { stroke:#93c5fd; }
 
   @media (max-width: 860px) {
     .main { grid-template-columns: 1fr; }
@@ -419,199 +433,301 @@ function partG(id, vis, extraHit){
   const p=byId(id); const label=p?p.hm:id;
   return `<g class="part" data-id="${id}" role="button" tabindex="0" aria-label="${esc(label)}">${extraHit||''}${vis}</g>`;
 }
+const BODY_SIL = 'M 200.0,38.0 C 224.0,38.0 242.0,54.0 244.0,86.0 C 245.0,108.0 238.0,124.0 226.0,136.0 C 222.0,146.0 224.0,154.0 226.0,166.0 C 252.0,170.0 282.0,176.0 304.0,182.0 C 320.0,190.0 330.0,218.0 328.0,252.0 C 330.0,290.0 334.0,318.0 336.0,338.0 C 338.0,362.0 334.0,418.0 330.0,450.0 C 332.0,456.0 344.0,464.0 350.0,476.0 C 356.0,486.0 354.0,500.0 346.0,506.0 C 340.0,510.0 336.0,504.0 334.0,494.0 C 338.0,516.0 340.0,536.0 338.0,552.0 C 334.0,560.0 326.0,560.0 324.0,550.0 C 324.0,560.0 316.0,562.0 314.0,550.0 C 312.0,560.0 304.0,560.0 304.0,548.0 C 300.0,556.0 292.0,552.0 294.0,538.0 C 296.0,520.0 300.0,504.0 306.0,490.0 C 300.0,478.0 302.0,464.0 308.0,454.0 C 312.0,420.0 316.0,372.0 314.0,340.0 C 310.0,300.0 296.0,252.0 278.0,218.0 C 268.0,204.0 258.0,200.0 250.0,204.0 C 254.0,242.0 260.0,282.0 258.0,312.0 C 250.0,334.0 252.0,350.0 258.0,362.0 C 268.0,390.0 278.0,412.0 282.0,426.0 C 276.0,452.0 270.0,502.0 266.0,538.0 C 260.0,582.0 254.0,618.0 256.0,638.0 C 260.0,678.0 252.0,726.0 246.0,778.0 C 246.0,794.0 248.0,810.0 242.0,822.0 C 246.0,834.0 260.0,844.0 274.0,848.0 C 282.0,850.0 284.0,856.0 278.0,858.0 C 268.0,860.0 256.0,858.0 246.0,856.0 C 236.0,858.0 224.0,856.0 216.0,850.0 C 208.0,844.0 210.0,834.0 216.0,826.0 C 222.0,814.0 228.0,798.0 230.0,780.0 C 236.0,730.0 230.0,680.0 226.0,640.0 C 220.0,600.0 216.0,560.0 214.0,520.0 C 214.0,490.0 214.0,472.0 214.0,464.0 C 214.0,456.0 208.0,452.0 200.0,452.0 C 192.0,452.0 186.0,456.0 186.0,464.0 C 186.0,472.0 186.0,490.0 186.0,520.0 C 184.0,560.0 180.0,600.0 174.0,640.0 C 170.0,680.0 164.0,730.0 170.0,780.0 C 172.0,798.0 178.0,814.0 184.0,826.0 C 190.0,834.0 192.0,844.0 184.0,850.0 C 176.0,856.0 164.0,858.0 154.0,856.0 C 144.0,858.0 132.0,860.0 122.0,858.0 C 116.0,856.0 118.0,850.0 126.0,848.0 C 140.0,844.0 154.0,834.0 158.0,822.0 C 152.0,810.0 154.0,794.0 154.0,778.0 C 148.0,726.0 140.0,678.0 144.0,638.0 C 146.0,618.0 140.0,582.0 134.0,538.0 C 130.0,502.0 124.0,452.0 118.0,426.0 C 122.0,412.0 132.0,390.0 142.0,362.0 C 148.0,350.0 150.0,334.0 142.0,312.0 C 140.0,282.0 146.0,242.0 150.0,204.0 C 142.0,200.0 132.0,204.0 122.0,218.0 C 104.0,252.0 90.0,300.0 86.0,340.0 C 84.0,372.0 88.0,420.0 92.0,454.0 C 98.0,464.0 100.0,478.0 94.0,490.0 C 100.0,504.0 104.0,520.0 106.0,538.0 C 108.0,552.0 100.0,556.0 96.0,548.0 C 96.0,560.0 88.0,560.0 86.0,550.0 C 84.0,562.0 76.0,560.0 76.0,550.0 C 74.0,560.0 66.0,560.0 62.0,552.0 C 60.0,536.0 62.0,516.0 66.0,494.0 C 64.0,504.0 60.0,510.0 54.0,506.0 C 46.0,500.0 44.0,486.0 50.0,476.0 C 56.0,464.0 68.0,456.0 70.0,450.0 C 66.0,418.0 62.0,362.0 64.0,338.0 C 66.0,318.0 70.0,290.0 72.0,252.0 C 70.0,218.0 80.0,190.0 96.0,182.0 C 118.0,176.0 148.0,170.0 174.0,166.0 C 176.0,154.0 178.0,146.0 174.0,136.0 C 162.0,124.0 155.0,108.0 156.0,86.0 C 158.0,54.0 176.0,38.0 200.0,38.0 Z';
+
 function faceSVG(){
   if(st.view==='back'){
-    return `<svg viewBox="0 0 240 300" role="img" aria-label="${esc(t('face'))}">
-      ${partG('hair', `<path class="vis hair" d="M48,150 C40,20 200,20 192,150 C170,70 70,70 48,150 Z"/>`)}
-      ${partG('head', `<ellipse class="vis skin" cx="120" cy="160" rx="78" ry="100"/>`)}
-      ${partG('ear', `<ellipse class="vis skin" cx="38" cy="165" rx="16" ry="26"/><ellipse class="vis skin" cx="202" cy="165" rx="16" ry="26"/>`)}
-      ${partG('neck', `<rect class="vis skin" x="88" y="248" width="64" height="44" rx="12"/>`)}
-      ${partG('hair', `<path class="vis hair" d="M55,145 C50,30 190,30 185,145 L170,80 Q120,28 70,80 Z"/>`)}
+    return `<svg viewBox="0 0 260 350" role="img" aria-label="${esc(t('face'))}">
+      ${partG('neck', `<path class="vis wf" d="M96,250 C90,290 98,330 112,348 M164,250 C170,290 162,330 148,348"/>`,
+        `<rect class="hit" x="90" y="246" width="80" height="104"/>`)}
+      ${partG('ear', `
+        <path class="vis wf" d="M70,122 C52,124 44,148 48,172 C52,190 66,196 76,184 C78,166 76,138 70,122 Z"/>
+        <path class="vis wf-soft" d="M66,140 C58,144 58,168 66,180"/>
+        <path class="vis wf" d="M190,122 C208,124 216,148 212,172 C208,190 194,196 184,184 C182,166 184,138 190,122 Z"/>
+        <path class="vis wf-soft" d="M194,140 C202,144 202,168 194,180"/>`,
+        `<ellipse class="hit" cx="58" cy="158" rx="26" ry="42"/><ellipse class="hit" cx="202" cy="158" rx="26" ry="42"/>`)}
+      ${partG('head', `<path class="vis wf" d="M130,18 C88,18 62,60 60,112 C58,158 70,200 96,232 C110,250 122,262 130,266 C138,262 150,250 164,232 C190,200 202,158 200,112 C198,60 172,18 130,18 Z"/>`,
+        `<ellipse class="hit" cx="130" cy="140" rx="74" ry="118"/>`)}
+      ${partG('hair', `<path class="vis wf" d="M68,128 C58,40 96,8 130,8 C164,8 202,40 192,128 M76,118 C84,60 108,36 130,34 C152,36 176,60 184,118"/>
+        <path class="vis wf-soft" d="M100,28 C110,70 108,110 102,140 M130,20 L130,90 M160,28 C150,70 152,110 158,140"/>`,
+        `<path class="hit" d="M56,8 H204 V132 H56 Z"/>`)}
+      <g class="mesh" pointer-events="none">
+        <path class="wf-soft" d="M108,250 C104,290 110,328 118,346 M152,250 C156,290 150,328 142,346"/>
+      </g>
     </svg>`;
   }
-  return `<svg viewBox="0 0 240 310" role="img" aria-label="${esc(t('face'))}">
-    ${partG('neck', `<rect class="vis skin" x="88" y="250" width="64" height="52" rx="12"/>`)}
-    ${partG('ear', `<ellipse class="vis skin" cx="36" cy="160" rx="16" ry="28"/><ellipse class="vis skin" cx="204" cy="160" rx="16" ry="28"/>`,
-      `<ellipse class="hit" cx="36" cy="160" rx="22" ry="34"/><ellipse class="hit" cx="204" cy="160" rx="22" ry="34"/>`)}
-    ${partG('head', `<ellipse class="vis skin" cx="120" cy="150" rx="80" ry="104"/>`)}
-    ${partG('hair', `<path class="vis hair" d="M48,130 C42,18 198,18 192,130 C180,70 60,70 48,130 Z M70,70 Q120,28 170,70 Q140,95 120,88 Q100,95 70,70 Z"/>`)}
-    ${partG('forehead', `<path class="vis skin" d="M68,78 Q120,58 172,78 L168,112 Q120,98 72,112 Z"/>`, `<rect class="hit" x="62" y="58" width="116" height="58"/>`)}
-    ${partG('beard', `<path class="vis" fill="#6b4a32" stroke="#3b2a1e" stroke-width="1" d="M70,200 Q78,248 120,268 Q162,248 170,200 Q150,230 120,236 Q90,230 70,200 Z"/>`)}
-    ${partG('chin', `<ellipse class="vis skin" cx="120" cy="238" rx="28" ry="20"/>`, `<ellipse class="hit" cx="120" cy="240" rx="34" ry="26"/>`)}
-    ${partG('eyebrow', `<path class="vis hair" d="M68,114 Q90,102 112,114" fill="none" stroke="#4a3426" stroke-width="6" stroke-linecap="round"/>
-      <path class="vis hair" d="M128,114 Q150,102 172,114" fill="none" stroke="#4a3426" stroke-width="6" stroke-linecap="round"/>`,
-      `<rect class="hit" x="62" y="96" width="56" height="24"/><rect class="hit" x="122" y="96" width="56" height="24"/>`)}
-    ${partG('eyelid', `<path class="vis skin" d="M72,122 Q90,114 110,122 Q90,126 72,122 Z"/><path class="vis skin" d="M130,122 Q150,114 168,122 Q150,126 130,122 Z"/>`,
-      `<rect class="hit" x="68" y="110" width="46" height="16"/><rect class="hit" x="126" y="110" width="46" height="16"/>`)}
-    ${partG('eye', `<ellipse class="vis" fill="#fff" stroke="#5b3d2e" stroke-width="1.4" cx="90" cy="132" rx="18" ry="11"/>
-      <ellipse class="vis" fill="#fff" stroke="#5b3d2e" stroke-width="1.4" cx="150" cy="132" rx="18" ry="11"/>
-      <circle fill="#3b2a1e" cx="90" cy="132" r="6"/><circle fill="#3b2a1e" cx="150" cy="132" r="6"/>
-      <circle fill="#fff" cx="93" cy="129" r="2"/><circle fill="#fff" cx="153" cy="129" r="2"/>`,
-      `<ellipse class="hit" cx="90" cy="132" rx="22" ry="16"/><ellipse class="hit" cx="150" cy="132" rx="22" ry="16"/>`)}
-    ${partG('eyelash', `<path class="vis hair" d="M74,122 L70,112 M82,118 L80,108 M90,117 L90,106 M98,118 L100,108 M106,122 L110,112" fill="none" stroke="#2a1c14" stroke-width="2" stroke-linecap="round"/>
-      <path class="vis hair" d="M134,122 L130,112 M142,118 L140,108 M150,117 L150,106 M158,118 L160,108 M166,122 L170,112" fill="none" stroke="#2a1c14" stroke-width="2" stroke-linecap="round"/>`,
-      `<rect class="hit" x="66" y="102" width="48" height="18"/><rect class="hit" x="126" y="102" width="48" height="18"/>`)}
-    ${partG('nose', `<path class="vis skin" d="M120,138 L108,178 Q120,188 132,178 Z"/>`, `<rect class="hit" x="100" y="132" width="40" height="60"/>`)}
-    ${partG('lip', `<path class="vis" fill="#c46b6b" stroke="#a34d4d" stroke-width="1" d="M88,200 Q120,188 152,200 Q120,214 88,200 Z"/>`,
-      `<rect class="hit" x="80" y="184" width="80" height="34"/>`)}
-    ${partG('mouth', `<ellipse class="vis" fill="#7a3a3a" cx="120" cy="202" rx="22" ry="8"/>`, `<ellipse class="hit" cx="120" cy="202" rx="28" ry="14"/>`)}
-    ${partG('tooth', `<rect class="vis" fill="#fff" stroke="#d0d0d0" x="104" y="195" width="8" height="8" rx="1"/>
-      <rect class="vis" fill="#fff" stroke="#d0d0d0" x="113" y="195" width="8" height="8" rx="1"/>
-      <rect class="vis" fill="#fff" stroke="#d0d0d0" x="122" y="195" width="8" height="8" rx="1"/>
-      <rect class="vis" fill="#fff" stroke="#d0d0d0" x="131" y="195" width="8" height="8" rx="1"/>`,
-      `<rect class="hit" x="100" y="192" width="40" height="14"/>`)}
-    ${partG('tongue', `<ellipse class="vis" fill="#e08989" stroke="#c46b6b" cx="120" cy="210" rx="12" ry="6"/>`,
-      `<ellipse class="hit" cx="120" cy="212" rx="20" ry="12"/>`)}
+  /* Front face — Loomis proportions, thin medical line art. Short hair, short jaw beard as contour only. */
+  return `<svg viewBox="0 0 260 360" role="img" aria-label="${esc(t('face'))}">
+    ${partG('neck', `<path class="vis wf" d="M98,250 C92,292 100,332 114,352 M162,250 C168,292 160,332 146,352"/>`,
+      `<rect class="hit" x="90" y="248" width="80" height="108"/>`)}
+    ${partG('ear', `
+      <path class="vis wf" d="M64,120 C50,124 44,148 48,172 C54,188 66,190 74,178 C76,162 72,136 64,120 Z"/>
+      <path class="vis wf-soft" d="M62,138 C56,144 56,166 62,176 M68,150 C64,154 64,166 68,172"/>
+      <path class="vis wf" d="M196,120 C210,124 216,148 212,172 C206,188 194,190 186,178 C184,162 188,136 196,120 Z"/>
+      <path class="vis wf-soft" d="M198,138 C204,144 204,166 198,176 M192,150 C196,154 196,166 192,172"/>`,
+      `<ellipse class="hit" cx="56" cy="156" rx="26" ry="44"/><ellipse class="hit" cx="204" cy="156" rx="26" ry="44"/>`)}
+    ${partG('head', `<path class="vis wf" d="M130,16 C90,16 62,58 60,110 C58,154 68,196 92,228 C106,248 120,260 130,264 C140,260 154,248 168,228 C192,196 202,154 200,110 C198,58 170,16 130,16 Z"/>`,
+      `<ellipse class="hit" cx="130" cy="140" rx="74" ry="118"/>`)}
+    ${partG('hair', `<path class="vis wf" d="M70,118 C58,34 96,6 130,6 C164,6 202,34 190,118"/>
+      <path class="vis wf-soft" d="M80,112 C96,78 164,78 180,112 M100,20 C108,48 108,70 102,90 M160,20 C152,48 152,70 158,90"/>`,
+      `<path class="hit" d="M56,4 H204 V122 H56 Z"/>`)}
+    ${partG('forehead', `<path class="vis wf-soft" d="M86,88 C108,72 152,72 174,88"/>`,
+      `<path class="hit" d="M78,42 H182 V116 H78 Z"/>`)}
+    ${partG('eyebrow', `<path class="vis wf" d="M82,116 C98,106 116,106 124,114 M136,114 C144,106 162,106 178,116"/>`,
+      `<rect class="hit" x="74" y="98" width="54" height="24"/><rect class="hit" x="132" y="98" width="54" height="24"/>`)}
+    ${partG('eyelid', `<path class="vis wf" d="M86,128 C100,120 116,120 124,130 M136,130 C144,120 160,120 174,128"/>`,
+      `<rect class="hit" x="80" y="116" width="48" height="16"/><rect class="hit" x="132" y="116" width="48" height="16"/>`)}
+    ${partG('eyelash', `<path class="vis wf" d="M90,126 L88,121 M100,122 L99,117 M110,122 L111,117 M120,126 L122,122 M140,126 L138,122 M150,122 L149,117 M160,122 L161,117 M170,126 L172,121"/>`,
+      `<rect class="hit" x="78" y="108" width="50" height="16"/><rect class="hit" x="132" y="108" width="50" height="16"/>`)}
+    ${partG('eye', `
+      <path class="vis wf" d="M86,134 C100,124 118,124 124,134 C118,142 100,142 86,134 Z"/>
+      <ellipse class="vis wf" cx="105" cy="134" rx="6.5" ry="7"/>
+      <circle class="vis wf" cx="105" cy="134" r="2"/>
+      <path class="vis wf" d="M136,134 C142,124 160,124 174,134 C160,142 142,142 136,134 Z"/>
+      <ellipse class="vis wf" cx="155" cy="134" rx="6.5" ry="7"/>
+      <circle class="vis wf" cx="155" cy="134" r="2"/>`,
+      `<ellipse class="hit" cx="105" cy="134" rx="24" ry="16"/><ellipse class="hit" cx="155" cy="134" rx="24" ry="16"/>`)}
+    ${partG('nose', `<path class="vis wf" d="M126,148 C124,162 122,172 118,182 C116,186 120,190 126,190 C130,192 130,192 134,190 C140,190 144,186 142,182 C138,172 136,162 134,148"/>
+      <path class="vis wf-soft" d="M122,184 C126,188 130,186 130,186 C130,186 134,188 138,184"/>`,
+      `<rect class="hit" x="108" y="118" width="44" height="80"/>`)}
+    ${partG('lip', `<path class="vis wf" d="M104,208 C116,200 124,198 130,204 C136,198 144,200 156,208 C146,212 138,214 130,212 C122,214 114,212 104,208 Z"/>
+      <path class="vis wf" d="M106,214 C118,226 142,226 154,214"/>`,
+      `<rect class="hit" x="96" y="194" width="68" height="38"/>`)}
+    ${partG('mouth', `<path class="vis wf" d="M108,210 C120,216 140,216 152,210"/>`,
+      `<ellipse class="hit" cx="130" cy="214" rx="28" ry="12"/>`)}
+    ${partG('tooth', `<path class="vis wf-soft" d="M118,210 L118,214 L142,214 L142,210"/>`,
+      `<rect class="hit" x="110" y="208" width="40" height="12"/>`)}
+    ${partG('tongue', `<path class="vis wf-soft" d="M120,220 C128,226 132,226 140,220"/>`,
+      `<ellipse class="hit" cx="130" cy="224" rx="20" ry="12"/>`)}
+    ${partG('chin', `<path class="vis wf" d="M108,246 C118,260 142,260 152,246"/>`,
+      `<ellipse class="hit" cx="130" cy="252" rx="34" ry="22"/>`)}
+    ${partG('beard', `<path class="vis wf-soft" d="M86,200 L84,210 M96,214 L94,224 M108,230 L106,240 M130,242 L130,254 M152,230 L154,240 M164,214 L166,224 M174,200 L176,210"/>`,
+      `<path class="hit" d="M70,184 C64,220 90,262 130,274 C170,262 196,220 190,184 L170,190 C160,228 140,246 130,248 C120,246 100,228 90,190 Z"/>`)}
+    <g class="mesh" pointer-events="none">
+      <path class="wf-soft" d="M112,250 C108,292 114,330 122,350 M148,250 C152,292 146,330 138,350"/>
+    </g>
   </svg>`;
 }
 
-function bodySilhouette(){
-  return `<path class="vis skin" d="M180,28 C152,28 140,52 140,78 C140,96 146,112 154,122 C148,128 128,140 100,152 C78,164 68,178 64,198 C54,250 46,305 52,348 C54,390 50,430 48,455 C36,458 28,472 30,492 C32,518 58,536 80,528 C94,522 100,508 98,490 C98,475 94,462 90,455 C94,428 98,395 102,355 C108,315 118,260 128,210 C132,198 140,192 148,196 L148,365 C148,392 148,408 146,418 L138,530 C134,562 136,582 140,620 L136,698 C134,722 132,738 138,750 C116,756 100,772 108,790 C114,804 146,810 166,796 L170,752 C172,720 174,680 176,620 C178,560 176,520 176,428 L184,428 C184,520 182,560 184,620 C186,680 188,720 190,752 L194,796 C214,810 246,804 252,790 C260,772 244,756 222,750 C228,738 226,722 224,698 L220,620 C224,582 226,562 222,530 L214,418 C212,408 212,392 212,365 L212,196 C220,192 228,198 232,210 C242,260 252,315 258,355 C262,395 266,428 270,455 C266,462 262,475 262,490 C260,508 266,522 280,528 C302,536 328,518 330,492 C332,472 324,458 312,455 C310,430 306,390 308,348 C314,305 306,250 296,198 C292,178 282,164 260,152 C232,140 212,128 206,122 C214,112 220,96 220,78 C220,52 208,28 180,28 Z"/>`;
+function bodyMeshFront(){
+  return `<g class="mesh" pointer-events="none">
+    <path class="wf-soft" d="M176,98 C190,86 210,86 224,98 M186,50 C192,70 208,70 214,50"/>
+    <path class="wf-soft" d="M188,102 C194,98 200,98 206,102 M194,110 C197,108 203,108 206,110"/>
+    <path class="wf-soft" d="M200,106 L200,122 M194,128 C198,126 202,126 206,128"/>
+    <path class="wf-soft" d="M200,166 C232,170 272,178 304,184 M200,166 C168,170 128,178 96,184"/>
+    <path class="wf-soft" d="M250,204 C232,190 212,186 200,186 C188,186 168,190 150,204"/>
+    <path class="wf-soft" d="M200,186 L200,350"/>
+    <path class="wf-soft" d="M168,232 C186,224 214,224 232,232"/>
+    <path class="wf" d="M160,412 C186,406 214,406 240,412 C242,430 236,448 228,454 C216,448 200,446 200,446 C200,446 184,448 172,454 C164,448 158,430 160,412 Z"/>
+    <path class="wf-soft" d="M168,412 L172,452 M232,412 L228,452"/>
+    <path class="wf-soft" d="M246,628 C258,624 268,632 266,644 C262,654 252,654 246,646 C242,638 242,632 246,628 Z"/>
+    <path class="wf-soft" d="M154,628 C142,624 132,632 134,644 C138,654 148,654 154,646 C158,638 158,632 154,628 Z"/>
+    <path class="wf-soft" d="M256,650 L250,770 M144,650 L150,770"/>
+  </g>`;
 }
+function bodyMeshBack(){
+  return `<g class="mesh" pointer-events="none">
+    <path class="wf-soft" d="M170,90 C180,48 220,48 230,90 M180,84 C188,62 212,62 220,84"/>
+    <path class="wf" d="M200,160 L200,412"/>
+    <path class="wf-soft" d="M200,168 C186,176 174,188 168,204 C164,220 168,234 178,242 C188,230 198,222 200,220"/>
+    <path class="wf-soft" d="M200,168 C214,176 226,188 232,204 C236,220 232,234 222,242 C212,230 202,222 200,220"/>
+    <path class="wf" d="M160,412 C186,406 214,406 240,412 C242,430 236,448 228,454 C216,448 200,446 200,446 C200,446 184,448 172,454 C164,448 158,430 160,412 Z"/>
+    <path class="wf-soft" d="M248,780 L238,844 M152,780 L162,844"/>
+  </g>`;
+}
+
 function bodyFrontSVG(){
-  return `<svg viewBox="0 0 360 840" role="img" aria-label="${esc(t('body'))}">
-    ${partG('skin', bodySilhouette())}
-    ${partG('hair', `<path class="vis hair" d="M145,78 C144,28 216,28 215,78 C200,48 160,48 145,78 Z"/>`)}
-    ${partG('head', `<ellipse class="vis body-reg" cx="180" cy="76" rx="38" ry="46"/>`)}
-    ${partG('neck', `<rect class="vis body-reg" x="162" y="114" width="36" height="36" rx="10"/>`)}
-    ${partG('shoulder', `<path class="vis body-reg" d="M72,168 Q110,145 160,150 L160,188 Q110,180 80,200 Z"/><path class="vis body-reg" d="M288,168 Q250,145 200,150 L200,188 Q250,180 280,200 Z"/>`)}
-    ${partG('chest', `<path class="vis body-reg" d="M148,168 L212,168 L220,275 L140,275 Z"/>`)}
-    ${partG('stomach', `<path class="vis body-reg" d="M140,272 L220,272 L216,340 L144,340 Z"/>`)}
-    ${partG('abdomen', `<path class="vis body-reg" d="M144,337 L216,337 L208,412 L152,412 Z"/>`)}
-    ${partG('arm', `<path class="vis body-reg" d="M90,175 L58,345 L88,350 L122,200 Z"/><path class="vis body-reg" d="M270,175 L302,345 L272,350 L238,200 Z"/>`)}
-    ${partG('elbow', `<circle class="vis body-reg" cx="70" cy="348" r="18"/><circle class="vis body-reg" cx="290" cy="348" r="18"/>`,
-      `<circle class="hit" cx="70" cy="348" r="26"/><circle class="hit" cx="290" cy="348" r="26"/>`)}
-    ${partG('wrist', `<rect class="vis body-reg" x="46" y="448" width="40" height="22" rx="8"/><rect class="vis body-reg" x="274" y="448" width="40" height="22" rx="8"/>`,
-      `<rect class="hit" x="40" y="440" width="52" height="32"/><rect class="hit" x="268" y="440" width="52" height="32"/>`)}
-    ${partG('hand', `<ellipse class="vis body-reg" cx="62" cy="500" rx="26" ry="30"/><ellipse class="vis body-reg" cx="298" cy="500" rx="26" ry="30"/>`)}
-    ${partG('thigh', `<path class="vis body-reg" d="M146,418 L174,418 L170,538 L148,538 Z"/><path class="vis body-reg" d="M186,418 L214,418 L212,538 L190,538 Z"/>`)}
-    ${partG('knee', `<circle class="vis body-reg" cx="159" cy="555" r="18"/><circle class="vis body-reg" cx="201" cy="555" r="18"/>`,
-      `<circle class="hit" cx="159" cy="555" r="24"/><circle class="hit" cx="201" cy="555" r="24"/>`)}
-    ${partG('leg', `<path class="vis body-reg" d="M144,570 L172,570 L166,700 L150,700 Z"/><path class="vis body-reg" d="M188,570 L216,570 L214,700 L194,700 Z"/>`)}
-    ${partG('ankle', `<circle class="vis body-reg" cx="156" cy="720" r="13"/><circle class="vis body-reg" cx="204" cy="720" r="13"/>`,
-      `<circle class="hit" cx="156" cy="720" r="20"/><circle class="hit" cx="204" cy="720" r="20"/>`)}
-    ${partG('foot', `<ellipse class="vis body-reg" cx="140" cy="772" rx="28" ry="16"/><ellipse class="vis body-reg" cx="220" cy="772" rx="28" ry="16"/>`)}
-    ${partG('heel', `<ellipse class="vis body-reg" cx="122" cy="776" rx="11" ry="13"/><ellipse class="vis body-reg" cx="238" cy="776" rx="11" ry="13"/>`,
-      `<ellipse class="hit" cx="122" cy="776" rx="18" ry="18"/><ellipse class="hit" cx="238" cy="776" rx="18" ry="18"/>`)}
+  return `<svg viewBox="0 0 400 900" role="img" aria-label="${esc(t('body'))}">
+    ${partG('skin', `<path class="vis wf" d="${BODY_SIL}"/>`)}
+    ${partG('hair', `<path class="vis wf" d="M174,90 C176,42 224,42 226,90"/>`, `<path class="hit" d="M166,34 H234 V92 H166 Z"/>`)}
+    ${partG('head', `<ellipse class="vis body-reg" cx="200" cy="100" rx="44" ry="62"/>`, `<ellipse class="hit" cx="200" cy="100" rx="50" ry="68"/>`)}
+    ${partG('neck', `<path class="vis body-reg" d="M180,138 H220 V172 H180 Z"/>`, `<rect class="hit" x="174" y="132" width="52" height="44"/>`)}
+    ${partG('shoulder', `<path class="vis body-reg" d="M100,168 L170,160 L170,210 L110,216 Z"/><path class="vis body-reg" d="M300,168 L230,160 L230,210 L290,216 Z"/>`,
+      `<path class="hit" d="M88,154 H178 V222 H88 Z"/><path class="hit" d="M222,154 H312 V222 H222 Z"/>`)}
+    ${partG('chest', `<path class="vis body-reg" d="M152,170 L248,170 L252,292 L148,292 Z"/>`)}
+    ${partG('stomach', `<path class="vis body-reg" d="M150,286 L250,286 L256,358 L144,358 Z"/>`)}
+    ${partG('abdomen', `<path class="vis body-reg" d="M148,350 L252,350 L248,424 L152,424 Z"/>`)}
+    ${partG('arm', `<path class="vis body-reg" d="M112,210 L92,330 L120,336 L150,214 Z"/><path class="vis body-reg" d="M288,210 L308,330 L280,336 L250,214 Z"/>`,
+      `<path class="hit" d="M84,200 H154 V332 H84 Z"/><path class="hit" d="M246,200 H316 V332 H246 Z"/>`)}
+    ${partG('elbow', `<circle class="vis body-reg" cx="70" cy="338" r="20"/><circle class="vis body-reg" cx="330" cy="338" r="20"/>`,
+      `<circle class="hit" cx="70" cy="338" r="28"/><circle class="hit" cx="330" cy="338" r="28"/>`)}
+    ${partG('wrist', `<rect class="vis body-reg" x="52" y="444" width="40" height="26" rx="6"/><rect class="vis body-reg" x="308" y="444" width="40" height="26" rx="6"/>`,
+      `<rect class="hit" x="46" y="436" width="52" height="36"/><rect class="hit" x="302" y="436" width="52" height="36"/>`)}
+    ${partG('hand', `<path class="vis body-reg" d="M36,468 H110 V562 H36 Z"/><path class="vis body-reg" d="M290,468 H364 V562 H290 Z"/>`)}
+    ${partG('thigh', `<path class="vis body-reg" d="M152,424 L186,424 L186,575 L150,575 Z"/><path class="vis body-reg" d="M214,424 L248,424 L250,575 L214,575 Z"/>`)}
+    ${partG('knee', `<circle class="vis body-reg" cx="168" cy="636" r="22"/><circle class="vis body-reg" cx="232" cy="636" r="22"/>`,
+      `<circle class="hit" cx="168" cy="636" r="28"/><circle class="hit" cx="232" cy="636" r="28"/>`)}
+    ${partG('leg', `<path class="vis body-reg" d="M148,658 L186,658 L180,770 L150,770 Z"/><path class="vis body-reg" d="M214,658 L252,658 L250,770 L220,770 Z"/>`)}
+    ${partG('ankle', `<circle class="vis body-reg" cx="164" cy="800" r="16"/><circle class="vis body-reg" cx="236" cy="800" r="16"/>`,
+      `<circle class="hit" cx="164" cy="800" r="24"/><circle class="hit" cx="236" cy="800" r="24"/>`)}
+    ${partG('foot', `<path class="vis body-reg" d="M118,818 H200 V860 H118 Z"/><path class="vis body-reg" d="M200,818 H282 V860 H200 Z"/>`)}
+    ${partG('heel', `<ellipse class="vis body-reg" cx="150" cy="848" rx="18" ry="14"/><ellipse class="vis body-reg" cx="250" cy="848" rx="18" ry="14"/>`,
+      `<ellipse class="hit" cx="150" cy="848" rx="24" ry="20"/><ellipse class="hit" cx="250" cy="848" rx="24" ry="20"/>`)}
+    ${bodyMeshFront()}
   </svg>`;
 }
 
 function bodyBackSVG(){
-  return `<svg viewBox="0 0 360 840" role="img" aria-label="${esc(t('body'))}">
-    ${partG('skin', bodySilhouette())}
-    ${partG('hair', `<path class="vis hair" d="M142,100 C140,28 220,28 218,100 C200,55 160,55 142,100 Z"/>`)}
-    ${partG('head', `<ellipse class="vis body-reg" cx="180" cy="76" rx="38" ry="46"/>`)}
-    ${partG('ear', `<ellipse class="vis body-reg" cx="140" cy="80" rx="9" ry="16"/><ellipse class="vis body-reg" cx="220" cy="80" rx="9" ry="16"/>`)}
-    ${partG('neck', `<rect class="vis body-reg" x="162" y="114" width="36" height="36" rx="10"/>`)}
-    ${partG('shoulder', `<path class="vis body-reg" d="M72,168 Q110,145 160,150 L160,188 Q110,180 80,200 Z"/><path class="vis body-reg" d="M288,168 Q250,145 200,150 L200,188 Q250,180 280,200 Z"/>`)}
-    ${partG('back', `<path class="vis body-reg" d="M148,168 L212,168 L214,390 L146,390 Z"/>`)}
-    ${partG('butt', `<ellipse class="vis body-reg" cx="162" cy="418" rx="28" ry="26"/><ellipse class="vis body-reg" cx="198" cy="418" rx="28" ry="26"/>`)}
-    ${partG('arm', `<path class="vis body-reg" d="M90,175 L58,345 L88,350 L122,200 Z"/><path class="vis body-reg" d="M270,175 L302,345 L272,350 L238,200 Z"/>`)}
-    ${partG('elbow', `<circle class="vis body-reg" cx="70" cy="348" r="18"/><circle class="vis body-reg" cx="290" cy="348" r="18"/>`,
-      `<circle class="hit" cx="70" cy="348" r="26"/><circle class="hit" cx="290" cy="348" r="26"/>`)}
-    ${partG('wrist', `<rect class="vis body-reg" x="46" y="448" width="40" height="22" rx="8"/><rect class="vis body-reg" x="274" y="448" width="40" height="22" rx="8"/>`,
-      `<rect class="hit" x="40" y="440" width="52" height="32"/><rect class="hit" x="268" y="440" width="52" height="32"/>`)}
-    ${partG('hand', `<ellipse class="vis body-reg" cx="62" cy="500" rx="26" ry="30"/><ellipse class="vis body-reg" cx="298" cy="500" rx="26" ry="30"/>`)}
-    ${partG('thigh', `<path class="vis body-reg" d="M146,432 L174,432 L170,538 L148,538 Z"/><path class="vis body-reg" d="M186,432 L214,432 L212,538 L190,538 Z"/>`)}
-    ${partG('knee', `<circle class="vis body-reg" cx="159" cy="555" r="18"/><circle class="vis body-reg" cx="201" cy="555" r="18"/>`,
-      `<circle class="hit" cx="159" cy="555" r="24"/><circle class="hit" cx="201" cy="555" r="24"/>`)}
-    ${partG('leg', `<path class="vis body-reg" d="M144,570 L172,570 L166,700 L150,700 Z"/><path class="vis body-reg" d="M188,570 L216,570 L214,700 L194,700 Z"/>`)}
-    ${partG('ankle', `<circle class="vis body-reg" cx="156" cy="720" r="13"/><circle class="vis body-reg" cx="204" cy="720" r="13"/>`,
-      `<circle class="hit" cx="156" cy="720" r="20"/><circle class="hit" cx="204" cy="720" r="20"/>`)}
-    ${partG('foot', `<ellipse class="vis body-reg" cx="152" cy="768" rx="22" ry="15"/><ellipse class="vis body-reg" cx="208" cy="768" rx="22" ry="15"/>`)}
-    ${partG('heel', `<ellipse class="vis body-reg" cx="148" cy="782" rx="14" ry="16"/><ellipse class="vis body-reg" cx="212" cy="782" rx="14" ry="16"/>`,
-      `<ellipse class="hit" cx="148" cy="782" rx="22" ry="22"/><ellipse class="hit" cx="212" cy="782" rx="22" ry="22"/>`)}
+  return `<svg viewBox="0 0 400 900" role="img" aria-label="${esc(t('body'))}">
+    ${partG('skin', `<path class="vis wf" d="${BODY_SIL}"/>`)}
+    ${partG('hair', `<path class="vis wf" d="M172,100 C174,38 226,38 228,100"/>`, `<path class="hit" d="M164,34 H236 V112 H164 Z"/>`)}
+    ${partG('head', `<ellipse class="vis body-reg" cx="200" cy="100" rx="44" ry="62"/>`, `<ellipse class="hit" cx="200" cy="100" rx="50" ry="68"/>`)}
+    ${partG('ear', `<ellipse class="vis body-reg" cx="158" cy="104" rx="10" ry="18"/><ellipse class="vis body-reg" cx="242" cy="104" rx="10" ry="18"/>`,
+      `<ellipse class="hit" cx="158" cy="104" rx="16" ry="24"/><ellipse class="hit" cx="242" cy="104" rx="16" ry="24"/>`)}
+    ${partG('neck', `<path class="vis body-reg" d="M180,138 H220 V172 H180 Z"/>`, `<rect class="hit" x="174" y="132" width="52" height="44"/>`)}
+    ${partG('shoulder', `<path class="vis body-reg" d="M100,168 L170,160 L170,210 L110,216 Z"/><path class="vis body-reg" d="M300,168 L230,160 L230,210 L290,216 Z"/>`,
+      `<path class="hit" d="M88,154 H178 V222 H88 Z"/><path class="hit" d="M222,154 H312 V222 H222 Z"/>`)}
+    ${partG('back', `<path class="vis body-reg" d="M152,170 L248,170 L250,410 L150,410 Z"/>`)}
+    ${partG('butt', `<path class="vis body-reg" d="M158,412 L242,412 L238,456 L162,456 Z"/>`)}
+    ${partG('arm', `<path class="vis body-reg" d="M112,210 L92,330 L120,336 L150,214 Z"/><path class="vis body-reg" d="M288,210 L308,330 L280,336 L250,214 Z"/>`,
+      `<path class="hit" d="M84,200 H154 V332 H84 Z"/><path class="hit" d="M246,200 H316 V332 H246 Z"/>`)}
+    ${partG('elbow', `<circle class="vis body-reg" cx="70" cy="338" r="20"/><circle class="vis body-reg" cx="330" cy="338" r="20"/>`,
+      `<circle class="hit" cx="70" cy="338" r="28"/><circle class="hit" cx="330" cy="338" r="28"/>`)}
+    ${partG('wrist', `<rect class="vis body-reg" x="52" y="444" width="40" height="26" rx="6"/><rect class="vis body-reg" x="308" y="444" width="40" height="26" rx="6"/>`,
+      `<rect class="hit" x="46" y="436" width="52" height="36"/><rect class="hit" x="302" y="436" width="52" height="36"/>`)}
+    ${partG('hand', `<path class="vis body-reg" d="M36,468 H110 V562 H36 Z"/><path class="vis body-reg" d="M290,468 H364 V562 H290 Z"/>`)}
+    ${partG('thigh', `<path class="vis body-reg" d="M152,456 L186,456 L186,575 L150,575 Z"/><path class="vis body-reg" d="M214,456 L248,456 L250,575 L214,575 Z"/>`)}
+    ${partG('knee', `<circle class="vis body-reg" cx="168" cy="636" r="22"/><circle class="vis body-reg" cx="232" cy="636" r="22"/>`,
+      `<circle class="hit" cx="168" cy="636" r="28"/><circle class="hit" cx="232" cy="636" r="28"/>`)}
+    ${partG('leg', `<path class="vis body-reg" d="M148,658 L186,658 L180,770 L150,770 Z"/><path class="vis body-reg" d="M214,658 L252,658 L250,770 L220,770 Z"/>`)}
+    ${partG('ankle', `<circle class="vis body-reg" cx="164" cy="800" r="16"/><circle class="vis body-reg" cx="236" cy="800" r="16"/>`,
+      `<circle class="hit" cx="164" cy="800" r="24"/><circle class="hit" cx="236" cy="800" r="24"/>`)}
+    ${partG('foot', `<path class="vis body-reg" d="M130,818 H200 V860 H130 Z"/><path class="vis body-reg" d="M200,818 H270 V860 H200 Z"/>`)}
+    ${partG('heel', `<ellipse class="vis body-reg" cx="168" cy="848" rx="22" ry="16"/><ellipse class="vis body-reg" cx="232" cy="848" rx="22" ry="16"/>`,
+      `<ellipse class="hit" cx="168" cy="848" rx="28" ry="22"/><ellipse class="hit" cx="232" cy="848" rx="28" ry="22"/>`)}
+    ${bodyMeshBack()}
   </svg>`;
 }
 
 function handSVG(){
-  /* Right hand, palm toward us, fingers up, thumb on the left */
-  return `<svg viewBox="0 0 260 320" role="img" aria-label="${esc(t('hand'))}">
-    ${partG('hand', `<path class="vis skin" d="M86,200 Q78,130 100,118 L170,118 Q198,130 186,200 Q180,250 130,258 Q90,250 86,200 Z"/>`)}
-    ${partG('wrist', `<rect class="vis skin" x="96" y="248" width="68" height="50" rx="16"/>`, `<rect class="hit" x="88" y="242" width="84" height="64"/>`)}
-    ${partG('thumb', `<path class="vis skin" d="M86,190 Q40,150 42,118 Q62,108 86,148 Q96,170 96,196 Z"/>`, `<ellipse class="hit" cx="64" cy="150" rx="36" ry="48"/>`)}
+  /* Dorsal right hand, fingers up, thumb left. Four fingers + thumb, tapered wrist, nails, joints. */
+  const outline = "M130,385 C126,350 120,310 122,270 C110,255 92,228 70,198 C54,176 42,148 44,126 C46,108 62,100 76,108 C90,116 104,140 114,166 C122,184 128,198 134,200 C132,150 130,90 132,42 C134,24 148,16 160,26 C168,34 170,50 168,70 C166,110 166,150 166,198 C168,140 170,80 174,28 C176,10 192,6 204,18 C212,26 214,44 212,64 C208,110 206,160 204,200 C208,150 214,100 220,56 C224,38 240,34 250,48 C258,58 258,76 254,96 C246,140 236,180 230,202 C236,170 250,140 260,100 C266,82 282,80 288,96 C294,112 288,132 278,154 C262,190 248,220 240,242 C238,280 242,330 238,385 C220,394 148,394 130,385 Z";
+  return `<svg viewBox="0 0 330 410" role="img" aria-label="${esc(t('hand'))}">
+    ${partG('wrist', `<path class="vis wf" d="M130,385 C126,350 120,310 122,272 M238,385 C242,330 238,280 236,248 M130,385 C148,394 220,394 238,385"/>
+      <path class="vis wf-soft" d="M148,385 L146,310 M220,385 L222,310 M140,360 C160,354 210,354 230,360"/>`,
+      `<rect class="hit" x="116" y="300" width="132" height="102"/>`)}
+    ${partG('hand', `<path class="vis wf" d="${outline}"/>
+      <path class="vis wf-soft" d="M166,198 L150,255 M204,200 L204,255 M230,202 L236,255 M150,215 L132,245 M220,215 L238,245"/>`,
+      `<path class="hit" d="M110,190 H250 V310 H110 Z"/>`)}
+    ${partG('thumb', `<path class="vis wf-soft" d="M70,126 C84,130 100,148 112,172 M58,150 L94,162"/>`,
+      `<path class="hit" d="M34,96 H130 V220 H34 Z"/>`)}
     ${partG('finger', `
-      <path class="vis skin" d="M100,122 L96,40 Q108,28 120,40 L122,122 Z"/>
-      <path class="vis skin" d="M126,118 L126,22 Q140,10 152,22 L150,118 Z"/>
-      <path class="vis skin" d="M156,122 L160,36 Q174,26 184,40 L176,122 Z"/>
-      <path class="vis skin" d="M180,130 L196,58 Q210,50 214,66 L196,140 Z"/>`)}
+      <path class="vis wf-soft" d="M134,92 L164,92 M176,82 L210,82 M222,96 L252,96 M260,128 L286,128 M134,128 L164,128 M176,122 L210,122 M222,132 L250,132 M258,150 L280,150"/>`,
+      `<path class="hit" d="M124,8 H172 V200 H124 Z"/><path class="hit" d="M168,2 H220 V200 H168 Z"/><path class="hit" d="M214,28 H270 V202 H214 Z"/><path class="hit" d="M240,78 H304 V210 H240 Z"/>`)}
     ${partG('fingernail', `
-      <rect class="vis" fill="#f8efe6" stroke="#c48960" x="100" y="32" width="16" height="16" rx="5"/>
-      <rect class="vis" fill="#f8efe6" stroke="#c48960" x="130" y="16" width="16" height="16" rx="5"/>
-      <rect class="vis" fill="#f8efe6" stroke="#c48960" x="162" y="30" width="16" height="16" rx="5"/>
-      <rect class="vis" fill="#f8efe6" stroke="#c48960" x="194" y="54" width="14" height="14" rx="5"/>
-      <rect class="vis" fill="#f8efe6" stroke="#c48960" x="44" y="112" width="16" height="14" rx="5"/>`,
-      `<rect class="hit" x="94" y="24" width="28" height="30"/><rect class="hit" x="124" y="8" width="28" height="30"/><rect class="hit" x="156" y="22" width="28" height="30"/><rect class="hit" x="186" y="46" width="28" height="30"/><rect class="hit" x="36" y="102" width="30" height="28"/>`)}
+      <path class="vis wf" d="M136,36 C138,26 152,22 160,32 C158,42 140,44 136,36 Z"/>
+      <path class="vis wf" d="M178,22 C180,12 196,8 204,20 C202,30 182,32 178,22 Z"/>
+      <path class="vis wf" d="M224,50 C226,40 242,38 250,50 C246,60 228,62 224,50 Z"/>
+      <path class="vis wf" d="M264,92 C266,82 282,80 288,92 C284,102 268,104 264,92 Z"/>
+      <path class="vis wf" d="M48,120 C50,110 66,108 74,120 C70,130 52,132 48,120 Z"/>`,
+      `<ellipse class="hit" cx="148" cy="32" rx="18" ry="16"/><ellipse class="hit" cx="191" cy="20" rx="18" ry="16"/><ellipse class="hit" cx="237" cy="50" rx="18" ry="16"/><ellipse class="hit" cx="276" cy="92" rx="18" ry="16"/><ellipse class="hit" cx="60" cy="120" rx="20" ry="16"/>`)}
   </svg>`;
 }
 
 function footSVG(){
-  return `<svg viewBox="0 0 320 200" role="img" aria-label="${esc(t('foot'))}">
-    ${partG('foot', `<path class="vis skin" d="M108,28 L132,28 C140,70 148,88 168,98 L248,108 C270,102 292,112 300,128 C308,148 290,160 268,162 L200,168 C130,170 78,160 62,140 C48,120 62,96 88,90 C98,70 104,45 108,28 Z"/>`)}
-    ${partG('ankle', `<path class="vis body-reg" d="M108,28 L132,28 C136,60 138,82 132,100 L108,100 C106,72 106,48 108,28 Z"/>`,
-      `<ellipse class="hit" cx="120" cy="70" rx="36" ry="48"/>`)}
-    ${partG('heel', `<ellipse class="vis body-reg" cx="80" cy="128" rx="26" ry="28"/>`, `<ellipse class="hit" cx="80" cy="130" rx="36" ry="36"/>`)}
+  /* Elevated medial 3/4 of a left foot. Columnar shin, heel, arch, five toes, nails. One outline. */
+  const outline = "M112,8 L152,8 C150,50 156,92 160,118 C184,130 230,142 275,150 C298,148 314,140 326,136 C342,124 362,130 370,148 C376,160 372,174 358,180 C368,174 384,178 390,194 C392,206 382,216 368,218 C378,216 388,224 388,236 C386,248 372,254 358,250 C366,254 370,264 364,272 C356,282 342,282 330,274 C336,284 334,294 322,298 C308,302 294,294 290,282 C252,298 200,292 158,268 C128,250 104,232 88,238 C68,246 50,226 50,200 C50,174 68,158 90,156 C100,136 106,88 110,40 L112,8 Z";
+  return `<svg viewBox="0 0 420 330" role="img" aria-label="${esc(t('foot'))}">
+    ${partG('foot', `<path class="vis wf" d="${outline}"/>`,
+      `<path class="hit" d="M40,4 H408 V316 H40 Z"/>`)}
+    ${partG('ankle', `<path class="vis wf" d="M112,8 L152,8 C150,50 156,92 160,118 L110,40 L112,8 Z"/>
+      <path class="vis wf-soft" d="M128,8 L132,100"/>`,
+      `<ellipse class="hit" cx="138" cy="70" rx="48" ry="72"/>`)}
+    ${partG('heel', `<path class="vis wf-soft" d="M88,238 C68,246 50,226 50,200 C50,174 68,158 90,156 C82,176 80,210 88,238 Z"/>`,
+      `<ellipse class="hit" cx="78" cy="200" rx="48" ry="54"/>`)}
     ${partG('toe', `
-      <ellipse class="vis body-reg" cx="292" cy="130" rx="16" ry="18"/>
-      <ellipse class="vis body-reg" cx="274" cy="116" rx="12" ry="14"/>
-      <ellipse class="vis body-reg" cx="258" cy="110" rx="11" ry="12"/>
-      <ellipse class="vis body-reg" cx="244" cy="108" rx="10" ry="11"/>
-      <ellipse class="vis body-reg" cx="232" cy="110" rx="9" ry="10"/>`)}
+      <path class="vis wf-soft" d="M326,136 C342,148 354,164 344,178 M358,180 C372,188 382,204 368,216 M368,218 C380,228 382,242 358,250 M330,274 C344,268 354,260 358,250"/>`,
+      `<path class="hit" d="M270,118 H408 V310 H270 Z"/>`)}
     ${partG('toenail', `
-      <ellipse class="vis" fill="#f8efe6" stroke="#c48960" cx="298" cy="122" rx="7" ry="6"/>
-      <ellipse class="vis" fill="#f8efe6" stroke="#c48960" cx="278" cy="108" rx="6" ry="5"/>
-      <ellipse class="vis" fill="#f8efe6" stroke="#c48960" cx="260" cy="102" rx="5.5" ry="5"/>
-      <ellipse class="vis" fill="#f8efe6" stroke="#c48960" cx="246" cy="100" rx="5" ry="4.5"/>
-      <ellipse class="vis" fill="#f8efe6" stroke="#c48960" cx="234" cy="102" rx="4.5" ry="4"/>`,
-      `<ellipse class="hit" cx="298" cy="122" rx="14" ry="14"/><ellipse class="hit" cx="278" cy="108" rx="12" ry="12"/><ellipse class="hit" cx="260" cy="102" rx="12" ry="12"/><ellipse class="hit" cx="246" cy="100" rx="11" ry="11"/><ellipse class="hit" cx="234" cy="102" rx="11" ry="11"/>`)}
+      <path class="vis wf" d="M344,138 C348,130 362,130 366,140 C362,148 348,148 344,138 Z"/>
+      <path class="vis wf" d="M372,186 C376,178 388,180 390,190 C386,198 374,198 372,186 Z"/>
+      <path class="vis wf" d="M372,228 C376,220 388,222 388,232 C384,240 374,240 372,228 Z"/>
+      <path class="vis wf" d="M348,264 C352,256 364,258 364,268 C360,276 350,276 348,264 Z"/>`,
+      `<ellipse class="hit" cx="355" cy="138" rx="16" ry="14"/><ellipse class="hit" cx="382" cy="188" rx="14" ry="14"/><ellipse class="hit" cx="380" cy="230" rx="14" ry="14"/><ellipse class="hit" cx="356" cy="266" rx="14" ry="14"/>`)}
+    <g class="mesh" pointer-events="none">
+      <path class="wf-soft" d="M160,118 C210,134 250,146 300,152"/>
+      <path class="wf-soft" d="M88,238 C140,216 200,210 260,226"/>
+    </g>
   </svg>`;
 }
 
 function organsSVG(){
-  const outline=`<path fill="#f0c4a0" fill-opacity=".22" stroke="#c48960" stroke-width="1.5" d="M180,40 C150,40 142,70 142,94 L142,118 L80,150 L70,300 L68,430 L100,440 L112,390 L128,390 L148,520 L154,640 L148,720 L170,780 L180,760 L190,780 L212,720 L206,640 L212,520 L232,390 L248,390 L260,440 L292,430 L290,300 L280,150 L218,118 L218,94 C218,70 210,40 180,40 Z"/>`;
-  return `<svg viewBox="0 0 360 800" role="img" aria-label="${esc(t('organs'))}">
-    ${outline}
-    ${partG('brain', `<path class="vis" fill="#f4b8c5" stroke="#c47386" stroke-width="1.6" d="M180,46 C152,46 144,78 148,100 C160,118 200,118 212,100 C216,78 208,46 180,46 Z"/>`)}
-    ${partG('lung', `<path class="vis" fill="#ef9a9a" stroke="#c05c5c" d="M100,175 Q95,230 112,300 Q140,310 150,250 Q148,190 128,168 Z"/>
-      <path class="vis" fill="#ef9a9a" stroke="#c05c5c" d="M260,175 Q265,230 248,300 Q220,310 210,250 Q212,190 232,168 Z"/>`)}
-    ${partG('blood', `<path class="vis" fill="none" stroke="#dc2626" stroke-width="4" d="M200,250 L200,400 M200,280 L150,300 L130,390 M200,280 L250,300 L270,390 M200,400 L160,500 M200,400 L240,500"/>
-      <circle class="vis" fill="#dc2626" cx="214" cy="248" r="8"/>`,
-      `<path class="hit" fill="none" stroke="transparent" stroke-width="22" d="M200,250 L200,400 M200,280 L150,300 L130,390 M200,280 L250,300 L270,390 M200,400 L160,500 M200,400 L240,500"/><circle class="hit" cx="214" cy="248" r="16"/>`)}
-    ${partG('heart', `<path class="vis" fill="#e11d48" stroke="#9f1239" d="M200,220 C200,200 230,196 230,222 C230,246 200,270 200,270 C200,270 170,246 170,222 C170,196 200,200 200,220 Z"/>`,
-      `<circle class="hit" cx="200" cy="230" r="36"/>`)}
-    ${partG('liver', `<path class="vis" fill="#b45309" stroke="#7c2d12" d="M100,300 Q95,345 130,360 Q170,355 175,325 Q150,290 100,300 Z"/>`)}
-    ${partG('stomach', `<path class="vis" fill="#f2c14e" stroke="#b45309" d="M190,315 Q230,300 245,335 Q248,370 215,380 Q185,365 190,315 Z"/>`)}
-    ${partG('kidney', `<ellipse class="vis" fill="#c45c5c" stroke="#7f1d1d" cx="128" cy="400" rx="16" ry="26"/>
-      <ellipse class="vis" fill="#c45c5c" stroke="#7f1d1d" cx="232" cy="400" rx="16" ry="26"/>`,
-      `<ellipse class="hit" cx="128" cy="400" rx="24" ry="34"/><ellipse class="hit" cx="232" cy="400" rx="24" ry="34"/>`)}
-    ${partG('intestines', `<path class="vis" fill="#e8a87c" stroke="#b45309" stroke-width="3" fill="none" d="M140,430 C160,420 180,450 200,430 C220,410 240,450 230,470 C210,500 160,490 150,460 C140,440 170,450 190,470 C210,490 170,510 155,500"/>
-      <path class="vis" fill="#e8a87c" stroke="#b45309" d="M135,425 Q180,410 235,430 Q250,480 200,520 Q140,500 135,425 Z" fill-opacity=".85"/>`)}
-    ${partG('bladder', `<ellipse class="vis" fill="#f5e6a8" stroke="#ca8a04" cx="180" cy="545" rx="28" ry="22"/>`,
-      `<ellipse class="hit" cx="180" cy="545" rx="36" ry="30"/>`)}
+  return `<svg viewBox="0 20 400 640" role="img" aria-label="${esc(t('organs'))}">
+    <path class="wf-soft" d="${BODY_SIL}" pointer-events="none"/>
+    ${partG('brain', `<path class="vis wf" d="M200,46 C174,46 154,62 152,86 C150,108 164,124 188,128 C196,130 198,126 200,122 C202,126 204,130 212,128 C236,124 250,108 248,86 C246,62 226,46 200,46 Z"/>
+      <path class="vis wf-soft" d="M200,48 L200,122 M160,70 C172,66 184,74 196,70 M204,70 C216,74 228,66 240,70 M158,92 C170,86 184,96 196,92 M204,92 C216,96 230,86 242,92 M164,114 C180,108 220,108 236,114"/>`,
+      `<ellipse class="hit" cx="200" cy="88" rx="60" ry="48"/>`)}
+    ${partG('lung', `
+      <path class="vis wf" d="M116,178 C100,188 96,230 100,268 C104,300 122,314 144,306 C156,300 162,278 160,250 C158,218 150,190 136,178 C128,174 120,174 116,178 Z"/>
+      <path class="vis wf-soft" d="M108,230 C124,224 148,230 154,238 M114,266 C130,260 146,268 150,276 M118,210 L150,218"/>
+      <path class="vis wf" d="M284,178 C300,188 304,230 300,268 C296,300 278,314 256,306 C244,300 238,278 240,250 C242,218 250,190 264,178 C272,174 280,174 284,178 Z"/>
+      <path class="vis wf-soft" d="M246,230 C262,224 286,230 292,238 M250,266 C266,260 286,268 290,276 M250,210 L282,218"/>`,
+      `<path class="hit" d="M90,170 H170 V318 H90 Z"/><path class="hit" d="M230,170 H310 V318 H230 Z"/>`)}
+    ${partG('blood', `<path class="vis wf-soft" d="M214,248 C216,268 216,298 214,338 L214,390 M214,270 C186,286 170,320 160,350 M214,270 C242,286 258,320 268,350"/>`,
+      `<path class="hit" fill="none" stroke="transparent" stroke-width="20" d="M214,248 C216,268 216,298 214,338 L214,390 M214,270 C186,286 170,320 160,350 M214,270 C242,286 258,320 268,350"/>`)}
+    ${partG('heart', `<path class="vis wf" d="M200,206 C200,196 210,188 222,190 C234,192 242,200 240,210 C250,224 254,244 248,262 C242,278 228,290 214,292 C202,294 192,286 186,274 C178,260 174,244 178,228 C180,216 188,208 200,206 Z"/>
+      <path class="vis wf-soft" d="M222,190 C226,200 228,214 224,240 M196,230 C210,236 228,234 236,224"/>`,
+      `<ellipse class="hit" cx="214" cy="242" rx="46" ry="50"/>`)}
+    ${partG('liver', `<path class="vis wf" d="M108,308 C108,288 132,276 164,278 C194,280 222,288 236,300 C246,308 248,320 238,328 C220,342 188,352 160,354 C128,356 108,348 104,332 C100,320 102,314 108,308 Z"/>
+      <path class="vis wf-soft" d="M168,280 C170,308 176,336 190,348"/>`,
+      `<path class="hit" d="M96,272 H250 V360 H96 Z"/>`)}
+    ${partG('stomach', `<path class="vis wf" d="M214,306 C204,298 214,288 230,286 C250,284 268,298 270,320 C272,346 258,370 236,376 C220,378 210,366 214,348 C218,330 216,316 214,306 Z"/>
+      <path class="vis wf-soft" d="M230,296 C242,308 248,336 236,360"/>`,
+      `<ellipse class="hit" cx="236" cy="332" rx="42" ry="50"/>`)}
+    ${partG('kidney', `
+      <path class="vis wf" d="M126,358 C108,366 100,388 108,406 C116,424 140,426 150,412 C158,400 154,378 144,366 C138,358 132,356 126,358 Z"/>
+      <path class="vis wf" d="M274,352 C292,360 300,382 292,400 C284,418 260,420 250,406 C242,394 246,372 256,360 C262,352 268,350 274,352 Z"/>
+      <path class="vis wf-soft" d="M122,384 L142,384 M258,378 L278,378"/>`,
+      `<ellipse class="hit" cx="128" cy="390" rx="32" ry="40"/><ellipse class="hit" cx="272" cy="384" rx="32" ry="40"/>`)}
+    ${partG('intestines', `
+      <path class="vis wf" d="M132,518 L132,400 C132,384 148,376 168,378 L248,380 C268,382 276,398 274,416 L270,518 C266,538 238,550 216,542 C198,536 188,522 196,508"/>
+      <path class="vis wf" d="M156,430 C174,418 196,438 216,426 C234,416 254,430 250,450 C240,474 206,480 184,466 C166,456 164,438 178,430 C196,422 220,440 234,452 M160,470 C178,458 200,476 220,464 C236,456 250,468 244,484"/>`,
+      `<path class="hit" d="M114,370 H286 V556 H114 Z"/>`)}
+    ${partG('bladder', `<path class="vis wf" d="M200,536 C176,540 162,554 164,572 C166,590 180,602 200,602 C220,602 234,590 236,572 C238,554 224,540 200,536 Z"/>`,
+      `<ellipse class="hit" cx="200" cy="570" rx="42" ry="38"/>`)}
   </svg>`;
 }
 
 function bonesSVG(){
-  const b='fill="#f5f0e6" stroke="#b8a078" stroke-width="1.6"';
-  return `<svg viewBox="0 0 360 800" role="img" aria-label="${esc(t('bones'))}">
-    <path fill="#f0c4a0" fill-opacity=".12" stroke="#c48960" stroke-width="1.2" d="M180,40 C150,40 142,70 142,94 L142,118 L80,150 L70,300 L68,430 L100,440 L112,390 L128,390 L148,520 L154,640 L148,720 L170,780 L180,760 L190,780 L212,720 L206,640 L212,520 L232,390 L248,390 L260,440 L292,430 L290,300 L280,150 L218,118 L218,94 C218,70 210,40 180,40 Z"/>
+  const b = 'class="vis wf"';
+  const sf = 'class="vis wf-soft"';
+  return `<svg viewBox="0 20 400 850" role="img" aria-label="${esc(t('bones'))}">
+    <path class="wf-soft" d="${BODY_SIL}" pointer-events="none"/>
     ${partG('bone', `
-      <ellipse class="vis" ${b} cx="180" cy="78" rx="32" ry="40"/>
-      <rect class="vis" ${b} x="172" y="118" width="16" height="28" rx="4"/>
-      <path class="vis" ${b} d="M175,146 L185,146 L185,390 L175,390 Z"/>
-      <path class="vis" ${b} d="M120,175 Q180,160 240,175 L248,200 Q180,188 112,200 Z"/>
-      <path class="vis" ${b} d="M130,210 L230,210 M128,228 L232,228 M126,246 L234,246 M128,264 L232,264"/>
-      <path class="vis" ${b} d="M132,390 Q180,410 228,390 L220,450 Q180,470 140,450 Z"/>
-      <path class="vis" ${b} d="M86,160 L58,330 L70,336 L98,168 Z"/>
-      <path class="vis" ${b} d="M274,160 L302,330 L290,336 L262,168 Z"/>
-      <circle class="vis" ${b} cx="62" cy="332" r="10"/><circle class="vis" ${b} cx="298" cy="332" r="10"/>
-      <path class="vis" ${b} d="M54,340 L54,450 L70,450 L70,340 Z"/><path class="vis" ${b} d="M290,340 L290,450 L306,450 L306,340 Z"/>
-      <path class="vis" ${b} d="M148,450 L168,450 L162,650 L150,650 Z"/><path class="vis" ${b} d="M192,450 L212,450 L210,650 L198,650 Z"/>
-      <circle class="vis" ${b} cx="156" cy="545" r="12"/><circle class="vis" ${b} cx="204" cy="545" r="12"/>
-      <ellipse class="vis" ${b} cx="150" cy="730" rx="24" ry="10"/><ellipse class="vis" ${b} cx="210" cy="730" rx="24" ry="10"/>
+      <path ${b} d="M168,46 C148,54 142,78 146,106 C150,126 166,138 186,136 C190,140 196,142 200,142 C204,142 210,140 214,136 C234,138 250,126 254,106 C258,78 252,54 232,46 C220,40 180,40 168,46 Z"/>
+      <ellipse ${b} cx="176" cy="100" rx="13" ry="10"/>
+      <ellipse ${b} cx="224" cy="100" rx="13" ry="10"/>
+      <path ${b} d="M200,110 L194,128 C196,134 204,134 206,128 Z"/>
+      <path ${sf} d="M184,138 L216,138"/>
+      <path ${b} d="M170,130 L168,150 C168,162 180,172 200,174 C220,172 232,162 232,150 L230,130"/>
+      <path ${b} d="M190,174 L190,188 L210,188 L210,174"/>
+      <path ${b} d="M194,188 L194,418 M206,188 L206,418"/>
+      <path ${sf} d="M194,208 H206 M194,228 H206 M194,248 H206 M194,268 H206 M194,288 H206 M194,308 H206 M194,328 H206 M194,348 H206 M194,368 H206 M194,388 H206 M194,408 H206"/>
+      <path ${b} d="M200,176 C234,172 272,182 302,196 M200,176 C166,172 128,182 98,196"/>
+      <path ${b} d="M197,188 L197,276 M203,188 L203,276"/>
+      <path ${b} d="M197,196 C160,202 128,216 114,236 M197,212 C158,220 126,236 116,256 M197,228 C156,238 128,254 118,274 M197,244 C160,256 136,272 124,290 M197,260 C166,272 146,286 136,302 M197,276 C170,288 154,300 146,314"/>
+      <path ${b} d="M203,196 C240,202 272,216 286,236 M203,212 C242,220 274,236 284,256 M203,228 C244,238 272,254 282,274 M203,244 C240,256 264,272 276,290 M203,260 C234,272 254,286 264,302 M203,276 C230,288 246,300 254,314"/>
+      <path ${sf} d="M146,314 C168,330 200,336 200,336 C200,336 232,330 254,314"/>
+      <path ${b} d="M200,416 C172,410 140,416 126,438 C116,456 124,478 148,490 C170,500 190,502 200,502 C210,502 230,500 252,490 C276,478 284,456 274,438 C260,416 228,410 200,416 Z"/>
+      <path ${sf} d="M154,436 C170,430 186,428 200,428 C214,428 230,430 246,436"/>
+      <path ${b} d="M186,424 L200,470 L214,424 M186,492 C194,500 206,500 214,492"/>
+      <path ${b} d="M104,198 C96,232 88,282 80,334 L94,338 C102,288 110,238 118,202 Z"/>
+      <path ${b} d="M296,198 C304,232 312,282 320,334 L306,338 C298,288 290,238 282,202 Z"/>
+      <circle ${b} cx="84" cy="340" r="8"/><circle ${b} cx="316" cy="340" r="8"/>
+      <path ${b} d="M72,350 L68,468 M92,350 L90,468"/>
+      <path ${b} d="M328,350 L332,468 M308,350 L310,468"/>
+      <path ${sf} d="M68,468 C72,480 88,480 92,468 M308,468 C312,480 328,480 332,468"/>
+      <path ${b} d="M170,494 C164,542 160,592 164,628 L178,628 C176,592 180,542 186,498 Z"/>
+      <path ${b} d="M230,494 C236,542 240,592 236,628 L222,628 C224,592 220,542 214,498 Z"/>
+      <circle ${b} cx="170" cy="638" r="10"/><circle ${b} cx="230" cy="638" r="10"/>
+      <path ${b} d="M160,650 L154,776 M176,650 L172,776"/>
+      <path ${b} d="M240,650 L246,776 M224,650 L228,776"/>
+      <path ${b} d="M150,778 C138,800 128,826 148,838 C168,848 188,836 190,818 L172,776"/>
+      <path ${b} d="M250,778 C262,800 272,826 252,838 C232,848 212,836 210,818 L228,776"/>
     `)}
   </svg>`;
 }
+
 function card(cap, svg){ return `<div class="fig-card"><div class="fig-cap">${esc(cap)}</div>${svg}</div>`; }
 
 function renderDiagram(){
