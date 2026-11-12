@@ -267,9 +267,9 @@
     </div>
   </div>
 
-  <!-- SUB-PANEL 1B: INTERACTIVE CLOCK FACE (teev, feeb, ib nrab) -->
+  <!-- SUB-PANEL 1B: INTERACTIVE CLOCK FACE (teev + minutes) -->
   <div class="timeline-box" style="margin-top:16px;">
-    <strong id="clockHeading" style="color:var(--accent);font-size:1.05rem;">🕰️ Interactive Hmong Clock: Hours (`teev`), Minutes (`feeb`) &amp; Half-Hours (`ib nrab`)</strong>
+    <strong id="clockHeading" style="color:var(--accent);font-size:1.05rem;">🕰️ Interactive Hmong Clock: Hours (`teev`) &amp; Minutes</strong>
     <div style="display:grid;grid-template-columns:230px 1fr;gap:16px;align-items:center;margin-top:12px;">
       <div style="width:200px;height:200px;border-radius:50%;border:5px solid var(--accent);background:var(--card);position:relative;margin:0 auto;box-shadow:0 4px 14px rgba(0,0,0,0.1);" id="analogClock">
         <div style="position:absolute;left:50%;top:10px;transform:translateX(-50%);font-weight:800;font-size:0.85rem;">12</div>
@@ -346,7 +346,7 @@
         <button type="button" class="move-btn" onclick="triggerSpaceAction('forward')" id="mBtnFwd">⬆️ Forward<br><code>mus tom ntej</code></button>
         <button type="button" class="move-btn" onclick="triggerSpaceAction('turn_right')" id="mBtnTR">↻ Turn Right<br><code>tig sab xis</code></button>
         <button type="button" class="move-btn" onclick="triggerSpaceAction('up')" id="mBtnUp">⛰️ Go Up<br><code>nce mus saum</code></button>
-        <button type="button" class="move-btn" onclick="triggerSpaceAction('backward')" id="mBtnBack">⬇️ Backward<br><code>thim rov qab</code></button>
+        <button type="button" class="move-btn" onclick="triggerSpaceAction('backward')" id="mBtnBack">⬇️ Backward<br><code>thauj qab</code></button>
         <button type="button" class="move-btn" onclick="triggerSpaceAction('down')" id="mBtnDown">🏞️ Go Down<br><code>nqis los qab</code></button>
         <button type="button" class="move-btn" onclick="triggerSpaceAction('enter')" id="mBtnIn">🚪 Go Inside<br><code>nkag mus hauv</code></button>
         <button type="button" class="move-btn" onclick="triggerSpaceAction('turn_around')" id="mBtnAround">🔄 Turn Around<br><code>tig rov qab</code></button>
@@ -581,7 +581,7 @@ const DIR_DATA = [
 // 4. MOVING THROUGH SPACE (12 Interactive Actions)
 const SPACE_DATA = [
   { key: "forward", icon: "⬆️", hmong: "mus lawm tom ntej", shortHm: "tom ntej", en: "Move Forward / Ahead", vi: "Đi về phía trước / Tiến lên", ko: "앞으로 가다 / 전진하다", ja: "前へ進む・前進する", ex: "Thov mus lawm tom ntej.", exEn: "Please move forward." },
-  { key: "backward", icon: "⬇️", hmong: "thim rov qab / nyob tom qab", shortHm: "tom qab", en: "Move Backward / Behind", vi: "Lùi lại phía sau / Đằng sau", ko: "뒤로 물러나다 / 뒤쪽", ja: "後ろへ下がる・後方", ex: "Saib tom qab.", exEn: "Look behind / in the back." },
+  { key: "backward", icon: "⬇️", hmong: "thauj qab / nyob tom qab", shortHm: "tom qab", en: "Move Backward / Behind", vi: "Lùi lại phía sau / Đằng sau", ko: "뒤로 물러나다 / 뒤쪽", ja: "後ろへ下がる・後方", ex: "Saib tom qab.", exEn: "Look behind / in the back." },
   { key: "turn_left", icon: "↺", hmong: "tig mus sab laug", shortHm: "sab laug", en: "Turn Left", vi: "Rẽ trái / Quay sang trái", ko: "왼쪽으로 돌다 (좌회전)", ja: "左へ曲がる・左を向く", ex: "Tig mus sab laug ntawm txoj kev.", exEn: "Turn left at the road." },
   { key: "turn_right", icon: "↻", hmong: "tig mus sab xis", shortHm: "sab xis", en: "Turn Right", vi: "Rẽ phải / Quay sang phải", ko: "오른쪽으로 돌다 (우회전)", ja: "右へ曲がる・右を向く", ex: "Tig mus sab xis.", exEn: "Turn to the right side." },
   { key: "turn_around", icon: "🔄", hmong: "tig rov qab", shortHm: "tig rov qab", en: "Turn Around (180°)", vi: "Quay ngược lại (180°)", ko: "뒤돌아보다 / 방향을 돌리다", ja: "振り返る・Uターンする", ex: "Nws tig rov qab los.", exEn: "He/she turned around and came back." },
@@ -641,7 +641,7 @@ const UI_LABELS = {
   },
   ja: {
     draftBadge: "🛠️ インタラクティブ試作ドラフト（まだ本番ハブには未公開）",
-    mainTitle: "モン語 時間・방位・空間移動 インタラクティブモジュール",
+    mainTitle: "モン語 時間・方位・空間移動 インタラクティブモジュール",
     mainSub: "日付と時間帯の2軸スライダー、方位コンパス、空間移動シミュレーターを動かして体験できます。",
     tabTime: "⏳ 1. 時間＆空タイムライン",
     tabDir: "🧭 2. 東西南北＆地形方位",
@@ -1034,13 +1034,11 @@ function renderClockModule() {
 
   const hrHm = `${HM_NUM_MAP[hr]} teev`;
   let mnHm = '';
-  if (mn === 30) {
-    mnHm = 'thiab ib nrab (or peb caug feeb)';
-  } else if (mn > 0) {
-    mnHm = `${HM_NUM_MAP[mn]} feeb`;
+  if (mn > 0) {
+    mnHm = `${HM_NUM_MAP[mn]}`;
   }
   const tod = TOD_DATA[todIdx];
-  const fullHm = `${HM_NUM_MAP[hr]} teev${mn === 30 ? ' thiab ib nrab' : (mn > 0 ? ' ' + HM_NUM_MAP[mn] + ' feeb' : '')} (${tod.hmong})`;
+  const fullHm = `${HM_NUM_MAP[hr]} teev${mn > 0 ? ' ' + HM_NUM_MAP[mn] : ''} (${tod.hmong})`;
   const timeStr = `${hr}:${mn < 10 ? '0' + mn : mn}`;
 
   document.getElementById('clockResultBox').innerHTML = `
@@ -1192,7 +1190,11 @@ document.getElementById('distRange').addEventListener('input', (e) => {
 
   let savedLang = 'en';
   try { savedLang = localStorage.getItem('hmong_ui_lang') || 'en'; } catch(e) {}
+  const qp = new URLSearchParams(location.search);
+  if (qp.get('lang')) savedLang = qp.get('lang');
   setLang(savedLang);
+  const qTab = qp.get('tab');
+  if (qTab && ['time','dir','space','prep','persp'].includes(qTab)) switchTab(qTab);
 })();
 </script>
 </body>
